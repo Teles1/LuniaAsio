@@ -33,8 +33,12 @@
 
 #Custom
 /.vs
+*Release/*
 */Release/*
+*Debug/*
 */Debug/*
 /*/vc-fileutils.settings
 *.log
 *x64/*
+*/x64/*
+*.user

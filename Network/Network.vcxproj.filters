@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Network">
+      <UniqueIdentifier>{b635735b-0573-4061-96b5-2255ce86ccb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Protocols">
+      <UniqueIdentifier>{35af7050-b54e-4f54-82b6-f999416dc6d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Protocols\Lobby">
+      <UniqueIdentifier>{a8bb7d1f-1aff-4079-85dd-4fadb52b0402}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Network\Protocols\Lobby\LobbyProtocols.h">
+      <Filter>Network\Protocols\Lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Protocols\Serializer.h">
+      <Filter>Network\Protocols</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Network\Protocols\Lobby\LobbyProtocols.cpp">
+      <Filter>Network\Protocols\Lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Protocols\Serializer.cpp">
+      <Filter>Network\Protocols</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
