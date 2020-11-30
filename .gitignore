@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+#Custom
+/.vs
+/Release/*
+*Debug/
+/*/vc-fileutils.settings
+*.log
+*x64/*
