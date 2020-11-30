@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Arquivos de Origem">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Arquivos de Cabeçalho">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Arquivos de Recurso">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Arquivos de Origem\IO">
+      <UniqueIdentifier>{d40d66de-1fbe-4b11-8639-cd8e851a0e32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Arquivos de Origem\IO\Network">
+      <UniqueIdentifier>{0b5dc665-88e9-4f5b-8924-6eb277be7d63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Arquivos de Cabeçalho\IO">
+      <UniqueIdentifier>{31ee138f-ba82-43e7-9999-d48c6961e873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Arquivos de Cabeçalho\IO\Network">
+      <UniqueIdentifier>{1d5539ef-8654-4d56-82ee-9201dc524833}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="Callbacks.h">
+      <Filter>Arquivos de Cabeçalho\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpConnection.h">
+      <Filter>Arquivos de Cabeçalho\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpServer.h">
+      <Filter>Arquivos de Cabeçalho\IO</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="Callbacks.cpp">
+      <Filter>Arquivos de Origem\IO\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpConnection.cpp">
+      <Filter>Arquivos de Origem\IO\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpServer.cpp">
+      <Filter>Arquivos de Origem\IO\Network</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
