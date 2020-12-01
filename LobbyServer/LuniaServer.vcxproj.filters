@@ -27,31 +27,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="StdAfx.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="TcpServer\Callbacks.h">
-      <Filter>Header\IO\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="TcpServer\TcpConnection.h">
-      <Filter>Header\IO\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="TcpServer\TcpServer.h">
-      <Filter>Header\IO\Network</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="TcpServer\Callbacks.cpp">
-      <Filter>Source\IO\Network</Filter>
+    <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="TcpServer\TcpConnection.cpp">
-      <Filter>Source\IO\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="TcpServer\TcpServer.cpp">
-      <Filter>Source\IO\Network</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LobbyProtocol\LobbyProtocol.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

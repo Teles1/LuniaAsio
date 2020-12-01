@@ -24,6 +24,7 @@
     <ProjectGuid>{44d445b5-30f4-4372-bc37-69a52303056d}</ProjectGuid>
     <RootNamespace>LuniaServer</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>LobbyServer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -43,7 +44,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -117,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Includes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Path)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,16 +142,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="TcpServer\Callbacks.cpp" />
+    <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="TcpServer\TcpConnection.cpp" />
-    <ClCompile Include="TcpServer\TcpServer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TcpServer\Callbacks.h" />
-    <ClInclude Include="StdAfx.h" />
-    <ClInclude Include="TcpServer\TcpConnection.h" />
-    <ClInclude Include="TcpServer\TcpServer.h" />
+    <ProjectReference Include="..\Core\Core.vcxproj">
+      <Project>{dd113a77-1c14-40e5-ae12-e50feecb28a4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Network\Network.vcxproj">
+      <Project>{a90c00e8-c1ba-48f1-987d-5017300d2f75}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LobbyProtocol\LobbyProtocol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

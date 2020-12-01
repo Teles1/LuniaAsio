@@ -1,32 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Callbacks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TcpConnection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TcpServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="NetStream.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Callbacks.h">
+    <ClInclude Include="Callbacks.hpp" />
+    <ClInclude Include="TcpConnection.hpp">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="StdAfx.h">
+    <ClInclude Include="TcpServer.hpp">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="TcpConnection.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="TcpServer.h">
-      <Filter>Header</Filter>
-    </ClInclude>
+    <ClInclude Include="Network.h" />
+    <ClInclude Include="Protocol.h" />
+    <ClInclude Include="NetStream.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

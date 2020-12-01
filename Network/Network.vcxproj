@@ -41,10 +41,10 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\Includes\asio</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Path)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,16 +142,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Callbacks.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="TcpConnection.cpp" />
-    <ClCompile Include="TcpServer.cpp" />
+    <ClCompile Include="NetStream.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Callbacks.h" />
-    <ClInclude Include="StdAfx.h" />
-    <ClInclude Include="TcpConnection.h" />
-    <ClInclude Include="TcpServer.h" />
+    <ClInclude Include="Callbacks.hpp" />
+    <ClInclude Include="NetStream.h" />
+    <ClInclude Include="Network.h" />
+    <ClInclude Include="Protocol.h" />
+    <ClInclude Include="TcpConnection.hpp" />
+    <ClInclude Include="TcpServer.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.vcxproj">
+      <Project>{dd113a77-1c14-40e5-ae12-e50feecb28a4}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

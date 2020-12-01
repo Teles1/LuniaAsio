@@ -1,5 +1,7 @@
 #pragma once
-#include "./Common.h"
+#include "../Common.h"
+#include <iomanip>
+#include <array>
 
 namespace StringUtil {
 	inline uint32 Hash(std::wstring str)
@@ -12,5 +14,12 @@ namespace StringUtil {
 			c = *p; hashcode = (31 * hashcode + (c % 31)) % 64000000; ++p;
 		}
 		return hashcode;
+	}
+	inline std::string GetString(uint8 data[], uint32 lenght) {
+		std::stringstream ss; // added include [ crazy in common.h ] 
+		for (int i = 0; i < lenght; i++)
+			ss << std::setw(2) << std::setfill('0') << std::hex << (unsigned)data[i];
+		
+		return ss.str();
 	}
 }

@@ -1,7 +1,6 @@
 #pragma once
 #include "../Common.h"
 #include "../Utils/Version.h"
-#include <cassert>
 
 namespace Serializer {
 
@@ -9,17 +8,56 @@ namespace Serializer {
 	class StreamWriter
 	{
 	private:
-		const char* buffer; //this won't ever change. The buffer will remain intact.
+		uint8* buffer;
 		uint16 position;
 	public:
 		StreamWriter() {
-			buffer = new char[MAX_BUFFER_SIZE];
+			buffer = new uint8[MAX_BUFFER_SIZE];
 			position = 0;
+		}
+		~StreamWriter() {
+			delete this->buffer;
+			this->position = 0;
 		}
 	};
 	class StreamReader
 	{
-	private:
+	public:
+		StreamReader(uint8* inData, uint16 size){
+			this->buffer = new uint8[size];
+			memcpy(this->buffer, inData, size);
+			this->size = size;
+			this->position = 0;
+		}
+		StreamReader(std::vector<uint8> inData){
+			this->size = inData.size();
+			this->buffer = new uint8[this->size];
+			memcpy(this->buffer, &inData[0], this->size);
+			this->position = 0;
+		}
+		StreamReader() {
+			this->buffer = new uint8[0];
+			this->size = 0;
+			this->position = 0;
+		}
+		uint16 GetData(uint8*& buffer) {
+			buffer = new uint8[this->size - this->position];
+			memcpy(buffer, this->buffer, this->size - this->position);
+			return this->position;
+		}
+		template<typename T> 
+		void Read(T& value) {
+			CanRead(sizeof(T));
+			memcpy(&value, this->buffer + this->position, sizeof(T));
+			this->position += sizeof(T);
+		}
+		~StreamReader() 
+		{
+			delete this->buffer;
+			this->position = 0;
+			this->size = 0;
+		}
+	protected:
 		uint8* buffer;
 		uint16 position;
 		uint16 size;
@@ -28,38 +66,5 @@ namespace Serializer {
 				throw Exception(boost::format("Cannot read past buffer MaxLenght(%d) Position(%d) Lenght(%d)\n") % this->size % this->position % lenght);
 			}
 		}
-		void CleanUp(size_t size) {
-			buffer += size;
-			position += size;
-		}
-	public:
-		StreamReader(uint8* inData, uint16 size){
-			this->buffer = inData;
-			this->position = 0;
-			this->size = size;
-		}
-		StreamReader() {
-			this->buffer = new uint8[0];
-			this->position = 0;
-			this->size = 0;
-		}
-		template<typename T> void Read(T& value) {
-			CanRead(sizeof(value));
-			memcpy(&value, buffer, sizeof(value));
-			CleanUp(sizeof(value));
-		}
-	};
-
-	class ISerializable {
-	public:
-		std::wstring TypeName = L"";
-		uint16 TypeHash = 0;
-		ISerializable(std::wstring input) {
-			this->TypeName = input.c_str();
-			this->TypeHash = StringUtil::Hash(input);
-		}
-		virtual void Serialize(StreamWriter& out) const = 0;
-		virtual void Deserialize(StreamReader& in) = 0;
-		virtual ~ISerializable() {}
 	};
 }
