@@ -1,13 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetStream.cpp" />
+    <ClCompile Include="Crypt\Crypt.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Callbacks.hpp" />
     <ClInclude Include="TcpConnection.hpp">
       <Filter>Header</Filter>
     </ClInclude>
@@ -16,7 +12,10 @@
     </ClInclude>
     <ClInclude Include="Network.h" />
     <ClInclude Include="Protocol.h" />
-    <ClInclude Include="NetStream.h" />
+    <ClInclude Include="Crypt\Crypt.h" />
+    <ClInclude Include="Buffer.h" />
+    <ClInclude Include="NetStream\NetStream.h" />
+    <ClInclude Include="CallBacks.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

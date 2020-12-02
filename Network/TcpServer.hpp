@@ -4,7 +4,7 @@
 #include "./Network.h"
 #include "TcpConnection.hpp"
 
-namespace net
+namespace Network
 {
 	class TcpServer
 	{

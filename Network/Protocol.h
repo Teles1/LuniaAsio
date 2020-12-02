@@ -11,3 +11,8 @@
     void Deserialize(Serializer::StreamReader &in);			\
     const String GetTypeName() { return TypeName; }
 #endif
+namespace Network {
+    namespace Protocol {
+        const uint32 Version = 0x17;
+    }
+}

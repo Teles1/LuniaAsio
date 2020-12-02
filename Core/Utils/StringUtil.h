@@ -17,7 +17,7 @@ namespace StringUtil {
 	}
 	inline std::string GetString(uint8 data[], uint32 lenght) {
 		std::stringstream ss; // added include [ crazy in common.h ] 
-		for (int i = 0; i < lenght; i++)
+		for (uint32 i = 0; i < lenght; i++)
 			ss << std::setw(2) << std::setfill('0') << std::hex << (unsigned)data[i];
 		
 		return ss.str();

@@ -27,10 +27,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp">
+    <ClCompile Include="LobbyServer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Handles.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,7 +41,10 @@
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Header.h">
+    <ClInclude Include="Handles.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyServer.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

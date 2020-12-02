@@ -22,7 +22,6 @@
     <ClInclude Include="Exceptions\Expcetion.h">
       <Filter>Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="Core.h" />
     <ClInclude Include="Serializer\StreamReader.h">
       <Filter>Serializer</Filter>
     </ClInclude>
@@ -40,7 +39,6 @@
     <ClInclude Include="Utils\Math\Random.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Utils\DateTime.cpp">
       <Filter>Utils</Filter>
     </ClCompile>

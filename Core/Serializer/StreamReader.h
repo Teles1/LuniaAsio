@@ -1,6 +1,5 @@
 #pragma once
 #include "../Common.h"
-#include "../Core.h"
 namespace Serializer {
 	class StreamReader
 	{
@@ -31,6 +30,11 @@ namespace Serializer {
 			buffer = new uint8[this->size - this->position];
 			memcpy(buffer, this->buffer + this->position, this->size - this->position);
 			return this->position;
+		}
+		uint8* GetData() {
+			uint8* rBuff = new uint8[this->size - this->position];
+			memcpy(rBuff, this->buffer + this->position, this->size - this->position);
+			return rBuff;
 		}
 #pragma endregion
 #pragma region SimpleTypes
@@ -133,6 +137,9 @@ namespace Serializer {
 		}
 		uint16 GetLenght() {
 			return this->size;
+		}
+		uint16 GetBytesLeft() {
+			return this->size - this->position;
 		}
 		~StreamReader()
 		{

@@ -72,6 +72,54 @@ DateTime::DateTime(const Time& rhs)
 	: timeData(rhs), dateData(){}
 DateTime::DateTime(const Date& lhs, const Time& rhs) 
 	: timeData(rhs), dateData(lhs){}
+DateTime DateTime::Now()
+{
+	DateTime nowDateTime;
+
+	// get current date, time
+	time_t ltime;	// __time64_t
+	struct tm* today;
+
+	time(&ltime);	// _time64
+	today = localtime(&ltime);	// _localtime64
+
+	if (today == NULL)
+	{
+		ERROR_LOG("DateTime localtime Is NULL!!", 0);
+		return nowDateTime;
+	}
+	// set current date
+	nowDateTime.Set(Unit::Year, (uint16)today->tm_year + 1900);
+	nowDateTime.Set(Unit::Month, (uint16)today->tm_mon + 1);
+	nowDateTime.Set(Unit::Day, (uint16)today->tm_mday);
+
+	// set current time
+	nowDateTime.Set(Unit::Hour, (uint16)today->tm_hour);
+	nowDateTime.Set(Unit::Minute, (uint16)today->tm_min);
+	nowDateTime.Set(Unit::Second, (uint16)today->tm_sec);
+
+	return nowDateTime;
+}
+void DateTime::Set(Unit::type unit, uint16 value)
+{
+	switch (unit)
+	{
+	case Unit::Year:
+		return dateData.SetYear(value);
+	case Unit::Month:
+		return dateData.SetMonth(static_cast<uint8>(value));
+	case Unit::Day:
+		return dateData.SetDay(static_cast<uint8>(value));
+	case Unit::Hour:
+		return timeData.SetHour(static_cast<uint8>(value));
+	case Unit::Minute:
+		return timeData.SetMinute(static_cast<uint8>(value));
+	case Unit::Second:
+		return timeData.SetSecond(value);
+	case Unit::MilliSecond:
+		return timeData.SetMilliSec(value);
+	}
+}
 void DateTime::Deserialize(Serializer::StreamReader& in) {
 	dateData.Deserialize(in);
 	timeData.Deserialize(in);

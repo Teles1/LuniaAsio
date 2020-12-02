@@ -1,3 +1,4 @@
+#pragma once
 #include <memory>
 #include <thread>
 #include <mutex>
@@ -18,8 +19,6 @@
 
 #pragma region Type Definition
 
-typedef std::wstring		String;
-
 typedef unsigned long		uint64;
 typedef uint32_t			uint32;
 typedef uint16_t			uint16;
@@ -32,7 +31,9 @@ typedef char				int8;
 
 #pragma endregion
 
-typedef unsigned short LengthType;
+typedef std::wstring		String;
+typedef uint16				HashType;
+typedef unsigned short		LengthType;
 
 #pragma region Global Constants
 
@@ -46,5 +47,6 @@ typedef unsigned short LengthType;
 
 #include "./Utils/StringUtil.h"
 #include "./Exceptions/Expcetion.h"
+#include "../Debugging/Debugging.h"
 
 #pragma endregion
