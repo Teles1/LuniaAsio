@@ -78,11 +78,11 @@ DateTime DateTime::Now()
 
 	// get current date, time
 	time_t ltime;	// __time64_t
-	struct tm* today;
+	struct tm* today{};
 
 	time(&ltime);	// _time64
-	today = localtime(&ltime);	// _localtime64
-
+	//today = localtime(&ltime);	// _localtime64
+	localtime_s(today, &ltime);
 	if (today == NULL)
 	{
 		ERROR_LOG("DateTime localtime Is NULL!!", 0);
