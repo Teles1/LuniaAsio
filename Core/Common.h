@@ -13,6 +13,7 @@
 #include <list>
 #include <set>
 #include <utility>
+#include <map>
 #include "boost/format.hpp"
 
 #pragma region Type Definition
@@ -30,6 +31,9 @@ typedef short int			int16;
 typedef char				int8;
 
 #pragma endregion
+
+typedef unsigned short LengthType;
+
 #pragma region Global Constants
 
 #ifndef MAX_BUFFER_SIZE
@@ -40,7 +44,6 @@ typedef char				int8;
 
 #pragma region  Utils Includes
 
-#include "./Utils/Log.h"
 #include "./Utils/StringUtil.h"
 #include "./Exceptions/Expcetion.h"
 

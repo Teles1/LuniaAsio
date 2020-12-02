@@ -13,26 +13,38 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
-    <ClInclude Include="Utils\Log.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\StringUtil.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Version.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Serializer\Serializer.h">
-      <Filter>Serializer</Filter>
-    </ClInclude>
     <ClInclude Include="Exceptions\Expcetion.h">
       <Filter>Exceptions</Filter>
     </ClInclude>
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="Serializer\StreamReader.h">
+      <Filter>Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Serializer\StreamWriter.h">
+      <Filter>Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Serializer\Private.h">
+      <Filter>Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\DateTime.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Serializer\Serializer.h" />
+    <ClInclude Include="Utils\Math\PseudoRandom.h" />
+    <ClInclude Include="Utils\Math\Random.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Serializer.cpp">
-      <Filter>Serializer</Filter>
+    <ClCompile Include="Utils\DateTime.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Math\PseudoRandom.cpp" />
+    <ClCompile Include="Utils\Math\Random.cpp" />
   </ItemGroup>
 </Project>

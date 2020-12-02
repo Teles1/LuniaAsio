@@ -38,5 +38,8 @@
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Header.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

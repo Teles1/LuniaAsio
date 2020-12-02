@@ -1,5 +1,7 @@
+#pragma once
 #include "../Core/Common.h"
-#include "../Core/Serializer/Serializer.h"
+#include "../Core/Serializer/StreamReader.h"
+#include "../Core/Serializer/StreamWriter.h"
 
 #ifndef NET_SERIALIZABLE
 #define NET_SERIALIZABLE								    \
