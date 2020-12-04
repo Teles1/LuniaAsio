@@ -1,4 +1,3 @@
-#pragma once
 #include "./DateTime.h"
 #pragma region Date
 DateTime::Date::Date() {
@@ -20,7 +19,7 @@ void DateTime::Date::Deserialize(Serializer::StreamReader& in) {
 	in.Read(aux);
 	dateValue.Day = static_cast<uint8>(aux);
 }
-void DateTime::Date::Serialize(Serializer::StreamWriter& out) const {
+void DateTime::Date::Serialize(Serializer::StreamWriter& out) {
 	out.Write(static_cast<uint16>(dateValue.Year));
 	out.Write(static_cast<uint16>(dateValue.Month));
 	out.Write(static_cast<uint16>(dateValue.Day));
@@ -50,7 +49,7 @@ void DateTime::Time::Deserialize(Serializer::StreamReader& in) {
 	in.Read(tmp); 
 	timeValue.MilliSec = tmp;
 }
-void DateTime::Time::Serialize(Serializer::StreamWriter& out) const{
+void DateTime::Time::Serialize(Serializer::StreamWriter& out){
 	uint16 tmp;
 	tmp = timeValue.Hour;
 	out.Write( tmp);
@@ -76,27 +75,18 @@ DateTime DateTime::Now()
 {
 	DateTime nowDateTime;
 
-	// get current date, time
-	time_t ltime;	// __time64_t
-	struct tm* today{};
-
-	time(&ltime);	// _time64
-	//today = localtime(&ltime);	// _localtime64
-	localtime_s(today, &ltime);
-	if (today == NULL)
-	{
-		ERROR_LOG("DateTime localtime Is NULL!!", 0);
-		return nowDateTime;
-	}
+	time_t now = time(0); 
+	struct tm timeinfo;
+	localtime_s(&timeinfo, &now);
 	// set current date
-	nowDateTime.Set(Unit::Year, (uint16)today->tm_year + 1900);
-	nowDateTime.Set(Unit::Month, (uint16)today->tm_mon + 1);
-	nowDateTime.Set(Unit::Day, (uint16)today->tm_mday);
+	nowDateTime.Set(Unit::Year, (uint16)timeinfo.tm_year + 1900);
+	nowDateTime.Set(Unit::Month, (uint16)timeinfo.tm_mon + 1);
+	nowDateTime.Set(Unit::Day, (uint16)timeinfo.tm_mday);
 
 	// set current time
-	nowDateTime.Set(Unit::Hour, (uint16)today->tm_hour);
-	nowDateTime.Set(Unit::Minute, (uint16)today->tm_min);
-	nowDateTime.Set(Unit::Second, (uint16)today->tm_sec);
+	nowDateTime.Set(Unit::Hour, (uint16)timeinfo.tm_hour);
+	nowDateTime.Set(Unit::Minute, (uint16)timeinfo.tm_min);
+	nowDateTime.Set(Unit::Second, (uint16)timeinfo.tm_sec);
 
 	return nowDateTime;
 }
@@ -121,12 +111,34 @@ void DateTime::Set(Unit::type unit, uint16 value)
 	}
 }
 void DateTime::Deserialize(Serializer::StreamReader& in) {
-	dateData.Deserialize(in);
-	timeData.Deserialize(in);
+	//in.Begin(L"AllM::DateTime");
+	uint16 tmp;
+	in.Read(tmp); dateData.SetYear(tmp);
+	in.Read(tmp); dateData.SetMonth(static_cast<uint8>(tmp));
+	in.Read(tmp); dateData.SetDay(static_cast<uint8>(tmp));
+	in.Read(tmp); timeData.SetHour(static_cast<uint8>(tmp));
+	in.Read(tmp); timeData.SetMinute(static_cast<uint8>(tmp));
+	in.Read(tmp); timeData.SetSecond(tmp);
+	in.Read(tmp); timeData.SetMilliSec(tmp);
 }
 
-void DateTime::Serialize(Serializer::StreamWriter& out) const{
-	dateData.Serialize(out);
-	timeData.Serialize(out);
+void DateTime::Serialize(Serializer::StreamWriter& out){
+	out.Begin(L"AllM::DateTime");
+	uint16 tmp;
+	tmp = dateData.GetYear();
+	out.Write( tmp);
+	tmp = dateData.GetMonth();
+	out.Write(tmp);
+	tmp = dateData.GetDay();
+	out.Write(tmp);
+
+	tmp = timeData.GetHour();
+	out.Write(tmp);
+	tmp = timeData.GetMinute();
+	out.Write(tmp);
+	tmp = timeData.GetSecond();
+	out.Write(tmp);
+	tmp = timeData.GetMilliSec();
+	out.Write(tmp);
 }
 #pragma endregion

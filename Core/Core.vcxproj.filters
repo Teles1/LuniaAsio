@@ -12,7 +12,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common.h" />
     <ClInclude Include="Utils\StringUtil.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -22,21 +21,15 @@
     <ClInclude Include="Exceptions\Expcetion.h">
       <Filter>Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="Serializer\StreamReader.h">
-      <Filter>Serializer</Filter>
-    </ClInclude>
-    <ClInclude Include="Serializer\StreamWriter.h">
-      <Filter>Serializer</Filter>
-    </ClInclude>
-    <ClInclude Include="Serializer\Private.h">
-      <Filter>Serializer</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\DateTime.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Serializer\Serializer.h" />
     <ClInclude Include="Utils\Math\PseudoRandom.h" />
     <ClInclude Include="Utils\Math\Random.h" />
+    <ClInclude Include="Utils\Buffer.h" />
+    <ClInclude Include="Serializer\ISerializable.h" />
+    <ClInclude Include="Core.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils\DateTime.cpp">
@@ -44,5 +37,6 @@
     </ClCompile>
     <ClCompile Include="Utils\Math\PseudoRandom.cpp" />
     <ClCompile Include="Utils\Math\Random.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
 </Project>

@@ -117,6 +117,11 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(Path);$(SolutionDir)Includes</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>$(SolutionDir)$(ProjectName)\$(ProjectName).h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeaderOutputFile>$(SolutionDir)Phcs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,27 +145,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Common.h" />
+    <ClInclude Include="Core.h" />
     <ClInclude Include="Exceptions\Expcetion.h" />
+    <ClInclude Include="Serializer\ISerializable.h" />
     <ClInclude Include="Serializer\Serializer.h" />
+    <ClInclude Include="Utils\Buffer.h" />
     <ClInclude Include="Utils\DateTime.h" />
-    <ClInclude Include="Serializer\Private.h" />
-    <ClInclude Include="Serializer\StreamReader.h" />
-    <ClInclude Include="Serializer\StreamWriter.h" />
     <ClInclude Include="Utils\Math\Random.h" />
     <ClInclude Include="Utils\Math\PseudoRandom.h" />
     <ClInclude Include="Utils\StringUtil.h" />
     <ClInclude Include="Utils\Version.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Core.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Core.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="Utils\DateTime.cpp" />
-    <ClCompile Include="Utils\Math\PseudoRandom.cpp" />
-    <ClCompile Include="Utils\Math\Random.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Debugging\Debugging.vcxproj">
-      <Project>{bbfc1af2-7743-454f-b9b0-e117210dd783}</Project>
-    </ProjectReference>
+    <ClCompile Include="Utils\Math\PseudoRandom.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Utils\Math\Random.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

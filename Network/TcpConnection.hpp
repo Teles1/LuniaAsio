@@ -1,5 +1,5 @@
 #pragma once
-#include "../Core/Common.h"
+#include "../Core/Core.h"
 #include "./Network.h"
 #include "Crypt/Crypt.h"
 #include "NetStream/NetStream.h"
@@ -20,6 +20,9 @@ namespace Network
 			decryptor(false),
 			EncryptKey(false)
 		{
+		}
+		~TcpConnection() {
+			INFO_LOG("[] Disconnected", userID);
 		}
 		/*
 			User's first connection gets started by this function.
@@ -73,7 +76,7 @@ namespace Network
 
 		void onMessage(const boost::system::error_code& error, size_t length)
 		{
-			INFO_LOG("Message received[{0}]", length);
+			INFO_LOG("[{0}]New Message received", userID);
 			if (!error)
 			{
 				auto t = std::thread([=]() {
@@ -84,7 +87,7 @@ namespace Network
 							//check if still connected.
 							if (length - total > sizeof(LengthType)) {
 								if (EncryptKey) {
-									unsigned char* work = &buffer[total]; // starting from where we left after running the loop n times
+									uint8* work = &src[total]; // starting from where we left after running the loop n times
 									this->Translate(work, sizeof(LengthType)); // translate the header only
 									LengthType* work_length = reinterpret_cast<LengthType*>(work);
 
@@ -106,10 +109,12 @@ namespace Network
 								}
 								//In here the message should be ready to be readed.
 								//Might get stuck in here if message was broken in half. lol
-								result = this->Parse(&buffer[total] , length - total);
+								result = this->Parse(&src[total], length - total);
 							}
 							total += result;
 							std::cout << "Reading packet\n";
+							if (total == length)
+								break;
 						} while (result);
 					}
 					catch (...) { std::cout << "Exception trown\n"; }
@@ -131,13 +136,13 @@ namespace Network
 			INFO_LOG("Trying to Parse Message[{0}]", size);
 			if (size < sizeof(HashType) + sizeof(LengthType))
 				return 0;
-			NetStream reader(buffer, size);
+			NetStreamReader reader(buffer, size);
 			int read = reader.GetNetStreamSize();
 			if (read == 0)
 				return 0;
 			if (read < 0) {
 				ERROR_LOG("[{0}]Invalid packet", userID);
-				return size;
+				return (int)size;
 			}
 			if (reader.IsNetStream() && read <= size) {
 				messageCallback_(shared_from_this(), &buffer[GetNetStreamHeaderSize()], size - GetNetStreamHeaderSize());
@@ -188,9 +193,33 @@ namespace Network
 	private:
 		void doRead() 
 		{
-			socket_.async_receive(boost::asio::buffer(buffer, bytes_read), std::bind(&TcpConnection::onMessage, this, std::placeholders::_1, std::placeholders::_2));
+			socket_.async_read_some(boost::asio::buffer(src, bytes_read), std::bind(&TcpConnection::onMessage, this, std::placeholders::_1, std::placeholders::_2));
 		}
 #pragma region Game related
+	public:
+			enum Marks { AliveReceived, AliveCleared };
+			///	Alive structure alter Game Guard Object
+			struct	Alive {
+				Marks	Mark;
+
+				///	backup alive data
+				struct AliveData
+				{
+					uint32	index;
+					uint32	value1;
+					uint32	value2;
+					uint32	value3;
+
+					bool	operator==(AliveData& aliveData)
+					{
+						if (index == aliveData.index && value1 == aliveData.value1
+							&& value2 == aliveData.value2 && value3 == aliveData.value3)
+							return	true;
+
+						return	false;
+					}
+				}answer, temp;
+			}alive;
 	private:
 		Network::Crypt::Box decryptor;
 		bool EncryptKey;
@@ -199,7 +228,7 @@ namespace Network
 	private:
 		boost::asio::ip::tcp::socket socket_;
 		uint32 userID = 0;
-		std::array<uint8, MAX_BUFFER_SIZE> buffer;
+		uint8 src[MAX_BUFFER_SIZE];
 		size_t bytes_read;
 		MessageCallback messageCallback_;
 		WriteCompleteCallback writeCompleteCallback_;

@@ -1,5 +1,4 @@
 #include "Crypt.h"
-#include "../Protocol.h"
 /*
 	Related to Cyphering the packets.
 
@@ -33,7 +32,7 @@ struct IndexTable
 			{
 				unsigned char jj = EncryptWithoutTable(j);
 				jj += ij;
-				jj ^= Protocol::Version;
+				jj ^= Constants::Version;
 				EncData[ii][j] = jj;
 				DecData[ii][jj] = j;
 			}

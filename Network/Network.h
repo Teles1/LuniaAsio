@@ -1,3 +1,5 @@
+#ifndef Network_HEADER_GUARD
+#define Network_HEADER_GUARD
 #pragma once
 #define ASIO_STANDALONE
 #ifdef _WIN32
@@ -9,3 +11,4 @@
 #include <boost/asio/ts/internet.hpp>
 #include <boost/asio/error.hpp>
 #include <boost/system/error_code.hpp>
+#endif // !Network_HEADER_GUARD

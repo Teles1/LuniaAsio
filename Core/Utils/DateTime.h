@@ -1,7 +1,9 @@
 #pragma once
+#include "../Core.h"
+#include "../Serializer/ISerializable.h"
 #include "../Serializer/Serializer.h"
 
-struct DateTime {
+struct DateTime : public Serializer::ISerializable {
 public:
 	struct Unit
 	{
@@ -10,7 +12,7 @@ public:
 			Year, Month, Day, Hour, Minute, Second, MilliSecond
 		};
 	};
-	class Date {
+	class Date : public Serializer::ISerializable {
 	private:
 		struct
 		{
@@ -32,9 +34,9 @@ public:
 		
 	public:
 		void Deserialize(Serializer::StreamReader& in);
-		void Serialize(Serializer::StreamWriter& out) const;
+		void Serialize(Serializer::StreamWriter& out);
 	};
-	class Time {
+	class Time : public Serializer::ISerializable {
 	private:
 		struct
 		{
@@ -58,7 +60,7 @@ public:
 		void SetMilliSec(uint16 milsec) { timeValue.MilliSec = milsec; }
 	public:
 		void Deserialize(Serializer::StreamReader& in);
-		void Serialize(Serializer::StreamWriter& out) const;
+		void Serialize(Serializer::StreamWriter& out);
 	};
 
 	DateTime();
@@ -79,6 +81,6 @@ private:
 	Time timeData;
 	Date dateData;
 public:
-	void Deserialize(Serializer::StreamReader& in);
-	void Serialize(Serializer::StreamWriter& out) const;
+	void Deserialize(Serializer::StreamReader& in) override;
+	void Serialize(Serializer::StreamWriter& out) override;
 };

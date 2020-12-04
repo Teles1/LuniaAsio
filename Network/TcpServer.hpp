@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "../Core/Common.h"
+#include "../Core/Core.h"
 #include "./Network.h"
 #include "TcpConnection.hpp"
 

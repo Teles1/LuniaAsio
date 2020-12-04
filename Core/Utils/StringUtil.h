@@ -1,7 +1,6 @@
 #pragma once
-#include "../Common.h"
+#include "../Core.h"
 #include <iomanip>
-#include <array>
 
 namespace StringUtil {
 	inline uint32 Hash(std::wstring str)

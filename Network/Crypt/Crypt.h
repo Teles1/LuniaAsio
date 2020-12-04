@@ -1,5 +1,5 @@
 #pragma once
-#include "../Buffer.h"
+#include "../Core/Utils/Buffer.h"
 namespace Network {
     namespace Crypt {
         static unsigned char HashToByte(const void* p, unsigned int size);
@@ -16,7 +16,7 @@ namespace Network {
             inline unsigned int GetKey() const { return key; }
 
         private:  // AllM::Net::ITranslator implementation
-            unsigned int Translate(Network::Buffer& buffer);
+            unsigned int Translate(Buffer& buffer);
 
         private:
             unsigned int key;

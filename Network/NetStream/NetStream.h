@@ -1,16 +1,13 @@
 #pragma once
-#include "../../Core/Serializer/StreamReader.h"
+#include "../../Core/Serializer/Serializer.h"
 namespace Network {
-	const HashType NetStreamHash = StringUtil::Hash(L"NetStream");
-
 	int GetNetStreamHeaderSize() {
 		return sizeof(HashType) + sizeof(LengthType);
 	}
 
-	class NetStream : private Serializer::StreamReader {
-	private:
+	class NetStreamReader : private Serializer::StreamReader {
 	public:
-		NetStream(uint8* buffer, size_t length)
+		NetStreamReader(uint8* buffer, size_t length)
 			: StreamReader(buffer, length) {}
 		int GetNetStreamSize() {
 			const LengthType* unit = (const LengthType*)buffer;
@@ -18,11 +15,12 @@ namespace Network {
 		}
 		bool IsNetStream() {
 			char* check = (char*)buffer + sizeof(LengthType);
-			return *(HashType*)check == NetStreamHash ? true : false;
+			return *(HashType*)check == Serializer::NetStreamHash ? true : false;
 		}
 		HashType GetSerializedTypeHash() {
 			HashType* temp = (HashType*)(buffer + GetNetStreamHeaderSize());
 			return *temp;
 		}
+	private:
 	};
 }

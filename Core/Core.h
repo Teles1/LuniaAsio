@@ -1,4 +1,6 @@
 #pragma once
+#ifndef Common_HEADER_GUARD
+#define Common_HEADER_GUARD
 #include <memory>
 #include <thread>
 #include <mutex>
@@ -40,13 +42,40 @@ typedef unsigned short		LengthType;
 #ifndef MAX_BUFFER_SIZE
 	#define MAX_BUFFER_SIZE 4096
 #endif
-
+namespace Constants {
+	const uint32 Version = 0x17;
+}
 #pragma endregion
 
 #pragma region  Utils Includes
 
 #include "./Utils/StringUtil.h"
 #include "./Exceptions/Expcetion.h"
-#include "../Debugging/Debugging.h"
 
 #pragma endregion
+
+#pragma region Debugging 
+#pragma once
+
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+
+
+#ifndef INFO_LOG 
+#define INFO_LOG(...) spdlog::info(fmt::format(__VA_ARGS__));
+#endif
+#ifndef ERROR_LOG 
+#define ERROR_LOG(...) spdlog::error(fmt::format(__VA_ARGS__));
+#endif
+#ifndef WARN_LOG 
+#define WARN_LOG(...) spdlog::warn(fmt::format(__VA_ARGS__));
+#endif
+#ifndef CRITICAL_LOG 
+#define CRITICAL_LOG(...) spdlog::critical(fmt::format(__VA_ARGS__));
+#endif
+#ifndef DEBUG_LOG 
+#define DEBUG_LOG(...) spdlog::debug(fmt::format(__VA_ARGS__));
+#endif
+
+#pragma endregion
+#endif // !Common_HEADER_GUARD
