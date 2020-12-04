@@ -11,6 +11,32 @@ namespace Network
 	*/
 	class TcpConnection : public std::enable_shared_from_this<TcpConnection>
 	{
+	#pragma region AllM Stupid Alive
+	public:
+		enum Marks { AliveReceived, AliveCleared };
+		///	Alive structure alter Game Guard Object
+		struct	Alive {
+			Marks	Mark;
+
+			///	backup alive data
+			struct AliveData
+			{
+				uint32	index;
+				uint32	value1;
+				uint32	value2;
+				uint32	value3;
+
+				bool	operator==(AliveData& aliveData)
+				{
+					if (index == aliveData.index && value1 == aliveData.value1
+						&& value2 == aliveData.value2 && value3 == aliveData.value3)
+						return	true;
+
+					return	false;
+				}
+			}answer, temp;
+		}alive;
+#pragma endregion
 	public:
 		using Tcp = boost::asio::ip::tcp;
 		TcpConnection(Tcp::socket&& socket) :
@@ -178,6 +204,9 @@ namespace Network
 		uint32 getUserID() const {
 			return this->userID;
 		}
+		void UpdateAliveAuth(const Alive::AliveData& answer) {
+			alive.Mark = AliveReceived;
+		}
 #pragma region Crypt
 		void SetEncryptKey(uint32 key) {
 			decryptor.SetKey(key);
@@ -196,30 +225,7 @@ namespace Network
 			socket_.async_read_some(boost::asio::buffer(src, bytes_read), std::bind(&TcpConnection::onMessage, this, std::placeholders::_1, std::placeholders::_2));
 		}
 #pragma region Game related
-	public:
-			enum Marks { AliveReceived, AliveCleared };
-			///	Alive structure alter Game Guard Object
-			struct	Alive {
-				Marks	Mark;
-
-				///	backup alive data
-				struct AliveData
-				{
-					uint32	index;
-					uint32	value1;
-					uint32	value2;
-					uint32	value3;
-
-					bool	operator==(AliveData& aliveData)
-					{
-						if (index == aliveData.index && value1 == aliveData.value1
-							&& value2 == aliveData.value2 && value3 == aliveData.value3)
-							return	true;
-
-						return	false;
-					}
-				}answer, temp;
-			}alive;
+	
 	private:
 		Network::Crypt::Box decryptor;
 		bool EncryptKey;

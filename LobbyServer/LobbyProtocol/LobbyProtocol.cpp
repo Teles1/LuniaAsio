@@ -1,5 +1,3 @@
-#include "F:\lunia\Network\Network.h"
-#include "F:\lunia\Core\Core.h"
 #pragma once
 #include "LobbyProtocol.h"
 
@@ -10,7 +8,7 @@ namespace Lobby {
 		const uint16 Head::TypeHash = StringUtil::Hash(Head::TypeName);
 		void Head::Serialize(Serializer::StreamWriter& out)
 		{
-			out.Write(TypeHash);
+			out.Begin(TypeName);
 			out.Write(Result);
 			out.Write(L"ServerTime", ServerTime);
 			out.Write(UserIP);
@@ -27,6 +25,7 @@ namespace Lobby {
 		const uint16 Auth::TypeHash = StringUtil::Hash(Auth::TypeName);
 		void Auth::Serialize(Serializer::StreamWriter& out)
 		{
+			out.Begin(TypeName);
 			out.Write(static_cast<const int>(Result));
 			out.Write(AccountId);
 			out.Write(IDNumber);
@@ -44,6 +43,7 @@ namespace Lobby {
 		const uint16 Alive::TypeHash = StringUtil::Hash(Alive::TypeName);
 		void Alive::Serialize(Serializer::StreamWriter& out)
 		{
+			out.Begin(TypeName);
 			out.Write(Index);
 			out.Write(Value1);
 			out.Write(Value2);
@@ -61,6 +61,7 @@ namespace Lobby {
 		const uint16 CharacterSlots::TypeHash = StringUtil::Hash(CharacterSlots::TypeName);
 		void CharacterSlots::Serialize(Serializer::StreamWriter& out)
 		{
+			out.Begin(TypeName);
 			//out.Write(NumberOfSlots);
 			//out.Write(CharacterLicenses);
 		}

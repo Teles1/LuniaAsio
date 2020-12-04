@@ -20,11 +20,18 @@ namespace Lobby {
 		uint16 aux = 0;
 		reader.Read(aux);
 		INFO_LOG("[{0}] New message received [{1:#04x}]!", user->getUserID(), aux);
-		if ((uint16)StringUtil::Hash(L"Head") == aux) { // pretty please. don't forget to convert to uint16 when hashing =p
-			std::cout << "It's Head!\n";
-			Lobby::Protocol::Head head;
-			head.Deserialize(reader);
-			handleHead(user, head);
+		if (Protocol::Head::TypeHash == aux) { // pretty please. don't forget to convert to uint16 when hashing =p
+			Lobby::Protocol::Head packet;
+			packet.Deserialize(reader);
+			handleHead(user, packet);
+		}
+		else if (Protocol::Alive::TypeHash == aux) {
+			Lobby::Protocol::Alive packet;
+			packet.Deserialize(reader);
+			handleAlive(user, packet);
+		}
+		else {
+			print_hex_memory(data);
 		}
 		std::cout << std::endl;
 	}
@@ -79,30 +86,48 @@ namespace Lobby {
 	{
 
 	}
-
-}
-void print_hex_memory(void* mem) {
-	int i;
-	unsigned char* p = (unsigned char*)mem;
-	for (i = 1; i < 128; i++) {
-		printf("%02x ", p[i-1]);
-		//if ((i % 16 == 0))
-		//	printf("\n");
+	void handleAlive(const Network::UserPtr& user, Protocol::Alive message)
+	{
+		Network::TcpConnection::Alive::AliveData answer;
+		answer.index = message.Index;
+		answer.value1 = message.Value1;
+		answer.value2 = message.Value2;
+		answer.value3 = message.Value3;
+		user->UpdateAliveAuth(answer);
 	}
-	printf("\n");
+
+	void print_hex_memory(void* mem) {
+		int i;
+		unsigned char* p = (unsigned char*)mem;
+		for (i = 1; i < 128; i++) {
+			printf("%02x ", p[i - 1]);
+			//if ((i % 16 == 0))
+			//	printf("\n");
+		}
+		printf("\n");
+	}
 }
+
 int main(int argc, char* argv[])
 {
 	/*
-	Lobby::Protocol::Head sendPacket;
-	sendPacket.Result = Lobby::Protocol::Head::Results::Ok;
-	sendPacket.ServerTime = DateTime::Now();
-	sendPacket.UserIP = "184.146.62.104";
-	sendPacket.EncryptKey = Math::Random();
+	Lobby::Protocol::Alive sendPacket;
 
 	StaticBuffer< 40960 > buffer;
 	Serializer::StreamWriter writer(buffer);
-	writer.Write(sendPacket);
+	//writer.Write(sendPacket);
+	uint16 hash = StringUtil::Hash(L"Index");
+	buffer.Append(&hash, sizeof(uint16));
+
+	hash = StringUtil::Hash(L"Value1");
+	buffer.Append(&hash, sizeof(uint16));
+
+	hash = StringUtil::Hash(L"Value2");
+	buffer.Append(&hash, sizeof(uint16));
+
+	hash = StringUtil::Hash(L"Value3");
+	buffer.Append(&hash, sizeof(uint16));
+
 	char* aux = buffer.GetData();
 	print_hex_memory(aux);
 	return 0;
