@@ -16,6 +16,8 @@
     <ClInclude Include="NetStream\NetStream.h" />
     <ClInclude Include="CallBacks.hpp" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Api\httplib.h" />
+    <ClInclude Include="Api\json.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

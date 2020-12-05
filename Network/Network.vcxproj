@@ -157,8 +157,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Api\json.hpp" />
     <ClInclude Include="Crypt\Crypt.h" />
     <ClInclude Include="CallBacks.hpp" />
+    <ClInclude Include="Api\httplib.h" />
     <ClInclude Include="NetStream\NetStream.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="stdafx.h" />

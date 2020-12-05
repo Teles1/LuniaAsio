@@ -58,9 +58,7 @@ namespace Constants {
 #pragma once
 
 #include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-
-
+#include "spdlog/sinks/stdout_sinks.h"
 #ifndef INFO_LOG 
 #define INFO_LOG(...) spdlog::info(fmt::format(__VA_ARGS__));
 #endif

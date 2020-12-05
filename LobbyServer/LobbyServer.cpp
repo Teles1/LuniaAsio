@@ -15,25 +15,31 @@ namespace Lobby {
 	}
 
 	void onMessage(const Network::UserPtr& user, uint8* data, size_t len) {
-		if (len < 6) WARN_LOG("[{0}] Message is too small.", user->getUserID());
 		Serializer::StreamReader reader = Serializer::StreamReader(data, len);
 		uint16 aux = 0;
 		reader.Read(aux);
-		INFO_LOG("[{0}] New message received [{1:#04x}]!", user->getUserID(), aux);
-		if (Protocol::Head::TypeHash == aux) { // pretty please. don't forget to convert to uint16 when hashing =p
+		if (Protocol::Head::TypeHash == aux) {
+			INFO_LOG("[{0}] Head Received!", user->getUserID());
 			Lobby::Protocol::Head packet;
 			packet.Deserialize(reader);
 			handleHead(user, packet);
 		}
 		else if (Protocol::Alive::TypeHash == aux) {
+			INFO_LOG("[{0}] Alive Received!", user->getUserID());
 			Lobby::Protocol::Alive packet;
 			packet.Deserialize(reader);
 			handleAlive(user, packet);
 		}
+		else if(Protocol::Auth::TypeHash == aux){
+			INFO_LOG("[{0}] Auth Received!", user->getUserID());
+			Lobby::Protocol::Auth packet;
+			packet.Deserialize(reader);
+			handleAuth(user, packet);
+		}
 		else {
+			WARN_LOG("[{0}] Unkown Packet Received [{1:04X}]",user ->getUserID(), aux);
 			print_hex_memory(data);
 		}
-		std::cout << std::endl;
 	}
 #pragma region User Related
 	bool QueryAliveAuth(const Network::UserPtr& user)
@@ -75,7 +81,8 @@ namespace Lobby {
 		else
 			sendPacket.Result = Protocol::Head::Results::Ok;
 		sendPacket.EncryptKey = Math::Random();
-		user->SetEncryptKey(sendPacket.EncryptKey);
+		user->SetKey(sendPacket.EncryptKey);
+		//INFO_LOG("CryptoKey[{0}]", sendPacket.EncryptKey);
 		sendPacket.ServerTime = DateTime::Now();
 		sendPacket.UserIP = user->peerAddress();
 		Send(user, sendPacket);
@@ -110,28 +117,14 @@ namespace Lobby {
 
 int main(int argc, char* argv[])
 {
-	/*
-	Lobby::Protocol::Alive sendPacket;
-
-	StaticBuffer< 40960 > buffer;
-	Serializer::StreamWriter writer(buffer);
-	//writer.Write(sendPacket);
-	uint16 hash = StringUtil::Hash(L"Index");
-	buffer.Append(&hash, sizeof(uint16));
-
-	hash = StringUtil::Hash(L"Value1");
-	buffer.Append(&hash, sizeof(uint16));
-
-	hash = StringUtil::Hash(L"Value2");
-	buffer.Append(&hash, sizeof(uint16));
-
-	hash = StringUtil::Hash(L"Value3");
-	buffer.Append(&hash, sizeof(uint16));
-
-	char* aux = buffer.GetData();
-	print_hex_memory(aux);
-	return 0;
-	*/
+	try {
+		//send lobby server to the api.
+		//auto res = Lobby::api.Get("Lobby/ListServer");
+	}
+	catch (...) {
+		INFO_LOG("Exception thrown Initializing server to db");
+		return 0;
+	}
 	spdlog::set_pattern("[%d/%m/%Y %X] %^%l%$ => %v");
 	boost::asio::io_service service;
 	uint16 port = 15550;
@@ -146,6 +139,7 @@ int main(int argc, char* argv[])
 	}
 	catch (const boost::system::system_error& ex) {
 		ERROR_LOG("Server Exception => {0}", ex.what());
+		return 0;
 	}
 	return 0;
 }

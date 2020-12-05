@@ -14,11 +14,22 @@ namespace StringUtil {
 		}
 		return hashcode;
 	}
-	inline std::string GetString(uint8 data[], uint32 lenght) {
-		std::stringstream ss; // added include [ crazy in common.h ] 
-		for (uint32 i = 0; i < lenght; i++)
-			ss << std::setw(2) << std::setfill('0') << std::hex << (unsigned)data[i];
-		
-		return ss.str();
+	inline std::string GetString(uint8* data, uint32 length) {
+		std::ostringstream ret;
+		ret << std::hex << std::setfill('0');
+		for (uint32 i = 1; i < length + 1; i++) {
+			ret << "0x" << std::setw(2) << static_cast<unsigned int>(data[i - 1]) << " ";
+			if (i % 16 == 0) { ret << "\n"; }
+		}
+		return ret.str();
+	}
+	inline std::string GetString(uint8* data, uint32 length, bool commasepareted) {
+		std::ostringstream ret;
+		ret << std::hex << std::setfill('0');
+		for (uint32 i = 0; i < length; i++) {
+			ret << (i == 0 ? " 0x" : ", 0x" ) << std::setw(2) << static_cast<unsigned int>(data[i]) << " ";
+			//if (i % 16 == 0) { ret << "\n"; }
+		}
+		return ret.str();
 	}
 }

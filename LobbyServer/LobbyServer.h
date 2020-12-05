@@ -1,10 +1,17 @@
 #pragma once
 #include "../Core/Core.h"
-#include "../Network/TcpServer.hpp"
-#include "../Core/Serializer/Serializer.h"
+#include "../Network/stdafx.h"
 #include "./LobbyProtocol/LobbyProtocol.h"
 #include "../Core/Utils/Math/Random.h"
 namespace Lobby{
+	struct Config {
+	public:
+		std::string API = "http://localhost:8080/";
+		uint16 Port = 15550;
+		std::string ServerName = "Lobby_CA-DEV";
+		uint16 PingTimeout = 30; //seconds
+	}Config;
+	httplib::Client api(Lobby::Config.API.c_str());
 	enum Static { 
 		SendBufferSize = 40960
 	};

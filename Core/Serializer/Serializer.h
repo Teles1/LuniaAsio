@@ -8,6 +8,7 @@
 #include "ISerializable.h"
 namespace Serializer {
 	const HashType NetStreamHash = StringUtil::Hash(L"NetStream");
+	const uint16 HeaderSize = sizeof(HashType) + sizeof(LengthType);
 	class StreamReader
 	{
 	private:
