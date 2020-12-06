@@ -24,28 +24,6 @@ namespace Lobby { namespace Protocol {
 		NET_SERIALIZABLE
 	};
 
-	/*
-	struct Teste : public Serializer::ISerializable
-	{
-		uint16 ProtocolVersion;
-		std::vector<std::string> Checksums;
-
-		enum Results
-		{
-			Ok = 0,
-			VersionMismatched,
-			NoResponse = 0xff,
-		} Result;
-
-		DateTime ServerTime;
-		std::string UserIP;
-		uint32 EncryptKey;
-
-		int Hashcode;
-		NET_SERIALIZABLE
-	} Teste;
-	*/
-
 	struct Auth : public Serializer::ISerializable
 	{
 		enum Results
