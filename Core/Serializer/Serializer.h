@@ -142,11 +142,10 @@ namespace Serializer {
 			buffer.Append(&hash, sizeof(HashType));
 			value.Serialize(*this);
 		}
-		void Begin(String name) {
-			HashType hash = StringUtil::Hash(name);
-			if (buffer.GetMaxLength() < sizeof(hash))   // buffer overflow
+		void Begin(uint16 protocolTypeHashed) {
+			if (buffer.GetMaxLength() < sizeof(protocolTypeHashed))   // buffer overflow
 				throw;
-			buffer.Append(&hash, sizeof(HashType));	
+			buffer.Append(&protocolTypeHashed, sizeof(HashType));
 		}
 #pragma region Base Types
 		void Write(uint8	value) { WriteBaseType(value); }

@@ -123,7 +123,7 @@ void DateTime::Deserialize(Serializer::StreamReader& in) {
 }
 
 void DateTime::Serialize(Serializer::StreamWriter& out){
-	out.Begin(L"AllM::DateTime");
+	out.Begin((uint16) StringUtil::Hash(L"AllM::DateTime"));
 	uint16 tmp;
 	tmp = dateData.GetYear();
 	out.Write( tmp);

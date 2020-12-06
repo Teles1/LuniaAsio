@@ -4,11 +4,10 @@
 namespace Lobby {
 	namespace Protocol {
 
-		const String Head::TypeName = L"Head";
-		const uint16 Head::TypeHash = StringUtil::Hash(Head::TypeName);
+		const uint16 Head::TypeHash = StringUtil::Hash(L"Head");
 		void Head::Serialize(Serializer::StreamWriter& out)
 		{
-			out.Begin(TypeName);
+			out.Begin(TypeHash);
 			out.Write(Result);
 			out.Write(L"ServerTime", ServerTime);
 			out.Write(UserIP);
@@ -21,11 +20,10 @@ namespace Lobby {
 			in.Read(Checksums);
 		}
 
-		const String Auth::TypeName = L"Auth";
-		const uint16 Auth::TypeHash = StringUtil::Hash(Auth::TypeName);
+		const uint16 Auth::TypeHash = StringUtil::Hash(L"Auth");
 		void Auth::Serialize(Serializer::StreamWriter& out)
 		{
-			out.Begin(TypeName);
+			out.Begin(TypeHash);
 			out.Write(static_cast<const int>(Result));
 			out.Write(AccountId);
 			out.Write(IDNumber);
@@ -39,11 +37,10 @@ namespace Lobby {
 			in.Read(Locale);
 		}
 
-		const String Alive::TypeName = L"Alive";
-		const uint16 Alive::TypeHash = StringUtil::Hash(Alive::TypeName);
+		const uint16 Alive::TypeHash = StringUtil::Hash(L"Alive");
 		void Alive::Serialize(Serializer::StreamWriter& out)
 		{
-			out.Begin(TypeName);
+			out.Begin(TypeHash);
 			out.Write(Index);
 			out.Write(Value1);
 			out.Write(Value2);
@@ -57,11 +54,10 @@ namespace Lobby {
 			in.Read(Value3);
 		}
 
-		const String CharacterSlots::TypeName = L"CharacterSlots";
-		const uint16 CharacterSlots::TypeHash = StringUtil::Hash(CharacterSlots::TypeName);
+		const uint16 CharacterSlots::TypeHash = StringUtil::Hash(L"CharacterSlots");
 		void CharacterSlots::Serialize(Serializer::StreamWriter& out)
 		{
-			out.Begin(TypeName);
+			out.Begin(TypeHash);
 			//out.Write(NumberOfSlots);
 			//out.Write(CharacterLicenses);
 		}
