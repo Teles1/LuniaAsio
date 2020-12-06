@@ -2,7 +2,7 @@
 #include "../Core/Core.h"
 #include "./Network.h"
 #include "Crypt/Crypt.h"
-#include "NetStream/NetStream.h"
+#include "../Core/Serializer/Serializer.h"
 #include "./CallBacks.hpp"
 namespace Network
 {
@@ -164,6 +164,8 @@ namespace Network
 							if (total >= length)
 								break;
 						} while (true);
+						//Cleaning up my pointer.
+						delete[] work;
 					}
 					catch (...) {
 						std::cout << "Exception trown\n"; 
@@ -233,7 +235,8 @@ namespace Network
 	private:
 		void doRead() 
 		{
-			socket_.async_read_some(boost::asio::buffer(src, bytes_read), std::bind(&TcpConnection::onMessage, this, std::placeholders::_1, std::placeholders::_2));
+			socket_.async_read_some(boost::asio::buffer(src, bytes_read), 
+				std::bind(&TcpConnection::onMessage, this, std::placeholders::_1, std::placeholders::_2));
 		}
 #pragma region Game related
 	

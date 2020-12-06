@@ -63,7 +63,7 @@ namespace Constants {
 #define INFO_LOG(...) spdlog::info(fmt::format(__VA_ARGS__));
 #endif
 #ifndef ERROR_LOG 
-#define ERROR_LOG(...) spdlog::error(fmt::format(__VA_ARGS__)); throw;
+#define ERROR_LOG(...) spdlog::error(fmt::format(__VA_ARGS__)); throw Exception("Look at the goddman console.");
 #endif
 #ifndef WARN_LOG 
 #define WARN_LOG(...) spdlog::warn(fmt::format(__VA_ARGS__));

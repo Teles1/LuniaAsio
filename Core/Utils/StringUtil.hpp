@@ -5,6 +5,7 @@
 #include "../Core.h"
 #include <iomanip>
 #include <stdarg.h>
+#include <codecvt>
 
 namespace StringUtil {
 	inline uint32 Hash(std::wstring str)
@@ -36,15 +37,26 @@ namespace StringUtil {
 		}
 		return ret.str();
 	}
+	inline std::string ws2s(const std::wstring& wstr)
+	{
+		using convert_typeX = std::codecvt_utf8<wchar_t>;
+		std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+		return converterX.to_bytes(wstr);
+	}
 	class StringBuilder {
 	public:
 		StringBuilder() {
 		}
 		StringBuilder(const char* in) {
-			sData.assign(std::move(in));
+			sData.push_back(std::move(in));
+			if (sData[sData.size()] != "/")
+				sData.push_back(std::move("/"));
 		}
 		StringBuilder(std::string& in) {
-			sData = std::move(in);
+			sData.push_back(std::move(in));
+			if (sData[sData.size()] != "/")
+				sData.push_back("/");
 		}
 		template<typename T>
 		StringBuilder& operator << (const T& inData) {
@@ -52,23 +64,32 @@ namespace StringUtil {
 			return *this;
 		}
 		std::string& GetString() {
-			return sData;
+			std::ostringstream ret;
+			for (int i = 0; i < sData.size(); i++) {
+				if (i != 0) {
+					ret << '|';
+				}
+				ret << sData[i];
+			}
 		}
 		void Append(const std::string& in) {
-			sData.append(in);
+			sData.push_back(in);
+		}
+		void Append(const std::wstring& in) {
+			sData.push_back(StringUtil::ws2s(in));
 		}
 		void Append(const char* in) {
-			sData.append(std::move(in));
+			sData.push_back(std::move(in));
 		}
 		void Append(const short& in) {
-			sData.append(std::move(std::to_string(in)));
+			sData.push_back(std::move(std::to_string(in)));
 		}
 		void Append(const int& in) {
-			sData.append(std::move(std::to_string(in)));
+			sData.push_back(std::move(std::to_string(in)));
 		}
 		~StringBuilder() {}
 	private:
-		std::string sData = "";
+		std::vector<std::string> sData;
 	};
 }
 #endif // !StringUtil_HEADER_GUARD

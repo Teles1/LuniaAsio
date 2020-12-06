@@ -11,15 +11,21 @@ namespace Lobby{
 		std::string API = "http://localhost:51542";
 		std::string ServerIp = "127.0.0.1";
 		uint16 ServerPort = 15550;
-		std::string ServerName = "Lobby_CA-DEV";
+		std::string ServerName = "Lobby_DEV";
 		uint16 PingTimeout = 30; //seconds
 	}Config;
-	struct Api {
+
+	class DatabaseHooker {
 	private:
 		httplib::Client cli;
 	public:
-		Api(const char* in) : cli(in)
+		DatabaseHooker(const char* in) : cli(in)
 		{
+			httplib::Headers headers{
+				{"ServerName", Config.ServerName},
+				{"ServerIp", Config.ServerIp}
+			};
+			cli.set_default_headers(headers);
 			cli.set_read_timeout(5, 0);
 			cli.set_write_timeout(5, 0);
 		}
@@ -29,15 +35,19 @@ namespace Lobby{
 				if (res->status == 200) {
 					return true;
 				}
-				else {
-					ERROR_LOG("{0}", in);
+				else if(res->status == 400){
+					WARN_LOG("[{0}]", res->body);
 				}
+				else if (res->status == 404)
+					WARN_LOG("Could not reach the API specified[{0}].", Config.API);
 			}else
-				ERROR_LOG("Cannot communicate with the api! {0}", res.error());
+				WARN_LOG("Cannot communicate with the api! {0}", res.error());
 			return false;
 		}
-	}Api(Config.API.c_str());
-	
+		~DatabaseHooker() {}
+	};
+	DatabaseHooker Api(Config.API.c_str());
+	UserManager users(Api);
 	enum Static { 
 		SendBufferSize = 2 << 13
 	};

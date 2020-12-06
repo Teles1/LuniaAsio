@@ -13,11 +13,13 @@
     </ClInclude>
     <ClInclude Include="Network.h" />
     <ClInclude Include="Crypt\Crypt.h" />
-    <ClInclude Include="NetStream\NetStream.h" />
     <ClInclude Include="CallBacks.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Api\httplib.h" />
     <ClInclude Include="Api\json.hpp" />
+    <ClInclude Include="Tcp\Client.h" />
+    <ClInclude Include="Tcp\Server.h" />
+    <ClInclude Include="Tcp\Shared.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

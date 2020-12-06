@@ -100,7 +100,17 @@ namespace Lobby {
 
 	void handleAuth(const Network::UserPtr& user, Protocol::Auth message)
 	{
-
+		//in.Read(AccountId);
+		//in.Read(EncryptedPassword);
+		//in.Read(AuthString);
+		//in.Read(IsPubModuleLogin);
+		//in.Read(Locale);
+		
+		INFO_LOG("{0} {1} {2} {3} {4}", StringUtil::ws2s(message.AccountId), message.EncryptedPassword,
+			std::string(message.AuthString), message.IsPubModuleLogin?"true":"false", StringUtil::ws2s(message.Locale));
+		StringUtil::StringBuilder call("CheckAccount");
+		call << message.AccountId << message.EncryptedPassword << user->peerAddress();
+		//Api.Send();
 	}
 	void handleAlive(const Network::UserPtr& user, Protocol::Alive message)
 	{
@@ -124,10 +134,9 @@ namespace Lobby {
 	}
 	void InitializeApi() {
 		try {
-			StringUtil::StringBuilder call;
+			StringUtil::StringBuilder call("AddServer");
 			//send lobby server to the api.
-			call << "AddServer/" << Lobby::Config.ServerName << "?ServerIp=" << Lobby::Config.ServerIp <<
-				"&ServerPort=" << Lobby::Config.ServerPort;
+			call << Lobby::Config.ServerPort;
 			[](std::string& in) {
 				while (!Api.Send(in)) {
 					Sleep(1000);

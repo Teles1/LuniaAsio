@@ -4,7 +4,6 @@
 #include <future>
 #include <cstdio>
 #include <iostream>
-#include "../Network/stdafx.h"
 struct Protocol {
 public:
 	virtual void Print() = 0;

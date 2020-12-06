@@ -41,7 +41,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -161,11 +161,13 @@
     <ClInclude Include="Crypt\Crypt.h" />
     <ClInclude Include="CallBacks.hpp" />
     <ClInclude Include="Api\httplib.h" />
-    <ClInclude Include="NetStream\NetStream.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TcpConnection.hpp" />
     <ClInclude Include="TcpServer.hpp" />
+    <ClInclude Include="Tcp\Client.h" />
+    <ClInclude Include="Tcp\Server.h" />
+    <ClInclude Include="Tcp\Shared.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
