@@ -33,18 +33,12 @@
     <ClCompile Include="LobbyServer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="UserManager.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="LobbyServer.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="UserManager.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

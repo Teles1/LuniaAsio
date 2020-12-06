@@ -47,7 +47,7 @@ namespace Lobby{
 		~DatabaseHooker() {}
 	};
 	DatabaseHooker Api(Config.API.c_str());
-	UserManager users(Api);
+	//UserManager users(Api);
 	enum Static { 
 		SendBufferSize = 2 << 13
 	};

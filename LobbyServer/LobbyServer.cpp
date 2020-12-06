@@ -137,11 +137,11 @@ namespace Lobby {
 			StringUtil::StringBuilder call("AddServer");
 			//send lobby server to the api.
 			call << Lobby::Config.ServerPort;
-			[](std::string& in) {
+			[](std::string&& in) {
 				while (!Api.Send(in)) {
 					Sleep(1000);
 				}
-			}(call.GetString());
+			}(std::move(call.GetString()));
 		}
 		catch (...) {
 			INFO_LOG("Exception thrown Initializing server to db");

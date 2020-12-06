@@ -151,7 +151,6 @@
   <ItemGroup>
     <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp" />
     <ClCompile Include="LobbyServer.cpp" />
-    <ClCompile Include="UserManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
@@ -162,7 +161,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="UserManager.h" />
     <ClInclude Include="LobbyServer.h" />
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h" />
   </ItemGroup>

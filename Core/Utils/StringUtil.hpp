@@ -63,7 +63,7 @@ namespace StringUtil {
 			Append(inData);
 			return *this;
 		}
-		std::string& GetString() {
+		std::string GetString() {
 			std::ostringstream ret;
 			for (int i = 0; i < sData.size(); i++) {
 				if (i != 0) {
@@ -71,6 +71,7 @@ namespace StringUtil {
 				}
 				ret << sData[i];
 			}
+			return ret.str();
 		}
 		void Append(const std::string& in) {
 			sData.push_back(in);
