@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="Core.h" />
     <ClInclude Include="Exceptions\Expcetion.h" />
+    <ClInclude Include="fwEvent.h" />
     <ClInclude Include="Serializer\ISerializable.h" />
     <ClInclude Include="Serializer\Serializer.h" />
     <ClInclude Include="Utils\Buffer.h" />

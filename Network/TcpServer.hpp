@@ -42,6 +42,14 @@ namespace Network
 				conn->setWriteCompleteCallback(writeCompleteCallback_);
 
 				conn->start(userID);
+
+				/*
+				conn->OnPacketMessage.Connect([=]() {
+					INFO_LOG("OnPacketMessage");
+				});
+				*/
+				
+
 				userID++;
 				connections_.push_back(conn);
 				connectionCallback_(conn);
@@ -64,6 +72,8 @@ namespace Network
 
 		std::vector<std::shared_ptr<TcpConnection>> connections_;
 		uint32 userID = 1000;
+
+		//PacketHandlerImpl* packetHandlerImpl;
 	};
 
 }

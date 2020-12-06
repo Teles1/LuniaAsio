@@ -34,6 +34,17 @@ namespace Serializer {
 		void Read(int32& value) { ReadBaseType(value); }
 		void Read(int64& value) { ReadBaseType(value); }
 
+		void Read(ISerializable& value)
+		{
+			//buffer += sizeof(LengthType); // skip length information of NetStream
+
+			// check hash
+			//assert(reinterpret_cast<HashType&>(*working) == NetStreamHash);
+			//buffer += sizeof(HashType);
+
+			value.Deserialize(*this);
+		}
+
 		uint32 Read(char* value) {
 			LengthType size;
 			ReadBaseType(size);

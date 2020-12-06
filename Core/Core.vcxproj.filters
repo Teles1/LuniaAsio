@@ -30,6 +30,7 @@
     <ClInclude Include="Utils\Buffer.h" />
     <ClInclude Include="Serializer\ISerializable.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="fwEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils\DateTime.cpp">
