@@ -1,3 +1,6 @@
+#ifndef DateTime_HEADER_GUARD
+#define DateTime_HEADER_GUARD
+
 #pragma once
 #include "../Core.h"
 #include "../Serializer/ISerializable.h"
@@ -84,3 +87,4 @@ public:
 	void Deserialize(Serializer::StreamReader& in) override;
 	void Serialize(Serializer::StreamWriter& out) override;
 };
+#endif // !DateTime_HEADER_GUARD

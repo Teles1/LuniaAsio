@@ -113,19 +113,29 @@ namespace Lobby {
 		}
 		printf("\n");
 	}
+	void InitializeApi() {
+		try {
+			StringUtil::StringBuilder call;
+			//send lobby server to the api.
+			call << "AddServer/" << Lobby::Config.ServerName << "?ServerIp=" << Lobby::Config.ServerIp <<
+				"&ServerPort=" << Lobby::Config.ServerPort;
+			[](std::string& in) {
+				while (!Api.Send(in)) {
+					Sleep(1000);
+				}
+			}(call.GetString());
+		}
+		catch (...) {
+			INFO_LOG("Exception thrown Initializing server to db");
+		}
+	}
 }
 
 int main(int argc, char* argv[])
 {
-	try {
-		//send lobby server to the api.
-		//auto res = Lobby::api.Get("Lobby/ListServer");
-	}
-	catch (...) {
-		INFO_LOG("Exception thrown Initializing server to db");
-		return 0;
-	}
-	spdlog::set_pattern("[%d/%m/%Y %X] %^%l%$ => %v");
+	Lobby::InitializeApi();
+	spdlog::set_pattern("[%d/%m/%Y %X]%^%l%$ => %v");
+	//INFO_LOG("[{0}] Initialized!", Lobby::Config.ServerName);
 	boost::asio::io_service service;
 	uint16 port = 15550;
 	try {
@@ -134,7 +144,7 @@ int main(int argc, char* argv[])
 		server.setDisconnectionCallback(Lobby::onDisconnection);
 		server.setWriteCompleteCallback(Lobby::onWrite);
 		server.setMessageCallback(Lobby::onMessage);
-		INFO_LOG("Server started on Port {0}", port);
+		INFO_LOG("{0} started on Port {1}", Lobby::Config.ServerName, port);
 		service.run();
 	}
 	catch (const boost::system::system_error& ex) {

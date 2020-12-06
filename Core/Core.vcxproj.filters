@@ -12,9 +12,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Utils\StringUtil.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\Version.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -30,6 +27,9 @@
     <ClInclude Include="Utils\Buffer.h" />
     <ClInclude Include="Serializer\ISerializable.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="Utils\StringUtil.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils\DateTime.cpp">

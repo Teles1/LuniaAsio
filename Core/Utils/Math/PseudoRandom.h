@@ -1,3 +1,6 @@
+#ifndef PseudoRandom_GUARDER
+#define PseudoRandom_GUARDER
+
 #pragma once
 namespace Math {
 	class MersenneTwister {
@@ -130,3 +133,5 @@ namespace Math {
 		void operator=(const PseudoRandomFloat53Bit&); // assignment operator not defined
 	};
 }
+
+#endif // !PseudoRandom_GUARDER

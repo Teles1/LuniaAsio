@@ -1,3 +1,5 @@
+#ifndef Excpetion_GUARD
+#define Excpetion_GUARD
 #pragma once
 #include <exception>
 #include <boost/format.hpp>
@@ -20,3 +22,4 @@ public:
 		return this->Message.c_str();
 	}
 };
+#endif //Excpetion_GUARD

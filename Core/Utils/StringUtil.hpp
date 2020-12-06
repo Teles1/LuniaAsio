@@ -1,6 +1,10 @@
+#ifndef StringUtil_HEADER_GUARD
+#define StringUtil_HEADER_GUARD
+
 #pragma once
 #include "../Core.h"
 #include <iomanip>
+#include <stdarg.h>
 
 namespace StringUtil {
 	inline uint32 Hash(std::wstring str)
@@ -32,4 +36,39 @@ namespace StringUtil {
 		}
 		return ret.str();
 	}
+	class StringBuilder {
+	public:
+		StringBuilder() {
+		}
+		StringBuilder(const char* in) {
+			sData.assign(std::move(in));
+		}
+		StringBuilder(std::string& in) {
+			sData = std::move(in);
+		}
+		template<typename T>
+		StringBuilder& operator << (const T& inData) {
+			Append(inData);
+			return *this;
+		}
+		std::string& GetString() {
+			return sData;
+		}
+		void Append(const std::string& in) {
+			sData.append(in);
+		}
+		void Append(const char* in) {
+			sData.append(std::move(in));
+		}
+		void Append(const short& in) {
+			sData.append(std::move(std::to_string(in)));
+		}
+		void Append(const int& in) {
+			sData.append(std::move(std::to_string(in)));
+		}
+		~StringBuilder() {}
+	private:
+		std::string sData = "";
+	};
 }
+#endif // !StringUtil_HEADER_GUARD

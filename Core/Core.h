@@ -49,7 +49,7 @@ namespace Constants {
 
 #pragma region  Utils Includes
 
-#include "./Utils/StringUtil.h"
+#include "./Utils/StringUtil.hpp"
 #include "./Exceptions/Expcetion.h"
 
 #pragma endregion
@@ -63,7 +63,7 @@ namespace Constants {
 #define INFO_LOG(...) spdlog::info(fmt::format(__VA_ARGS__));
 #endif
 #ifndef ERROR_LOG 
-#define ERROR_LOG(...) spdlog::error(fmt::format(__VA_ARGS__));
+#define ERROR_LOG(...) spdlog::error(fmt::format(__VA_ARGS__)); throw;
 #endif
 #ifndef WARN_LOG 
 #define WARN_LOG(...) spdlog::warn(fmt::format(__VA_ARGS__));

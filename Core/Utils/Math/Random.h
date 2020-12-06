@@ -1,3 +1,6 @@
+#ifndef Random_GUARDER
+#define Random_GUARDER
+
 #pragma once
 #include "PseudoRandom.h"
 namespace Math {
@@ -25,3 +28,5 @@ namespace Math {
 	*/
 	unsigned long Random();
 }
+
+#endif // !Random_GUARDER
