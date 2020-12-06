@@ -28,8 +28,7 @@
     <ClInclude Include="Serializer\ISerializable.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Utils\StringUtil.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
+    <ClInclude Include="fwEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils\DateTime.cpp">

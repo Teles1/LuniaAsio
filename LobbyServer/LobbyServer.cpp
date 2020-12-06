@@ -1,5 +1,7 @@
 #pragma once
 #include "./LobbyServer.h"
+#include "../Core/fwEvent.h";
+
 namespace Lobby {
 
 	void onConnection(const Network::UserPtr& user) {
@@ -16,8 +18,12 @@ namespace Lobby {
 
 	void onMessage(const Network::UserPtr& user, uint8* data, size_t len) {
 		Serializer::StreamReader reader = Serializer::StreamReader(data, len);
+
 		uint16 aux = 0;
 		reader.Read(aux);
+
+		pcktHandlerInstance(aux, reader);
+
 		if (Protocol::Head::TypeHash == aux) {
 			INFO_LOG("[{0}] Head Received!", user->getUserID());
 			Lobby::Protocol::Head packet;
@@ -87,6 +93,9 @@ namespace Lobby {
 		sendPacket.UserIP = user->peerAddress();
 		Send(user, sendPacket);
 		QueryAliveAuth(user);
+
+
+
 	}
 
 	void handleAuth(const Network::UserPtr& user, Protocol::Auth message)
@@ -135,6 +144,27 @@ int main(int argc, char* argv[])
 {
 	Lobby::InitializeApi();
 	spdlog::set_pattern("[%d/%m/%Y %X]%^%l%$ => %v");
+	/*
+	Lobby::OnConnectionPacketReceived.Connect([](const Network::UserPtr& user, uint8* data, size_t len)
+	{
+
+		Serializer::StreamReader reader = Serializer::StreamReader(data, len);
+
+		INFO_LOG("OnPacketMessage {0} ", user->getUserID());
+	});
+	*/
+
+	pcktHandlerInstance.On<Lobby::Protocol::Head>([](Lobby::Protocol::Head &packet) {
+		INFO_LOG("Packet Head was handled {0} ", packet.Checksums[0]);
+	});
+
+	pcktHandlerInstance.On<Lobby::Protocol::Auth>([](Lobby::Protocol::Auth& packet) {
+		INFO_LOG("Packet Auth was handled {0} ", packet.AuthString);
+	});
+
+	pcktHandlerInstance.On<Lobby::Protocol::Alive>([](Lobby::Protocol::Alive& packet) {
+		INFO_LOG("Packet Alive was handled {0} ", packet.Index);
+	});
 	//INFO_LOG("[{0}] Initialized!", Lobby::Config.ServerName);
 	boost::asio::io_service service;
 	uint16 port = 15550;
@@ -153,3 +183,4 @@ int main(int argc, char* argv[])
 	}
 	return 0;
 }
+
