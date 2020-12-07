@@ -7,8 +7,6 @@
 #include "../Utils/Buffer.h"
 #include "ISerializable.h"
 namespace Serializer {
-	const HashType NetStreamHash = StringUtil::Hash(L"NetStream");
-	const uint16 HeaderSize = sizeof(HashType) + sizeof(LengthType);
 	class StreamReader
 	{
 	private:
@@ -130,7 +128,7 @@ namespace Serializer {
 			}
 
 			buffer.Append(sizeof(LengthType));  // reserve size
-			buffer.Append(&NetStreamHash, sizeof(HashType)); /*adding E0 55 to it*/
+			buffer.Append(&Constants::NetStreamHash, sizeof(HashType)); /*adding E0 55 to it*/
 			value.Serialize(*this);
 			*(LengthType*)buffer.GetData() = (LengthType)buffer.GetLength();  // update size
 		}

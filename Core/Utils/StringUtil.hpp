@@ -51,7 +51,7 @@ namespace StringUtil {
 		StringBuilder(const char* in) {
 			sData.push_back(std::move(in));
 			if (sData[sData.size()] != "/")
-				sData.push_back(std::move("/"));
+				sData.push_back("/");
 		}
 		StringBuilder(std::string& in) {
 			sData.push_back(std::move(in));

@@ -1,5 +1,4 @@
 #pragma once
-#include "../Network/TcpServer.hpp"
 
 template<bool IsBoolean>
 struct fwEventConnectProxy
@@ -103,8 +102,9 @@ private:
 	{
 		auto cb = new callback(func);
 		cb->order = order;
-
+		assert(m_callbacks);
 		if (!m_callbacks)
+//isabelinha		
 		{
 			cb->next = nullptr;
 			m_callbacks = cb;

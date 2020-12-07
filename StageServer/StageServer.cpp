@@ -1,6 +1,6 @@
 #include "../Core/Core.h"
 #include <iostream>
-
+#include <chrono>
 class later
 {
 public:
@@ -54,20 +54,66 @@ public:
 private:
     std::shared_ptr<std::vector<uint8>> buffer;
 };
+struct Server;
+struct User : std::enable_shared_from_this<User> {
+public:
+    User(std::shared_ptr<Server> server) {
+        id = 0;
+        std::cout << "User Created!" << std::endl;
+    }
+    User() {
+        std::cout << "User Created!" << std::endl;
+    }
+    int& GetId() { return id; }
+    void DoWork(int i) {
+    }
+public:
+    void print(int i) {
+        id = i;
+    }
+    ~User(){
+        std::cout << "User destroyed" << std::endl;
+    }
+private:
+    int id;
+};
+typedef std::shared_ptr<User> UserPtr;
 
+struct Server {
+public:
+    Server (){}
+    void AddUsr(User* newUsr)
+    {
+        _connections.push_back(std::shared_ptr<User>(newUsr));
+    }
+    auto GetUser(uint16 i) {
+        //return _connections.at(i)->weak_from_this();
+    }
+    ~Server() {
+        UserPtr x = _connections[0];
+        std::cout << "server destroyed" << std::endl;
+    }
+    void Changedata(int& i) { user = i; }
+private:
+    std::vector < UserPtr> _connections;
+    uint16 user = 11;
+};
 
+typedef std::shared_ptr<Server> ServerPtr;
 int main()
 {	
-    std::vector<uint8> buffer;
-    buffer.push_back(10);
-    buffer.push_back(3);
-    buffer.push_back(4);
-    {
-        Tester obj(buffer);
-        obj.Print();
-        obj.GetData()[0] = 45;
-        obj.Print();
-    } 
-    std::cout << buffer[0] << std::endl;
+    ServerPtr x = std::shared_ptr<Server>( new Server);
+
+
+
+
+
+
+    x->AddUsr( new User );
+
+
+
+
+    system("pause");
     return 0;
 }

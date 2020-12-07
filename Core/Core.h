@@ -10,7 +10,6 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include <chrono>
 #include <cstdint>
 #include <cstdlib>
 #include <list>
@@ -42,10 +41,6 @@ typedef unsigned short		LengthType;
 #ifndef MAX_BUFFER_SIZE
 	#define MAX_BUFFER_SIZE 4096
 #endif
-namespace Constants {
-	const uint32 Version = 0x17;
-}
-#pragma endregion
 
 #pragma region  Utils Includes
 
@@ -53,10 +48,16 @@ namespace Constants {
 #include "./Exceptions/Expcetion.h"
 
 #pragma endregion
+namespace Constants {
+	const uint32 Version = 0x17;
+	const HashType NetStreamHash = StringUtil::Hash(L"NetStream");
+	const uint16 HeaderSize = sizeof(HashType) + sizeof(LengthType);
+}
+#pragma endregion
 
-#pragma region Debugging 
-#pragma once
-
+/*
+	LOG RELATED BEGIN
+*/
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_sinks.h"
 #ifndef INFO_LOG 
@@ -74,6 +75,8 @@ namespace Constants {
 #ifndef DEBUG_LOG 
 #define DEBUG_LOG(...) spdlog::debug(fmt::format(__VA_ARGS__));
 #endif
-
+/*
+	LOG STUFF END
+*/
 #pragma endregion
 #endif // !Common_HEADER_GUARD

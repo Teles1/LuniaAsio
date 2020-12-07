@@ -130,6 +130,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,6 +152,8 @@
   <ItemGroup>
     <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp" />
     <ClCompile Include="LobbyServer.cpp" />
+    <ClCompile Include="User.cpp" />
+    <ClCompile Include="UserRegistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
@@ -163,6 +166,10 @@
   <ItemGroup>
     <ClInclude Include="LobbyServer.h" />
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h" />
+    <ClInclude Include="User.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="UserRegistry.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

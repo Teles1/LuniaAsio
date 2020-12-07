@@ -3,17 +3,12 @@
   <ItemGroup>
     <ClCompile Include="Crypt\Crypt.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Tcp\Client.cpp" />
+    <ClCompile Include="Tcp\Server.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TcpConnection.hpp">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="TcpServer.hpp">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="Network.h" />
     <ClInclude Include="Crypt\Crypt.h" />
-    <ClInclude Include="CallBacks.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Api\httplib.h" />
     <ClInclude Include="Api\json.hpp" />
