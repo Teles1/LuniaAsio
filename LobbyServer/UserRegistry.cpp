@@ -28,7 +28,7 @@ namespace net
 	*/
 #pragma endregion
 
-	net::UserSharedPtr UserRegistry::MakeUser(boost::asio::ip::tcp::socket& socket){
+	net::UserSharedPtr UserRegistry::MakeUser(asio::ip::tcp::socket& socket){
 
 		UserSharedPtr user(new Lobby::User(std::move(socket)));
 		user->SetUserId(m_curUserId);

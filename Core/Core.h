@@ -3,8 +3,6 @@
 #define Common_HEADER_GUARD
 #include <memory>
 #include <thread>
-#include <mutex>
-#include <deque>
 #include <optional>
 #include <sstream> // added 
 #include <vector>
@@ -12,11 +10,8 @@
 #include <algorithm>
 #include <cstdint>
 #include <cstdlib>
-#include <list>
-#include <set>
 #include <utility>
 #include <map>
-#include "boost/format.hpp"
 
 #pragma region Type Definition
 

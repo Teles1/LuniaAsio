@@ -16,7 +16,7 @@ namespace Lobby {
 		{
 			
 		}
-		void HandleNewConnection(const boost::system::error_code& err_code
-			, boost::asio::ip::tcp::socket& socket);
+		void HandleNewConnection(const asio::error_code& err_code
+			, asio::ip::tcp::socket& socket);
 	};
 }

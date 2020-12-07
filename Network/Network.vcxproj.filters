@@ -6,7 +6,6 @@
     <ClCompile Include="Tcp\Client.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Network.h" />
     <ClInclude Include="Crypt\Crypt.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Api\httplib.h" />

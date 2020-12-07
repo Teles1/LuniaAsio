@@ -1,7 +1,7 @@
 #pragma once
 #include "./LobbyServer.h"
 namespace Lobby {
-	void LobbyServer::HandleNewConnection(const boost::system::error_code& err_code, boost::asio::ip::tcp::socket& socket)
+	void LobbyServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
 	{
 		INFO_LOG("Connection handled by Lobby");
 		net::UserRegistry::GetInstance()->MakeUser(socket)->HandleRead();

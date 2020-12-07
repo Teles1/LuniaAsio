@@ -27,7 +27,7 @@ namespace net
 		~UserRegistry() { std::cout << "User regestry destroyed" << std::endl; }
 		static std::shared_ptr<UserRegistry>& GetInstance();
 	public:
-		net::UserSharedPtr MakeUser(boost::asio::ip::tcp::socket& socket);
+		net::UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);
 
 		void RemoveUser(net::UserSharedPtr& user);
 

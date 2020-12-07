@@ -6,7 +6,7 @@ namespace Lobby {
 	class User : public net::ClientTcp 
 	{
 	public:
-		User(boost::asio::ip::tcp::socket&& socket)  
+		User(asio::ip::tcp::socket&& socket)
 			: ClientTcp(std::move(socket))
 			, m_userId(1000)
 			, packetHandler()
