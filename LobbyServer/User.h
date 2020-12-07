@@ -14,6 +14,11 @@ namespace Lobby {
 			std::cout << "User Created!" << std::endl;
 		}
 
+		~User()
+		{
+			std::cout << "User was deleted" << std::endl;
+		}
+
 		uint32 GetUserId()
 		{
 			return m_userId;

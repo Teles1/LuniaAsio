@@ -54,10 +54,11 @@ namespace net
 }
 
 static InitFunction initFunction([](){
-		INFO_LOG("TA EXECUTANDO");
-		net::UserRegistry::GetInstance()->OnUserConnected.Connect([](const net::UserSharedPtr& user)
-			{
-				INFO_LOG("UserConnected!!!");
-			});
+	INFO_LOG("TA EXECUTANDO");
+
+	net::UserRegistry::GetInstance()->OnUserConnected.Connect([](const net::UserSharedPtr& user)
+	{
+		INFO_LOG("UserConnected!!!");
 	});
+});
 
