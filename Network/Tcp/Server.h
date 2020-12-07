@@ -1,5 +1,5 @@
-#ifndef Server_GUARD
-#define Server_GUARD
+#ifndef ServerTcp_GUARD
+#define ServerTcp_GUARD
 #pragma once
 #include "./Shared.h"
 #include "./Client.h"

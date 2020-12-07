@@ -1,6 +1,8 @@
-﻿#pragma once
+﻿#ifndef UserRegistry_GUARD
+#define UserRegistry_GUARD
+
+#pragma once
 #include "./User.h"
-#include "../Core/fwEvent.h"
 
 struct InitFunction
 {
@@ -44,3 +46,5 @@ namespace net
 	};
 	typedef std::shared_ptr<UserRegistry> UserRegPtr;
 }
+
+#endif // !UserRegistry_GUARD
