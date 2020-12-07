@@ -1,6 +1,6 @@
 #pragma once
 #include "../Network/Tcp/Server.h"
-#include "./User.h"
+#include "UserRegistry.h"
 
 namespace Lobby {
 	struct Config {
@@ -16,6 +16,7 @@ namespace Lobby {
 		{
 			
 		}
-	
+		void HandleNewConnection(const boost::system::error_code& err_code
+			, boost::asio::ip::tcp::socket& socket);
 	};
 }

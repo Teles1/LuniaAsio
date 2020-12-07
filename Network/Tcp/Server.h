@@ -5,7 +5,7 @@
 #include "./Client.h"
 
 namespace net {
-    template<typename T>
+    template<class T>
     struct ServerTcp 
     {
         using TemplTypeSharedPtr = std::shared_ptr<T>;
@@ -22,10 +22,16 @@ namespace net {
             m_ioservice.run();
         }
 
+        /*
+            We should add some sort of filtering here. I'm not really sure what but for sure something.
+        */
         void NewConnection(const error_code& err_code) {
             std::cout << "Server Listening Initialized" << std::endl;
+            HandleNewConnection(err_code, m_socket);
             m_acceptor.async_accept(m_socket, std::bind(&ServerTcp::NewConnection, this, std::placeholders::_1));
         }
+    protected:
+        virtual void HandleNewConnection(const error_code& err_code, tcp::socket& socket) = 0;
     private:
         void HandleAcceptNextSocketConnection() {
             std::cout << "Server Listening Initialized" << std::endl;

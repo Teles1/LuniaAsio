@@ -3,9 +3,13 @@
 #include "../Core/Serializer/Serializer.h"
 namespace Lobby {
 	class PacketHandler;
-	struct User : public net::ClientTcp 
+	class User : public net::ClientTcp 
 	{
-		User(boost::asio::ip::tcp::socket&& socket) : ClientTcp(std::move(socket))
+	public:
+		User(boost::asio::ip::tcp::socket&& socket)  
+			: ClientTcp(std::move(socket))
+			, m_userId(1000)
+			, packetHandler()
 		{
 			std::cout << "User Created!" << std::endl;
 		}
