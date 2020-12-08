@@ -9,19 +9,20 @@ namespace net {
     struct ClientTcp : std::enable_shared_from_this<ClientTcp> {
     public:
         ClientTcp(tcp::socket&& s);
-        void SendAsync(uint8* data, size_t& size);
+        void SendAsync(uint8* data, size_t size);
         void HandleRead();
         ~ClientTcp();
+        void SetCryptoKey(uint32& newKey);
+        uint32 GetCryptoKey();
+
+        Network::Crypt::Box		m_decryptor;
+
     protected:
         void ReceivedSome(const error_code& ec, size_t size);
-        void SetCryptyoKey(uint32& newKey);
-        uint32 GetCryptoKey();
         void WroteSome(const error_code& error, size_t size);
         virtual void Parse(uint8* buffer, size_t size) = 0;
-	protected:
-		Network::Crypt::Box		m_decryptor;
-		bool					m_isEncryptKey;
     private:
+        bool					m_isEncryptKey;
 		uint8					m_buffer[READ_DATA_BUFFER_LENGTH] = {};
         tcp::socket				m_socket;
     };
