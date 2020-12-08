@@ -1,6 +1,6 @@
 #pragma once
-#include "../Network/Tcp/Client.h"
-#include "../Core/Serializer/Serializer.h"
+#include "Network/Tcp/Client.h"
+#include "Core/Serializer/Serializer.h"
 #include "LobbyProtocol/LobbyProtocol.h"
 
 namespace Lobby {

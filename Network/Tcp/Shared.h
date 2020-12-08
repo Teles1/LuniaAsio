@@ -9,7 +9,7 @@
 #include <asio.hpp>
 #include <asio/basic_stream_socket.hpp>
 #include <iostream>
-#include "../Core/Core.h"
+#include "Core/Core.h"
 
 namespace Shared {
     using ReceivedCallback = std::function<void(std::vector<uint8>& buffer)>;
@@ -19,5 +19,5 @@ namespace net {
     using error_code = asio::error_code;
     const uint16 READ_DATA_BUFFER_LENGTH = 2 << 12;
 }
-#include "../Core/fwEvent.h"
+#include "Core/fwEvent.h"
 #endif // !Shared_GUARD

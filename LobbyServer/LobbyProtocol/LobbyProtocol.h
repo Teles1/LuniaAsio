@@ -1,7 +1,7 @@
 #pragma once
-#include "../Core/Core.h"
-#include "../Core/Serializer/Serializer.h"
-#include "../Core/Utils/DateTime.h"
+#include "Core/Core.h"
+#include "Core/Serializer/Serializer.h"
+#include "Core/Utils/DateTime.h"
 namespace Lobby { namespace Protocol {
 
 	struct Head : public Serializer::ISerializable

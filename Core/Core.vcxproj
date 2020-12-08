@@ -83,7 +83,7 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgUseStatic>false</VcpkgUseStatic>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(Path);$(SolutionDir)Includes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>
@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(Path);$(SolutionDir)Includes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>
@@ -129,7 +129,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(Path);$(SolutionDir)Includes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>$(SolutionDir)$(ProjectName)\$(ProjectName).h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -149,7 +149,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(Path);$(SolutionDir)Includes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>

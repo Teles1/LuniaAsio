@@ -39,8 +39,8 @@ typedef unsigned short		LengthType;
 
 #pragma region  Utils Includes
 
-#include "./Utils/StringUtil.hpp"
-#include "./Exceptions/Expcetion.h"
+#include "Utils/StringUtil.hpp"
+#include "Exceptions/Expcetion.h"
 
 #pragma endregion
 namespace Constants {
@@ -53,8 +53,8 @@ namespace Constants {
 /*
 	LOG RELATED BEGIN
 */
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_sinks.h"
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_sinks.h>
 #ifndef INFO_LOG 
 #define INFO_LOG(...) spdlog::info(fmt::format(__VA_ARGS__));
 #endif

@@ -1,5 +1,5 @@
 #pragma once
-#include "./LobbyServer.h"
+#include "LobbyServer.h"
 namespace Lobby {
 	void LobbyServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
 	{

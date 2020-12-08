@@ -1,6 +1,9 @@
 #include "../Core/Core.h"
 #include <iostream>
+#include <strstream>
 #include <chrono>
+#include <cpr/cpr.h>
+#include <spdlog/spdlog.h>
 class later
 {
 public:
@@ -35,85 +38,76 @@ void test2(int a)
     printf("%i\n", a);
     return;
 }
-struct Tester {
+/*
+struct Api {
 public:
-    Tester(std::vector<uint8>& in) {
-        buffer = std::make_shared < std::vector<uint8> >(std::move(in));
-        (*buffer)[0] = 30;
+    Api(const char* reqPage) {
+        std::string buf = "http://192.168.86.50:51542/Lobby/AddServer/10";
+        if (buf[buf.size() - 1] != '/')
+            buf.append("/");
+        buf.append(reqPage);
+        if (buf[buf.size() - 1] != '/')
+            buf.append("/");
+        m_request = new http::Request(std::move(buf));
+        //AddHeader();
     }
-    std::shared_ptr<std::vector<uint8>>& Test(std::shared_ptr<std::vector<uint8>>& bufferin) {
-        return bufferin;
+    template<typename T>
+    Api& operator<< (T& a) {
+        Append(a);
+        return *this;
     }
-    std::vector<uint8>& GetData() {
-        return *buffer;
+    void Append(const std::string& in) {
+        m_body.push_back(in);
     }
-    void Print() {
-        auto x = (*buffer)[0];
-        std::cout << std::to_string(x).c_str() << std::endl;
+    void Append(const std::wstring& in) {
+        using convert_type = std::codecvt_utf8<wchar_t>;
+        std::wstring_convert<convert_type, wchar_t> converter;
+        Append(std::move(converter.to_bytes(in)));
+    }
+    void Send() {
+        //try{
+        std::string aux("aopa");
+        auto response = m_request->send();
+            INFO_LOG("[{0}] {1}", response.status, std::string( response.body.begin(), response.body.end() ));
+        //}
+        //catch (const std::exception& e)
+        //{
+            //WARN_LOG("Request failed => {0}", e.what());
+        //}
+    }
+    const std::vector<uint8> BuildBody() {
+        std::string ret;
+        for (size_t i = 0; i < m_body.size(); i++) {
+            if (i != 0)
+                ret.append("|");
+            ret.append(m_body[i]);
+        }
+        m_body.clear();
+        return std::move(std::vector<uint8>(ret.begin(), ret.end()));
+    }
+    ~Api() {
+        delete m_request;
     }
 private:
-    std::shared_ptr<std::vector<uint8>> buffer;
-};
-struct Server;
-struct User : std::enable_shared_from_this<User> {
-public:
-    User(std::shared_ptr<Server> server) {
-        id = 0;
-        std::cout << "User Created!" << std::endl;
-    }
-    User() {
-        std::cout << "User Created!" << std::endl;
-    }
-    int& GetId() { return id; }
-    void DoWork(int i) {
-    }
-public:
-    void print(int i) {
-        id = i;
-    }
-    ~User(){
-        std::cout << "User destroyed" << std::endl;
+    void AddHeader() {
+        m_headers.push_back("ServerName: Lobby_DEV");
+        m_headers.push_back("ServerIp: 127.0.0.1");
     }
 private:
-    int id;
+    std::vector<std::string>     m_body;
+    std::vector<std::string>     m_headers;
+    http::Request*               m_request;
 };
-typedef std::shared_ptr<User> UserPtr;
-
-struct Server {
-public:
-    Server (){}
-    void AddUsr(User* newUsr)
-    {
-        _connections.push_back(std::shared_ptr<User>(newUsr));
-    }
-    auto GetUser(uint16 i) {
-        //return _connections.at(i)->weak_from_this();
-    }
-    ~Server() {
-        UserPtr x = _connections[0];
-        std::cout << "server destroyed" << std::endl;
-    }
-    void Changedata(int& i) { user = i; }
-private:
-    std::vector < UserPtr> _connections;
-    uint16 user = 11;
-};
-
-typedef std::shared_ptr<Server> ServerPtr;
+*/
 int main()
-{	
-    ServerPtr x = std::shared_ptr<Server>( new Server);
-
-
-
-
-
-
-    x->AddUsr( new User );
-
-
-
-
-    system("pause");
+{
+    //StringUtil::StringBuilder sb;
+    //Api api("AddServer");
+    //api << "1010";
+    //api.Send();
+    cpr::Response r = cpr::Get(cpr::Url{ "http://192.168.86.50:51542/Lobby/AddServer/10" });
+    r.status_code;                  // 200
+    r.header["content-type"];       // application/json; charset=utf-8
+    r.text;                         // JSON text string
     return 0;
 }

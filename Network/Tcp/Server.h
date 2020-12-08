@@ -1,8 +1,8 @@
 #ifndef ServerTcp_GUARD
 #define ServerTcp_GUARD
 #pragma once
-#include "./Shared.h"
-#include "./Client.h"
+#include "Shared.h"
+#include "Client.h"
 
 namespace net {
     template<class T>

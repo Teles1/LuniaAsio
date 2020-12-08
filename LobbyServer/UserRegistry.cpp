@@ -1,4 +1,4 @@
-#include "./UserRegistry.h"
+#include "UserRegistry.h"
 
 namespace net
 {

@@ -48,16 +48,6 @@ namespace StringUtil {
 	public:
 		StringBuilder() {
 		}
-		StringBuilder(const char* in) {
-			sData.push_back(std::move(in));
-			if (sData[sData.size()] != "/")
-				sData.push_back("/");
-		}
-		StringBuilder(std::string& in) {
-			sData.push_back(std::move(in));
-			if (sData[sData.size()] != "/")
-				sData.push_back("/");
-		}
 		template<typename T>
 		StringBuilder& operator << (const T& inData) {
 			Append(inData);

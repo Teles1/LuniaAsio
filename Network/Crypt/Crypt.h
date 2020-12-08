@@ -1,5 +1,5 @@
 #pragma once
-#include "../Core/Utils/Buffer.h"
+#include "Core/Utils/Buffer.h"
 namespace Network {
     namespace Crypt {
         static unsigned char HashToByte(const void* p, unsigned int size);

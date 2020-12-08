@@ -2,7 +2,7 @@
 #define UserRegistry_GUARD
 
 #pragma once
-#include "./User.h"
+#include "User.h"
 
 struct InitFunction
 {

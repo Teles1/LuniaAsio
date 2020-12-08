@@ -1,5 +1,5 @@
 #pragma once
-#include "../Network/Tcp/Server.h"
+#include "Network/Tcp/Server.h"
 #include "UserRegistry.h"
 
 namespace Lobby {
