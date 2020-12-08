@@ -48,7 +48,7 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 							//printf("Psize[%.2X], Hash[%.2X]\n", pSize, header);
 							if (header == Constants::NetStreamHash) {
 								//Translate only the bytes related to the packet
-								if (pSize - Constants::HeaderSize > size) {
+								if (size_t(pSize) - size_t(Constants::HeaderSize) > size) {
 									//Back up the packet for the next iteration. There is not enough bytes to parse this data, or, the client is trolling?
 									WARN_LOG("Could not read entire packet. We should back up the packet for the next iteration WARN!!!!! pSize[{0}] > size[{1}]", pSize - Constants::HeaderSize, size);
 								}
@@ -98,7 +98,7 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 						printf("\n");
 						break;
 					}*/
-					if (total >= size)
+					if (size_t(total) >= size)
 						break;
 				} while (true);
 				//Cleaning up my pointer.
