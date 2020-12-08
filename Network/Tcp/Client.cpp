@@ -9,8 +9,8 @@ ClientTcp::ClientTcp(tcp::socket&& s)
 	std::cout << "ClientTcp was created" << std::endl;
 }
 
-void net::ClientTcp::SendAsync(uint8* data, size_t& size){
-	m_socket.async_send(ba::buffer(data, size),
+void net::ClientTcp::SendAsync(uint8* data, size_t size){
+	m_socket.async_send(boost::asio::buffer(data, size),
 		std::bind(&ClientTcp::WroteSome, this, std::placeholders::_1, std::placeholders::_2));
 }
 
@@ -63,7 +63,7 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 								// Eventually we gonna have to add a system to simple add data to a buffer or maybe a pointer to hold the data?
 							}
 							else {
-								SetCryptyoKey(keyBackup);
+								SetCryptoKey(keyBackup);
 								total += 1;
 							}
 						}
@@ -114,7 +114,7 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 	}
 }
 
-void ClientTcp::SetCryptyoKey(uint32& newKey)
+void ClientTcp::SetCryptoKey(uint32& newKey)
 {
 	m_decryptor.SetKey(newKey);
 	m_isEncryptKey = true;

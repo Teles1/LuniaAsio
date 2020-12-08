@@ -102,8 +102,7 @@ private:
 	{
 		auto cb = new callback(func);
 		cb->order = order;
-		if (!m_callbacks)
-//isabelinha		
+		if (!m_callbacks)	
 		{
 			cb->next = nullptr;
 			m_callbacks = cb;
