@@ -24,15 +24,26 @@ struct function_traits<ReturnType(ClassType::*)(Args...) const>
     };
 };
 
-struct fwPacketListener
+class fwPacketListener
 {
-public:
-
+private:
     template<class T>
     struct packetFromType
     {
         T value;
     };
+
+public:
+    static std::mutex						 m_lock;
+    static std::shared_ptr<fwPacketListener> m_instance;
+public:
+    fwPacketListener(const fwPacketListener&) = delete; //anti creation  of a copy
+    fwPacketListener& operator= (const fwPacketListener&) = delete; // anti copy
+    ~fwPacketListener() { }
+    static std::shared_ptr<fwPacketListener>& GetInstance();
+
+public:
+    fwPacketListener() {};
 
     template<typename F>
     void Connect(F f)
@@ -54,20 +65,16 @@ public:
         m_callbacks[packet.value.TypeHash] = lambda;
     }
 
-    void operator()(Lobby::UserSharedPtr& user, uint16& packetHeaderHash, Serializer::StreamReader& streamReader)
+    void Invoke(Lobby::UserSharedPtr& user, uint16& packetHeaderHash, Serializer::StreamReader& streamReader)
     {
         auto it = m_callbacks.find(packetHeaderHash);
 
         if (it != m_callbacks.end())
         {
             it->second(user, streamReader);
-
-            std::cout << "[fwPacketListener] Handler de " << packetHeaderHash << " foi encontrado e invocado!" << std::endl;
         }
     }
-
-    static fwPacketListener instance;
-
 private:
+
     std::map<uint16, std::function<void(Lobby::UserSharedPtr& user, Serializer::StreamReader&)>> m_callbacks;
 };

@@ -18,5 +18,6 @@
     <ClInclude Include="Utils\Math\PseudoRandom.h" />
     <ClInclude Include="Utils\StringUtil.hpp" />
     <ClInclude Include="Utils\Version.h" />
+    <ClInclude Include="Utils\InitFunction.h" />
   </ItemGroup>
 </Project>

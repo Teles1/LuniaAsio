@@ -4,15 +4,6 @@
 #pragma once
 #include "User.h"
 
-struct InitFunction
-{
-	template<typename T>
-	InitFunction(T func)
-	{
-		func();
-	}
-};
-
 namespace net
 {
 	class UserRegistry
@@ -23,7 +14,7 @@ namespace net
 	public:
 		UserRegistry(const UserRegistry&) = delete; //anti creation  of a copy
 		UserRegistry& operator= (const UserRegistry&) = delete; // anti copy
-		~UserRegistry() { std::cout << "User regestry destroyed" << std::endl; }
+		~UserRegistry() { }
 		static std::shared_ptr<UserRegistry>& GetInstance();
 	public:
 		Lobby::UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);
@@ -37,7 +28,7 @@ namespace net
 		fwEvent<const Lobby::UserSharedPtr&>				OnUserDisconnected;
 
 	private:
-		UserRegistry() : m_curUserId(1000) { INFO_LOG("UserRegistry Instanciated"); }
+		UserRegistry() : m_curUserId(1000) { }
 	private:
 		uint32											m_curUserId;
 

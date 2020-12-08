@@ -170,6 +170,7 @@
     <ClInclude Include="Serializer\Serializer.h" />
     <ClInclude Include="Utils\Buffer.h" />
     <ClInclude Include="Utils\DateTime.h" />
+    <ClInclude Include="Utils\InitFunction.h" />
     <ClInclude Include="Utils\Math\Random.h" />
     <ClInclude Include="Utils\Math\PseudoRandom.h" />
     <ClInclude Include="Utils\StringUtil.hpp" />

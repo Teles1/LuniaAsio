@@ -1,4 +1,5 @@
 #include "UserRegistry.h"
+#include "../Core/Utils/InitFunction.h"
 
 namespace net
 {
@@ -52,9 +53,14 @@ namespace net
 	}
 }
 
-static InitFunction initFunction([](){
+static utils::InitFunction initFunction([](){
 	net::UserRegistry::GetInstance()->OnUserConnected.Connect([](const Lobby::UserSharedPtr& user)
 	{
-		INFO_LOG("UserConnected!!!");
+		INFO_LOG("UserRegistry :: OnUserConnected :: userId@{0}", user->GetUserId());
+	});
+
+	net::UserRegistry::GetInstance()->OnUserDisconnected.Connect([](const Lobby::UserSharedPtr& user)
+	{
+		INFO_LOG("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetUserId());
 	});
 });

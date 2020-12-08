@@ -7,16 +7,16 @@ namespace Lobby {
 	class User : public net::ClientTcp
 	{
 	public:
-		User(uint32 newKey,asio::ip::tcp::socket&& socket)
+		User(uint32& userId, asio::ip::tcp::socket&& socket)
 			: ClientTcp(std::move(socket))
-			, m_userId(newKey)
+			, m_userId(userId)
 		{
-			INFO_LOG("[{}] User Created!", GetUserId());
+			INFO_LOG("User :: Hey, i was created!", GetUserId());
 		}
 
 		~User()
 		{
-			INFO_LOG("[{}] User was deleted", GetUserId());
+			WARN_LOG("Usser :: Hey, i deleted myself, you should check that!", GetUserId());
 		}
 
 		const uint32 GetUserId();

@@ -173,6 +173,7 @@
     <ClCompile Include="fwPacketListener.cpp" />
     <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp" />
     <ClCompile Include="LobbyServer.cpp" />
+    <ClCompile Include="PacketHandlers.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="UserRegistry.cpp" />
   </ItemGroup>
