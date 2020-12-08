@@ -14,3 +14,6 @@ vcpkg install spdlog:x86-windows
 
 vcpkg install fmt:x64-windows  
 vcpkg install fmt:x86-windows  
+
+vcpkg install cpr:x86-windows  
+vcpkg install cpr:x86-windows  
