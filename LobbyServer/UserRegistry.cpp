@@ -28,22 +28,21 @@ namespace net
 	*/
 #pragma endregion
 
-	net::UserSharedPtr UserRegistry::MakeUser(asio::ip::tcp::socket& socket){
+	Lobby::UserSharedPtr UserRegistry::MakeUser(asio::ip::tcp::socket& socket){
 
-		UserSharedPtr user(new Lobby::User(std::move(socket)));
-		user->SetUserId(m_curUserId);
+		Lobby::UserSharedPtr user(new Lobby::User(m_curUserId, std::move(socket)));
 		m_users.emplace(m_curUserId, user);
 		m_curUserId++;
 		OnUserConnected(user);
 		return user;
 	}
-	void UserRegistry::RemoveUser(net::UserSharedPtr& user){
+	void UserRegistry::RemoveUser(Lobby::UserSharedPtr& user){
 
 		m_users.erase(user->GetUserId());
 		OnUserDisconnected(user);
 	}
-	UserSharedPtr UserRegistry::GetUserByUserId(uint32 userId) {
-		auto ptr = net::UserSharedPtr();
+	Lobby::UserSharedPtr UserRegistry::GetUserByUserId(uint32 userId) {
+		auto ptr = Lobby::UserSharedPtr();
 		auto it = m_users.find(userId);
 
 		if (it != m_users.end())
@@ -54,7 +53,7 @@ namespace net
 }
 
 static InitFunction initFunction([](){
-	net::UserRegistry::GetInstance()->OnUserConnected.Connect([](const net::UserSharedPtr& user)
+	net::UserRegistry::GetInstance()->OnUserConnected.Connect([](const Lobby::UserSharedPtr& user)
 	{
 		INFO_LOG("UserConnected!!!");
 	});

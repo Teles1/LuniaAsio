@@ -7,31 +7,24 @@ namespace Lobby {
 	class User : public net::ClientTcp
 	{
 	public:
-		User(asio::ip::tcp::socket&& socket)
+		User(uint32 newKey,asio::ip::tcp::socket&& socket)
 			: ClientTcp(std::move(socket))
-			, m_userId(1000)
+			, m_userId(newKey)
 		{
-			std::cout << "User Created!" << std::endl;
+			INFO_LOG("[{}] User Created!", GetUserId());
 		}
 
 		~User()
 		{
-			std::cout << "User was deleted" << std::endl;
+			INFO_LOG("[{}] User was deleted", GetUserId());
 		}
 
-		uint32 GetUserId()
-		{
-			return m_userId;
-		}
-
-		void SetUserId(uint32 userId)
-		{
-			m_userId = userId;
-		}
+		const uint32 GetUserId();
 
 		void Parse(uint8* buffer, size_t size);
 	private:
 
 		uint32 m_userId;
 	};
+	typedef std::shared_ptr<User> UserSharedPtr;
 }

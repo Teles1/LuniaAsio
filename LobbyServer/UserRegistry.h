@@ -15,7 +15,6 @@ struct InitFunction
 
 namespace net
 {
-	using UserSharedPtr = std::shared_ptr<Lobby::User>;
 	class UserRegistry
 	{
 	public:
@@ -27,22 +26,22 @@ namespace net
 		~UserRegistry() { std::cout << "User regestry destroyed" << std::endl; }
 		static std::shared_ptr<UserRegistry>& GetInstance();
 	public:
-		net::UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);
+		Lobby::UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);
 
-		void RemoveUser(net::UserSharedPtr& user);
+		void RemoveUser(Lobby::UserSharedPtr& user);
 
-		UserSharedPtr GetUserByUserId(uint32 userId);
+		Lobby::UserSharedPtr GetUserByUserId(uint32 userId);
 		
-		fwEvent<const net::UserSharedPtr&>				OnUserConnected;
+		fwEvent<const Lobby::UserSharedPtr&>				OnUserConnected;
 
-		fwEvent<const net::UserSharedPtr&>				OnUserDisconnected;
+		fwEvent<const Lobby::UserSharedPtr&>				OnUserDisconnected;
 
 	private:
 		UserRegistry() : m_curUserId(1000) { INFO_LOG("UserRegistry Instanciated"); }
 	private:
 		uint32											m_curUserId;
 
-		std::unordered_map<uint32, net::UserSharedPtr>	m_users;
+		std::unordered_map<uint32, Lobby::UserSharedPtr>	m_users;
 	};
 	typedef std::shared_ptr<UserRegistry> UserRegPtr;
 }

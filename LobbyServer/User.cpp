@@ -1,11 +1,12 @@
 #include "User.h"
 #include "fwPacketListener.h"
+#include "UserRegistry.h"
 
 namespace Lobby 
 {
 	void User::Parse(uint8* buffer, size_t size)
 	{
-		std::cout << "Parser called" << std::endl;
+		INFO_LOG("[{}] Parser called", GetUserId());
 		/*
 			We should technically see but i think that if the server doesn't recognize the packet I say we let the client connection dies. 
 			That's why I want to keep this call in here
@@ -23,8 +24,9 @@ namespace Lobby
 		/*
 			Move 'fwPacketListener::instance' to someplace it can be globally accessed;
 		*/
-		fwPacketListener::instance.Connect([&](/*UserSharedPtr& user, */Lobby::Protocol::Head& packet)
+		fwPacketListener::instance.Connect([&](UserSharedPtr& user, Lobby::Protocol::Head& packet)
 		{
+			INFO_LOG("[{0}] SharedCount [{1}]", user->GetUserId(), user.use_count());
 			packet.Checksums[0] = 1;
 
 			packet.Result = Lobby::Protocol::Head::Results::Ok;
@@ -48,13 +50,16 @@ namespace Lobby
 			this->SendAsync(reinterpret_cast<uint8*>(buffer.GetData()), buffer.GetLength());
 		});
 
-		fwPacketListener::instance.Connect([](/*UserSharedPtr& user, */Lobby::Protocol::Auth& packet)
+		fwPacketListener::instance.Connect([&](UserSharedPtr& user, Lobby::Protocol::Auth& packet)
 		{
 			INFO_LOG("Evento CHAMADO AUTH!!!! {0}", packet.EncryptedPassword);
 		});
-
-		fwPacketListener::instance(packetHeaderHash, sReader);
+		auto userPtr = net::UserRegistry::GetInstance()->GetUserByUserId(this->GetUserId());
+		fwPacketListener::instance(userPtr, packetHeaderHash, sReader);
 
 		HandleRead();
+	}
+	const uint32 User::GetUserId(){
+		return m_userId;
 	}
 }

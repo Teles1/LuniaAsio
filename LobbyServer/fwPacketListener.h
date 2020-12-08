@@ -1,8 +1,5 @@
 #pragma once
-#include "../Network/Tcp/Client.h"
-#include "../Core/Serializer/Serializer.h"
-#include "LobbyProtocol/LobbyProtocol.h"
-
+#include "./User.h"
 template <typename T>
 struct function_traits
     : public function_traits<decltype(&T::operator())>
@@ -42,28 +39,28 @@ public:
     {
         typedef function_traits<decltype(f)> traits;
 
-        packetFromType<std::remove_reference<traits::template arg<0>::type>::type> packet;
+        packetFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
 
-        auto lambda = [f](/*UserSharedPtr& user, */Serializer::StreamReader& streamReader)
+        auto lambda = [f](Lobby::UserSharedPtr& user, Serializer::StreamReader& streamReader)
         {
             //packetFromType<traits::result_type> packet;
-            packetFromType<std::remove_reference<traits::template arg<0>::type>::type> packet;
+            packetFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
 
             packet.value.Deserialize(streamReader);
 
-            f(packet.value);
+            f(user, packet.value);
         };
 
         m_callbacks[packet.value.TypeHash] = lambda;
     }
 
-    void operator()(/*UserSharedPtr& user, */uint16 packetHeaderHash, Serializer::StreamReader& streamReader)
+    void operator()(Lobby::UserSharedPtr& user, uint16& packetHeaderHash, Serializer::StreamReader& streamReader)
     {
         auto it = m_callbacks.find(packetHeaderHash);
 
         if (it != m_callbacks.end())
         {
-            it->second(streamReader);
+            it->second(user, streamReader);
 
             std::cout << "[fwPacketListener] Handler de " << packetHeaderHash << " foi encontrado e invocado!" << std::endl;
         }
@@ -72,5 +69,5 @@ public:
     static fwPacketListener instance;
 
 private:
-    std::map<uint16, std::function<void(/*UserSharedPtr& user, */Serializer::StreamReader&)>> m_callbacks;
+    std::map<uint16, std::function<void(Lobby::UserSharedPtr& user, Serializer::StreamReader&)>> m_callbacks;
 };
