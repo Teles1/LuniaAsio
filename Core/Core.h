@@ -50,6 +50,9 @@ namespace Constants {
 }
 #pragma endregion
 
+#define FMT_HEADER_ONLY
+#include <fmt/format.h>
+
 /*
 	LOG RELATED BEGIN
 */
