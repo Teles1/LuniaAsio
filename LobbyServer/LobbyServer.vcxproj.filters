@@ -39,6 +39,9 @@
     <ClCompile Include="UserRegistry.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="fwPacketListener.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h">
@@ -48,6 +51,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="User.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="fwPacketListener.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
