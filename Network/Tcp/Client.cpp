@@ -10,12 +10,12 @@ ClientTcp::ClientTcp(tcp::socket&& s)
 }
 
 void net::ClientTcp::SendAsync(uint8* data, size_t size){
-	m_socket.async_send(boost::asio::buffer(data, size),
+	m_socket.async_send(asio::buffer(data, size),
 		std::bind(&ClientTcp::WroteSome, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void net::ClientTcp::HandleRead() {
-	m_socket.async_read_some(ba::buffer(m_buffer, READ_DATA_BUFFER_LENGTH),
+	m_socket.async_read_some(asio::buffer(m_buffer, READ_DATA_BUFFER_LENGTH),
 		std::bind(&ClientTcp::ReceivedSome, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 }
 

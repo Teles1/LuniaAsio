@@ -15,8 +15,7 @@ namespace Shared {
     using ReceivedCallback = std::function<void(std::vector<uint8>& buffer)>;
 }
 namespace net {
-    namespace ba = asio;
-    using ba::ip::tcp;
+    using asio::ip::tcp;
     using error_code = asio::error_code;
     const uint16 READ_DATA_BUFFER_LENGTH = 2 << 12;
 }

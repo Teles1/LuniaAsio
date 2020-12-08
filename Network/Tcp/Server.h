@@ -38,7 +38,7 @@ namespace net {
             m_acceptor.async_accept(m_socket, std::bind(&ServerTcp::NewConnection, this, std::placeholders::_1));
         }
 
-        ba::io_service                          m_ioservice;
+        asio::io_service                        m_ioservice;
         tcp::acceptor                           m_acceptor;
         tcp::socket                             m_socket;
         uint32                                  m_userId;
