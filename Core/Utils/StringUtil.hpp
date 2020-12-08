@@ -65,7 +65,7 @@ namespace StringUtil {
 		}
 		std::string GetString() {
 			std::ostringstream ret;
-			for (int i = 0; i < sData.size(); i++) {
+			for (size_t i = 0; i < sData.size(); i++) {
 				if (i != 0) {
 					ret << '|';
 				}

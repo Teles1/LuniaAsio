@@ -1,4 +1,5 @@
 #include "./DateTime.h"
+#include "../Core.h"
 #pragma region Date
 DateTime::Date::Date() {
 	this->dateValue.Year = 0;

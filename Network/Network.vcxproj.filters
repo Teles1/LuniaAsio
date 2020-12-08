@@ -2,12 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Crypt\Crypt.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Tcp\Client.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypt\Crypt.h" />
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="Api\httplib.h" />
     <ClInclude Include="Api\json.hpp" />
     <ClInclude Include="Tcp\Client.h" />
