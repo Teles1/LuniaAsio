@@ -5,6 +5,7 @@
     <ClCompile Include="Utils\DateTime.cpp" />
     <ClCompile Include="Utils\Math\PseudoRandom.cpp" />
     <ClCompile Include="Utils\Math\Random.cpp" />
+    <ClCompile Include="GameServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -19,5 +20,6 @@
     <ClInclude Include="Utils\StringUtil.hpp" />
     <ClInclude Include="Utils\Version.h" />
     <ClInclude Include="Utils\InitFunction.h" />
+    <ClInclude Include="GameServer.h" />
   </ItemGroup>
 </Project>

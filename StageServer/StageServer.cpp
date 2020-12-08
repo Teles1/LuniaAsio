@@ -2,7 +2,6 @@
 #include <iostream>
 #include <strstream>
 #include <chrono>
-#include <cpr/cpr.h>
 #include <spdlog/spdlog.h>
 class later
 {
