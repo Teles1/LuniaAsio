@@ -88,7 +88,7 @@ namespace Serializer {
 		template<typename T>
 		void ReadBaseType(T& value) {
 			if (!CanRead(sizeof(T))) {
-				throw new Exception("Cannot read Base Type past stream.");
+				Logger::GetInstance()->Exception("Cannot read Base Type past stream.");
 			}
 			memcpy(&value, buffer, sizeof(T));
 			buffer += sizeof(T);
@@ -98,7 +98,7 @@ namespace Serializer {
 			LengthType strSize;
 			Read(strSize);
 			if (!CanRead(sizeof(typename T::value_type) * strSize)) {
-				throw new Exception("Cannot read string past stream.");
+				Logger::GetInstance()->Exception("Cannot read string past stream.");
 			}
 			value = (typename T::value_type*)buffer;
 			buffer += sizeof(typename T::value_type) * strSize;
@@ -106,7 +106,7 @@ namespace Serializer {
 		}
 		bool CanRead(uint16 size) {
 			if (size + buffer > endOfBuffer) {
-				ERROR_LOG("Cannot read past stream.", 0);
+				Logger::GetInstance()->Exception("Cannot read past stream.", 0);
 				return false;
 			}
 			return true;

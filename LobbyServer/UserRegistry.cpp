@@ -54,13 +54,13 @@ namespace net
 }
 
 static utils::InitFunction initFunction([](){
-	net::UserRegistry::GetInstance()->OnUserConnected.Connect([](const Lobby::UserSharedPtr& user)
-	{
-		INFO_LOG("UserRegistry :: OnUserConnected :: userId@{0}", user->GetUserId());
-	});
+	net::UserRegistry::GetInstance()->OnUserConnected.Connect(
+		[](const Lobby::UserSharedPtr& user){
+				Logger::GetInstance()->Info("UserRegistry :: OnUserConnected :: userId@{0}", user->GetUserId());
+		});
 
-	net::UserRegistry::GetInstance()->OnUserDisconnected.Connect([](const Lobby::UserSharedPtr& user)
-	{
-		INFO_LOG("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetUserId());
-	});
+	net::UserRegistry::GetInstance()->OnUserDisconnected.Connect(
+		[](const Lobby::UserSharedPtr& user){
+				Logger::GetInstance()->Info("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetUserId());
+		});
 });

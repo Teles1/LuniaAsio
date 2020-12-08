@@ -11,12 +11,12 @@ namespace Lobby {
 			: ClientTcp(std::move(socket))
 			, m_userId(userId)
 		{
-			INFO_LOG("User :: Hey, i was created!", GetUserId());
+			Logger::GetInstance()->Info("User :: Hey, i was created!", GetUserId());
 		}
 
 		~User()
 		{
-			WARN_LOG("Usser :: Hey, i deleted myself, you should check that!", GetUserId());
+			Logger::GetInstance()->Warn("Usser :: Hey, i deleted myself, you should check that!", GetUserId());
 		}
 
 		const uint32 GetUserId();
