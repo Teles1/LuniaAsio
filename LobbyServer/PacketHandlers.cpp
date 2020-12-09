@@ -31,8 +31,13 @@ static utils::InitFunction init([]()
 			api << packet.AccountId;
 			api << packet.EncryptedPassword;
 			api << user->GetPeerAddress();
-			if (auto response = api.Send()){
-				
+			const Answer result = api.RequestApi();
+			Lobby::Protocol::Auth sendPacket;
+			if(result.errorCode == 0) {
+				sendPacket.AccountId = std::move(packet.AccountId);
+				sendPacket.Result = Lobby::Protocol::Auth::Results::Ok;
 			}
+			sendPacket.Result = static_cast<Lobby::Protocol::Auth::Results>(result.errorCode);
+			user->Send(sendPacket);
 		});
 });

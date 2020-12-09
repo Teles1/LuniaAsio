@@ -135,6 +135,7 @@
       <ForcedIncludeFiles>$(SolutionDir)$(ProjectName)\$(ProjectName).h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

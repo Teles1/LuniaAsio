@@ -102,6 +102,7 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 						break;
 				} while (true);
 				//Cleaning up my pointer.
+				assert(work != nullptr);
 				delete[] work;
 			}
 			catch (...) {

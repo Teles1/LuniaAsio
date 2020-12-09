@@ -126,6 +126,7 @@
       <LanguageStandard>Default</LanguageStandard>
       <PrecompiledHeaderOutputFile>$(SolutionDir)Phcs\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

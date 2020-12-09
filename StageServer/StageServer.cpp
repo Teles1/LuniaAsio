@@ -2,7 +2,11 @@
 #include <iostream>
 #include <strstream>
 #include <chrono>
-#include <spdlog/spdlog.h>
+#include "./Network/Api/Json.hpp"
+#include <cpr/cpr.h>
+
+// for convenience
+using json = nlohmann::json;
 class later
 {
 public:
@@ -37,76 +41,38 @@ void test2(int a)
     printf("%i\n", a);
     return;
 }
-/*
-struct Api {
-public:
-    Api(const char* reqPage) {
-        std::string buf = "http://192.168.86.50:51542/Lobby/AddServer/10";
-        if (buf[buf.size() - 1] != '/')
-            buf.append("/");
-        buf.append(reqPage);
-        if (buf[buf.size() - 1] != '/')
-            buf.append("/");
-        m_request = new http::Request(std::move(buf));
-        //AddHeader();
-    }
-    template<typename T>
-    Api& operator<< (T& a) {
-        Append(a);
-        return *this;
-    }
-    void Append(const std::string& in) {
-        m_body.push_back(in);
-    }
-    void Append(const std::wstring& in) {
-        using convert_type = std::codecvt_utf8<wchar_t>;
-        std::wstring_convert<convert_type, wchar_t> converter;
-        Append(std::move(converter.to_bytes(in)));
-    }
-    void Send() {
-        //try{
-        std::string aux("aopa");
-        auto response = m_request->send();
-            INFO_LOG("[{0}] {1}", response.status, std::string( response.body.begin(), response.body.end() ));
-        //}
-        //catch (const std::exception& e)
-        //{
-            //WARN_LOG("Request failed => {0}", e.what());
-        //}
-    }
-    const std::vector<uint8> BuildBody() {
-        std::string ret;
-        for (size_t i = 0; i < m_body.size(); i++) {
-            if (i != 0)
-                ret.append("|");
-            ret.append(m_body[i]);
+
+json Send() {
+    cpr::Header m_Header;
+
+    m_Header.emplace("ServerName", "Lobby");
+    m_Header.emplace("ServerIp", "127.0.0.1");
+    m_Header.emplace("ContentType", "application/json");
+
+    cpr::Response r = cpr::Get(cpr::Url("http://127.0.0.1:51542/Lobby/CheckAccount/Teles|DA6EFBC18629FFC57A4273A40D5092C063A40F78|184.146.62.104"), m_Header, cpr::Timeout{ 1000 });
+    Logger::GetInstance()->Info("[{0}]{1}", r.status_code, r.text);
+    if (r.status_code == 200) {
+        try {
+            return json::parse(r.text);
         }
-        m_body.clear();
-        return std::move(std::vector<uint8>(ret.begin(), ret.end()));
+        catch (...) {
+            Logger::GetInstance()->Error("Could not parse json!");
+        }
     }
-    ~Api() {
-        delete m_request;
-    }
-private:
-    void AddHeader() {
-        m_headers.push_back("ServerName: Lobby_DEV");
-        m_headers.push_back("ServerIp: 127.0.0.1");
-    }
-private:
-    std::vector<std::string>     m_body;
-    std::vector<std::string>     m_headers;
-    http::Request*               m_request;
-};
-*/
+    return NULL;
+}
 int main()
 {
-    //StringUtil::StringBuilder sb;
-    //Api api("AddServer");
-    //api << "1010";
-    //api.Send();
-    cpr::Response r = cpr::Get(cpr::Url{ "http://192.168.86.50:51542/Lobby/AddServer/10" });
-    r.status_code;                  // 200
-    r.header["content-type"];       // application/json; charset=utf-8
-    r.text;                         // JSON text string
+    auto x = Send();
+    try {
+        if (x != NULL && x.is_object()) {
+            uint16 aux = x["errorCode"].get<uint16>();
+            std::string auxString = x["errorMessage"].get<std::string>();
+            Logger::GetInstance()->Info("fella {0} da {1} ", auxString, aux);
+        }
+    }
+    catch (...) {
+        Logger::GetInstance()->Error("Error parsing jason");
+    }
     return 0;
 }

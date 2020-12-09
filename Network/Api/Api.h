@@ -7,6 +7,14 @@
 #include "Json.hpp"
 // for convenience
 using json = nlohmann::json;
+struct Answer {
+    Answer(const std::string& errorMessage, const uint16& errorCode)
+    :   errorMessage(errorMessage),errorCode(errorCode) {}
+    std::string errorMessage;
+    uint16 errorCode;
+    
+    //json object? who knows
+};
 struct Api {
     const std::string ApiUrl = "http://127.0.0.1:51542/Lobby";
 public:
@@ -39,17 +47,24 @@ public:
         std::wstring_convert<convert_type, wchar_t> converter;
         Append(std::move(converter.to_bytes(in)));
     }
-    json Send() {
+    const Answer& RequestApi() {
         cpr::Response r = cpr::Get(cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ 1000 });
         Logger::GetInstance()->Info("[{0}]{1}", r.status_code, r.text);
         if (r.status_code == 200) {
             try {
-                return json::parse(r.text);
+                json result = json::parse(r.text);
+                if (result != NULL && result.is_object()) {
+                    uint16 errorCode = result["errorCode"].get<uint16>();
+                    std::string errorMessage = result["errorMessage"].get<std::string>();
+                    //get objct
+                    return Answer(errorMessage, errorCode);
+                }
             }
-            catch (json::parse_error& e) {
-                Logger::GetInstance()->Error("Could not parse json! {0}", e.what());
+            catch (...) {
+                Logger::GetInstance()->Error("Could not parse json!");
             }
         }
+        return Answer("Whoops!", -1);
     }
     std::string BuildUrl() {
         std::string ret;
@@ -64,6 +79,7 @@ public:
     void AddHeaders() {
         m_Header.emplace("ServerName", "Lobby");
         m_Header.emplace("ServerIp", "127.0.0.1");
+        m_Header.emplace("ContentType", "application/json");
     }
 private:
     cpr::Header                                     m_Header;
