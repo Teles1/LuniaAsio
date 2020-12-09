@@ -1,5 +1,11 @@
 #pragma once
 #include "LobbyServer.h"
+
+std::shared_ptr<GameServerScope> g_gameServer = std::make_shared<GameServerScope>();;
+
+
+
+
 namespace Lobby {
 	void LobbyServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
 	{
@@ -7,6 +13,7 @@ namespace Lobby {
 		Logger::GetInstance()->Info("Connection handled by Lobby");
 	}
 }
+
 int main(int argc, char* argv[])
 {
 	//setting log name to be used on the console.
@@ -17,3 +24,16 @@ int main(int argc, char* argv[])
 	lobbyServer.Run();
 	return 0;
 }
+
+#include "../Core/Utils/InitFunction.h"
+static utils::InitFunction InitFunction([]()
+{
+	if (g_gameServer->IsScope<ScopeLobby>())
+	{
+		ScopeLobby lobbyGameServer = g_gameServer->GetScope<ScopeLobby>();
+
+		//lobbyGameServer.A();
+
+		std::cout << "g_gameServer : IsScope<ScopeStage> : " << (g_gameServer->IsScope<ScopeStage>() == 1 ? "true" : "false") << std::endl;
+	}
+});

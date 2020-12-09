@@ -1,13 +1,16 @@
 #pragma once
+#include "fwEvent.h"
+
 template<typename TScope>
 class GameServer
 {
 public:
-	GameServer() { }
+	GameServer() 
+	{
+		OnGameServerAcceptorCreated();
+	};
 
 	~GameServer() { };
-
-	TScope scope;
 
 	template<typename T>
 	TScope& GetScope()
@@ -22,12 +25,19 @@ public:
 	{
 		return std::is_same<T, TScope>::value;
 	}
+
+public:
+	fwEvent<> OnGameServerAcceptorCreated;
+
+private:
+	TScope scope;
+
 };
 
 struct ScopedServer
 {
 public:
-	ScopedServer() { std::cout << "Scoped server constructed" << std::endl; };
+	ScopedServer() { };
 
 	~ScopedServer() { };
 
@@ -39,7 +49,7 @@ struct ScopeLobby : public ScopedServer
 public:
 	void A()
 	{
-		std::cout << "A" << std::endl;
+		std::cout << "ScopeLobby A" << std::endl;
 	};
 };
 
@@ -48,7 +58,7 @@ struct ScopeStage : public ScopedServer
 public:
 	void A()
 	{
-		std::cout << "B" << std::endl;
+		std::cout << "ScopeStage B" << std::endl;
 	};
 };
 
@@ -57,6 +67,6 @@ struct ScopePvp : public ScopedServer
 public:
 	void A()
 	{
-		std::cout << "C" << std::endl;
+		std::cout << "ScopePvp C" << std::endl;
 	};
 };

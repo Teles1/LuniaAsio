@@ -1,6 +1,13 @@
 #pragma once
 #include "Network/Tcp/Server.h"
 #include "UserRegistry.h"
+#include "../Core/GameServer.h"
+
+typedef GameServer< ScopeLobby > GameServerScope;
+extern std::shared_ptr<GameServerScope> g_gameServer;
+
+
+
 
 namespace Lobby {
 	struct Config {
