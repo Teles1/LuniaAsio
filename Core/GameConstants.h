@@ -2805,7 +2805,8 @@ namespace Lunia {
 				};
 				if (grade < 0 || grade >= Grade::Cnt)
 				{
-					throw Exception(ALLM_EXCEPTION((L"Wrong gradeType: %d", grade)));
+					Logger::GetInstance()->Exception("Wrong gradeType: {0}", grade);
+                    throw fmt::format("Wrong gradeType: {0}", grade);
 				}
 				return strGrade[grade];
 			};
