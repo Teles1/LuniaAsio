@@ -169,19 +169,33 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="Exceptions\Expcetion.h" />
     <ClInclude Include="fwEvent.h" />
+    <ClInclude Include="GameConstants.h" />
+    <ClInclude Include="Utils\StringUtil\GeneralConversions.h" />
+    <ClInclude Include="InstanceEx.h" />
+    <ClInclude Include="Utils\Math\vector4.h" />
+    <ClInclude Include="Utils\StringUtil\General.h" />
     <ClInclude Include="Serializer\ISerializable.h" />
     <ClInclude Include="Serializer\Serializer.h" />
     <ClInclude Include="Utils\Buffer.h" />
     <ClInclude Include="Utils\DateTime.h" />
     <ClInclude Include="GameServer.h" />
     <ClInclude Include="Utils\InitFunction.h" />
+    <ClInclude Include="Utils\Locator.h" />
     <ClInclude Include="Utils\Logger.h" />
+    <ClInclude Include="Utils\Math\Basevector.h" />
     <ClInclude Include="Utils\Math\Random.h" />
     <ClInclude Include="Utils\Math\PseudoRandom.h" />
-    <ClInclude Include="Utils\StringUtil.hpp" />
+    <ClInclude Include="Utils\Math\vector3.h" />
+    <ClInclude Include="Utils\StringUtil.h" />
+    <ClInclude Include="Utils\StringUtil\StaticString.h" />
     <ClInclude Include="Utils\Version.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="InstanceEx.cpp" />
+    <ClCompile Include="Utils\StringUtil\General.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Core.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
@@ -199,6 +213,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Utils\Locator.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Utils\Logger.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -215,6 +233,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Utils\StringUtil\GeneralConversions.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>

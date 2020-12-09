@@ -1,78 +1,49 @@
-#include "../Core/Core.h"
+﻿#include <sstream>
+#include <codecvt>
 #include <iostream>
-#include <strstream>
-#include <chrono>
-#include "./Network/Api/Json.hpp"
-#include <cpr/cpr.h>
+#include <fmt/format.h>
+#include "Header.h"
 
-// for convenience
-using json = nlohmann::json;
-class later
-{
-public:
-    template <class callable, class... arguments>
-    later(int after, bool async, callable&& f, arguments&&... args)
-    {
-        std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(f), std::forward<arguments>(args)...));
+#pragma region Unicode
+template<> std::wstring inline To(const unsigned char& value) { return std::to_wstring(value); }
+template<> std::wstring inline To(const unsigned short& value) { return std::to_wstring(value);}
+template<> std::wstring inline To(const unsigned int& value) {	return std::to_wstring(value);}
+template<> std::wstring inline To(const unsigned long& value) { return std::to_wstring(value);}
+template<> std::wstring inline To(const unsigned long long& value) { return std::to_wstring(value);}
 
-        if (async)
-        {
-            std::thread([after, task]() {
-                std::this_thread::sleep_for(std::chrono::milliseconds(after));
-                task();
-                }).detach();
-        }
-        else
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(after));
-            task();
-        }
-    }
+template<> std::wstring inline To(const char& value) {	return std::to_wstring(value);}
+template<> std::wstring inline To(const short& value) { return std::to_wstring(value);}
+template<> std::wstring inline To(const int& value) { return std::to_wstring(value);}
+template<> std::wstring inline To(const long& value) {	return std::to_wstring(value);}
+template<> std::wstring inline To(const long long& value) { return std::to_wstring(value);}
+template<> std::wstring inline To(const unsigned long long& value) { return std::to_wstring(value); }
+#pragma endregion
+#pragma region ASCII
+template<> std::string inline To(const unsigned char& value) { return std::to_string(value); }
+template<> std::string inline To(const unsigned short& value) { return std::to_string(value); }
+template<> std::string inline To(const unsigned int& value) { return std::to_string(value); }
+template<> std::string inline To(const unsigned long& value) { return std::to_string(value); }
+template<> std::string inline To(const unsigned long long& value) { return std::to_string(value); }
 
-};
-void test1(std::string &a)
-{
-    a = "alpha";
-    return;
+template<> std::string inline To(const char& value) { return std::to_string(value); }
+template<> std::string inline To(const short& value) { return std::to_string(value); }
+template<> std::string inline To(const int& value) { return std::to_string(value); }
+template<> std::string inline To(const long& value) { return std::to_string(value); }
+template<> std::string inline To(const long long& value) { return std::to_string(value); }
+template<> std::string inline To(const unsigned long long& value) { return std::to_string(value); }
+#pragma endregion
+template<typename T>
+std::wstring ToUnicode(const T& value ) {
+	return To(value);
+}
+template<typename T>
+std::string ToUnicode(const T& value) {
+	return To(value);
 }
 
-void test2(int a)
-{
-    printf("%i\n", a);
-    return;
+int main() {
+	unsigned char value = 100;
+	std::wstring aux = ToUnicode(value);
+	return 0;
 }
-
-json Send() {
-    cpr::Header m_Header;
-
-    m_Header.emplace("ServerName", "Lobby");
-    m_Header.emplace("ServerIp", "127.0.0.1");
-    m_Header.emplace("ContentType", "application/json");
-
-    cpr::Response r = cpr::Get(cpr::Url("http://127.0.0.1:51542/Lobby/CheckAccount/Teles|DA6EFBC18629FFC57A4273A40D5092C063A40F78|184.146.62.104"), m_Header, cpr::Timeout{ 1000 });
-    Logger::GetInstance()->Info("[{0}]{1}", r.status_code, r.text);
-    if (r.status_code == 200) {
-        try {
-            return json::parse(r.text);
-        }
-        catch (...) {
-            Logger::GetInstance()->Error("Could not parse json!");
-        }
-    }
-    return NULL;
-}
-int main()
-{
-    auto x = Send();
-    try {
-        if (x != NULL && x.is_object()) {
-            uint16 aux = x["errorCode"].get<uint16>();
-            std::string auxString = x["errorMessage"].get<std::string>();
-            Logger::GetInstance()->Info("fella {0} da {1} ", auxString, aux);
-        }
-    }
-    catch (...) {
-        Logger::GetInstance()->Error("Error parsing jason");
-    }
-    return 0;
-}
+//return StringUtil::Format(L"%04d-%02d-%02d", dateValue.Year, dateValue.Month, dateValue.Day);

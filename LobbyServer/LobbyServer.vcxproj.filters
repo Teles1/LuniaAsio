@@ -59,6 +59,9 @@
     <ClInclude Include="fwPacketListener.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="LobbyStructs.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="UserRegistry.h" />

@@ -11,7 +11,7 @@ namespace net {
         using TemplTypeSharedPtr = std::shared_ptr<T>;
 
         ServerTcp(const char* ip, unsigned port) :
-            m_acceptor(m_ioservice, tcp::endpoint(tcp::v4(), port))
+            m_acceptor(m_ioservice, tcp::endpoint(asio::ip::address_v4::any(), port)) // this ip is what asio will be listening for :')
             , m_socket(m_ioservice)
             , m_userId(1000)
         {

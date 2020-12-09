@@ -71,6 +71,11 @@ namespace Lobby { namespace Protocol {
 		NET_SERIALIZABLE
 	};
 
+	struct ListCharacter {
+		std::vector<LobbyPlayerInfo> Characters;
+
+		NET_SERIALIZABLE;
+	};
 	struct CharacterSlots : public Serializer::ISerializable
 	{
 		int32 NumberOfSlots;
