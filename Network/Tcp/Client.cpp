@@ -125,6 +125,10 @@ uint32 ClientTcp::GetCryptoKey()
 	return m_decryptor.GetKey();
 }
 
+const std::string ClientTcp::GetPeerAddress() {
+	return std::move(m_socket.remote_endpoint().address().to_string());
+}
+
 void ClientTcp::WroteSome(const error_code& error, size_t size)
 {
 }

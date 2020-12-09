@@ -12,7 +12,7 @@
 #include <mutex>
 #include "../Exceptions/Expcetion.h"
 
-struct Logger {
+struct Logger{
 public:
 	template <typename... Args>
 	void Info(const std::string& message, const Args &... args) {
@@ -40,8 +40,10 @@ private:
 	std::shared_ptr<spdlog::logger>					m_logger; 
 #pragma region Sigleton
 public:
-	Logger(const Logger&) = delete; //anti creation  of a copy
-	Logger& operator= (const Logger&) = delete; // anti copy
+	Logger(Logger&&) = delete;
+	Logger& operator=(Logger&&) = delete;
+	Logger(const Logger&) = delete;
+	Logger& operator= (const Logger&) = delete;
 	~Logger() {}
 	static std::shared_ptr<Logger>& GetInstance(const std::string& name = "DefaultName");
 private:

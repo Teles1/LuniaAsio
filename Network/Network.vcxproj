@@ -176,6 +176,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Api\Api.h" />
     <ClInclude Include="Api\json.hpp" />
     <ClInclude Include="Crypt\Crypt.h" />
     <ClInclude Include="Api\httplib.h" />

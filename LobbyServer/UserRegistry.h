@@ -14,6 +14,8 @@ namespace net
 	public:
 		UserRegistry(const UserRegistry&) = delete; //anti creation  of a copy
 		UserRegistry& operator= (const UserRegistry&) = delete; // anti copy
+		UserRegistry(UserRegistry&&) = delete;
+		UserRegistry& operator=(UserRegistry&&) = delete;
 		~UserRegistry() { }
 		static std::shared_ptr<UserRegistry>& GetInstance();
 	public:
