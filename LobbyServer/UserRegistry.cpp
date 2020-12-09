@@ -30,11 +30,14 @@ namespace net
 #pragma endregion
 
 	Lobby::UserSharedPtr UserRegistry::MakeUser(asio::ip::tcp::socket& socket){
+		Lobby::UserSharedPtr user(new Lobby::User(m_curTempUserId, std::move(socket)));
 
-		Lobby::UserSharedPtr user(new Lobby::User(m_curUserId, std::move(socket)));
-		m_users.emplace(m_curUserId, user);
-		m_curUserId++;
+		m_users.emplace(m_curTempUserId, user);
+
 		OnUserConnected(user);
+
+		m_curTempUserId--;
+
 		return user;
 	}
 	void UserRegistry::RemoveUser(Lobby::UserSharedPtr& user){
@@ -42,6 +45,22 @@ namespace net
 		m_users.erase(user->GetUserId());
 		OnUserDisconnected(user);
 	}
+
+	void UserRegistry::AuthenticateUser(Lobby::UserSharedPtr& user)
+	{
+		if (user)
+		{
+			m_users.erase(user->GetUserId());
+
+			m_users.emplace(m_curUserId, user);
+
+			user->SetUserId(m_curUserId);
+			user->SetIsAuthenticated(true);
+
+			m_curUserId++;
+		}
+	}
+
 	Lobby::UserSharedPtr UserRegistry::GetUserByUserId(uint32 userId) {
 		auto ptr = Lobby::UserSharedPtr();
 		auto it = m_users.find(userId);

@@ -55,17 +55,30 @@ namespace Lobby
 		Send(packet);
 		return true;
 	}
-	void User::AuthorizeUser()
+
+	void User::SetIsAuthenticated(const bool& toggle)
 	{
 		mtx.lock();
 		{
-			this->m_IsAuthorized = true;
+			this->m_isAuthenticated = toggle;
 		}
 		mtx.unlock();
 	}
+
+	const bool User::IsAuthenticated()
+	{
+		return m_isAuthenticated;
+	}
+
 	const uint32 User::GetUserId(){
 		return m_userId;
 	}
+
+	void User::SetUserId(const uint32& userId)
+	{
+		m_userId = userId;
+	}
+
 	void User::SetUserLocale(const String& inLocale)
 	{
 		mtx.lock(); 

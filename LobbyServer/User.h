@@ -20,15 +20,25 @@ namespace Lobby {
 		}
 
 		const uint32 GetUserId();
+
+		void SetUserId(const uint32& userId);
+
 		void SetUserLocale(const String& inLocale);
+
 		void SetUserAccountName(const String& inAccountName);
+
 		bool QueryAliveAuth();
-		void AuthorizeUser();
+
+		void SetIsAuthenticated(const bool& toggle);
+
+		const bool IsAuthenticated();
+
 	public://Network Related;
 		void Send(Serializer::ISerializable& packet);
+
 		void Parse(uint8* buffer, size_t size);
+
 	private:
-		uint32 m_userId;
 		enum Marks { AliveReceived, AliveCleared };
 		struct Alive {
 			Marks	Mark;
@@ -49,12 +59,18 @@ namespace Lobby {
 
 					return	false;
 				}
-			}answer, temp;
-		}m_Alive;
+			} answer, temp;
+		} m_Alive;
+
+		uint32 m_userId;
+
 		uint32 m_AlivePacketCount;
+
 		String m_Locale;
+
 		String m_AccountName;
-		bool m_IsAuthorized;
+
+		bool m_isAuthenticated;
 
 	private:
 		std::mutex mtx;
