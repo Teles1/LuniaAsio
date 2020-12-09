@@ -55,14 +55,30 @@ namespace Lobby
 		Send(packet);
 		return true;
 	}
+	void User::AuthorizeUser()
+	{
+		mtx.lock();
+		{
+			this->m_IsAuthorized = true;
+		}
+		mtx.unlock();
+	}
 	const uint32 User::GetUserId(){
 		return m_userId;
 	}
-	void User::SetUserLocale(String& inLocale)
+	void User::SetUserLocale(const String& inLocale)
 	{
 		mtx.lock(); 
 		{
-			this->m_Locale = std::move(inLocale);
+			this->m_Locale = inLocale;
+		}
+		mtx.unlock();
+	}
+	void User::SetUserAccountName(const String& inAccountName)
+	{
+		mtx.lock();
+		{
+			this->m_AccountName = inAccountName;
 		}
 		mtx.unlock();
 	}

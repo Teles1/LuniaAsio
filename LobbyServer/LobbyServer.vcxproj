@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.1.0.0\build\native\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.props" Condition="Exists('..\packages\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.1.0.0\build\native\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.props')" />
   <Import Project="..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props" Condition="Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -139,7 +138,8 @@
       <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(SolutionDir)Network\stdafx.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
       <PrecompiledHeaderOutputFile>$(SolutionDir)Phcs\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -203,7 +203,6 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets" Condition="Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets')" />
-    <Import Project="..\packages\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.1.0.0\build\native\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.targets" Condition="Exists('..\packages\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.1.0.0\build\native\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -211,7 +210,5 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props'))" />
     <Error Condition="!Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets'))" />
-    <Error Condition="!Exists('..\packages\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.1.0.0\build\native\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.1.0.0\build\native\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.props'))" />
-    <Error Condition="!Exists('..\packages\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.1.0.0\build\native\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.1.0.0\build\native\vcpkg.C.Users.kvalue.Desktop.Scripting.vcpkg.targets'))" />
   </Target>
 </Project>

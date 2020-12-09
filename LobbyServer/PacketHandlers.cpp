@@ -34,8 +34,10 @@ static utils::InitFunction init([]()
 			const Answer result = api.RequestApi();
 			Lobby::Protocol::Auth sendPacket;
 			if(result.errorCode == 0) {
+				user->SetUserAccountName(packet.AccountId); //It's fine because we already know that the account exists and the user is authenticated
 				sendPacket.AccountId = std::move(packet.AccountId);
 				sendPacket.Result = Lobby::Protocol::Auth::Results::Ok;
+				user->AuthorizeUser();
 			}
 			sendPacket.Result = static_cast<Lobby::Protocol::Auth::Results>(result.errorCode);
 			user->Send(sendPacket);

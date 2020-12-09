@@ -20,8 +20,10 @@ namespace Lobby {
 		}
 
 		const uint32 GetUserId();
-		void SetUserLocale(String& inLocale);
+		void SetUserLocale(const String& inLocale);
+		void SetUserAccountName(const String& inAccountName);
 		bool QueryAliveAuth();
+		void AuthorizeUser();
 	public://Network Related;
 		void Send(Serializer::ISerializable& packet);
 		void Parse(uint8* buffer, size_t size);
@@ -51,8 +53,8 @@ namespace Lobby {
 		}m_Alive;
 		uint32 m_AlivePacketCount;
 		String m_Locale;
-		
-
+		String m_AccountName;
+		bool m_IsAuthorized;
 
 	private:
 		std::mutex mtx;

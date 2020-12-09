@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="Crypt\Crypt.cpp" />
     <ClCompile Include="Tcp\Client.cpp" />
+    <ClCompile Include="Api\Api.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypt\Crypt.h" />

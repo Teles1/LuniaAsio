@@ -1,12 +1,21 @@
 #pragma once
 #include "LobbyServer.h"
+#include "Network/Api/Api.h"
 
-std::shared_ptr<GameServerScope> g_gameServer = std::make_shared<GameServerScope>();;
-
-
-
+std::shared_ptr<GameServerScope> g_gameServer = std::make_shared<GameServerScope>();
 
 namespace Lobby {
+	LobbyServer::LobbyServer(const char* ip, uint16 port) : ServerTcp(ip, port)
+	{
+		Api::ApiUrl = Config.API;
+		Api api("AddServer");
+		api << Config.ServerPort;
+		auto result = api.RequestApi();
+		if (result.errorCode == 0 || result.errorCode == 1)
+			Logger::GetInstance()->Info("{0} Initialized on port {1}", Lobby::Config.ServerName, Lobby::Config.ServerPort);
+		else
+			Logger::GetInstance()->Error("Could not initiaze server using the API supplied!! {0}", result.errorMessage);
+	}
 	void LobbyServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
 	{
 		net::UserRegistry::GetInstance()->MakeUser(socket)->HandleRead();
@@ -20,7 +29,6 @@ int main(int argc, char* argv[])
 	Logger::GetInstance("LobbyServer");
 	//Load Config
 	Lobby::LobbyServer lobbyServer(Lobby::Config.ServerIp.c_str(), Lobby::Config.ServerPort);
-	Logger::GetInstance()->Info("{0} Initialized on port {1}", Lobby::Config.ServerName, Lobby::Config.ServerPort);
 	lobbyServer.Run();
 	return 0;
 }
