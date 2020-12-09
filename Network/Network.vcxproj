@@ -134,6 +134,7 @@
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
