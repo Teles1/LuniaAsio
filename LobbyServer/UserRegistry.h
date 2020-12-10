@@ -1,8 +1,8 @@
 ﻿#ifndef UserRegistry_GUARD
 #define UserRegistry_GUARD
+
 #pragma once
 #include "User.h"
-
 namespace Lunia {
 	namespace Net
 	{
@@ -23,6 +23,8 @@ namespace Lunia {
 
 			void RemoveUser(Lobby::UserSharedPtr& user);
 
+			void AuthenticateUser(Lobby::UserSharedPtr& user);
+
 			Lobby::UserSharedPtr GetUserByUserId(uint32 userId);
 
 			fwEvent<const Lobby::UserSharedPtr&>				OnUserConnected;
@@ -30,13 +32,17 @@ namespace Lunia {
 			fwEvent<const Lobby::UserSharedPtr&>				OnUserDisconnected;
 
 		private:
-			UserRegistry() : m_curUserId(1000) { }
+			UserRegistry() { };
 		private:
-			uint32											m_curUserId;
 
-			std::unordered_map<uint32, Lobby::UserSharedPtr>	m_users;
+			uint32 m_curTempUserId = 0xFFFFFFFF;
+
+			uint32 m_curUserId = 0;
+
+			std::unordered_map<uint32, Lobby::UserSharedPtr> m_users;
 		};
 		typedef std::shared_ptr<UserRegistry> UserRegPtr;
 	}
 }
+
 #endif // !UserRegistry_GUARD
