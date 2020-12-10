@@ -21,7 +21,7 @@ namespace Lunia {
 
 			this->SendAsync(reinterpret_cast<uint8*>(buffer.GetData()), buffer.GetLength());
 		}
-		void User::Parse(uint8* buffer, size_t size)
+		uint32 User::Parse(uint8* buffer, size_t size)
 		{
 			/*
 				We should technically see but i think that if the server doesn't recognize the packet I say we let the client connection dies.
@@ -36,6 +36,7 @@ namespace Lunia {
 			fwPacketListener::GetInstance()->Invoke(userPtr, sReader.GetSerializedTypeHash(), sReader);
 
 			HandleRead();
+			return (uint32)size;
 		}
 		bool User::QueryAliveAuth()
 		{
@@ -78,12 +79,9 @@ namespace Lunia {
 		{
 			mtx.lock();
 			{
-				mtx.lock();
-				{
-					this->m_Locale = inLocale;
-				}
-				mtx.unlock();
+				this->m_Locale = inLocale;
 			}
+			mtx.unlock();
 		}
 
 		void User::SetUserAccountName(const String& inAccountName)

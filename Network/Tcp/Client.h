@@ -21,7 +21,7 @@ namespace Lunia {
             void SendAsync(uint8* data, size_t size);
             void ReceivedSome(const error_code& ec, size_t size);
             void WroteSome(const error_code& error, size_t size);
-            virtual void Parse(uint8* buffer, size_t size) = 0;
+            virtual uint32 Parse(uint8* buffer, size_t size) = 0;
         private:
             bool					m_isEncryptKey;
             uint8					m_buffer[READ_DATA_BUFFER_LENGTH] = {};

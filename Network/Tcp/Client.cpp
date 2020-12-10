@@ -29,7 +29,7 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 	if (!ec)
 	{
 		auto t = std::thread([=]() {
-			try {
+			//try {
 				int total = 0;
 				uint8* work = new uint8[Constants::HeaderSize]{ 0 };
 				do {
@@ -60,8 +60,8 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 									//Putting back the header into the m_buffer
 									memcpy(m_buffer, &pSize, sizeof(LengthType));
 									memmove(m_buffer + sizeof(LengthType), &header, sizeof(LengthType));
-									Parse(&m_buffer[size_t(total) /*+ size_t(Constants::HeaderSize)*/], pSize/* - Constants::HeaderSize*/);
-									total += pSize;
+									total += Parse(&m_buffer[size_t(total)], pSize);
+									//if not then something went wrong lol
 								}
 								//size - total - HeaderSize > lenght  means that there is more data to be processed.
 								// Eventually we gonna have to add a system to simple add data to a buffer or maybe a pointer to hold the data?
@@ -112,10 +112,10 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 				//Cleaning up my pointer.
 				assert(work != nullptr);
 				delete[] work;
-			}
-			catch (...) {
-				std::cout << "Exception trown\n";
-			}
+			//}
+			//catch (...) {
+				//std::cout << "Exception trown\n";
+			//}
 
 			});
 

@@ -29,7 +29,7 @@ namespace Lunia {
 		public://Network Related;
 			void Send(Serializer::ISerializable& packet);
 
-			void Parse(uint8* buffer, size_t size);
+			uint32 Parse(uint8* buffer, size_t size);
 
 		private:
 			enum Marks { AliveReceived, AliveCleared };
