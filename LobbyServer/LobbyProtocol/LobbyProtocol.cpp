@@ -21,7 +21,7 @@ namespace Lunia {
 				in.Read(L"Checksums", Checksums);
 			}
 
-			const wchar_t* Head::TypeName = L"Auth";
+			const wchar_t* Auth::TypeName = L"Auth";
 			const uint16 Auth::TypeHash = StringUtil::Hash(TypeName);
 			void Auth::Serialize(Serializer::IStreamWriter& out) const
 			{
@@ -40,7 +40,7 @@ namespace Lunia {
 				in.Read(L"Locale", Locale);
 			}
 
-			const wchar_t* Head::TypeName = L"Alive";
+			const wchar_t* Alive::TypeName = L"Alive";
 			const uint16 Alive::TypeHash = StringUtil::Hash(TypeName);
 			void Alive::Serialize(Serializer::IStreamWriter& out) const
 			{
@@ -70,7 +70,7 @@ namespace Lunia {
 				//user doesn't request this!
 			}
 			*/
-			const wchar_t* Head::TypeName = L"CharacterSlots";
+			const wchar_t* CharacterSlots::TypeName = L"CharacterSlots";
 			const uint16 CharacterSlots::TypeHash = StringUtil::Hash(TypeName);
 			void CharacterSlots::Serialize(Serializer::IStreamWriter& out) const
 			{

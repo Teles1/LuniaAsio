@@ -6,8 +6,17 @@
 #include <codecvt>
 namespace Lunia {
 	namespace StringUtil {
+
         template<typename T1, typename T2>
         T1 To(T2 value);
+
+        template <typename T> T To(const char* str);
+        template <typename T> inline T To(char* str) { return To<T>((const char*)str); }
+        template <typename T> inline T To(const std::string& str) { return To<T>(str.c_str()); }
+
+        template <typename T> T To(const wchar_t* wstr);
+        template <typename T> inline T To(wchar_t* wstr) { return To<T>((const wchar_t*)wstr); }
+        template <typename T> inline T To(const std::wstring& wstr) { return To<T>(wstr.c_str()); }
 
         #pragma region Type Conversions
         template<typename T>

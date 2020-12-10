@@ -1,5 +1,6 @@
 #include "fwPacketListener.h"
 #include "UserRegistry.h"
+using namespace Lunia;
 
 std::shared_ptr<fwPacketListener> fwPacketListener::m_instance;
 std::mutex fwPacketListener::m_lock;

@@ -4,6 +4,7 @@
     <ClCompile Include="Crypt\Crypt.cpp" />
     <ClCompile Include="Tcp\Client.cpp" />
     <ClCompile Include="Api\Api.cpp" />
+    <ClCompile Include="NetStream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypt\Crypt.h" />
@@ -13,6 +14,7 @@
     <ClInclude Include="Tcp\Server.h" />
     <ClInclude Include="Tcp\Shared.h" />
     <ClInclude Include="Api\Api.h" />
+    <ClInclude Include="NetStream.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

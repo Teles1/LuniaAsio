@@ -1,2 +1,6 @@
 #include "Api.h"
-std::string Api::ApiUrl;
+namespace Lunia {
+    namespace Net {
+        std::string Api::ApiUrl;
+    }
+}

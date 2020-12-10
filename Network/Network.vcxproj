@@ -175,6 +175,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="NetStream.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Tcp\Client.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -187,6 +190,7 @@
     <ClInclude Include="Api\json.hpp" />
     <ClInclude Include="Crypt\Crypt.h" />
     <ClInclude Include="Api\httplib.h" />
+    <ClInclude Include="NetStream.h" />
     <ClInclude Include="Tcp\Client.h" />
     <ClInclude Include="Tcp\Server.h" />
     <ClInclude Include="Tcp\Shared.h" />

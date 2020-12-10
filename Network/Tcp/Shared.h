@@ -11,13 +11,17 @@
 #include <iostream>
 #include "Core/Core.h"
 
-namespace Shared {
-    using ReceivedCallback = std::function<void(std::vector<uint8>& buffer)>;
+
+namespace Lunia {
+    namespace Shared {
+        using ReceivedCallback = std::function<void(std::vector<uint8>& buffer)>;
+    }
+    namespace Net {
+        using asio::ip::tcp;
+        using error_code = asio::error_code;
+        const uint16 READ_DATA_BUFFER_LENGTH = 2 << 12;
+    }
 }
-namespace net {
-    using asio::ip::tcp;
-    using error_code = asio::error_code;
-    const uint16 READ_DATA_BUFFER_LENGTH = 2 << 12;
-}
+
 #include "Core/fwEvent.h"
 #endif // !Shared_GUARD

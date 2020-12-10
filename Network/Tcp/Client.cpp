@@ -1,5 +1,6 @@
 #include "Client.h"
-using namespace net;
+using namespace Lunia;
+using namespace Net;
 
 ClientTcp::ClientTcp(tcp::socket&& s)
 	: m_socket(std::move(s)) //ClientTcp now Owns the socket.
@@ -9,12 +10,12 @@ ClientTcp::ClientTcp(tcp::socket&& s)
 	std::cout << "ClientTcp was created" << std::endl;
 }
 
-void net::ClientTcp::SendAsync(uint8* data, size_t size){
+void ClientTcp::SendAsync(uint8* data, size_t size){
 	m_socket.async_send(asio::buffer(data, size),
 		std::bind(&ClientTcp::WroteSome, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-void net::ClientTcp::HandleRead() {
+void ClientTcp::HandleRead() {
 	m_socket.async_read_some(asio::buffer(m_buffer, READ_DATA_BUFFER_LENGTH),
 		std::bind(&ClientTcp::ReceivedSome, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 }

@@ -1,83 +1,88 @@
 #pragma once
 #include "User.h"
-template <typename T>
-struct function_traits
-    : public function_traits<decltype(&T::operator())>
-{};
-// For generic types, directly use the result of the signature of its 'operator()'
+#include "Network/NetStream.h"
 
-template <typename ClassType, typename ReturnType, typename... Args>
-struct function_traits<ReturnType(ClassType::*)(Args...) const>
-    // we specialize for pointers to member function
-{
-    enum { arity = sizeof...(Args) };
-    // arity is the number of arguments.
+namespace Lunia {
+    template <typename T>
+    struct function_traits
+        : public function_traits<decltype(&T::operator())>
+    {};
+    // For generic types, directly use the result of the signature of its 'operator()'
 
-    typedef ReturnType result_type;
-
-    template <size_t i>
-    struct arg
+    template <typename ClassType, typename ReturnType, typename... Args>
+    struct function_traits<ReturnType(ClassType::*)(Args...) const>
+        // we specialize for pointers to member function
     {
-        typedef typename std::tuple_element<i, std::tuple<Args...>>::type type;
-        // the i-th argument is equivalent to the i-th tuple element of a tuple
-        // composed of those arguments.
-    };
-};
+        enum { arity = sizeof...(Args) };
+        // arity is the number of arguments.
 
-class fwPacketListener
-{
-private:
-    template<class T>
-    struct packetFromType
-    {
-        T value;
-    };
+        typedef ReturnType result_type;
 
-public:
-    static std::mutex						 m_lock;
-    static std::shared_ptr<fwPacketListener> m_instance;
-public:
-    fwPacketListener(const fwPacketListener&) = delete; //anti creation  of a copy
-    fwPacketListener& operator= (const fwPacketListener&) = delete; // anti copy
-    ~fwPacketListener() { }
-    static std::shared_ptr<fwPacketListener>& GetInstance();
-
-public:
-    fwPacketListener() {};
-
-    template<typename F>
-    void Connect(F f)
-    {
-        typedef function_traits<decltype(f)> traits;
-
-        packetFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
-
-        auto lambda = [f](Lobby::UserSharedPtr& user, Serializer::StreamReader& streamReader)
+        template <size_t i>
+        struct arg
         {
-            //packetFromType<traits::result_type> packet;
-            packetFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
+            typedef typename std::tuple_element<i, std::tuple<Args...>>::type type;
+            // the i-th argument is equivalent to the i-th tuple element of a tuple
+            // composed of those arguments.
+        };
+    };
 
-            packet.value.Deserialize(streamReader);
-
-            f(user, packet.value);
+    class fwPacketListener
+    {
+    private:
+        template<class T>
+        struct packetFromType
+        {
+            T value;
         };
 
-        m_callbacks[packet.value.TypeHash] = lambda;
-    }
+    public:
+        static std::mutex						 m_lock;
+        static std::shared_ptr<fwPacketListener> m_instance;
+    public:
+        fwPacketListener(const fwPacketListener&) = delete; //anti creation  of a copy
+        fwPacketListener& operator= (const fwPacketListener&) = delete; // anti copy
+        ~fwPacketListener() { }
+        static std::shared_ptr<fwPacketListener>& GetInstance();
 
-    void Invoke(Lobby::UserSharedPtr& user, uint16& packetHeaderHash, Serializer::StreamReader& streamReader)
-    {
-        auto it = m_callbacks.find(packetHeaderHash);
+    public:
+        fwPacketListener() {};
 
-        if (it != m_callbacks.end())
+        template<typename F>
+        void Connect(F f)
         {
-            it->second(user, streamReader);
-        }
-        else
-            Logger::GetInstance()->Warn("fwPacket::Invoke::user{0} unhandled packet [{1:#4x}]", user->GetUserId(), packetHeaderHash);
-        //do something else ?
-    }
-private:
+            typedef function_traits<decltype(f)> traits;
 
-    std::map<uint16, std::function<void(Lobby::UserSharedPtr& user, Serializer::StreamReader&)>> m_callbacks;
-};
+            packetFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
+
+            auto lambda = [f](Lobby::UserSharedPtr& user, Net::StreamReader& streamReader)
+            {
+                //packetFromType<traits::result_type> packet;
+                packetFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
+
+                packet.value.Deserialize(streamReader);
+
+                f(user, packet.value);
+            };
+
+            m_callbacks[packet.value.TypeHash] = lambda;
+        }
+
+        void Invoke(Lobby::UserSharedPtr& user, const uint16& packetHeaderHash, Net::StreamReader& streamReader)
+        {
+            auto it = m_callbacks.find(packetHeaderHash);
+
+            if (it != m_callbacks.end())
+            {
+                it->second(user, streamReader);
+            }
+            else
+                Logger::GetInstance()->Warn("fwPacket::Invoke::user{0} unhandled packet [{1:#4x}]", user->GetUserId(), packetHeaderHash);
+            //do something else ?
+        }
+    private:
+
+        std::map<uint16, std::function<void(Lobby::UserSharedPtr& user, Net::StreamReader&)>> m_callbacks;
+    };
+
+}
