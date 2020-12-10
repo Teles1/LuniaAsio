@@ -47,21 +47,36 @@ namespace Lunia {
 			packet.Value2 = m_Alive.temp.value2 = 0;
 			packet.Value3 = m_Alive.temp.value3 = 0;
 
-			Send(packet);
-			return true;
-		}
-		void User::AuthorizeUser()
+		Send(packet);
+		return true;
+	}
+
+	void User::SetIsAuthenticated(const bool& toggle)
+	{
+		mtx.lock();
 		{
-			mtx.lock();
-			{
-				this->m_IsAuthorized = true;
-			}
-			mtx.unlock();
+			this->m_isAuthenticated = toggle;
 		}
-		const uint32 User::GetUserId() {
-			return m_userId;
-		}
-		void User::SetUserLocale(const String& inLocale)
+		mtx.unlock();
+	}
+
+	const bool User::IsAuthenticated()
+	{
+		return m_isAuthenticated;
+	}
+
+	const uint32 User::GetUserId(){
+		return m_userId;
+	}
+
+	void User::SetUserId(const uint32& userId)
+	{
+		m_userId = userId;
+	}
+
+	void User::SetUserLocale(const String& inLocale)
+	{
+		mtx.lock(); 
 		{
 			mtx.lock();
 			{
