@@ -52,13 +52,9 @@ namespace Lunia {
 			return true;
 		}
 
-		void User::SetIsAuthenticated(const bool& toggle)
+		void User::SetIsAuthenticated()
 		{
-			mtx.lock();
-			{
-				this->m_isAuthenticated = toggle;
-			}
-			mtx.unlock();
+			this->m_isAuthenticated = true;
 		}
 
 		const bool User::IsAuthenticated()

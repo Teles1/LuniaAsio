@@ -31,6 +31,8 @@ namespace Lunia {
 
 			fwEvent<const Lobby::UserSharedPtr&>				OnUserDisconnected;
 
+			fwEvent<const Lobby::UserSharedPtr&, const uint32&>                OnUserAuthenticated;
+
 		private:
 			UserRegistry() { };
 		private:
@@ -39,7 +41,12 @@ namespace Lunia {
 
 			uint32 m_curUserId = 0;
 
-			std::unordered_map<uint32, Lobby::UserSharedPtr> m_users;
+			std::mutex m_usersMutex;
+			std::vector<Lobby::UserSharedPtr> m_users;
+
+			std::unordered_map<uint32, Lobby::UserWeakPtr> m_usersByUserId;
+
+			std::unordered_map<uint32, Lobby::UserWeakPtr> m_autorizedUsersByUserId;
 		};
 		typedef std::shared_ptr<UserRegistry> UserRegPtr;
 	}

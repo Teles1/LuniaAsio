@@ -22,7 +22,7 @@ namespace Lunia {
 
 			bool QueryAliveAuth();
 
-			void SetIsAuthenticated(const bool& toggle);
+			void SetIsAuthenticated();
 
 			const bool IsAuthenticated();
 
@@ -69,5 +69,6 @@ namespace Lunia {
 			std::mutex mtx;
 		};
 		typedef std::shared_ptr<User> UserSharedPtr;
+		typedef std::weak_ptr<User> UserWeakPtr;
 	}
 }
