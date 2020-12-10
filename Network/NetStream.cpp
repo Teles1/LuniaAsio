@@ -149,8 +149,10 @@ namespace Lunia {
 
         // StreamReader
         // ///////////////////////////////////////////////////////////////////////////////
-        StreamReader::StreamReader(const void* buffer)
-            : buffer(buffer), endOfBuffer(static_cast<const char*>(buffer) + GetNetStreamSize()) {
+        StreamReader::StreamReader(const void* buffer) : 
+            buffer(buffer)
+            , endOfBuffer(static_cast<const char*>(buffer) + GetNetStreamSize()) 
+        {
             size = GetNetStreamSize();
         }
 
@@ -173,8 +175,7 @@ namespace Lunia {
         }
 
         HashType StreamReader::GetSerializedTypeHash() {
-            HashType* temp =
-                (HashType*)((const char*)buffer + GetNetStreamHeaderSize());
+            HashType* temp = (HashType*)((const char*)buffer + GetNetStreamHeaderSize());
 
             return *temp;
         }

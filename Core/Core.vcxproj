@@ -179,7 +179,6 @@
     <ClInclude Include="IStream.h" />
     <ClInclude Include="ReferenceCounted.h" />
     <ClInclude Include="Serializer\IReferenceCounted.h" />
-    <ClInclude Include="Serializer\NetStream.h" />
     <ClInclude Include="Serializer\Serializer.h" />
     <ClInclude Include="Utils\Math\Color.h" />
     <ClInclude Include="Utils\Math\euler.h" />

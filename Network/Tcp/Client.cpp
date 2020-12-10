@@ -57,7 +57,7 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 									//Packet can be deserialized safely.
 									//Packet can be fully read because lenght > pSize
 									m_decryptor.Translate(&m_buffer[size_t(total) + size_t(Constants::HeaderSize)], pSize - Constants::HeaderSize); // Decryption done
-									Parse(&m_buffer[size_t(total) + size_t(Constants::HeaderSize)], pSize - Constants::HeaderSize);
+									Parse(&m_buffer[size_t(total) /*+ size_t(Constants::HeaderSize)*/], pSize/* - Constants::HeaderSize*/);
 									total += pSize;
 								}
 								//size - total - HeaderSize > lenght  means that there is more data to be processed.
@@ -74,10 +74,14 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 
 							HashType* header_length = reinterpret_cast<HashType*>(m_buffer + total + 2);
 							HashType header = *header_length;
-							//printf("NonCrypt Psize[%.2X], Hash[%.2X]\n", pSize, header);
-							if (header == Constants::NetStreamHash) {
+							//printf("size[%.2X] Psize[%.2X], Hash[%.2X]\n", size, pSize, header);
+							if (header == Constants::NetStreamHash && pSize <= size) {
+								/*for (int i = 0; i < pSize; i++) {
+									printf("%.2X", m_buffer[i]);
+								}
+								printf("\n");*/
 								//printf("size[%d] total[%d] pSize[%d]\n", size, total, pSize);
-								Parse(&m_buffer[size_t(total) + size_t(Constants::HeaderSize)], pSize - Constants::HeaderSize);
+								Parse(&m_buffer[size_t(total)/* + size_t(Constants::HeaderSize)*/], pSize/* - Constants::HeaderSize*/);
 								total = +pSize;
 							}
 							else

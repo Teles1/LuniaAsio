@@ -59,8 +59,7 @@ namespace Lunia {
             {
                 //packetFromType<traits::result_type> packet;
                 packetFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
-
-                packet.value.Deserialize(streamReader);
+                streamReader.Read(packet.value);
 
                 f(user, packet.value);
             };

@@ -29,9 +29,6 @@ namespace Lunia {
 				Parse only known packets. At least the ones which follow NetStream Standarts.
 			*/
 
-			uint32 a = 0;
-			this->SetCryptoKey(a);
-
 			Net::StreamReader sReader(buffer);
 			
 			auto userPtr = Net::UserRegistry::GetInstance()->GetUserByUserId(this->GetUserId());

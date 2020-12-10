@@ -32,7 +32,6 @@
     <ClInclude Include="Utils\StringUtil\General.h" />
     <ClInclude Include="Utils\Math\vector4.h" />
     <ClInclude Include="Utils\StringUtil\GeneralConversions.h" />
-    <ClInclude Include="Utils\StringUtil.h" />
     <ClInclude Include="ReferenceCounted.h" />
     <ClInclude Include="com_ptr.h" />
     <ClInclude Include="Serializer\IReferenceCounted.h" />
@@ -46,9 +45,9 @@
     <ClInclude Include="Types.h" />
     <ClInclude Include="Serializer\Serializer_old.h" />
     <ClInclude Include="Serializer\Serializer.h" />
-    <ClInclude Include="Serializer\NetStream.h" />
     <ClInclude Include="IStream.h" />
     <ClInclude Include="IReferenceCounted.h" />
+    <ClInclude Include="Utils\StringUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

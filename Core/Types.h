@@ -24,7 +24,7 @@ namespace Lunia {
 namespace Lunia {
 	namespace Constants {
 		const uint32 Version = 0x17;
-		const HashType NetStreamHash = 0xE055;
+		const HashType NetStreamHash = 0x55E0;
 		const uint16 HeaderSize = sizeof(HashType) + sizeof(LengthType);
 	}
 }
