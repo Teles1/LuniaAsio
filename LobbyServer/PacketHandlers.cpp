@@ -51,7 +51,7 @@ namespace Lunia {
 
 						break;
 					default:
-						Net::UserRegistry::GetInstance()->RemoveUser(user);
+						//Net::UserRegistry::GetInstance()->RemoveUser(user);
 						break;
 					}
 
