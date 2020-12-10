@@ -25,7 +25,6 @@ namespace Lunia {
 	}
 }
 
-
 int main(int argc, char* argv[])
 {
 	//setting log name to be used on the console.

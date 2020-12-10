@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Serializer/Serializer.h"
 #include "Core/Utils/DateTime.h"
+#include <Core/GameConstants.h>
 namespace Lunia {
 	namespace Lobby {
 		namespace Protocol {
@@ -72,11 +73,12 @@ namespace Lunia {
 				NET_SERIALIZABLE
 			};
 
-			/*struct ListCharacter {
-				std::vector<LobbyPlayerInfo> Characters;
+			struct ListCharacter : public Serializer::ISerializable
+			{
+				std::vector<XRated::LobbyPlayerInfo> Characters;
 
 				NET_SERIALIZABLE;
-			};*/
+			};
 			struct CharacterSlots : public Serializer::ISerializable
 			{
 				int32 NumberOfSlots;

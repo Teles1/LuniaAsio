@@ -11,6 +11,7 @@
     <ClCompile Include="Utils\StringUtil\GeneralConversions.cpp" />
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="Serializer\Serializer.cpp" />
+    <ClCompile Include="Utils\ThreadPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -48,6 +49,7 @@
     <ClInclude Include="IStream.h" />
     <ClInclude Include="IReferenceCounted.h" />
     <ClInclude Include="Utils\StringUtil.h" />
+    <ClInclude Include="Utils\ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

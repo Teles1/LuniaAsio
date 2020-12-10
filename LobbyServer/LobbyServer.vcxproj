@@ -194,7 +194,6 @@
     <ClInclude Include="fwPacketListener.h" />
     <ClInclude Include="LobbyServer.h" />
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h" />
-    <ClInclude Include="LobbyStructs.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>

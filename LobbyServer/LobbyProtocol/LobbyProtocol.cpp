@@ -59,17 +59,21 @@ namespace Lunia {
 				in.Read(L"Value3", Value3);
 			}
 
-			/*const uint16 ListCharacter::TypeHash = StringUtil::Hash(L"ListCharacter");
-			void ListCharacter::Serialize(Serializer::StreamWriter& out)
+			const wchar_t* ListCharacter::TypeName = L"ListCharacter";
+			const HashType ListCharacter::TypeHash = StringUtil::Hash(ListCharacter::TypeName);
+			void ListCharacter::Serialize(Serializer::IStreamWriter& out) const
 			{
-				out.Begin(TypeHash);
+				out.Begin(TypeName);
 				out.Write(L"Characters", Characters);
 			}
-			void ListCharacter::Deserialize(Serializer::StreamReader& in)
+			void ListCharacter::Deserialize(Serializer::IStreamReader& in)
 			{
-				//user doesn't request this!
+				in.Begin(TypeName);
+				in.Read(L"Characters", Characters);
+				Logger::GetInstance()->Warn("ListCharacter shouldn't be getting called by the client.");
 			}
-			*/
+
+
 			const wchar_t* CharacterSlots::TypeName = L"CharacterSlots";
 			const uint16 CharacterSlots::TypeHash = StringUtil::Hash(TypeName);
 			void CharacterSlots::Serialize(Serializer::IStreamWriter& out) const

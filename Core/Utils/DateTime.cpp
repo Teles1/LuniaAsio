@@ -276,7 +276,6 @@ namespace Lunia {
 		return true;
 
 	}
-
 	std::wstring DateTime::Time::ToString(Format::type format) const
 	{
 		if (IsValid())
@@ -294,7 +293,6 @@ namespace Lunia {
 		}
 		return L"";
 	}
-
 	double DateTime::Time::GetCumulatedSec(const Time& origin) const
 	{
 		if (timeValue.Hour == 0 && timeValue.Minute == 0
@@ -312,7 +310,6 @@ namespace Lunia {
 
 		return sec;
 	}
-
 	void DateTime::Time::Deserialize(Serializer::IStreamReader& in) {
 		in.Begin(L"AllM::Time");
 		uint16 tmp;
@@ -429,7 +426,6 @@ namespace Lunia {
 		Logger::GetInstance()->Error(" The number of numeric strings is invalid.");
 		return false;
 	}
-
 	std::wstring DateTime::ToString(Format::type format) const
 	{
 		std::wstring data = L"";
@@ -442,7 +438,6 @@ namespace Lunia {
 
 		return data;
 	}
-
 	void DateTime::Deserialize(Serializer::IStreamReader& in) {
 		in.Begin(L"AllM::DateTime");
 		uint16 tmp;
@@ -493,7 +488,7 @@ namespace Lunia {
 
 		return nowDateTime;
 	}
-
+	DateTime DateTime::Infinite(L"9999-01-01 00:00:00");
 	bool DateTime::IsValid(const std::wstring& dateTime)
 	{
 		DateTime test;
@@ -507,7 +502,6 @@ namespace Lunia {
 				return false;
 		}
 	}
-
 	bool DateTime::IsSpecificDayOfWeek(SpecificType specific, Week::type dayOfWeek, const DateTime& dateTime)
 	{
 		if (specific < First)
@@ -537,7 +531,6 @@ namespace Lunia {
 
 		return true;
 	}
-
 	uint16 DateTime::GetSpecificDayOfWeek(SpecificType specific, Week::type dayOfWeek, const DateTime& dateTime)
 	{
 		if (specific < First)
@@ -564,7 +557,6 @@ namespace Lunia {
 
 		return 0;
 	}
-
 	uint16 DateTime::Get(const Unit::type& unit, bool checkValid) const
 	{
 		switch (unit)
@@ -587,7 +579,6 @@ namespace Lunia {
 
 		return 0;
 	}
-
 	void DateTime::Set(Unit::type unit, uint16 value)
 	{
 		switch (unit)
@@ -646,7 +637,7 @@ namespace Lunia {
 
 		return false;
 	}
-#pragma region Operations
+
 
 	bool DateTime::operator==(const DateTime& rhs) const
 	{
@@ -776,7 +767,6 @@ namespace Lunia {
 		}
 		return *this;
 	}
-
 	DateTime& DateTime::Add(DateTime dateTime)
 	{
 		if (dateTime.IsValid())
@@ -798,7 +788,6 @@ namespace Lunia {
 		}
 		return *this;
 	}
-
 	DateTime& DateTime::AddEx(Unit::type unit, int32 value)
 	{
 		if (value == 0)
@@ -859,7 +848,6 @@ namespace Lunia {
 		}
 		return *this;
 	}
-
 	DateTime& DateTime::Add(const DateTerm& dateTerm)
 	{
 		if (dateTerm.term == 0)
@@ -868,7 +856,6 @@ namespace Lunia {
 		}
 		return Add(dateTerm.termUnit, dateTerm.term);
 	}
-
 	DateTime::DateTime(const std::wstring rhs)
 	{
 		if (Parse(rhs))
@@ -879,7 +866,6 @@ namespace Lunia {
 			throw "Arguments are invailid";
 		}
 	}
-
 	DateTime operator+(const DateTime& lhs, const DateTime& rhs)
 	{
 		DateTime datetimeData(lhs);
@@ -893,7 +879,6 @@ namespace Lunia {
 
 		return datetimeData;
 	}
-
 	DateTime operator-(const DateTime& lhs, const DateTime& rhs)
 	{
 		DateTime datetimeData(lhs);
@@ -907,7 +892,6 @@ namespace Lunia {
 
 		return datetimeData;
 	}
-
 	DateTime DateTime::Plus(const DateTime& lhs, const DateTime& rhs)
 	{
 		double secs = lhs.GetTime().GetCumulatedSec() + rhs.GetTime().GetCumulatedSec();
@@ -921,7 +905,6 @@ namespace Lunia {
 
 		return DateTime(date, time);
 	}
-
 	DateTime DateTime::Minus(const DateTime& lhs, const DateTime& rhs)
 	{
 		assert(lhs.GetDate().GetCumulatedDay() - rhs.GetDate().GetCumulatedDay() >= 0);
@@ -953,10 +936,6 @@ namespace Lunia {
 		timeData.SetMinute(static_cast<uint8>(timeinfo.tm_min));
 		timeData.SetSecond(static_cast<uint16>(timeinfo.tm_sec));
 	}
-
-#pragma endregion
-#pragma endregion
-
 	void DateTime::Date::SetCumulatedDay(uint32 day, bool isValid, const Date& origin)
 	{
 		day += origin.GetCumulatedDay();
@@ -1006,7 +985,6 @@ namespace Lunia {
 		dateValue.Month = static_cast<uint8>(month);
 		dateValue.Day = static_cast<uint8>(day);
 	}
-
 	int32 DateTime::Date::DateConvertToJulianDay()
 	{
 		if (dateValue.Month < 3)
@@ -1018,7 +996,6 @@ namespace Lunia {
 			* dateValue.Year + (dateValue.Year / 4) - (dateValue.Year / 100)
 			+ (dateValue.Year / 400) + 1721119;
 	}
-
 	DateTime::Week::type DateTime::Date::GetDayOfWeek() const
 	{
 		if (!IsValid()) {
@@ -1095,7 +1072,6 @@ namespace Lunia {
 		Logger::GetInstance()->Warn("value error, res={0}", res);
 		return Week::Sunday;
 	}
-
 	bool DateTime::Date::IsValid() const
 	{
 		if (dateValue.Month > 12 || dateValue.Month < 1)
@@ -1110,14 +1086,12 @@ namespace Lunia {
 		}
 		return true;
 	}
-
 	DateTime::Date DateTime::Date::Now()
 	{
 		time_t ltime;
 		time(&ltime);
 		return Date(ltime);
 	}
-
 	bool DateTime::Date::IsValid(const std::wstring& date)
 	{
 		Date test;
@@ -1132,7 +1106,6 @@ namespace Lunia {
 				return false;
 		}
 	}
-
 	uint16 DateTime::Date::GetLastDayOfMonth(uint16 year, uint16 month)
 	{
 		static uint16 days[] = { 0/* no days in zeroth dateValue.Month*/, 31 /* January */,
@@ -1208,6 +1181,26 @@ namespace Lunia {
 			return !(*this < rhs);
 		}
 		return false;
+	}
+	DateTime::Date operator+(const DateTime::Date& lhs, const DateTime::Date& rhs)
+	{
+		DateTime::Date dateData(lhs);
+
+		dateData.Add(DateTime::Unit::Day, rhs.GetDay(true));
+		dateData.Add(DateTime::Unit::Month, rhs.GetMonth(true));
+		dateData.Add(DateTime::Unit::Year, rhs.GetYear(true));
+
+		return dateData;
+	}
+	DateTime::Date operator-(const DateTime::Date& lhs, const DateTime::Date& rhs)
+	{
+		DateTime::Date dateData(lhs);
+
+		dateData.Add(DateTime::Unit::Day, -rhs.GetDay(true));
+		dateData.Add(DateTime::Unit::Month, -rhs.GetMonth(true));
+		dateData.Add(DateTime::Unit::Year, -rhs.GetYear(true));
+
+		return dateData;
 	}
 
 	DateTime::Date& DateTime::Date::Add(Unit::type unit, int32 value)
@@ -1331,29 +1324,6 @@ namespace Lunia {
 
 		return *this;
 	}
-
-	DateTime::Date operator+(const DateTime::Date& lhs, const DateTime::Date& rhs)
-	{
-		DateTime::Date dateData(lhs);
-
-		dateData.Add(DateTime::Unit::Day, rhs.GetDay(true));
-		dateData.Add(DateTime::Unit::Month, rhs.GetMonth(true));
-		dateData.Add(DateTime::Unit::Year, rhs.GetYear(true));
-
-		return dateData;
-	}
-
-	DateTime::Date operator-(const DateTime::Date& lhs, const DateTime::Date& rhs)
-	{
-		DateTime::Date dateData(lhs);
-
-		dateData.Add(DateTime::Unit::Day, -rhs.GetDay(true));
-		dateData.Add(DateTime::Unit::Month, -rhs.GetMonth(true));
-		dateData.Add(DateTime::Unit::Year, -rhs.GetYear(true));
-
-		return dateData;
-	}
-
 	void DateTime::Time::SetCumulatedSec(double sec, const Time& origin)
 	{
 		sec += origin.GetCumulatedSec();
@@ -1382,7 +1352,6 @@ namespace Lunia {
 		timeValue.Second = isec;
 		timeValue.MilliSec = msec;
 	}
-
 	bool DateTime::Time::IsValid() const
 	{
 		bool result = true;
@@ -1410,7 +1379,6 @@ namespace Lunia {
 
 		return result;
 	}
-
 	DateTime::Time& DateTime::Time::Add(Unit::type unit, int32 value)
 	{
 		if (unit < Unit::Hour) {
@@ -1708,7 +1676,6 @@ namespace Lunia {
 		}
 		return *this;
 	}
-
 	DateTime::Time DateTime::Time::Now()
 	{
 		time_t now = time(0);
@@ -1807,4 +1774,5 @@ namespace Lunia {
 
 		return timeData;
 	}
+#pragma endregion
 }
