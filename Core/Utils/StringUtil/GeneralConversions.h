@@ -8,33 +8,6 @@ namespace Lunia {
 	namespace StringUtil {
         template<typename T1, typename T2>
         T1 To(T2 value);
-        #pragma region Base Conversions
-        template<typename T>
-        const T To(const std::wstring& str) {
-            std::wstring temp;
-            for (size_t i = 0; i < str.size(); i++) {
-                if (std::isdigit(str[i]))
-                    temp.push_back(str[i]);
-            }
-            std::wistringstream ss(std::move(temp));
-            T number(0);
-            ss >> number;
-            return std::move(number);
-        }
-
-        template<typename T>
-        const T To(const std::string& str) {
-            std::string temp;
-            for (size_t i = 0; i < str.size(); i++) {
-                if (std::isdigit(str[i]))
-                    temp.push_back(str[i]);
-            }
-            std::stringstream ss(std::move(temp));
-            T number(0);
-            ss >> number;
-            return std::move(number);
-        }
-        #pragma endregion
 
         #pragma region Type Conversions
         template<typename T>
@@ -75,9 +48,8 @@ namespace Lunia {
         const short ToInt16(const T& str) {
             return To<short>(str);
         }
-        const char ToInt8(const std::string& str) {
-            return To<char>(str);
-        }
+
+        const char ToInt8(const std::string& str);
 
         #pragma endregion
 
@@ -90,17 +62,6 @@ namespace Lunia {
         std::string ToASCII(const T& p) { return To<std::string>(p); }
         template<typename T>
         std::string ToASCII(const T* p) { return To<std::string>(p); }
-
-        #pragma region String Conversions
-        const std::wstring ToUnicode(const std::string& utf8) {
-            std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> wcu8;
-            return wcu8.from_bytes(utf8);
-        }
-        const std::string ToASCII(const std::wstring& utf16) {
-            std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> wcu8;
-            return wcu8.to_bytes(utf16);
-        }
-        #pragma endregion
     }
 }
 

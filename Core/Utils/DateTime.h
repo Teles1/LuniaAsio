@@ -2,7 +2,6 @@
 #define DateTime_HEADER_GUARD
 
 #pragma once
-#include "../Core.h"
 #include "../Serializer/Serializer.h"
 namespace Lunia {
 	class DateTime : public Serializer::ISerializable {
