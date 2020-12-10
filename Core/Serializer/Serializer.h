@@ -60,7 +60,7 @@ namespace Lunia {
 					@param name name of the parameter
 					@value value of the parameter
 					*/
-					//virtual void Write(const wchar_t* name, const Locator& locator) = 0;
+			virtual void Write(const wchar_t* name, const Locator& locator) = 0;
 			virtual void Write(const wchar_t* name, bool value) = 0;
 			virtual void Write(const wchar_t* name, char value) = 0;
 			virtual void Write(const wchar_t* name, unsigned char value) = 0;
