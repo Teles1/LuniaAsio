@@ -5,7 +5,9 @@
 #include <string>
 #include <Core/Utils/StringUtil.h>
 int main() {
-	unsigned int aux = 10;
-	std::wcout << Lunia::StringUtil::To<std::wstring>(aux);
+	short a = 10;
+	short b = 20;
+	int* c = new int[10];
+	memcpy(c, &a + &b, 4);
 }
 //return StringUtil::Format(L"%04d-%02d-%02d", dateValue.Year, dateValue.Month, dateValue.Day);
