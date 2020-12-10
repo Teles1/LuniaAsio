@@ -100,8 +100,8 @@ namespace Lunia {
 
 			Date& Add(Unit::type unit, int32 value);
 		public:
-			void Deserialize(Serializer::StreamReader& in);
-			void Serialize(Serializer::StreamWriter& out);
+			void Deserialize(Serializer::IStreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
 		};
 		
 		class Time : public Serializer::ISerializable {
@@ -150,8 +150,8 @@ namespace Lunia {
 			bool operator>(const Time& rhs) const;
 			bool operator>=(const Time& rhs) const;
 		public:
-			void Deserialize(Serializer::StreamReader& in);
-			void Serialize(Serializer::StreamWriter& out);
+			void Deserialize(Serializer::IStreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
 		};
 
 		DateTime();
@@ -204,8 +204,8 @@ namespace Lunia {
 		Time timeData;
 		Date dateData;
 	public:
-		void Deserialize(Serializer::StreamReader& in) override;
-		void Serialize(Serializer::StreamWriter& out) override;
+		void Deserialize(Serializer::IStreamReader& in) override;
+		void Serialize(Serializer::IStreamWriter& out)  const;
 	};
 
 	DateTime::Time operator+(const DateTime::Time& lhs, const DateTime::Time& rhs);

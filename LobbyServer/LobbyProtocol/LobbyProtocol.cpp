@@ -4,57 +4,62 @@ namespace Lunia {
 	namespace Lobby {
 		namespace Protocol {
 
-			const uint16 Head::TypeHash = StringUtil::Hash(L"Head");
-			void Head::Serialize(Serializer::StreamWriter& out)
+			const wchar_t* Head::TypeName = L"Head";
+			const uint16 Head::TypeHash = StringUtil::Hash(TypeName);
+			void Head::Serialize(Serializer::IStreamWriter& out) const
 			{
-				out.Begin(TypeHash);
-				out.Write(Result);
+				out.Begin(TypeName);
+				out.Write(L"Result", static_cast<const int>(Result));
 				out.Write(L"ServerTime", ServerTime);
-				out.Write(UserIP);
-				out.Write(EncryptKey);
+				out.Write(L"UserIP", UserIP);
+				out.Write(L"EncryptKey", EncryptKey);
 			}
-			void Head::Deserialize(Serializer::StreamReader& in)
+			void Head::Deserialize(Serializer::IStreamReader& in)
 			{
-				in.Read(ProtocolVersion);
-				in.Read(Hashcode);
-				in.Read(Checksums);
+				in.Begin(TypeName);
+				in.Read(L"ProtocolVersion", ProtocolVersion);
+				in.Read(L"Checksums", Checksums);
 			}
 
-			const uint16 Auth::TypeHash = StringUtil::Hash(L"Auth");
-			void Auth::Serialize(Serializer::StreamWriter& out)
+			const wchar_t* Head::TypeName = L"Auth";
+			const uint16 Auth::TypeHash = StringUtil::Hash(TypeName);
+			void Auth::Serialize(Serializer::IStreamWriter& out) const
 			{
-				out.Begin(TypeHash);
-				out.Write(static_cast<const int>(Result));
-				out.Write(AccountId);
-				out.Write(IDNumber);
+				out.Begin(TypeName);
+				out.Write(L"Result", static_cast<const int>(Result));
+				out.Write(L"AccountId", AccountId);
+				out.Write(L"IDNumber", IDNumber);
 			}
-			void Auth::Deserialize(Serializer::StreamReader& in)
+			void Auth::Deserialize(Serializer::IStreamReader& in)
 			{
-				in.Read(AccountId);
-				in.Read(EncryptedPassword);
-				in.Read(AuthString);
-				in.Read(IsPubModuleLogin);
-				in.Read(Locale);
-			}
-
-			const uint16 Alive::TypeHash = StringUtil::Hash(L"Alive");
-			void Alive::Serialize(Serializer::StreamWriter& out)
-			{
-				out.Begin(TypeHash);
-				out.Write(Index);
-				out.Write(Value1);
-				out.Write(Value2);
-				out.Write(Value3);
-			}
-			void Alive::Deserialize(Serializer::StreamReader& in)
-			{
-				in.Read(Index);
-				in.Read(Value1);
-				in.Read(Value2);
-				in.Read(Value3);
+				in.Begin(TypeName);
+				in.Read(L"AccountId", AccountId);
+				in.Read(L"EncryptedPassword", EncryptedPassword);
+				in.Read(L"AuthString", AuthString, 2048);
+				in.Read(L"IsPubModuleLogin", IsPubModuleLogin);
+				in.Read(L"Locale", Locale);
 			}
 
-			const uint16 ListCharacter::TypeHash = StringUtil::Hash(L"ListCharacter");
+			const wchar_t* Head::TypeName = L"Alive";
+			const uint16 Alive::TypeHash = StringUtil::Hash(TypeName);
+			void Alive::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"Index", Index);
+				out.Write(L"Index", Value1);
+				out.Write(L"Index", Value2);
+				out.Write(L"Index", Value3);
+			}
+			void Alive::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"Index", Index);
+				in.Read(L"Value1", Value1);
+				in.Read(L"Value2", Value2);
+				in.Read(L"Value3", Value3);
+			}
+
+			/*const uint16 ListCharacter::TypeHash = StringUtil::Hash(L"ListCharacter");
 			void ListCharacter::Serialize(Serializer::StreamWriter& out)
 			{
 				out.Begin(TypeHash);
@@ -64,18 +69,20 @@ namespace Lunia {
 			{
 				//user doesn't request this!
 			}
-
-			const uint16 CharacterSlots::TypeHash = StringUtil::Hash(L"CharacterSlots");
-			void CharacterSlots::Serialize(Serializer::StreamWriter& out)
+			*/
+			const wchar_t* Head::TypeName = L"CharacterSlots";
+			const uint16 CharacterSlots::TypeHash = StringUtil::Hash(TypeName);
+			void CharacterSlots::Serialize(Serializer::IStreamWriter& out) const
 			{
-				out.Begin(TypeHash);
-				//out.Write(NumberOfSlots);
-				//out.Write(CharacterLicenses);
+				out.Begin(TypeName);
+				out.Write(L"NumberOfSlots", NumberOfSlots);
+				out.Write(L"CharacterLicenses", CharacterLicenses);
 			}
-			void CharacterSlots::Deserialize(Serializer::StreamReader& in)
+			void CharacterSlots::Deserialize(Serializer::IStreamReader& in)
 			{
-				in.Read(NumberOfSlots);
-				in.Read(CharacterLicenses);
+				in.Begin(TypeName);
+				in.Read(L"NumberOfSlots", NumberOfSlots);
+				in.Read(L"CharacterLicenses", CharacterLicenses);
 			}
 		}
 	}

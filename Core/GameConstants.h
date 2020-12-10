@@ -846,8 +846,8 @@ namespace Lunia {
 			Locator Effect; // effect that gonna loop
 			float4 Area; // effective area to step into the shop
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct ActivePoint : public Serializer::ISerializable
@@ -860,8 +860,8 @@ namespace Lunia {
 			Locator Effect; // effect that gonna loop
 			float4 Area; // effective area to step into the shop
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct MissionResultInfo
@@ -872,8 +872,8 @@ namespace Lunia {
 			int	ClearXp;
 			uint64 StageXp;
 
-			virtual void Serialize(Serializer::StreamWriter& out) const;
-			virtual void Deserialize(Serializer::StreamReader& in);
+			virtual void Serialize(Serializer::IStreamWriter& out) const;
+			virtual void Deserialize(Serializer::IStreamReader& in);
 
 			MissionResultInfo()
 				: MaxAirCombo(0)
@@ -1034,8 +1034,8 @@ namespace Lunia {
 			};
 
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		/* to picking items  */
@@ -1052,8 +1052,8 @@ namespace Lunia {
 			{
 			}
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		// Robotex
@@ -1081,8 +1081,8 @@ namespace Lunia {
 					ExpireDate = dateTime;
 			}
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 
 			bool operator==(const InstanceEx& rhs) const
 			{
@@ -1154,8 +1154,8 @@ namespace Lunia {
 			{
 			}
 		public:
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct ItemSlot : public Serializer::ISerializable
@@ -1173,8 +1173,8 @@ namespace Lunia {
 			{
 			}
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 
 			void operator=(const ItemSlot& rhs)
 			{
@@ -1228,8 +1228,8 @@ namespace Lunia {
 			bool enable;
 
 		public:
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct EquippedItem
@@ -1240,8 +1240,8 @@ namespace Lunia {
 			Constants::Equipment	where;
 
 		public:
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct StoreSlot : public Serializer::ISerializable
@@ -1253,8 +1253,8 @@ namespace Lunia {
 
 			bool operator==(const StoreSlot& rhs) const;
 
-			virtual void Serialize(Serializer::StreamWriter& out) const;
-			virtual void Deserialize(Serializer::StreamReader& in);
+			virtual void Serialize(Serializer::IStreamWriter& out) const;
+			virtual void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct ItemBasicInfo : public Serializer::ISerializable
@@ -1278,8 +1278,8 @@ namespace Lunia {
 			{
 			}
 		public:
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct RewardItem : public Serializer::ISerializable
@@ -1301,8 +1301,8 @@ namespace Lunia {
 			{
 			}
 		public:
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct PresentEventMailReward
@@ -1322,8 +1322,8 @@ namespace Lunia {
 			RewardItem item;
 
 		public:
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		typedef uint32 PlayTimeMinute;
@@ -1342,8 +1342,8 @@ namespace Lunia {
 			uint16 Attr2;	///< secondary additional attribute index
 			uint16 Attr3;	/// 3.1 by ultimate 
 
-			virtual void Serialize(Serializer::StreamWriter& out) const;
-			virtual void Deserialize(Serializer::StreamReader& in);
+			virtual void Serialize(Serializer::IStreamWriter& out) const;
+			virtual void Deserialize(Serializer::IStreamReader& in);
 
 			struct Finder
 			{
@@ -1384,8 +1384,8 @@ namespace Lunia {
 			std::string Name;	///< no wide string character to reduce packet size
 			std::vector<ItemPackage> Packages;
 
-			virtual void Serialize(Serializer::StreamWriter& out) const;
-			virtual void Deserialize(Serializer::StreamReader& in);
+			virtual void Serialize(Serializer::IStreamWriter& out) const;
+			virtual void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct BagState
@@ -1395,8 +1395,8 @@ namespace Lunia {
 			DateTime ExpireDate;
 			bool	 Expired;
 
-			virtual void Serialize(Serializer::StreamWriter& out) const;
-			virtual void Deserialize(Serializer::StreamReader& in);
+			virtual void Serialize(Serializer::IStreamWriter& out) const;
+			virtual void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct Skill
@@ -1409,8 +1409,8 @@ namespace Lunia {
 			}
 			uint32 Id; uint8 Level; Skill(uint32 id, uint8 lv) : Id(id), Level(lv) {}
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 
 			/* helper
 			@code
@@ -1466,8 +1466,8 @@ namespace Lunia {
 			uint8 Pos;
 			InstanceEx instanceEx;
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct StageLocation
@@ -1568,8 +1568,8 @@ namespace Lunia {
 			{
 			}
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 		typedef StageLocation StageLicense;
 
@@ -1590,8 +1590,8 @@ namespace Lunia {
 			int	Capacity;
 			int OrderNumber;
 
-			virtual void Serialize(Serializer::StreamWriter& out) const;
-			virtual void Deserialize(Serializer::StreamReader& in);
+			virtual void Serialize(Serializer::IStreamWriter& out) const;
+			virtual void Deserialize(Serializer::IStreamReader& in);
 		};
 		
 		struct Friend : public Serializer::ISerializable
@@ -1615,8 +1615,8 @@ namespace Lunia {
 					return f.CharacterName == name;
 				}
 			};
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 		
 		typedef std::vector<Friend> Friends;
@@ -1726,8 +1726,8 @@ namespace Lunia {
 			std::vector<ItemSlot> Equipments; // item hashes
 			std::vector<StageLicense> Licenses; // license hashes
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 
 			struct Finder
 			{
@@ -1768,8 +1768,8 @@ namespace Lunia {
 			Constants::GameTypes GameType;
 			bool ItemPopup;
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct StateFlag
@@ -1788,8 +1788,8 @@ namespace Lunia {
 			{
 			}
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct Quest : public Serializer::ISerializable
@@ -1867,8 +1867,8 @@ namespace Lunia {
 			{
 			}
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct ObjectData
@@ -2003,8 +2003,8 @@ namespace Lunia {
 
 			PetCaredBySchool();
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 
 			class Finder
 			{
@@ -2039,8 +2039,8 @@ namespace Lunia {
 			PetItemSlot();
 			PetItemSlot(PositionType type, uint8 position, uint32 itemHash, int64 instance, uint16 stacked = 0);
 		public:
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct Pet
@@ -2193,8 +2193,8 @@ namespace Lunia {
 
 			Pet();
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 
 			//!= operator�� appear�� �����ϰ� �����Ѵ�.
 			bool operator !=(const Pet& in) const;
@@ -2220,8 +2220,8 @@ namespace Lunia {
 			Pet Pet;
 			ItemPosition PetItemPosition;
 		public:
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 		
 		struct StoreSlotForPet : public StoreSlot
@@ -2251,8 +2251,8 @@ namespace Lunia {
 				}
 			};
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct PlayerData
@@ -2321,8 +2321,8 @@ namespace Lunia {
 			bool IsJoined() const { return GuildId.empty() ? false : true; }
 			void Clear() { GuildId.clear(); }
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct AllMGuildInfo : public Serializer::ISerializable
@@ -2362,8 +2362,8 @@ namespace Lunia {
 				}
 
 			public:
-				virtual void Serialize(Serializer::StreamWriter& out) const;
-				virtual void Deserialize(Serializer::StreamReader& in);
+				virtual void Serialize(Serializer::IStreamWriter& out) const;
+				virtual void Deserialize(Serializer::IStreamReader& in);
 			};
 
 			int GuildId;
@@ -2404,8 +2404,8 @@ namespace Lunia {
 			uint16 GetLimitMemberCount() const;
 
 		public:
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct GuildRankInfo
@@ -2464,8 +2464,8 @@ namespace Lunia {
 				}
 			};
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct GuildShopItem
@@ -2497,8 +2497,8 @@ namespace Lunia {
 				, ExpiredDate(expiredDate)
 			{
 			}
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct AllMBasicGuildInfo
@@ -2507,8 +2507,8 @@ namespace Lunia {
 			int GuildId;
 			int MemberCount;
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct AllMGuildUserInfo : public Serializer::ISerializable
@@ -2576,8 +2576,8 @@ namespace Lunia {
 			};
 
 		public:
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct Gamble
@@ -2682,8 +2682,8 @@ namespace Lunia {
 				uint32 MyChips;
 				uint32 TotalChips;
 
-				void Serialize(Serializer::StreamWriter& out) const;
-				void Deserialize(Serializer::StreamReader& in);
+				void Serialize(Serializer::IStreamWriter& out) const;
+				void Deserialize(Serializer::IStreamReader& in);
 			};
 		};
 
@@ -2710,8 +2710,8 @@ namespace Lunia {
 				DateTime 			SentDate;		// YYYY-MM-DD hh:mm:ss
 
 			public:
-				void Serialize(Serializer::StreamWriter& out) const;
-				void Deserialize(Serializer::StreamReader& in);
+				void Serialize(Serializer::IStreamWriter& out) const;
+				void Deserialize(Serializer::IStreamReader& in);
 			};
 
 
@@ -2737,8 +2737,8 @@ namespace Lunia {
 					IsSystemMail = false;
 				}
 			public:
-				void Serialize(Serializer::StreamWriter& out) const;
-				void Deserialize(Serializer::StreamReader& in);
+				void Serialize(Serializer::IStreamWriter& out) const;
+				void Deserialize(Serializer::IStreamReader& in);
 
 			};
 			static uint64 CalculatePostalCharge(uint64 money, uint16 itemCount);
@@ -2773,8 +2773,8 @@ namespace Lunia {
 				{
 				}
 			public:
-				void Serialize(Serializer::StreamWriter& out) const;
-				void Deserialize(Serializer::StreamReader& in);
+				void Serialize(Serializer::IStreamWriter& out) const;
+				void Deserialize(Serializer::IStreamReader& in);
 			};
 
 			const static int MaxList = 50;
@@ -3093,8 +3093,8 @@ namespace Lunia {
 				{
 				}
 
-				void Serialize(Serializer::StreamWriter& out) const;
-				void Deserialize(Serializer::StreamReader& in);
+				void Serialize(Serializer::IStreamWriter& out) const;
+				void Deserialize(Serializer::IStreamReader& in);
 
 			} BattleGroundInfo;
 
@@ -3128,8 +3128,8 @@ namespace Lunia {
 			{
 			}
 
-			void Serialize(Serializer::StreamWriter& out) const;
-			void Deserialize(Serializer::StreamReader& in);
+			void Serialize(Serializer::IStreamWriter& out) const;
+			void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		typedef std::vector< PvpRoomInfo > PvpRoomInfoList;
@@ -3155,8 +3155,8 @@ namespace Lunia {
 			};
 			StatusType::type Status;
 
-			virtual void Serialize(Serializer::StreamWriter& out) const;
-			virtual void Deserialize(Serializer::StreamReader& in);
+			virtual void Serialize(Serializer::IStreamWriter& out) const;
+			virtual void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct PvpStartEvent
@@ -3256,8 +3256,8 @@ namespace Lunia {
 			{
 			}
 
-			virtual void Serialize(Serializer::StreamWriter& out) const;
-			virtual void Deserialize(Serializer::StreamReader& in);
+			virtual void Serialize(Serializer::IStreamWriter& out) const;
+			virtual void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct ConfirmTradeInfo
@@ -3269,8 +3269,8 @@ namespace Lunia {
 				uint16 count;
 				bool isPetItem; // 3.1 by Robotex
 				PetToolTipInfo pet; // 3.1 by Robotex
-				virtual void Serialize(Serializer::StreamWriter& out) const;
-				virtual void Deserialize(Serializer::StreamReader& in);
+				virtual void Serialize(Serializer::IStreamWriter& out) const;
+				virtual void Deserialize(Serializer::IStreamReader& in);
 			};
 
 			XRated::Serial playerSerial;
@@ -3278,8 +3278,8 @@ namespace Lunia {
 			std::vector< TradeItem > items;
 			uint32 money;
 
-			virtual void Serialize(Serializer::StreamWriter& out) const;
-			virtual void Deserialize(Serializer::StreamReader& in);
+			virtual void Serialize(Serializer::IStreamWriter& out) const;
+			virtual void Deserialize(Serializer::IStreamReader& in);
 		};
 
 		struct Family
@@ -3307,8 +3307,8 @@ namespace Lunia {
 				DateTime	CreatedTime;		///< �йи� ���� �ð�.
 
 			public:
-				virtual void Serialize(Serializer::StreamWriter& out) const;
-				virtual void Deserialize(Serializer::StreamReader& in);
+				virtual void Serialize(Serializer::IStreamWriter& out) const;
+				virtual void Deserialize(Serializer::IStreamReader& in);
 			};
 
 			struct MemberInfo
@@ -3327,8 +3327,8 @@ namespace Lunia {
 				DateTime					LastLoggedDate;	///< ���ӿ� ���������� �α��� �� ��¥ : Append by rapperkjm (09/07/30)
 
 			public:
-				virtual void Serialize(Serializer::StreamWriter& out) const;
-				virtual void Deserialize(Serializer::StreamReader& in);
+				virtual void Serialize(Serializer::IStreamWriter& out) const;
+				virtual void Deserialize(Serializer::IStreamReader& in);
 
 			public:
 				class FindByMemberSerial
@@ -3367,8 +3367,8 @@ namespace Lunia {
 				DateTime		MemorialDay;					///< ������.
 
 			public:
-				virtual void Serialize(Serializer::StreamWriter& out) const;
-				virtual void Deserialize(Serializer::StreamReader& in);
+				virtual void Serialize(Serializer::IStreamWriter& out) const;
+				virtual void Deserialize(Serializer::IStreamReader& in);
 			};
 		};
 
@@ -3441,8 +3441,8 @@ namespace Lunia {
 				{
 				}
 
-				virtual void Serialize(Serializer::StreamWriter& out) const;
-				virtual void Deserialize(Serializer::StreamReader& in);
+				virtual void Serialize(Serializer::IStreamWriter& out) const;
+				virtual void Deserialize(Serializer::IStreamReader& in);
 			};
 
 			typedef std::vector< ProductInfo > ProductInfoList;
@@ -3468,8 +3468,8 @@ namespace Lunia {
 				InstanceEx instanceEx;
 
 			public: /* ISerializable implementation */
-				virtual void Serialize(Serializer::StreamWriter& out) const;
-				virtual void Deserialize(Serializer::StreamReader& in);
+				virtual void Serialize(Serializer::IStreamWriter& out) const;
+				virtual void Deserialize(Serializer::IStreamReader& in);
 			};
 
 			std::wstring Id;
@@ -3486,8 +3486,8 @@ namespace Lunia {
 				ProbabilityTableList	Table;
 
 			public:
-				virtual void Serialize(Serializer::StreamWriter& out) const;
-				virtual void Deserialize(Serializer::StreamReader& in);
+				virtual void Serialize(Serializer::IStreamWriter& out) const;
+				virtual void Deserialize(Serializer::IStreamReader& in);
 			};
 			typedef std::vector< ProbabilityTableListPerLevel > ProbabilityTablesPerLevelList;
 
@@ -3496,8 +3496,8 @@ namespace Lunia {
 				std::vector< float >	ReinforcementProbabilitys;
 				std::vector< float >	LightReinforcementProbabilitys;
 			public:
-				virtual void Serialize(Serializer::StreamWriter& out) const;
-				virtual void Deserialize(Serializer::StreamReader& in);
+				virtual void Serialize(Serializer::IStreamWriter& out) const;
+				virtual void Deserialize(Serializer::IStreamReader& in);
 				EnchantProbabilityList() {}
 			};
 			float ClassSpecializedRate;
@@ -3505,8 +3505,8 @@ namespace Lunia {
 
 			EnchantProbabilityList	EnchantProbabilitys;
 		public: /* ISerializable implementation */
-			virtual void Serialize(Serializer::StreamWriter& out) const;
-			virtual void Deserialize(Serializer::StreamReader& in);
+			virtual void Serialize(Serializer::IStreamWriter& out) const;
+			virtual void Deserialize(Serializer::IStreamReader& in);
 
 			void Sort();
 

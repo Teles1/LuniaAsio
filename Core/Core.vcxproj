@@ -94,9 +94,10 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -113,9 +114,10 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,13 +133,14 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>
-      </ForcedIncludeFiles>
+      <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <Optimization>MaxSpeed</Optimization>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,9 +157,10 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -166,16 +170,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="com_ptr.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Exceptions\Expcetion.h" />
     <ClInclude Include="fwEvent.h" />
     <ClInclude Include="GameConstants.h" />
+    <ClInclude Include="IReferenceCounted.h" />
+    <ClInclude Include="IStream.h" />
+    <ClInclude Include="ReferenceCounted.h" />
+    <ClInclude Include="Serializer\IReferenceCounted.h" />
+    <ClInclude Include="Serializer\NetStream.h" />
+    <ClInclude Include="Serializer\Private.h" />
+    <ClInclude Include="Serializer\PrivateFlat.h" />
+    <ClInclude Include="Serializer\Serializer.h" />
+    <ClInclude Include="Utils\Math\Color.h" />
+    <ClInclude Include="Utils\Math\euler.h" />
+    <ClInclude Include="Utils\Math\Math.h" />
+    <ClInclude Include="Utils\Math\matrix4x4.h" />
+    <ClInclude Include="Utils\Math\plane.h" />
+    <ClInclude Include="Utils\Math\quaternion.h" />
+    <ClInclude Include="Types.h" />
+    <ClInclude Include="Utils\Math\Vector2.h" />
     <ClInclude Include="Utils\StringUtil\GeneralConversions.h" />
-    <ClInclude Include="InstanceEx.h" />
     <ClInclude Include="Utils\Math\vector4.h" />
     <ClInclude Include="Utils\StringUtil\General.h" />
-    <ClInclude Include="Serializer\ISerializable.h" />
-    <ClInclude Include="Serializer\Serializer.h" />
+    <ClInclude Include="Serializer\Serializer_old.h" />
     <ClInclude Include="Utils\Buffer.h" />
     <ClInclude Include="Utils\DateTime.h" />
     <ClInclude Include="GameServer.h" />
@@ -191,20 +210,20 @@
     <ClInclude Include="Utils\Version.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="InstanceEx.cpp" />
+    <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="Utils\StringUtil\General.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Core.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Core.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Core.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Core.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Core.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Utils\DateTime.cpp">

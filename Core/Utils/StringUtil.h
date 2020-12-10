@@ -2,11 +2,13 @@
 #define StringUtil_HEADER_GUARD
 
 #pragma once
-#include "../Core.h"
-#include <iomanip>
-#include <stdarg.h>
-#include <codecvt>
-#include "StringUtil/GeneralConversions.h"
+#include <string>
+#include <Core/Utils/StringUtil/GeneralConversions.h>
+#include <Core/Utils/StringUtil/General.h>
+
+//#include "Compare.h"
+
+/*
 namespace Lunia {
 	namespace StringUtil {
 		const uint32 Hash(std::wstring str) {
@@ -39,4 +41,5 @@ namespace Lunia {
 		}
 	}
 }
+*/
 #endif // !StringUtil_HEADER_GUARD

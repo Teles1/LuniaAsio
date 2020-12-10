@@ -624,8 +624,8 @@ namespace Lunia {
 				float q = 1 / (farp - nearp);
 				Zero();
 
-				m44[0][0] = 2 / width
-					m44[1][1] = 2 / height;
+				m44[0][0] = 2 / width;
+				m44[1][1] = 2 / height;
 				m44[2][2] = q;
 				m44[3][2] = -q * nearp;
 				m44[3][3] = 1;

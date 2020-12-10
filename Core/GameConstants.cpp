@@ -335,19 +335,19 @@ namespace Lunia {
 			return 0.0f;
 		}
 
-		void XRated::Gamble::BettingState::Serialize(Serializer::StreamWriter& out) const
+		void XRated::Gamble::BettingState::Serialize(Serializer::IStreamWriter& out) const
 		{
-			//out.Begin("XRated::Gamble::BettingInfo");
-			out.Write(RecentRate);
-			out.Write(MyChips);
-			out.Write(TotalChips);
+			out.Begin(L"XRated::Gamble::BettingInfo");
+			out.Write(L"RecentRate",RecentRate);
+			out.Write(L"MyChips",MyChips);
+			out.Write(L"TotalChips",TotalChips);
 		}
-		void XRated::Gamble::BettingState::Deserialize(Serializer::StreamReader& in)
+		void XRated::Gamble::BettingState::Deserialize(Serializer::IStreamReader& in)
 		{
-			//in.Begin(L"XRated::Gamble::BettingInfo");
-			in.Read(RecentRate);
-			in.Read(MyChips);
-			in.Read(TotalChips);
+			in.Begin(L"XRated::Gamble::BettingInfo");
+			in.Read(L"RecentRate", RecentRate);
+			in.Read(L"MyChips", MyChips);
+			in.Read(L"TotalChips", TotalChips);
 		}
 
 		bool Constants::IsDefaultClass(ClassType type)
@@ -1001,7 +1001,7 @@ namespace Lunia {
 		}
 
 		// ISerializable implementation ///////////////////////////////////////////////////////////////
-		void StageEvent::Serialize(Serializer::StreamWriter& out) const
+		void StageEvent::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::StageEvent");
 			out.Write(L"Type", static_cast<const int>(Type));
@@ -1013,7 +1013,7 @@ namespace Lunia {
 			out.Write(L"Area", Area);
 		}
 
-		void StageEvent::Deserialize(Serializer::StreamReader& in)
+		void StageEvent::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::StageEvent");
 			in.Read(L"Type", reinterpret_cast<int&>(Type));
@@ -1025,7 +1025,7 @@ namespace Lunia {
 			in.Read(L"Area", Area);
 		}
 
-		void ActivePoint::Serialize(Serializer::StreamWriter& out) const
+		void ActivePoint::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::ActivePoint");
 			out.Write(L"Type", static_cast<const int>(Type));
@@ -1037,7 +1037,7 @@ namespace Lunia {
 			out.Write(L"Area", Area);
 		}
 
-		void ActivePoint::Deserialize(Serializer::StreamReader& in)
+		void ActivePoint::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::ActivePoint");
 			in.Read(L"Type", reinterpret_cast<int&>(Type));
@@ -1060,14 +1060,14 @@ namespace Lunia {
 		{
 		}
 
-		void ItemPosition::Serialize(Serializer::StreamWriter& out) const
+		void ItemPosition::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"ItemPosition");
 			out.Write(L"Bag", Bag);
 			out.Write(L"Position", Position);
 		}
 
-		void ItemPosition::Deserialize(Serializer::StreamReader& in)
+		void ItemPosition::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"ItemPosition");
 			in.Read(L"Bag", Bag);
@@ -1084,7 +1084,7 @@ namespace Lunia {
 		//	return false;
 		//}
 
-		void ItemPack::Serialize(Serializer::StreamWriter& out) const
+		void ItemPack::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"ItemPack");
 			out.Write(L"Position", Position);
@@ -1092,7 +1092,7 @@ namespace Lunia {
 			out.Write(L"ExtendInfo", ExtendInfo);
 		}
 
-		void ItemPack::Deserialize(Serializer::StreamReader& in)
+		void ItemPack::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"ItemPack");
 			in.Read(L"Position", Position);
@@ -1101,21 +1101,21 @@ namespace Lunia {
 		}
 
 
-		void Item::Serialize(Serializer::StreamWriter& out) const
+		void Item::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"Item");
 			out.Write(L"Id", Id);
 			out.Write(L"InstanceEx", InstanceEx);
 		}
 
-		void Item::Deserialize(Serializer::StreamReader& in)
+		void Item::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"Item");
 			in.Read(L"Id", Id);
 			in.Read(L"InstanceEx", InstanceEx);
 		}
 
-		void ItemSlot::Serialize(Serializer::StreamWriter& out) const
+		void ItemSlot::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"ItemSlot");
 			out.Write(L"Id", Id);
@@ -1124,7 +1124,7 @@ namespace Lunia {
 			out.Write(L"instanceEx", instanceEx);
 		}
 
-		void ItemSlot::Deserialize(Serializer::StreamReader& in)
+		void ItemSlot::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"ItemSlot");
 			in.Read(L"Id", Id);
@@ -1133,21 +1133,21 @@ namespace Lunia {
 			in.Read(L"instanceEx", instanceEx);
 		}
 
-		void InvalidEquippedItem::Serialize(Serializer::StreamWriter& out) const
+		void InvalidEquippedItem::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"InvalidEquippedItem");
 			out.Write(L"Where", static_cast<int>(where));
 			out.Write(L"Enable", enable);
 		}
 
-		void InvalidEquippedItem::Deserialize(Serializer::StreamReader& in)
+		void InvalidEquippedItem::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"InvalidEquippedItem");
 			in.Read(L"Where", reinterpret_cast<int&>(where));
 			in.Read(L"Enable", enable);
 		}
 
-		void EquippedItem::Serialize(Serializer::StreamWriter& out) const
+		void EquippedItem::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"InvalidEquippedItem");
 			out.Write(L"itemHash", itemHash);
@@ -1155,7 +1155,7 @@ namespace Lunia {
 			out.WriteEnum(L"Where", where);
 		}
 
-		void EquippedItem::Deserialize(Serializer::StreamReader& in)
+		void EquippedItem::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"InvalidEquippedItem");
 			in.Read(L"itemHash", itemHash);
@@ -1163,7 +1163,7 @@ namespace Lunia {
 			in.ReadEnum(L"Where", where);
 		}
 
-		void StoreSlot::Serialize(Serializer::StreamWriter& out) const
+		void StoreSlot::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"StoreSlot");
 			out.Write(L"ItemHash", ItemHash);
@@ -1172,7 +1172,7 @@ namespace Lunia {
 			out.Write(L"SellPrice", SellPrice);
 		}
 
-		void StoreSlot::Deserialize(Serializer::StreamReader& in)
+		void StoreSlot::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"StoreSlot");
 			in.Read(L"ItemHash", ItemHash);
@@ -1186,7 +1186,7 @@ namespace Lunia {
 			return (ItemHash == rhs.ItemHash && StackedCount == rhs.StackedCount && instanceEx == rhs.instanceEx && SellPrice == rhs.SellPrice);
 		}
 
-		void ItemBasicInfo::Serialize(Serializer::StreamWriter& out) const
+		void ItemBasicInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"ItemInfo");
 			out.Write(L"ItemHash", ItemHash);
@@ -1194,7 +1194,7 @@ namespace Lunia {
 			out.Write(L"StackCount", StackCount);
 		}
 
-		void ItemBasicInfo::Deserialize(Serializer::StreamReader& in)
+		void ItemBasicInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"ItemInfo");
 			in.Read(L"ItemHash", ItemHash);
@@ -1202,7 +1202,7 @@ namespace Lunia {
 			in.Read(L"StackCount", StackCount);
 		}
 
-		void RewardItem::Serialize(Serializer::StreamWriter& out) const
+		void RewardItem::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"RewardItem");
 			out.Write(L"ItemHash", ItemHash);
@@ -1210,7 +1210,7 @@ namespace Lunia {
 			out.Write(L"StackCount", StackCount);
 		}
 
-		void RewardItem::Deserialize(Serializer::StreamReader& in)
+		void RewardItem::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"RewardItem");
 			in.Read(L"ItemHash", ItemHash);
@@ -1218,35 +1218,35 @@ namespace Lunia {
 			in.Read(L"StackCount", StackCount);
 		}
 
-		void PresentEventMailReward::Serialize(Serializer::StreamWriter& out) const
+		void PresentEventMailReward::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"PresentEventMailReward");
 			out.WriteEnum(L"ExpireInfo", expireInfo);
 			out.Write(L"Item", item);
 		}
 
-		void PresentEventMailReward::Deserialize(Serializer::StreamReader& in)
+		void PresentEventMailReward::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"PresentEventMailReward");
 			in.ReadEnum(L"ExpireInfo", expireInfo);
 			in.Read(L"Item", item);
 		}
 
-		void Skill::Serialize(Serializer::StreamWriter& out) const
+		void Skill::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"Skill");
 			out.Write(L"Id", Id);
 			out.Write(L"Level", Level);
 		}
 
-		void Skill::Deserialize(Serializer::StreamReader& in)
+		void Skill::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"Skill");
 			in.Read(L"Id", Id);
 			in.Read(L"Level", Level);
 		}
 
-		void QuickSlot::Serialize(Serializer::StreamWriter& out) const
+		void QuickSlot::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"QuickSlot");
 			out.Write(L"Id", Id);
@@ -1255,7 +1255,7 @@ namespace Lunia {
 			out.Write(L"instanceEx", instanceEx); // 3.1 by Robotex
 		}
 
-		void QuickSlot::Deserialize(Serializer::StreamReader& in)
+		void QuickSlot::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"QuickSlot");
 			in.Read(L"Id", Id);
@@ -1265,7 +1265,7 @@ namespace Lunia {
 		}
 
 
-		void Friend::Serialize(Serializer::StreamWriter& out) const
+		void Friend::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::Friend");
 			out.Write(L"CharacterName", CharacterName);
@@ -1276,7 +1276,7 @@ namespace Lunia {
 			out.Write(L"Memo", Memo);
 		}
 
-		void Friend::Deserialize(Serializer::StreamReader& in)
+		void Friend::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::Friend");
 			in.Read(L"CharacterName", CharacterName);
@@ -1287,7 +1287,7 @@ namespace Lunia {
 			in.Read(L"Memo", Memo);
 		}
 
-		void LobbyPlayerInfo::Serialize(Serializer::StreamWriter& out) const
+		void LobbyPlayerInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::TeamMember");
 			out.Write(L"CharacterName", CharacterName);
@@ -1312,7 +1312,7 @@ namespace Lunia {
 			out.Write(L"CharacterStateFlags", static_cast<int>(StateFlags));
 		}
 
-		void LobbyPlayerInfo::Deserialize(Serializer::StreamReader& in)
+		void LobbyPlayerInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::TeamMember");
 			in.Read(L"CharacterName", CharacterName);
@@ -1337,7 +1337,7 @@ namespace Lunia {
 			in.Read(L"CharacterStateFlags", reinterpret_cast<int&>(StateFlags));
 		}
 
-		void ItemPackage::Serialize(Serializer::StreamWriter& out) const
+		void ItemPackage::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"ItemPackage");
 			out.Write(L"ItemHash", ItemHash);
@@ -1349,7 +1349,7 @@ namespace Lunia {
 			out.Write(L"Attr2", Attr3); // 3.1 by ultimate ???-> this a new scroll statuses? :D
 		}
 
-		void ItemPackage::Deserialize(Serializer::StreamReader& in)
+		void ItemPackage::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"ItemPackage");
 			in.Read(L"ItemHash", ItemHash);
@@ -1361,7 +1361,7 @@ namespace Lunia {
 			in.Read(L"Attr3", Attr3); // 3.1 by ultimate ???-> this a new scroll statuses? :D
 		}
 
-		void CashItem::Serialize(Serializer::StreamWriter& out) const
+		void CashItem::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"CashItem");
 			out.Write(L"OrderNumber", OrderNumber);
@@ -1372,7 +1372,7 @@ namespace Lunia {
 			out.Write(L"Packages", Packages);
 		}
 
-		void CashItem::Deserialize(Serializer::StreamReader& in)
+		void CashItem::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"CashItem");
 			in.Read(L"OrderNumber", OrderNumber);
@@ -1383,7 +1383,7 @@ namespace Lunia {
 			in.Read(L"Packages", Packages);
 		}
 
-		void BagState::Serialize(Serializer::StreamWriter& out) const
+		void BagState::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"BagState");
 			out.Write(L"BagNumber", BagNumber);
@@ -1391,7 +1391,7 @@ namespace Lunia {
 			out.Write(L"Expired", Expired);
 		}
 
-		void BagState::Deserialize(Serializer::StreamReader& in)
+		void BagState::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"BagState");
 			in.Read(L"BagNumber", BagNumber);
@@ -1399,7 +1399,7 @@ namespace Lunia {
 			in.Read(L"Expired", Expired);
 		}
 
-		void StageLocation::Serialize(Serializer::StreamWriter& out) const
+		void StageLocation::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::StageLocation");
 			out.Write(L"StageGroupHash", StageGroupHash);
@@ -1408,7 +1408,7 @@ namespace Lunia {
 			out.Write(L"Tags", Tags); // arcrus. ��±׽ý��.
 		}
 
-		void StageLocation::Deserialize(Serializer::StreamReader& in)
+		void StageLocation::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::StageLocation");
 			in.Read(L"StageGroupHash", StageGroupHash);
@@ -1417,7 +1417,7 @@ namespace Lunia {
 			in.Read(L"Tags", Tags, std::vector< std::wstring >()); // arcrus. ��±׽ý��.
 		}
 
-		void SquareInfo::Serialize(Serializer::StreamWriter& out) const
+		void SquareInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"SquareInfo");
 			out.Write(L"Name", Name);
@@ -1428,7 +1428,7 @@ namespace Lunia {
 			out.Write(L"OrderNumber", OrderNumber);
 		}
 
-		void SquareInfo::Deserialize(Serializer::StreamReader& in)
+		void SquareInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"SquareInfo");
 			in.Read(L"Name", Name);
@@ -1439,35 +1439,35 @@ namespace Lunia {
 			in.Read(L"OrderNumber", OrderNumber);
 		}
 
-		void GameMode::Serialize(Serializer::StreamWriter& out) const
+		void GameMode::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::PvpGameType");
 			out.Write(L"GameType", static_cast<int>(GameType));
 			out.Write(L"ItemPopup", ItemPopup);
 		}
 
-		void GameMode::Deserialize(Serializer::StreamReader& in)
+		void GameMode::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::PvpGameType");
 			in.Read(L"GameType", reinterpret_cast<int&>(GameType));
 			in.Read(L"ItemPopup", ItemPopup);
 		}
 
-		void StateFlag::Serialize(Serializer::StreamWriter& out) const
+		void StateFlag::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"StateFlag");
 			out.Write(L"Id", Id);
 			out.Write(L"Level", (short)Level);
 		}
 
-		void StateFlag::Deserialize(Serializer::StreamReader& in)
+		void StateFlag::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"StateFlag");
 			in.Read(L"Id", Id);
 			in.Read(L"Level", (short&)Level);
 		}
 
-		void Quest::Serialize(Serializer::StreamWriter& out) const
+		void Quest::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"Quest");
 			out.Write(L"Id", Id);
@@ -1476,7 +1476,7 @@ namespace Lunia {
 			out.Write(L"Params", Params);
 		}
 
-		void Quest::Deserialize(Serializer::StreamReader& in)
+		void Quest::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"Quest");
 			in.Read(L"Id", Id);
@@ -1558,7 +1558,7 @@ namespace Lunia {
 		PlayerData::PlayerData(CharacterData& character)
 			: BaseCharacter(character), Job(Constants::ClassType::Healer), Life(0), MaxLife(0), SkillPoint(0)
 			, BonusLife(0), UsableBonusLifeInStage(0)
-			, Sp(0), MaxSp(0), SyncRoot(0), AddedSkillPointPlus(0), StoredLevel(0), RebirthCount(0), StoredSkillPoint(0), LastRebirthDateTime(DateTime::Infinite)
+			, Sp(0), MaxSp(0), AddedSkillPointPlus(0), StoredLevel(0), RebirthCount(0), StoredSkillPoint(0), LastRebirthDateTime(DateTime::Infinite)
 			, achievementScore(0)
 			//, fullFactor(1.0f), goodFactor(1.0f), sosoFactor(1.0f), hungryFactor(1.0f)
 		{
@@ -1580,7 +1580,6 @@ namespace Lunia {
 			Skills = pc.Skills;
 			Equipments = pc.Equipments;
 			//PS = pc.PS;
-			SyncRoot = pc.SyncRoot;
 			StoredLevel = pc.StoredLevel;
 			RebirthCount = pc.RebirthCount;
 			StoredSkillPoint = pc.StoredSkillPoint;
@@ -1589,7 +1588,7 @@ namespace Lunia {
 		}
 
 
-		void NexonGuildInfo::Serialize(Serializer::StreamWriter& out) const
+		void NexonGuildInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"NexonGuildInfo");
 			out.Write(L"GuildOid", GuildOid);
@@ -1601,7 +1600,7 @@ namespace Lunia {
 			out.Write(L"Intro", Intro);
 		}
 
-		void NexonGuildInfo::Deserialize(Serializer::StreamReader& in)
+		void NexonGuildInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"NexonGuildInfo");
 			in.Read(L"GuildOid", GuildOid);
@@ -1613,7 +1612,7 @@ namespace Lunia {
 			in.Read(L"Intro", Intro);
 		}
 
-		void AllMGuildInfo::Serialize(Serializer::StreamWriter& out) const
+		void AllMGuildInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"AllMGuildInfo");
 			out.Write(L"GuildId", GuildId);
@@ -1641,7 +1640,7 @@ namespace Lunia {
 			out.Write(L"GuildMemberId", GuildMemberId);
 		}
 
-		void AllMGuildInfo::Deserialize(Serializer::StreamReader& in)
+		void AllMGuildInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"AllMGuildInfo");
 			in.Read(L"GuildId", GuildId);
@@ -1669,14 +1668,14 @@ namespace Lunia {
 			in.Read(L"GuildMemberId", GuildMemberId);
 		}
 
-		void AllMGuildInfo::GradeInfo::Serialize(Serializer::StreamWriter& out) const
+		void AllMGuildInfo::GradeInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"AllMGuildInfo::GradeInfo");
 			out.Write(L"GradeName", GradeName);
 			out.Write(L"Authority", Authority);
 		}
 
-		void AllMGuildInfo::GradeInfo::Deserialize(Serializer::StreamReader& in)
+		void AllMGuildInfo::GradeInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"AllMGuildInfo::GradeInfo");
 			in.Read(L"GradeName", GradeName);
@@ -1702,7 +1701,7 @@ namespace Lunia {
 #endif
 		}
 
-		void GuildRankInfo::Serialize(Serializer::StreamWriter& out) const
+		void GuildRankInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::GuildRankInfo");
 			out.Write(L"GuildID", GuildID);
@@ -1716,7 +1715,7 @@ namespace Lunia {
 		}
 
 
-		void GuildRankInfo::Deserialize(Serializer::StreamReader& in)
+		void GuildRankInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::GuildRankInfo");
 			in.Read(L"GuildID", GuildID);
@@ -1757,20 +1756,20 @@ namespace Lunia {
 			return guild1.CurrentTotalPlayTime > guild2.CurrentTotalPlayTime;
 		}
 
-		void GuildShopItem::Serialize(Serializer::StreamWriter& out) const
+		void GuildShopItem::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::GuildShopItem");
 			out.Write(L"ItemHash", ItemHash);
 			out.Write(L"ExpiredDate", ExpiredDate);
 		}
 
-		void GuildShopItem::Deserialize(Serializer::StreamReader& in)
+		void GuildShopItem::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::GuildShopItem");
 			in.Read(L"ItemHash", ItemHash);
 			in.Read(L"ExpiredDate", ExpiredDate);
 		}
-		void AllMBasicGuildInfo::Serialize(Serializer::StreamWriter& out) const
+		void AllMBasicGuildInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"AllMBasicGuildInfo");
 			out.Write(L"GuildName", GuildName);
@@ -1778,7 +1777,7 @@ namespace Lunia {
 			out.Write(L"MemberCount", MemberCount);
 		}
 
-		void AllMBasicGuildInfo::Deserialize(Serializer::StreamReader& in)
+		void AllMBasicGuildInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"AllMBasicGuildInfo");
 			in.Read(L"GuildName", GuildName);
@@ -1787,7 +1786,7 @@ namespace Lunia {
 		}
 
 
-		void AllMGuildUserInfo::Serialize(Serializer::StreamWriter& out) const
+		void AllMGuildUserInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"AllMGuildUserInfo");
 			out.Write(L"GuildMemberId", GuildMemberId);
@@ -1800,7 +1799,7 @@ namespace Lunia {
 			out.Write(L"PrivateMessage", PrivateMessage); // 3.1 by Robotex
 		}
 
-		void AllMGuildUserInfo::Deserialize(Serializer::StreamReader& in)
+		void AllMGuildUserInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"AllMGuildUserInfo");
 			in.Read(L"GuildMemberId", GuildMemberId);
@@ -1813,7 +1812,7 @@ namespace Lunia {
 			in.Read(L"PrivateMessage", PrivateMessage); // 3.1 by Robotex
 		}
 
-		void Mail::HeaderInfo::Serialize(Serializer::StreamWriter& out) const
+		void Mail::HeaderInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"Mail::HeaderInfo");
 			out.Write(L"Index", Index);
@@ -1824,7 +1823,7 @@ namespace Lunia {
 			out.Write(L"SentDate", SentDate);
 		}
 
-		void Mail::HeaderInfo::Deserialize(Serializer::StreamReader& in)
+		void Mail::HeaderInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"Mail::HeaderInfo");
 			in.Read(L"Index", Index);
@@ -1835,7 +1834,7 @@ namespace Lunia {
 			in.Read(L"SentDate", SentDate);
 		}
 
-		void Mail::ContentsInfo::Serialize(Serializer::StreamWriter& out) const
+		void Mail::ContentsInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"Mail::ContentsInfo");
 			out.Write(L"Index", Index);
@@ -1846,7 +1845,7 @@ namespace Lunia {
 			out.Write(L"IsSystemMail", IsSystemMail); // 3.1 by Robotex
 		}
 
-		void Mail::ContentsInfo::Deserialize(Serializer::StreamReader& in)
+		void Mail::ContentsInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"Mail::ContentsInfo");
 			in.Read(L"Index", Index);
@@ -1857,7 +1856,7 @@ namespace Lunia {
 			in.Read(L"IsSystemMail", IsSystemMail); // 3.1 by Robotex
 		}
 
-		void Fishing::FishingInfo::Serialize(Serializer::StreamWriter& out) const
+		void Fishing::FishingInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"Fishing::FishingInfo");
 			out.Write(L"ItemHash", ItemHash);
@@ -1866,7 +1865,7 @@ namespace Lunia {
 			out.Write(L"FishingTime", FishingTime);
 		}
 
-		void Fishing::FishingInfo::Deserialize(Serializer::StreamReader& in)
+		void Fishing::FishingInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"Fishing::FishingInfo");
 			in.Read(L"ItemHash", ItemHash);
@@ -1999,7 +1998,7 @@ namespace Lunia {
 			return playerRank;
 		}
 
-		void MissionResultInfo::Serialize(Serializer::StreamWriter& out) const
+		void MissionResultInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::MissionResultInfo");
 			out.Write(L"MaxAirCombo", MaxAirCombo);
@@ -2007,7 +2006,7 @@ namespace Lunia {
 			out.Write(L"ClearXp", ClearXp);
 			out.Write(L"StageXp", StageXp);
 		}
-		void MissionResultInfo::Deserialize(Serializer::StreamReader& in)
+		void MissionResultInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::MissionResultInfo");
 			in.Read(L"MaxAirCombo", MaxAirCombo);
@@ -3129,7 +3128,7 @@ namespace Lunia {
 			return false;
 		}
 
-		void PvpRoomInfo::BattleGroundInfoType::Serialize(Serializer::StreamWriter& out) const
+		void PvpRoomInfo::BattleGroundInfoType::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::PvpRoomInfo::BattleGroundInfoType");
 			out.Write(L"GoalKillCount", GoalKillCount);
@@ -3137,14 +3136,14 @@ namespace Lunia {
 		}
 
 
-		void PvpRoomInfo::BattleGroundInfoType::Deserialize(Serializer::StreamReader& in)
+		void PvpRoomInfo::BattleGroundInfoType::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::PvpRoomInfo::BattleGroundInfoType");
 			in.Read(L"GoalKillCount", GoalKillCount);
 			in.Read(L"LimitPlayTime", LimitPlayTime);
 		}
 
-		void PvpRoomInfo::Serialize(Serializer::StreamWriter& out) const
+		void PvpRoomInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::PvpRoomInfo");
 			out.Write(L"Id", Id);
@@ -3166,7 +3165,7 @@ namespace Lunia {
 
 			out.Write(L"BattleGroundInfo", BattleGroundInfo);
 		}
-		void PvpRoomInfo::Deserialize(Serializer::StreamReader& in)
+		void PvpRoomInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::PvpRoomInfo");
 			in.Read(L"Id", Id);
@@ -3191,7 +3190,7 @@ namespace Lunia {
 		}
 
 
-		void PvpChannelInfo::Serialize(Serializer::StreamWriter& out) const
+		void PvpChannelInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::PvpChannelInfo");
 			out.Write(L"Name", Name);
@@ -3200,7 +3199,7 @@ namespace Lunia {
 			out.WriteEnum(L"Status", Status);
 		}
 
-		void PvpChannelInfo::Deserialize(Serializer::StreamReader& in)
+		void PvpChannelInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::PvpChannelInfo");
 			in.Read(L"Name", Name);
@@ -3353,7 +3352,7 @@ namespace Lunia {
 		{
 		}
 
-		void PetCaredBySchool::Serialize(Serializer::StreamWriter& out) const
+		void PetCaredBySchool::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"PetCaredBySchool");
 			out.Write(L"PetItemHash", PetItemHash);
@@ -3365,7 +3364,7 @@ namespace Lunia {
 			out.Write(L"End", End);
 		}
 
-		void PetCaredBySchool::Deserialize(Serializer::StreamReader& in)
+		void PetCaredBySchool::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"PetCaredBySchool");
 			in.Read(L"PetItemHash", PetItemHash);
@@ -3377,7 +3376,7 @@ namespace Lunia {
 			in.Read(L"End", End);
 		}
 
-		void PetToolTipInfo::Serialize(Serializer::StreamWriter& out) const
+		void PetToolTipInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::PetToolTipInfo");
 			out.Write(L"IsRarePet", IsRarePet);
@@ -3387,7 +3386,7 @@ namespace Lunia {
 			out.Write(L"RareProbability", RareProbability);
 			out.Write(L"EnchantSerial", EnchantSerial); // 3.1 by Robotex
 		}
-		void PetToolTipInfo::Deserialize(Serializer::StreamReader& in)
+		void PetToolTipInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::PetToolTipInfo");
 			in.Read(L"IsRarePet", IsRarePet);
@@ -3411,7 +3410,7 @@ namespace Lunia {
 			PetName.reserve(50);
 		}
 
-		void Pet::Serialize(Serializer::StreamWriter& out) const
+		void Pet::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::Pet");
 			out.Write(L"IsRarePet", IsRarePet);
@@ -3433,7 +3432,7 @@ namespace Lunia {
 			out.Write(L"EnchantSerial", EnchantSerial); // 3.1 by Robotex
 		}
 
-		void Pet::Deserialize(Serializer::StreamReader& in)
+		void Pet::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::Pet");
 			in.Read(L"IsRarePet", IsRarePet);
@@ -3751,7 +3750,7 @@ namespace Lunia {
 		{
 		}
 
-		void PetItemSlot::Serialize(Serializer::StreamWriter& out) const
+		void PetItemSlot::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::PetItemSlot");
 			out.WriteEnum(L"Type", Type);
@@ -3762,7 +3761,7 @@ namespace Lunia {
 			out.Write(L"instanceEx", instanceEx);
 		}
 
-		void PetItemSlot::Deserialize(Serializer::StreamReader& in)
+		void PetItemSlot::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::PetItemSlot");
 			in.ReadEnum(L"Type", Type);
@@ -3773,14 +3772,14 @@ namespace Lunia {
 			in.Read(L"instanceEx", instanceEx);
 		}
 
-		void PetDataWithItemPos::Serialize(Serializer::StreamWriter& out) const
+		void PetDataWithItemPos::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::PetDataWithItemPos");
 			out.Write(L"Pet", Pet);
 			out.Write(L"PetItemPosition", PetItemPosition);
 		}
 
-		void PetDataWithItemPos::Deserialize(Serializer::StreamReader& in)
+		void PetDataWithItemPos::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::PetDataWithItemPos");
 			in.Read(L"Pet", Pet);
@@ -3790,7 +3789,7 @@ namespace Lunia {
 		{
 			return (ItemHash == rhs.ItemHash && StackedCount == rhs.StackedCount && instanceEx == rhs.instanceEx && SellPrice == rhs.SellPrice);
 		}
-		void StoreSlotForPet::Serialize(Serializer::StreamWriter& out) const
+		void StoreSlotForPet::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::StoreSlotForPet");
 			out.Write(L"ItemHash", ItemHash);
@@ -3799,7 +3798,7 @@ namespace Lunia {
 			out.Write(L"SellPrice", SellPrice);
 			out.Write(L"PetData", PetData);
 		}
-		void StoreSlotForPet::Deserialize(Serializer::StreamReader& in)
+		void StoreSlotForPet::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::StoreSlotForPet");
 			in.Read(L"ItemHash", ItemHash);
@@ -3809,7 +3808,7 @@ namespace Lunia {
 			in.Read(L"PetData", PetData);
 		}
 
-		void ConfirmTradeInfo::TradeItem::Serialize(Serializer::StreamWriter& out) const
+		void ConfirmTradeInfo::TradeItem::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::ConfirmTradeInfo::TradeItem");
 			out.Write(L"hash", hash);
@@ -3820,7 +3819,7 @@ namespace Lunia {
 				out.Write(L"pet", pet); // 3.1 by Robotex
 		}
 
-		void ConfirmTradeInfo::TradeItem::Deserialize(Serializer::StreamReader& in)
+		void ConfirmTradeInfo::TradeItem::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::ConfirmTradeInfo::TradeItem");
 			in.Read(L"hash", hash);
@@ -3831,7 +3830,7 @@ namespace Lunia {
 				in.Read(L"pet", pet); // 3.1 by Robotex
 		}
 
-		void ConfirmTradeInfo::Serialize(Serializer::StreamWriter& out) const
+		void ConfirmTradeInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::ConfirmTradeInfo");
 			out.Write(L"playerSerial", playerSerial);
@@ -3840,7 +3839,7 @@ namespace Lunia {
 			out.Write(L"money", money);
 		}
 
-		void ConfirmTradeInfo::Deserialize(Serializer::StreamReader& in)
+		void ConfirmTradeInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::ConfirmTradeInfo");
 			in.Read(L"playerSerial", playerSerial);
@@ -3853,26 +3852,26 @@ namespace Lunia {
 		const int Constants::SecurityCard::MaxColumn = 8;
 		const int Constants::SecurityCard::QuestionCount = 3;
 
-		String Constants::SecurityCard::GetSecurityCodeString(int row, int col)
+		/*String Constants::SecurityCard::GetSecurityCodeString(int row, int col)
 		{
 			return StringUtil::ToUnicode(StringUtil::Format("%c%d", (65 + col), row));
-		}
+		}*/
 
 
-		void Family::Info::Serialize(Serializer::StreamWriter& out) const
+		void Family::Info::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::Family::Info");
 			out.Write(L"Serial", Serial);
 			out.Write(L"CreatedTime", CreatedTime);
 		}
 
-		void Family::Info::Deserialize(Serializer::StreamReader& in)
+		void Family::Info::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::Family::Info");
 			in.Read(L"Serial", Serial);
 			in.Read(L"CreatedTime", CreatedTime);
 		}
-		void Family::MemberInfo::Serialize(Serializer::StreamWriter& out) const
+		void Family::MemberInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::Family::MemberInfo");
 			out.Write(L"MemberSerial", MemberSerial);
@@ -3887,7 +3886,7 @@ namespace Lunia {
 			out.Write(L"LastLoggedDate", LastLoggedDate);
 		}
 
-		void Family::MemberInfo::Deserialize(Serializer::StreamReader& in)
+		void Family::MemberInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::Family::MemberInfo");
 			in.Read(L"MemberSerial", MemberSerial);
@@ -3903,7 +3902,7 @@ namespace Lunia {
 		}
 
 
-		void Family::RewardCondition::Serialize(Serializer::StreamWriter& out) const
+		void Family::RewardCondition::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::Family::RewardCondition");
 			out.Write(L"NextPlayTimeForPersonalPlay", NextPlayTimeForPersonalPlay);
@@ -3911,7 +3910,7 @@ namespace Lunia {
 			out.Write(L"MemorialDay", MemorialDay);
 		}
 
-		void Family::RewardCondition::Deserialize(Serializer::StreamReader& in)
+		void Family::RewardCondition::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::Family::RewardCondition");
 			in.Read(L"NextPlayTimeForPersonalPlay", NextPlayTimeForPersonalPlay);
@@ -3919,7 +3918,7 @@ namespace Lunia {
 			in.Read(L"MemorialDay", MemorialDay);
 		}
 
-		void OpenMarket::ProductInfo::Serialize(Serializer::StreamWriter& out) const
+		void OpenMarket::ProductInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::OpenMarket::ProductInfo");
 			out.Write(L"RegistrationNumber", RegistrationNumber);
@@ -3936,7 +3935,7 @@ namespace Lunia {
 				out.Write(L"Pet", Pet);
 			}
 		}
-		void OpenMarket::ProductInfo::Deserialize(Serializer::StreamReader& in)
+		void OpenMarket::ProductInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::OpenMarket::ProductInfo");
 			in.Read(L"RegistrationNumber", RegistrationNumber);
@@ -3953,7 +3952,7 @@ namespace Lunia {
 				in.Read(L"Pet", Pet);
 			}
 		}
-		void UnidentifiedItemInfo::ProbabilityTable::Serialize(Serializer::StreamWriter& out) const
+		void UnidentifiedItemInfo::ProbabilityTable::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::Database::Info::UnidentifiedItemInfo::ProbabilityTable");
 			out.Write(L"Id", Id);
@@ -3975,7 +3974,7 @@ namespace Lunia {
 			out.Write(L"InstanceEx.ExpireDate", temp);
 		}
 
-		void UnidentifiedItemInfo::ProbabilityTable::Deserialize(Serializer::StreamReader& in)
+		void UnidentifiedItemInfo::ProbabilityTable::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::Database::Info::UnidentifiedItemInfo::ProbabilityTable");
 			in.Read(L"Id", Id);
@@ -4000,14 +3999,14 @@ namespace Lunia {
 			in.Read(L"InstanceExpireDate", InstanceExpireDate, std::wstring(L"0")); */
 		}
 
-		void UnidentifiedItemInfo::EnchantProbabilityList::Serialize(Serializer::StreamWriter& out) const
+		void UnidentifiedItemInfo::EnchantProbabilityList::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::Database::Info::UnidentifiedItemInfo::EnchantProbabilityList");
 			out.Write(L"ReinforcementProbabilitys", ReinforcementProbabilitys);
 			out.Write(L"LightReinforcementProbabilitys", LightReinforcementProbabilitys);
 		}
 
-		void UnidentifiedItemInfo::EnchantProbabilityList::Deserialize(Serializer::StreamReader& in)
+		void UnidentifiedItemInfo::EnchantProbabilityList::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::Database::Info::UnidentifiedItemInfo::EnchantProbabilityList");
 			in.Read(L"ReinforcementProbabilitys", ReinforcementProbabilitys, std::vector< float >());
@@ -4015,7 +4014,7 @@ namespace Lunia {
 		}
 
 
-		void UnidentifiedItemInfo::Serialize(Serializer::StreamWriter& out) const
+		void UnidentifiedItemInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::Database::Info::UnidentifiedItemInfo");
 			out.Write(L"Id", Id);
@@ -4026,7 +4025,7 @@ namespace Lunia {
 			out.Write(L"EnchantProbabilitys", EnchantProbabilitys);
 		}
 
-		void UnidentifiedItemInfo::Deserialize(Serializer::StreamReader& in)
+		void UnidentifiedItemInfo::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::Database::Info::UnidentifiedItemInfo");
 			in.Read(L"Id", Id);
@@ -4042,14 +4041,14 @@ namespace Lunia {
 		{
 		}
 
-		void UnidentifiedItemInfo::ProbabilityTableListPerLevel::Serialize(Serializer::StreamWriter& out) const
+		void UnidentifiedItemInfo::ProbabilityTableListPerLevel::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::Database::Info::UnidentifiedItemInfo::ProbabilityTableListPerLevel");
 			out.Write(L"Level", Level);
 			out.Write(L"ProbabilityTableList", Table);
 		}
 
-		void UnidentifiedItemInfo::ProbabilityTableListPerLevel::Deserialize(Serializer::StreamReader& in)
+		void UnidentifiedItemInfo::ProbabilityTableListPerLevel::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"XRated::Database::Info::UnidentifiedItemInfo::ProbabilityTableListPerLevel");
 			in.Read(L"Level", Level);
@@ -4081,7 +4080,7 @@ namespace Lunia {
 
 		const DateTime InstanceEx::NoExpiration(L"2050-12-31 00:00:00");
 
-		void InstanceEx::Serialize(Serializer::StreamWriter& out) const
+		void InstanceEx::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"InstanceEx");
 			out.Write(L"Instance", Instance);
@@ -4096,7 +4095,7 @@ namespace Lunia {
 			out.Write(L"ExpireDate", reinterpret_cast<const uint32&>(tmp));
 
 		}
-		void InstanceEx::Deserialize(Serializer::StreamReader& in)
+		void InstanceEx::Deserialize(Serializer::IStreamReader& in)
 		{
 			in.Begin(L"InstanceEx");
 			in.Read(L"Instance", Instance);

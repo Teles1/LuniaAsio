@@ -1,6 +1,5 @@
 #include "./DateTime.h"
 #include "../Core.h"
-#include <fmt/format.h>
 namespace Lunia {
 
 #pragma region Date
@@ -150,19 +149,21 @@ namespace Lunia {
 		}
 		return L"";
 	}
-	void DateTime::Date::Deserialize(Serializer::StreamReader& in) {
+	void DateTime::Date::Deserialize(Serializer::IStreamReader& in) {
+		in.Begin(L"AllM::Date");
 		uint16 aux = 0;
-		in.Read(aux);
+		in.Read(L"Year", aux);
 		dateValue.Year = aux;
-		in.Read(aux);
+		in.Read(L"Month", aux);
 		dateValue.Month = static_cast<uint8>(aux);
-		in.Read(aux);
+		in.Read(L"Day", aux);
 		dateValue.Day = static_cast<uint8>(aux);
 	}
-	void DateTime::Date::Serialize(Serializer::StreamWriter& out) {
-		out.Write(static_cast<uint16>(dateValue.Year));
-		out.Write(static_cast<uint16>(dateValue.Month));
-		out.Write(static_cast<uint16>(dateValue.Day));
+	void DateTime::Date::Serialize(Serializer::IStreamWriter& out)  const {
+		out.Begin(L"AllM::Date");
+		out.Write(L"Year", static_cast<uint16>(dateValue.Year));
+		out.Write(L"Month", static_cast<uint16>(dateValue.Month));
+		out.Write(L"Day", static_cast<uint16>(dateValue.Day));
 	}
 #pragma endregion
 
@@ -312,27 +313,28 @@ namespace Lunia {
 		return sec;
 	}
 
-	void DateTime::Time::Deserialize(Serializer::StreamReader& in) {
+	void DateTime::Time::Deserialize(Serializer::IStreamReader& in) {
+		in.Begin(L"AllM::Time");
 		uint16 tmp;
-		in.Read(tmp);
+		in.Read(L"Hour", tmp);
 		timeValue.Hour = static_cast<uint8>(tmp);
-		in.Read(tmp);
+		in.Read(L"Minute", tmp);
 		timeValue.Minute = static_cast<uint8>(tmp);
-		in.Read(tmp);
+		in.Read(L"Second", tmp);
 		timeValue.Second = tmp;
-		in.Read(tmp);
+		in.Read(L"MilliSec", tmp);
 		timeValue.MilliSec = tmp;
 	}
-	void DateTime::Time::Serialize(Serializer::StreamWriter& out) {
+	void DateTime::Time::Serialize(Serializer::IStreamWriter& out)  const {
 		uint16 tmp;
 		tmp = timeValue.Hour;
-		out.Write(tmp);
+		out.Write(L"Hour", tmp);
 		tmp = timeValue.Minute;
-		out.Write(tmp);
+		out.Write(L"Minute", tmp);
 		tmp = timeValue.Second;
-		out.Write(tmp);
+		out.Write(L"Second", tmp);
 		tmp = timeValue.MilliSec;
-		out.Write(tmp);
+		out.Write(L"MilliSec", tmp);
 	}
 #pragma endregion
 
@@ -441,35 +443,35 @@ namespace Lunia {
 		return data;
 	}
 
-	void DateTime::Deserialize(Serializer::StreamReader& in) {
-		//in.Begin(L"AllM::DateTime");
+	void DateTime::Deserialize(Serializer::IStreamReader& in) {
+		in.Begin(L"AllM::DateTime");
 		uint16 tmp;
-		in.Read(tmp); dateData.SetYear(tmp);
-		in.Read(tmp); dateData.SetMonth(static_cast<uint8>(tmp));
-		in.Read(tmp); dateData.SetDay(static_cast<uint8>(tmp));
-		in.Read(tmp); timeData.SetHour(static_cast<uint8>(tmp));
-		in.Read(tmp); timeData.SetMinute(static_cast<uint8>(tmp));
-		in.Read(tmp); timeData.SetSecond(tmp);
-		in.Read(tmp); timeData.SetMilliSec(tmp);
+		in.Read(L"Year", tmp); dateData.SetYear(tmp);
+		in.Read(L"Month", tmp); dateData.SetMonth(static_cast<uint8>(tmp));
+		in.Read(L"Day", tmp); dateData.SetDay(static_cast<uint8>(tmp));
+		in.Read(L"Hour", tmp); timeData.SetHour(static_cast<uint8>(tmp));
+		in.Read(L"Minute", tmp); timeData.SetMinute(static_cast<uint8>(tmp));
+		in.Read(L"Second", tmp); timeData.SetSecond(tmp);
+		in.Read(L"MilliSec", tmp); timeData.SetMilliSec(tmp);
 	}
-	void DateTime::Serialize(Serializer::StreamWriter& out) {
-		out.Begin((uint16)StringUtil::Hash(L"AllM::DateTime"));
+	void DateTime::Serialize(Serializer::IStreamWriter& out)  const {
+		out.Begin(L"AllM::DateTime");
 		uint16 tmp;
 		tmp = dateData.GetYear();
-		out.Write(tmp);
+		out.Write(L"Year", tmp);
 		tmp = dateData.GetMonth();
-		out.Write(tmp);
+		out.Write(L"Month", tmp);
 		tmp = dateData.GetDay();
-		out.Write(tmp);
+		out.Write(L"Day", tmp);
 
 		tmp = timeData.GetHour();
-		out.Write(tmp);
+		out.Write(L"Hour", tmp);
 		tmp = timeData.GetMinute();
-		out.Write(tmp);
+		out.Write(L"Minute", tmp);
 		tmp = timeData.GetSecond();
-		out.Write(tmp);
+		out.Write(L"Second", tmp);
 		tmp = timeData.GetMilliSec();
-		out.Write(tmp);
+		out.Write(L"MilliSec", tmp);
 	}
 
 	DateTime DateTime::Now()

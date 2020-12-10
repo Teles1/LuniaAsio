@@ -2,9 +2,7 @@
 #define Locator_GUARD
 #pragma once
 
-#include <string>
 #include "StringUtil/StaticString.h"
-#include "StringUtil/General.h"
 
 namespace Lunia {
 

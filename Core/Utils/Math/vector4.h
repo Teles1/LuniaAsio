@@ -26,7 +26,8 @@ namespace Lunia {
 
 			}
 
-			Vector4(const BaseVector<T, 3>& vxyz, const T& vw)
+			Vector4(const BaseVector<T, 3>& vxyz
+				, const T& vw)
 				: x(vxyz[0]), y(vxyz[1]), z(vxyz[2]), w(vw)
 			{
 			}

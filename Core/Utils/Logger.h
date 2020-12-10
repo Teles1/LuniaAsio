@@ -10,7 +10,6 @@
 
 #include <memory>
 #include <mutex>
-#include "../Exceptions/Expcetion.h"
 
 struct Logger{
 public:

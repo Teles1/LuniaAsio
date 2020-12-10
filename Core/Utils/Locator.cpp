@@ -1,5 +1,6 @@
 #pragma once
-#include "Locator.h"
+#include <Core/Utils/Locator.h>
+#include <Core/Utils/StringUtil.h>
 
 namespace Lunia {
 
