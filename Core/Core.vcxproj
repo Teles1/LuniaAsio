@@ -138,7 +138,7 @@
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <Optimization>MaxSpeed</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
@@ -180,8 +180,6 @@
     <ClInclude Include="ReferenceCounted.h" />
     <ClInclude Include="Serializer\IReferenceCounted.h" />
     <ClInclude Include="Serializer\NetStream.h" />
-    <ClInclude Include="Serializer\Private.h" />
-    <ClInclude Include="Serializer\PrivateFlat.h" />
     <ClInclude Include="Serializer\Serializer.h" />
     <ClInclude Include="Utils\Math\Color.h" />
     <ClInclude Include="Utils\Math\euler.h" />

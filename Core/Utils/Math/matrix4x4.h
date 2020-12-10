@@ -186,7 +186,7 @@ namespace Lunia {
 			{
 				for (int i = 0; i < 4; ++i)
 				{
-					T v[4];
+					T v[4]{};
 					v[0] = m44[i][0];
 					v[1] = m44[i][1];
 					v[2] = m44[i][2];
@@ -535,7 +535,7 @@ namespace Lunia {
 			{
 				for (int i = 0; i < 4; ++i)
 				{
-					T v[4];
+					T v[4]{};
 					v[0] = m44[i][0];
 					v[1] = m44[i][1];
 					v[2] = m44[i][2];
@@ -551,7 +551,7 @@ namespace Lunia {
 			{
 				for (int i = 0; i < 4; ++i)
 				{
-					T v[3];
+					T v[3]{};
 					v[0] = m44[i][0];
 					v[1] = m44[i][1];
 					v[2] = m44[i][2];
@@ -568,7 +568,7 @@ namespace Lunia {
 			{
 				for (int i = 0; i < 4; ++i)
 				{
-					T v[3];
+					T v[3]{};
 					v[0] = m44[i][0];
 					v[1] = m44[i][1];
 					v[2] = m44[i][2];

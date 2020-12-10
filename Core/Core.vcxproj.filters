@@ -46,8 +46,6 @@
     <ClInclude Include="Serializer\Serializer_old.h" />
     <ClInclude Include="Serializer\Serializer.h" />
     <ClInclude Include="Serializer\NetStream.h" />
-    <ClInclude Include="Serializer\Private.h" />
-    <ClInclude Include="Serializer\PrivateFlat.h" />
     <ClInclude Include="IStream.h" />
     <ClInclude Include="IReferenceCounted.h" />
   </ItemGroup>
