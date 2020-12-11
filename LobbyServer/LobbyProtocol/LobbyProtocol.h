@@ -192,6 +192,25 @@ namespace Lunia {
 				NET_SERIALIZABLE;
 			};
 
+			struct CreateCharacter : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					AlreadyExistingCharacterName = 1,
+					DeletingCharacterName = 2,
+					WrongCharacterName = 3,
+					NotCreateCharacterPeriod = 6,
+					NoResponse = 0xff,
+				} Result;
+
+				XRated::LobbyPlayerInfo CharacterInfo;
+
+				String Name;
+				XRated::Constants::ClassType ClassType;
+
+				NET_SERIALIZABLE;
+			};
 
 			struct Terminate : public Serializer::ISerializable
 			{
