@@ -31,8 +31,11 @@ namespace Lunia {
 
 		Lobby::UserSharedPtr UserRegistry::MakeUser(asio::ip::tcp::socket& socket) {
 			Lobby::UserSharedPtr user(new Lobby::User(m_curTempUserId, std::move(socket)));
+			Lobby::UserWeakPtr userWeak = user;
 
-			m_users.emplace(m_curTempUserId, user);
+			m_users.push_back(user);
+
+			m_usersByUserId[m_curTempUserId] = userWeak;
 
 			OnUserConnected(user);
 
@@ -42,7 +45,27 @@ namespace Lunia {
 		}
 		void UserRegistry::RemoveUser(Lobby::UserSharedPtr& user) {
 
-			m_users.erase(user->GetId());
+			//m_users.erase(user->GetId());
+
+			m_usersByUserId[user->GetId()].reset();
+
+			if (m_autorizedUsersByUserId.find(user->GetId()) != m_autorizedUsersByUserId.end())
+			{
+				m_autorizedUsersByUserId[user->GetId()].reset();
+			}
+
+			std::lock_guard<std::mutex> usersLock(m_usersMutex);
+			for (int i = 0; m_users.size(); i++)
+			{
+				if (m_users[i]->GetId() == user->GetId())
+				{
+
+					m_users[i].reset();
+
+					break;
+				}
+			}
+
 			OnUserDisconnected(user);
 		}
 
@@ -50,39 +73,51 @@ namespace Lunia {
 		{
 			if (user)
 			{
-				m_users.erase(user->GetId());
+				Lobby::UserWeakPtr userWeak = user;
 
-				m_users.emplace(m_curUserId, user);
+				uint32 oldUserId = user->GetId();
+
+				m_usersByUserId[user->GetId()].reset();
+
+				m_usersByUserId[m_curUserId] = userWeak;
+				m_autorizedUsersByUserId[m_curUserId] = userWeak;
 
 				user->SetId(m_curUserId);
-				user->SetIsAuthenticated(true);
+				user->SetIsAuthenticated();
 
 				m_curUserId++;
+
+				OnUserAuthenticated(user, oldUserId);
 			}
-			else
-				Logger::GetInstance()->Exception("Could not authenticate user!");
 		}
 
 		Lobby::UserSharedPtr UserRegistry::GetUserByUserId(uint32 userId) {
 			auto ptr = Lobby::UserSharedPtr();
-			auto it = m_users.find(userId);
 
-			if (it != m_users.end())
-				ptr = it->second;
+			if (m_usersByUserId.find(userId) != m_usersByUserId.end())
+			{
+				ptr = m_usersByUserId[userId].lock();
+			}
 
 			return ptr;
 		}
 	}
 
-	static utils::InitFunction initFunction([]() {
-		Net::UserRegistry::GetInstance()->OnUserConnected.Connect(
-			[](const Lobby::UserSharedPtr& user) {
-				Logger::GetInstance()->Info("UserRegistry :: OnUserConnected :: userId@{0}", user->GetId());
-			});
+	static utils::InitFunction initFunction([]()
+		{
+			Net::UserRegistry::GetInstance()->OnUserConnected.Connect([](const Lobby::UserSharedPtr& user)
+				{
+					Logger::GetInstance()->Info("UserRegistry :: OnUserConnected :: userId@{0}", user->GetId());
+				});
 
-		Net::UserRegistry::GetInstance()->OnUserDisconnected.Connect(
-			[](const Lobby::UserSharedPtr& user) {
-				Logger::GetInstance()->Info("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetId());
-			});
+			Net::UserRegistry::GetInstance()->OnUserDisconnected.Connect([](const Lobby::UserSharedPtr& user)
+				{
+					Logger::GetInstance()->Info("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetId());
+				});
+
+			Net::UserRegistry::GetInstance()->OnUserAuthenticated.Connect([](const Lobby::UserSharedPtr& user, const uint32& oldUserId)
+				{
+					Logger::GetInstance()->Info("UserRegistry :: OnUserAuthenticated :: userId@{0} oldUserId@{1}", user->GetId(), oldUserId);
+				});
 		});
 }

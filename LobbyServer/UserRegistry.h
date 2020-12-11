@@ -31,22 +31,22 @@ namespace Lunia {
 
 			fwEvent<const Lobby::UserSharedPtr&>				OnUserDisconnected;
 
-			fwEvent<const Lobby::UserSharedPtr&, const uint32&>                OnUserAuthenticated;
+			fwEvent<const Lobby::UserSharedPtr&, const uint32&> OnUserAuthenticated;
 
 		private:
 			UserRegistry() { };
 		private:
 
-			uint32 m_curTempUserId = 0xFFFFFFFF;
+			uint32												m_curTempUserId = 0xFFFFFFFF;
 
-			uint32 m_curUserId = 0;
+			uint32												m_curUserId = 0;
 
-			std::mutex m_usersMutex;
-			std::vector<Lobby::UserSharedPtr> m_users;
+			std::mutex											m_usersMutex;
+			std::vector<Lobby::UserSharedPtr>					m_users;
 
-			std::unordered_map<uint32, Lobby::UserWeakPtr> m_usersByUserId;
+			std::unordered_map<uint32, Lobby::UserWeakPtr>		m_usersByUserId;
 
-			std::unordered_map<uint32, Lobby::UserWeakPtr> m_autorizedUsersByUserId;
+			std::unordered_map<uint32, Lobby::UserWeakPtr>		m_autorizedUsersByUserId;
 		};
 		typedef std::shared_ptr<UserRegistry> UserRegPtr;
 	}
