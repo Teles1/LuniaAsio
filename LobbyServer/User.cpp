@@ -15,7 +15,7 @@ namespace Lunia {
 			}
 			catch (Exception&) // catch something like buffer overflow
 			{
-				Logger::GetInstance()->Error("User@{} Unable to Parse packet", this->GetUserId());
+				Logger::GetInstance()->Error("User@{0} Unable to Parse packet", this->GetId());
 				return;
 			}
 
@@ -31,7 +31,7 @@ namespace Lunia {
 
 			Net::StreamReader sReader(buffer);
 
-			auto userPtr = Net::UserRegistry::GetInstance()->GetUserByUserId(this->GetUserId());
+			auto userPtr = Net::UserRegistry::GetInstance()->GetUserByUserId(this->GetId());
 
 			fwPacketListener::GetInstance()->Invoke(userPtr, sReader.GetSerializedTypeHash(), sReader);
 
@@ -61,21 +61,31 @@ namespace Lunia {
 			mtx.unlock();
 		}
 
-		const bool User::IsAuthenticated()
+		bool User::IsAuthenticated() const
 		{
 			return m_isAuthenticated;
 		}
 
-		const uint32 User::GetUserId() {
+		bool User::PassedSecondPassword(const bool& newBool)
+		{
+			mtx.lock();
+			{
+				this->m_isAuthenticated = newBool;
+			}
+			mtx.unlock();
+			return this->m_isAuthenticated;
+		}
+
+		uint32 User::GetId() const {
 			return m_userId;
 		}
 
-		void User::SetUserId(const uint32& userId)
+		void User::SetId(const uint32& userId)
 		{
 			m_userId = userId;
 		}
 
-		void User::SetUserLocale(const String& inLocale)
+		void User::SetLocale(const String& inLocale)
 		{
 			mtx.lock();
 			{
@@ -84,13 +94,17 @@ namespace Lunia {
 			mtx.unlock();
 		}
 
-		void User::SetUserAccountName(const String& inAccountName)
+		void User::SetAccountName(const String& inAccountName)
 		{
 			mtx.lock();
 			{
 				this->m_AccountName = inAccountName;
 			}
 			mtx.unlock();
+		}
+		String User::GetAccountName() const
+		{
+			return this->m_AccountName;
 		}
 	}
 }

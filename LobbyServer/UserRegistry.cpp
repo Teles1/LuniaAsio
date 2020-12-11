@@ -42,7 +42,7 @@ namespace Lunia {
 		}
 		void UserRegistry::RemoveUser(Lobby::UserSharedPtr& user) {
 
-			m_users.erase(user->GetUserId());
+			m_users.erase(user->GetId());
 			OnUserDisconnected(user);
 		}
 
@@ -50,15 +50,17 @@ namespace Lunia {
 		{
 			if (user)
 			{
-				m_users.erase(user->GetUserId());
+				m_users.erase(user->GetId());
 
 				m_users.emplace(m_curUserId, user);
 
-				user->SetUserId(m_curUserId);
+				user->SetId(m_curUserId);
 				user->SetIsAuthenticated(true);
 
 				m_curUserId++;
 			}
+			else
+				Logger::GetInstance()->Exception("Could not authenticate user!");
 		}
 
 		Lobby::UserSharedPtr UserRegistry::GetUserByUserId(uint32 userId) {
@@ -75,12 +77,12 @@ namespace Lunia {
 	static utils::InitFunction initFunction([]() {
 		Net::UserRegistry::GetInstance()->OnUserConnected.Connect(
 			[](const Lobby::UserSharedPtr& user) {
-				Logger::GetInstance()->Info("UserRegistry :: OnUserConnected :: userId@{0}", user->GetUserId());
+				Logger::GetInstance()->Info("UserRegistry :: OnUserConnected :: userId@{0}", user->GetId());
 			});
 
 		Net::UserRegistry::GetInstance()->OnUserDisconnected.Connect(
 			[](const Lobby::UserSharedPtr& user) {
-				Logger::GetInstance()->Info("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetUserId());
+				Logger::GetInstance()->Info("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetId());
 			});
 		});
 }

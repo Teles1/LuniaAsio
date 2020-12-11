@@ -76,7 +76,7 @@ namespace Lunia {
                 it->second(user, streamReader);
             }
             else
-                Logger::GetInstance()->Warn("fwPacket::Invoke::user{0} unhandled packet [{1:#4x}]", user->GetUserId(), packetHeaderHash);
+                Logger::GetInstance()->Warn("fwPacket::Invoke::user{0} unhandled packet [{1:#4x}]", user->GetId(), packetHeaderHash);
             //do something else ?
         }
     private:

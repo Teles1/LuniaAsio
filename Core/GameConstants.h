@@ -1,4 +1,7 @@
-﻿#include "Core.h"
+﻿#ifndef GameConstants_GUARD
+#define GameConstants_GUARD
+
+#include "Core.h"
 #include <Core/Utils/DateTime.h>
 #include <Core/ReferenceCounted.h>
 #include <Core/Utils/Math/matrix4x4.h>
@@ -3531,3 +3534,4 @@ namespace Lunia {
 		};
 	} // namespace XRated
 } // namespace Lunia
+#endif // !GameConstants_GUARD

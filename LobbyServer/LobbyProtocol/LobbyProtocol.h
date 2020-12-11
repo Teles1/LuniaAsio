@@ -73,18 +73,123 @@ namespace Lunia {
 				NET_SERIALIZABLE
 			};
 
+			struct CharacterSlots : public Serializer::ISerializable
+			{
+				int32 NumberOfSlots;				  ///< total number of characters that can exist (created - deleted)
+				std::vector<int32> CharacterLicenses; ///< each elements are matched with XRated::Constants::ClassType
+
+				NET_SERIALIZABLE;
+			};
+
 			struct ListCharacter : public Serializer::ISerializable
 			{
 				std::vector<XRated::LobbyPlayerInfo> Characters;
 
 				NET_SERIALIZABLE;
 			};
-			struct CharacterSlots : public Serializer::ISerializable
-			{
-				int32 NumberOfSlots;
-				std::vector<int32> CharacterLicenses;
 
-				NET_SERIALIZABLE
+			//This comes from the client only.
+			struct CheckSecondPassword : public Serializer::ISerializable
+			{
+				std::wstring AccountName;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct CreateSecondPassword : public Serializer::ISerializable
+			{
+				std::wstring AccountName;
+				std::wstring Password;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct DeleteSecondPassword : public Serializer::ISerializable
+			{
+				std::wstring AccountName;
+				std::wstring Password;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct ModifySecondPassword : public Serializer::ISerializable
+			{
+				std::wstring AccountName;
+				std::wstring Password;
+				std::wstring NewPassword;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct SignInSecondPassword : public Serializer::ISerializable
+			{
+				std::wstring AccountName;
+				std::wstring Password;
+				uint32 FailCount;
+				std::wstring LockExpired;
+
+				NET_SERIALIZABLE;
+			};
+
+
+			struct SecondPasswordChecked : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					NoResponse = 0xff
+				} Result;
+
+				NET_SERIALIZABLE;
+				uint8 PasswordInUse;
+				uint32 FailCount;
+				std::wstring LockExpired;
+				uint8 IsLocked;
+			};
+			
+			struct SecondPasswordCreated : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					NoResponse = 0xff
+				} Result;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct SecondPasswordDeleted : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					NoResponse = 0xff
+				} Result;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct SecondPasswordModified : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					NoResponse = 0xff
+				} Result;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct SecondPasswordSignedIn : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					InvalidPassword = 1,
+					NoResponse = 0xff
+				} Result;
+
+				NET_SERIALIZABLE;
 			};
 
 		}//Protocol

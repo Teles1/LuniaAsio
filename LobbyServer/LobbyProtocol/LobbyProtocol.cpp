@@ -73,9 +73,8 @@ namespace Lunia {
 				Logger::GetInstance()->Warn("ListCharacter shouldn't be getting called by the client.");
 			}
 
-
 			const wchar_t* CharacterSlots::TypeName = L"CharacterSlots";
-			const uint16 CharacterSlots::TypeHash = StringUtil::Hash(TypeName);
+			const HashType CharacterSlots::TypeHash = StringUtil::Hash(CharacterSlots::TypeName);
 			void CharacterSlots::Serialize(Serializer::IStreamWriter& out) const
 			{
 				out.Begin(TypeName);
@@ -88,6 +87,159 @@ namespace Lunia {
 				in.Read(L"NumberOfSlots", NumberOfSlots);
 				in.Read(L"CharacterLicenses", CharacterLicenses);
 			}
+			
+			const wchar_t* CheckSecondPassword::TypeName = L"CheckSecondPassword";
+			const HashType CheckSecondPassword::TypeHash = StringUtil::Hash(CheckSecondPassword::TypeName);
+			void CheckSecondPassword::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"AccountName", AccountName);
+			}
+			void CheckSecondPassword::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"AccountName", AccountName);
+			}
+
+			const wchar_t* CreateSecondPassword::TypeName = L"CreateSecondPassword";
+			const HashType CreateSecondPassword::TypeHash = StringUtil::Hash(CreateSecondPassword::TypeName);
+			void CreateSecondPassword::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"AccountName", AccountName);
+				out.Write(L"Password", Password);
+			}
+			void CreateSecondPassword::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"AccountName", AccountName);
+				in.Read(L"Password", Password);
+			}
+
+			const wchar_t* DeleteSecondPassword::TypeName = L"DeleteSecondPassword";
+			const HashType DeleteSecondPassword::TypeHash = StringUtil::Hash(DeleteSecondPassword::TypeName);
+			void DeleteSecondPassword::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"AccountName", AccountName);
+				out.Write(L"Password", Password);
+			}
+			void DeleteSecondPassword::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"AccountName", AccountName);
+				in.Read(L"Password", Password);
+			}
+
+			const wchar_t* ModifySecondPassword::TypeName = L"ModifySecondPassword";
+			const HashType ModifySecondPassword::TypeHash = StringUtil::Hash(ModifySecondPassword::TypeName);
+			void ModifySecondPassword::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"AccountName", AccountName);
+				out.Write(L"Password", Password);
+				out.Write(L"NewPassword", NewPassword);
+			}
+			void ModifySecondPassword::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"AccountName", AccountName);
+				in.Read(L"Password", Password);
+				in.Read(L"NewPassword", NewPassword);
+			}
+
+			const wchar_t* SignInSecondPassword::TypeName = L"SignInSecondPassword";
+			const HashType SignInSecondPassword::TypeHash = StringUtil::Hash(SignInSecondPassword::TypeName);
+			void SignInSecondPassword::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"AccountName", AccountName);
+				out.Write(L"Password", Password);
+				out.Write(L"FailCount", FailCount);
+				out.Write(L"LockExpired", LockExpired);
+			}
+			void SignInSecondPassword::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"AccountName", AccountName);
+				in.Read(L"Password", Password);
+				in.Read(L"FailCount", FailCount);
+				in.Read(L"LockExpired", LockExpired);
+			}
+			
+			const wchar_t* SecondPasswordChecked::TypeName = L"SecondPasswordChecked";
+			const HashType SecondPasswordChecked::TypeHash = StringUtil::Hash(SecondPasswordChecked::TypeName);
+			void SecondPasswordChecked::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"PasswordInUse", PasswordInUse);
+				out.Write(L"FailCount", FailCount);
+				out.Write(L"LockExpired", LockExpired);
+				out.Write(L"IsLocked", IsLocked);
+				out.Write(L"Result", static_cast<const int>(Result));
+			}
+			void SecondPasswordChecked::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"PasswordInUse", PasswordInUse);
+				in.Read(L"FailCount", FailCount);
+				in.Read(L"LockExpired", LockExpired);
+				in.Read(L"IsLocked", IsLocked);
+				in.Read(L"Result", reinterpret_cast<int&>(Result));
+			}
+
+			const wchar_t* SecondPasswordCreated::TypeName = L"SecondPasswordCreated";
+			const HashType SecondPasswordCreated::TypeHash = StringUtil::Hash(SecondPasswordCreated::TypeName);
+			void SecondPasswordCreated::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"Result", static_cast<const int>(Result));
+			}
+			void SecondPasswordCreated::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"Result", reinterpret_cast<int&>(Result));
+			}
+
+			const wchar_t* SecondPasswordDeleted::TypeName = L"SecondPasswordDeleted";
+			const HashType SecondPasswordDeleted::TypeHash = StringUtil::Hash(SecondPasswordDeleted::TypeName);
+			void SecondPasswordDeleted::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"Result", static_cast<const int>(Result));
+			}
+			void SecondPasswordDeleted::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"Result", reinterpret_cast<int&>(Result));
+			}
+
+			const wchar_t* SecondPasswordModified::TypeName = L"SecondPasswordModified";
+			const HashType SecondPasswordModified::TypeHash = StringUtil::Hash(SecondPasswordModified::TypeName);
+			void SecondPasswordModified::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"Result", static_cast<const int>(Result));
+			}
+			void SecondPasswordModified::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"Result", reinterpret_cast<int&>(Result));
+			}
+
+			const wchar_t* SecondPasswordSignedIn::TypeName = L"SecondPasswordSignedIn";
+			const HashType SecondPasswordSignedIn::TypeHash = StringUtil::Hash(SecondPasswordSignedIn::TypeName);
+			void SecondPasswordSignedIn::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"Result", static_cast<const int>(Result));
+			}
+			void SecondPasswordSignedIn::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"Result", reinterpret_cast<int&>(Result));
+			}
+
 		}
 	}
 }

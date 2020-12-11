@@ -1,6 +1,8 @@
 #pragma once
 #include "Network/Tcp/Client.h"
 #include "LobbyProtocol/LobbyProtocol.h"
+#include <vector>
+#include <Core/GameConstants.h>
 namespace Lunia {
 	namespace Lobby {
 		class User : public Net::ClientTcp {
@@ -8,24 +10,28 @@ namespace Lunia {
 			User(uint32& userId, asio::ip::tcp::socket&& socket)
 				: ClientTcp(std::move(socket))
 				, m_userId(userId)
+				, m_NumberOfSlots(0)
 			{
-				Logger::GetInstance()->Info("User :: Hey, I was created!", GetUserId());
+				Logger::GetInstance()->Info("User :: Hey, I was created!", GetId());
 			}
 
-			const uint32 GetUserId();
+			uint32 GetId() const;
 
-			void SetUserId(const uint32& userId);
+			void SetId(const uint32& userId);
 
-			void SetUserLocale(const String& inLocale);
+			void SetLocale(const String& inLocale);
 
-			void SetUserAccountName(const String& inAccountName);
+			void SetAccountName(const String& inAccountName);
+
+			String GetAccountName() const;
 
 			bool QueryAliveAuth();
 
 			void SetIsAuthenticated(const bool& toggle);
 
-			const bool IsAuthenticated();
+			bool IsAuthenticated() const;
 
+			bool PassedSecondPassword(const bool& newBool);
 		public://Network Related;
 			void Send(Serializer::ISerializable& packet);
 
@@ -65,6 +71,12 @@ namespace Lunia {
 
 			bool m_isAuthenticated;
 
+		public:
+			bool m_isSecondPasswordProtected;
+			uint8 m_NumberOfSlots;
+			std::vector<int32> m_AccountLicenses;
+			std::vector<XRated::LobbyPlayerInfo> m_Characters;
+			XRated::LobbyPlayerInfo* m_selectedCharacter;
 		private:
 			std::mutex mtx;
 		};
