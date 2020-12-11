@@ -9,15 +9,15 @@ namespace Lunia {
 		class UserRegistry
 		{
 		public:
-			static std::mutex								m_lock;
-			static std::shared_ptr<UserRegistry>			m_instance;
-		public:
 			UserRegistry(const UserRegistry&) = delete; //anti creation  of a copy
 			UserRegistry& operator= (const UserRegistry&) = delete; // anti copy
 			UserRegistry(UserRegistry&&) = delete;
 			UserRegistry& operator=(UserRegistry&&) = delete;
 			~UserRegistry() { }
-			static std::shared_ptr<UserRegistry>& GetInstance();
+			inline static UserRegistry& GetInstance() {
+				static UserRegistry								m_instance;
+				return m_instance;
+			}
 		public:
 			Lobby::UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);
 
@@ -34,7 +34,7 @@ namespace Lunia {
 			fwEvent<const Lobby::UserSharedPtr&, const uint32&> OnUserAuthenticated;
 
 		private:
-			UserRegistry() { };
+			inline UserRegistry() { };
 		private:
 
 			uint32												m_curTempUserId = 0xFFFFFFFF;

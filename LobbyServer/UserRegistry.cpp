@@ -3,32 +3,6 @@
 namespace Lunia {
 	namespace Net
 	{
-#pragma region Singleton
-		/*
-			Definitions os the static methods/variables MUST be in the cpp.
-			I went for shared_ptr in order to avoid deletion of memory manually.
-			Let the compiler does it's thing.
-		*/
-
-		UserRegPtr UserRegistry::m_instance;
-		std::mutex UserRegistry::m_lock;
-
-		UserRegPtr& UserRegistry::GetInstance() {
-			UserRegPtr pTmp = m_instance;
-			if (pTmp == NULL)
-			{
-				m_lock.lock(); // thread safe
-				if (pTmp == NULL)
-					m_instance = UserRegPtr(new UserRegistry());
-				m_lock.unlock();
-			}
-			return m_instance;
-		}
-		/*
-			End of static definitions.
-		*/
-#pragma endregion
-
 		Lobby::UserSharedPtr UserRegistry::MakeUser(asio::ip::tcp::socket& socket) {
 			Lobby::UserSharedPtr user(new Lobby::User(m_curTempUserId, std::move(socket)));
 			Lobby::UserWeakPtr userWeak = user;
@@ -105,19 +79,19 @@ namespace Lunia {
 
 	static utils::InitFunction initFunction([]()
 		{
-			Net::UserRegistry::GetInstance()->OnUserConnected.Connect([](const Lobby::UserSharedPtr& user)
+			Net::UserRegistry::GetInstance().OnUserConnected.Connect([](const Lobby::UserSharedPtr& user)
 				{
-					Logger::GetInstance()->Info("UserRegistry :: OnUserConnected :: userId@{0}", user->GetId());
+					Logger::GetInstance().Info("UserRegistry :: OnUserConnected :: userId@{0}", user->GetId());
 				});
 
-			Net::UserRegistry::GetInstance()->OnUserDisconnected.Connect([](const Lobby::UserSharedPtr& user)
+			Net::UserRegistry::GetInstance().OnUserDisconnected.Connect([](const Lobby::UserSharedPtr& user)
 				{
-					Logger::GetInstance()->Info("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetId());
+					Logger::GetInstance().Info("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetId());
 				});
 
-			Net::UserRegistry::GetInstance()->OnUserAuthenticated.Connect([](const Lobby::UserSharedPtr& user, const uint32& oldUserId)
+			Net::UserRegistry::GetInstance().OnUserAuthenticated.Connect([](const Lobby::UserSharedPtr& user, const uint32& oldUserId)
 				{
-					Logger::GetInstance()->Info("UserRegistry :: OnUserAuthenticated :: userId@{0} oldUserId@{1}", user->GetId(), oldUserId);
+					Logger::GetInstance().Info("UserRegistry :: OnUserAuthenticated :: userId@{0} oldUserId@{1}", user->GetId(), oldUserId);
 				});
 		});
 }

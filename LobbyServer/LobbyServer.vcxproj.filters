@@ -39,9 +39,6 @@
     <ClCompile Include="UserRegistry.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="fwPacketListener.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="PacketHandlers.cpp">
       <Filter>Source</Filter>
     </ClCompile>

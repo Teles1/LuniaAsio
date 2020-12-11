@@ -8,10 +8,10 @@
 namespace Lunia {
 	static utils::InitFunction init([]()
 		{
-			fwPacketListener::GetInstance()->Connect(
+			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::Head& packet)
 				{
-					Logger::GetInstance()->Info("fwPacketListener :: userId@{0} :: protocol@Head", user->GetId());
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Head", user->GetId());
 					Lobby::Protocol::Head sendPacket;
 					if (packet.ProtocolVersion == Constants::Version)
 						sendPacket.Result = Lobby::Protocol::Head::Results::Ok;
@@ -26,10 +26,10 @@ namespace Lunia {
 					user->QueryAliveAuth();
 				});
 
-			fwPacketListener::GetInstance()->Connect(
+			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::Auth& packet)
 				{
-					Logger::GetInstance()->Info("fwPacketListener :: userId@{0} :: protocol@Auth", user->GetId());
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Auth", user->GetId());
 					user->SetLocale(packet.Locale);
 					Net::Api api("CheckAccount");
 					api << packet.AccountId;
@@ -48,7 +48,7 @@ namespace Lunia {
 
 						sendPacket.AccountId = std::move(packet.AccountId);
 
-						Net::UserRegistry::GetInstance()->AuthenticateUser(user);
+						Net::UserRegistry::GetInstance().AuthenticateUser(user);
 						//send Character List
 						auto listCharacter = [&](int threadId, Lobby::UserSharedPtr& user) {
 							Net::Api api("ListCharacters");
@@ -62,7 +62,7 @@ namespace Lunia {
 									auto j_array = result.resultObjet["accountsLicense"].get<json>();
 									for (json::iterator it = j_array.begin(); it != j_array.end(); it++)
 										if ((*it).get<uint16>() > 16 || (*it).get<uint16>() < 0)
-											Logger::GetInstance()->Exception("[{0}] AccountLicenses out of boundries.", user->GetId());
+											Logger::GetInstance().Exception("[{0}] AccountLicenses out of boundries.", user->GetId());
 										else
 											user->m_AccountLicenses.push_back((*it).get<uint16>());
 								}
@@ -89,23 +89,23 @@ namespace Lunia {
 								}
 							}
 							else
-								Logger::GetInstance()->Warn("[{}] Error requesting for the user's character list", user->GetId());
+								Logger::GetInstance().Warn("[{}] Error requesting for the user's character list", user->GetId());
 						};
-						Utils::thread_pool::GetInstance()->push(listCharacter, user);
+						Utils::thread_pool::GetInstance().push(listCharacter, user);
 						break;
 					}
 					default:
-						//Net::UserRegistry::GetInstance()->RemoveUser(user);
+						//Net::UserRegistry::GetInstance().RemoveUser(user);
 						break;
 					}
 
 					user->Send(sendPacket);
 				});
 
-			fwPacketListener::GetInstance()->Connect(
+			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::CheckSecondPassword& packet)
 				{
-					Logger::GetInstance()->Info("fwPacketListener :: userId@{0} :: protocol@CheckSecondPassword", user->GetId());
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@CheckSecondPassword", user->GetId());
 					Net::Api api("Auth_2nd_Check");
 					api << user->GetAccountName();
 					const Net::Answer result = api.RequestApi();
@@ -125,28 +125,28 @@ namespace Lunia {
 						user->Send(sendPacket);
 					}
 				});
-			fwPacketListener::GetInstance()->Connect(
+			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::CreateSecondPassword& packet)
 				{
-					Logger::GetInstance()->Info("fwPacketListener :: userId@{0} :: protocol@CreateSecondPassword", user->GetId());
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@CreateSecondPassword", user->GetId());
 					
 				});
-			fwPacketListener::GetInstance()->Connect(
+			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::DeleteSecondPassword& packet)
 				{
-					Logger::GetInstance()->Info("fwPacketListener :: userId@{0} :: protocol@DeleteSecondPassword", user->GetId());
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@DeleteSecondPassword", user->GetId());
 					
 				});
-			fwPacketListener::GetInstance()->Connect(
+			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::ModifySecondPassword& packet)
 				{
-					Logger::GetInstance()->Info("fwPacketListener :: userId@{0} :: protocol@ModifySecondPassword", user->GetId());
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ModifySecondPassword", user->GetId());
 					
 				});
-			fwPacketListener::GetInstance()->Connect(
+			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::SignInSecondPassword& packet)
 				{
-					Logger::GetInstance()->Info("fwPacketListener :: userId@{0} :: protocol@SignInSecondPassword", user->GetId());
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SignInSecondPassword", user->GetId());
 					
 				});
 		});

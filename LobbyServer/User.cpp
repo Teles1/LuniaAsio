@@ -15,7 +15,7 @@ namespace Lunia {
 			}
 			catch (Exception&) // catch something like buffer overflow
 			{
-				Logger::GetInstance()->Error("User@{0} Unable to Parse packet", this->GetId());
+				Logger::GetInstance().Error("User@{0} Unable to Parse packet", this->GetId());
 				return;
 			}
 
@@ -31,9 +31,9 @@ namespace Lunia {
 
 			Net::StreamReader sReader(buffer);
 
-			auto userPtr = Net::UserRegistry::GetInstance()->GetUserByUserId(this->GetId());
+			auto userPtr = Net::UserRegistry::GetInstance().GetUserByUserId(this->GetId());
 
-			fwPacketListener::GetInstance()->Invoke(userPtr, sReader.GetSerializedTypeHash(), sReader);
+			fwPacketListener::GetInstance().Invoke(userPtr, sReader.GetSerializedTypeHash(), sReader);
 
 			HandleRead();
 			return (uint32)size;

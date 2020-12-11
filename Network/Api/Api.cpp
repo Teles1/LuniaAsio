@@ -5,11 +5,11 @@ namespace Lunia {
         Api::Api(const std::string& reqPage) {
             std::string aux = reqPage; // I need it to be a non const lol
             if (aux == "") {
-                Logger::GetInstance()->Error("The requested Procedure shouldn't be empty!");
+                Logger::GetInstance().Error("The requested Procedure shouldn't be empty!");
                 throw "The requested Procedure shouldn't be empty!";
             }
             if (ApiUrl.size() == 0) {
-                Logger::GetInstance()->Error("The api url shouldn't be empty!");
+                Logger::GetInstance().Error("The api url shouldn't be empty!");
                 throw "The api url shouldn't be empty!";
             }
             if (aux[aux.size() - 1] != '/')
@@ -19,7 +19,7 @@ namespace Lunia {
         }
         Answer Api::RequestApi() const {
             cpr::Response r = cpr::Get(cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ 1000 });
-            Logger::GetInstance()->Info("[{0}]{1}", r.status_code, r.text);
+            Logger::GetInstance().Info("[{0}]{1}", r.status_code, r.text);
             if (r.status_code == 200) {
                 try {
                     json result = json::parse(r.text);
@@ -30,7 +30,7 @@ namespace Lunia {
                     }
                 }
                 catch (...) {
-                    Logger::GetInstance()->Error("Could not parse json!");
+                    Logger::GetInstance().Error("Could not parse json!");
                 }
             }
             return std::move(Answer("Whoops!", -1));

@@ -92,7 +92,7 @@ namespace Lunia {
 		}
 		else
 		{
-			Logger::GetInstance()->Warn("The number of numeric strings is invalid.");
+			Logger::GetInstance().Warn("The number of numeric strings is invalid.");
 			return false;
 		}
 
@@ -145,7 +145,7 @@ namespace Lunia {
 			case Format::Unseparated:
 				return fmt::format(L"{0:04d}{1:02d}{2:02d}", dateValue.Year, dateValue.Month, dateValue.Day);
 			}
-			Logger::GetInstance()->Warn("no format. format = {0}", format);
+			Logger::GetInstance().Warn("no format. format = {0}", format);
 		}
 		return L"";
 	}
@@ -179,7 +179,7 @@ namespace Lunia {
 		if (Parse(rhs))
 			return;
 		else {
-			Logger::GetInstance()->Error("Arguments are invalid");
+			Logger::GetInstance().Error("Arguments are invalid");
 			throw "Arguments are invalid";
 		}
 	}
@@ -264,7 +264,7 @@ namespace Lunia {
 		}
 		else
 		{
-			Logger::GetInstance()->Warn("The number of numeric strings is invalid.");
+			Logger::GetInstance().Warn("The number of numeric strings is invalid.");
 			return false;
 		}
 
@@ -289,7 +289,7 @@ namespace Lunia {
 				return fmt::format(L"{0:042}{1:02d}{2:02d}", timeValue.Hour, timeValue.Minute, timeValue.Second);
 			}
 
-			Logger::GetInstance()->Warn("no format. format = {0}", format);
+			Logger::GetInstance().Warn("no format. format = {0}", format);
 		}
 		return L"";
 	}
@@ -423,7 +423,7 @@ namespace Lunia {
 			return true;
 		}
 
-		Logger::GetInstance()->Error(" The number of numeric strings is invalid.");
+		Logger::GetInstance().Error(" The number of numeric strings is invalid.");
 		return false;
 	}
 	std::wstring DateTime::ToString(Format::type format) const
@@ -688,7 +688,7 @@ namespace Lunia {
 	{
 		if (value == 0)
 		{
-			Logger::GetInstance()->Warn("argument value is zero. value = 0");
+			Logger::GetInstance().Warn("argument value is zero. value = 0");
 			return *this;
 		}
 		else if (value > 0)
@@ -784,7 +784,7 @@ namespace Lunia {
 		}
 		else
 		{
-			Logger::GetInstance()->Warn("argument value isnt valid. {0}", StringUtil::ToASCII(dateTime.ToString()));
+			Logger::GetInstance().Warn("argument value isnt valid. {0}", StringUtil::ToASCII(dateTime.ToString()));
 		}
 		return *this;
 	}
@@ -792,7 +792,7 @@ namespace Lunia {
 	{
 		if (value == 0)
 		{
-			Logger::GetInstance()->Warn("argument value is zero. value = 0");
+			Logger::GetInstance().Warn("argument value is zero. value = 0");
 			return *this;
 		}
 		else if (value > 0)
@@ -862,7 +862,7 @@ namespace Lunia {
 			return;
 		else 
 		{
-			Logger::GetInstance()->Exception("Arguments are invailid");
+			Logger::GetInstance().Exception("Arguments are invailid");
 			throw "Arguments are invailid";
 		}
 	}
@@ -999,7 +999,7 @@ namespace Lunia {
 	DateTime::Week::type DateTime::Date::GetDayOfWeek() const
 	{
 		if (!IsValid()) {
-			Logger::GetInstance()->Warn("invalid value. Year = {0}, Month = {1}, Day = {2}"
+			Logger::GetInstance().Warn("invalid value. Year = {0}, Month = {1}, Day = {2}"
 				, dateValue.Year, dateValue.Month, dateValue.Day);
 			throw fmt::format("invalid value. Year = {0}, Month = {1}, Day = {2}"
 				, dateValue.Year, dateValue.Month, dateValue.Day);
@@ -1069,19 +1069,19 @@ namespace Lunia {
 			return Week::Saturday;
 		}
 
-		Logger::GetInstance()->Warn("value error, res={0}", res);
+		Logger::GetInstance().Warn("value error, res={0}", res);
 		return Week::Sunday;
 	}
 	bool DateTime::Date::IsValid() const
 	{
 		if (dateValue.Month > 12 || dateValue.Month < 1)
 		{
-			Logger::GetInstance()->Error("error value. Month = {0}, Day = {1}", dateValue.Month, dateValue.Day);
+			Logger::GetInstance().Error("error value. Month = {0}, Day = {1}", dateValue.Month, dateValue.Day);
 			return false;
 		}
 		else if (dateValue.Day < 1 || dateValue.Day > GetLastDayOfMonth(dateValue.Year, dateValue.Month))
 		{
-			Logger::GetInstance()->Error("error value. Month = {0}, Day = {1}", dateValue.Month, dateValue.Day);
+			Logger::GetInstance().Error("error value. Month = {0}, Day = {1}", dateValue.Month, dateValue.Day);
 			return false;
 		}
 		return true;
@@ -1112,7 +1112,7 @@ namespace Lunia {
 			28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 /* December */ };
 
 		if (month < 1 || month>12) {
-			Logger::GetInstance()->Exception("invalid dateValue.Month. month = {0}", month);
+			Logger::GetInstance().Exception("invalid dateValue.Month. month = {0}", month);
 			throw fmt::format("invalid dateValue.Month. month = {0}", month);
 		}
 
@@ -1206,7 +1206,7 @@ namespace Lunia {
 	DateTime::Date& DateTime::Date::Add(Unit::type unit, int32 value)
 	{
 		if (unit >= Unit::Hour) {
-			Logger::GetInstance()->Exception("argument is invalid, unit = {0}", unit);
+			Logger::GetInstance().Exception("argument is invalid, unit = {0}", unit);
 			throw fmt::format("argument is invalid, unit = {0}", unit);
 		}
 
@@ -1358,22 +1358,22 @@ namespace Lunia {
 
 		if (timeValue.Hour < 0 || timeValue.Hour >= Constant::HoursInADay)
 		{
-			Logger::GetInstance()->Warn("Invalid value, Unit::Hour = {0}. It can be only 0~{1}", timeValue.Hour, Constant::HoursInADay - 1);
+			Logger::GetInstance().Warn("Invalid value, Unit::Hour = {0}. It can be only 0~{1}", timeValue.Hour, Constant::HoursInADay - 1);
 			result = false;
 		}
 		if (timeValue.Minute < 0 || timeValue.Minute >= Constant::MinutesInAnHour)
 		{
-			Logger::GetInstance()->Warn("Invalid value, Unit::Minute = {0}. It can be only 0~{1}", timeValue.Minute, Constant::MinutesInAnHour - 1);
+			Logger::GetInstance().Warn("Invalid value, Unit::Minute = {0}. It can be only 0~{1}", timeValue.Minute, Constant::MinutesInAnHour - 1);
 			result = false;
 		}
 		if (timeValue.Second < 0 || timeValue.Second >= Constant::SecondsInAMinute)
 		{
-			Logger::GetInstance()->Warn("Invalid value, Unit::Second = {0}. It can be only 0~{1}", timeValue.Second, Constant::SecondsInAMinute - 1);
+			Logger::GetInstance().Warn("Invalid value, Unit::Second = {0}. It can be only 0~{1}", timeValue.Second, Constant::SecondsInAMinute - 1);
 			result = false;
 		}
 		if (timeValue.MilliSec < 0 || timeValue.MilliSec >= Constant::MilliSecondsInASecond)
 		{
-			Logger::GetInstance()->Warn("Invalid value, Unit::MilliSecond= {0}. It can be only 0~{1}", timeValue.MilliSec, Constant::MilliSecondsInASecond - 1);
+			Logger::GetInstance().Warn("Invalid value, Unit::MilliSecond= {0}. It can be only 0~{1}", timeValue.MilliSec, Constant::MilliSecondsInASecond - 1);
 			result = false;
 		}
 
@@ -1382,7 +1382,7 @@ namespace Lunia {
 	DateTime::Time& DateTime::Time::Add(Unit::type unit, int32 value)
 	{
 		if (unit < Unit::Hour) {
-			Logger::GetInstance()->Exception("argument is invalid. unit = {0}", unit);
+			Logger::GetInstance().Exception("argument is invalid. unit = {0}", unit);
 			throw fmt::format("argument is invalid. unit = {0}", unit);
 		}
 
@@ -1555,7 +1555,7 @@ namespace Lunia {
 	{
 		if (unit < Unit::Hour) 
 		{
-			Logger::GetInstance()->Exception("argument is invalid. unit = {0}", unit);
+			Logger::GetInstance().Exception("argument is invalid. unit = {0}", unit);
 			throw fmt::format("argument is invalid. unit = {0}", unit);
 		}
 

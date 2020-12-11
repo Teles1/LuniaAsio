@@ -44,31 +44,31 @@ public:
 
 	void RequireMajor(int major) const {
 		if (this->Major != major) 
-			Logger::GetInstance()->Warn("Version mismatch: {0} major version {1} != {2}", (char*)this->Type, this->Major, major);
+			Logger::GetInstance().Warn("Version mismatch: {0} major version {1} != {2}", (char*)this->Type, this->Major, major);
 	}
 
 	void RequireLess(int major, int minor) const {
 		if (!Less(major, minor))
-			Logger::GetInstance()->Warn("Version mismatch: '{0}' version {1}.{2} >= {3}.{4}", (char*)this->Type, this->Major, this->Minor, major, minor);
+			Logger::GetInstance().Warn("Version mismatch: '{0}' version {1}.{2} >= {3}.{4}", (char*)this->Type, this->Major, this->Minor, major, minor);
 	}
 
 	void RequireLessEquals(int major, int minor) const {
 		if (!LessEquals(major, minor))
-			Logger::GetInstance()->Warn("Version mismatch: '{0}' version {1}.{2} > {3}.{4}", (char*)this->Type, this->Major, this->Minor, major, minor);
+			Logger::GetInstance().Warn("Version mismatch: '{0}' version {1}.{2} > {3}.{4}", (char*)this->Type, this->Major, this->Minor, major, minor);
 	}
 
 	void RequireGreater(int major, int minor) const {
 		if (!Greater(major, minor))
-			Logger::GetInstance()->Warn("Version mismatch: '{0}' version {0}.{1} <= {2}.{3}", (char*)this->Type, this->Major, this->Minor, major, minor);
+			Logger::GetInstance().Warn("Version mismatch: '{0}' version {0}.{1} <= {2}.{3}", (char*)this->Type, this->Major, this->Minor, major, minor);
 	}
 
 	void RequireGreaterEquals(int major, int minor) const {
 		if (!GreaterEquals(major, minor)) 
-			Logger::GetInstance()->Warn("Version mismatch: '{0}' version {0}.{1} < {2}.{3}", (char*)this->Type, this->Major, this->Minor, major, minor);
+			Logger::GetInstance().Warn("Version mismatch: '{0}' version {0}.{1} < {2}.{3}", (char*)this->Type, this->Major, this->Minor, major, minor);
 	}
 
 	void RequireEquals(int major, int minor) const {
 		if (!Equals(major, minor))
-			Logger::GetInstance()->Warn("Version mismatch: '{0}' version {0}.{1} != {2}.{3}", (char*)this->Type, this->Major, this->Minor, major, minor);
+			Logger::GetInstance().Warn("Version mismatch: '{0}' version {0}.{1} != {2}.{3}", (char*)this->Type, this->Major, this->Minor, major, minor);
 	}
 };

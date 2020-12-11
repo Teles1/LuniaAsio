@@ -70,7 +70,7 @@ namespace Lunia {
 			{
 				in.Begin(TypeName);
 				in.Read(L"Characters", Characters);
-				Logger::GetInstance()->Warn("ListCharacter shouldn't be getting called by the client.");
+				Logger::GetInstance().Warn("ListCharacter shouldn't be getting called by the client.");
 			}
 
 			const wchar_t* CharacterSlots::TypeName = L"CharacterSlots";

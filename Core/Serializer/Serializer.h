@@ -255,10 +255,10 @@ namespace Lunia {
 					in.Read(L"size", fsize);
 					if (fsize >= size) {
 						if (fsize != size)
-							Logger::GetInstance()->Warn("static array being deserialized has bigger size on file");
+							Logger::GetInstance().Warn("static array being deserialized has bigger size on file");
 					}
 					else {
-						Logger::GetInstance()->Exception(L"static array being deserialized has smaller size on file");
+						Logger::GetInstance().Exception(L"static array being deserialized has smaller size on file");
 					}
 
 					for (unsigned int i = 0; i < size; ++i) {
@@ -403,10 +403,10 @@ namespace Lunia {
 					size_t fsize = in.GetCount(L"item");
 					if (fsize >= size) {
 						if (fsize != size)
-							Logger::GetInstance()->Warn("static array being deserialized has bigger size on file");
+							Logger::GetInstance().Warn("static array being deserialized has bigger size on file");
 					}
 					else {
-						Logger::GetInstance()->Exception("static array being deserialized has smaller size on file");
+						Logger::GetInstance().Exception("static array being deserialized has smaller size on file");
 					}
 
 					for (unsigned int i = 0; i < size; ++i) {
@@ -885,7 +885,14 @@ namespace Lunia {
 			value = static_cast<T>(tmp);
 		}
 #pragma endregion	
-}
+		
+		class IRefCountedStreamWriter : public IStreamWriter, public IReferenceCounted
+		{
+		};
+		class IRefCountedStreamReader : public IStreamReader, public IReferenceCounted
+		{
+		};
+	}
 }
 #ifndef NET_SERIALIZABLE
 #define NET_SERIALIZABLE                                          \

@@ -9,34 +9,36 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 
 #include <memory>
-#include <mutex>
 
 struct Logger{
 public:
 	template <typename... Args>
-	void Info(const std::string& message, const Args &... args) {
+	inline void Info(const std::string& message, const Args &... args) {
 		m_logger->info(fmt::format(message, args...));
 	}
 	template <typename... Args>
-	void Warn(const std::string& message, const Args &... args) {
+	inline void Warn(const std::string& message, const Args &... args) {
 		m_logger->warn(fmt::format(message, args...));
 	}
 	template <typename... Args>
-	void Debug(const std::string& message, const Args &... args) {
+	inline void Debug(const std::string& message, const Args &... args) {
 		m_logger->debug(fmt::format(message, args...));
 	}
 	template <typename... Args>
-	void Error(const std::string& message, const Args &... args) {
+	inline void Error(const std::string& message, const Args &... args) {
 		m_logger->error(fmt::format(message, args...));
 	}
 	template <typename... Args>
-	void Exception(const std::string& message, const Args &... args) {
+	inline void Exception(const std::string& message, const Args &... args) {
 		m_logger->critical(fmt::format(message, args...));
 		throw fmt::format(message, args...);
 	}
 private:
-	Logger(const std::string& name); // Private because I want only members to be able to construct which is GetInstance
-	std::shared_ptr<spdlog::logger>					m_logger; 
+	inline Logger(const std::string& name) {
+		m_logger = spdlog::stdout_color_mt(name);
+		m_logger->set_pattern("[%X %^%l%$] => %v");
+	}
+	std::shared_ptr<spdlog::logger>					m_logger; //spd_logger sharedpointer
 #pragma region Sigleton
 public:
 	Logger(Logger&&) = delete;
@@ -44,13 +46,12 @@ public:
 	Logger(const Logger&) = delete;
 	Logger& operator= (const Logger&) = delete;
 	~Logger() {}
-	static std::shared_ptr<Logger>& GetInstance(const std::string& name = "DefaultName");
-private:
-	static std::mutex								m_lock;
-	static std::shared_ptr<Logger>					m_instance;
+	inline static Logger& GetInstance(const std::string& name = "DefaultName") {
+		static Logger m_instance(name);
+		return m_instance;
+	}
 #pragma endregion
 };
-typedef std::shared_ptr<Logger> LoggerPtr;
 #endif // !Logger_GUARD
 
 

@@ -75,9 +75,7 @@ namespace Lunia {
             //thread_pool(int nThreads) { this->init(); this->resize(nThreads); }
 
             // the destructor waits for all the functions in the queue to be finished
-            ~thread_pool() {
-                this->stop(true);
-            }
+            ~thread_pool() { this->stop(true); }
 
             // get the number of running threads in the pool
             int size() { return static_cast<int>(this->threads.size()); }
@@ -195,21 +193,20 @@ namespace Lunia {
                 this->cv.notify_one();
                 return pck->get_future();
             }
-
 #pragma region Singleton
-            static std::shared_ptr<thread_pool>& GetInstance();
-        private:
-            static std::shared_ptr<thread_pool> m_instance;
-            static std::mutex _mutex;
+            inline static thread_pool& GetInstance(){
+                static thread_pool m_instance;
+                return m_instance;
+            }
 #pragma endregion
-        private:
-            thread_pool(int nThreads) { this->init(); this->resize(nThreads); }
+        public:
             // deleted
             thread_pool(const thread_pool&) = delete;
             thread_pool(thread_pool&&) = delete;
             thread_pool& operator=(const thread_pool&) = delete;
             thread_pool& operator=(thread_pool&&) = delete;
-
+        private:
+            thread_pool() { /*printf("Constructed\n"); */this->init(); this->resize(std::thread::hardware_concurrency()); }
             void set_thread(int i) {
                 std::shared_ptr<std::atomic<bool>> flag(this->flags[i]); // a copy of the shared ptr to the flag
                 auto f = [this, i, flag/* a copy of the shared ptr to the flag */]() {

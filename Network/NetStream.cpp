@@ -33,7 +33,7 @@ namespace Lunia {
         void StreamWriter::Write(const Serializer::ISerializable& value) {
             buffer.Clear();
             if (buffer.GetMaxLength() < sizeof(LengthType)) {  // buffer overflow
-                Logger::GetInstance()->Exception("buffer overflow on reserving length");
+                Logger::GetInstance().Exception("buffer overflow on reserving length");
             }
 
             buffer.Append(sizeof(LengthType));  // reserve size
@@ -62,7 +62,7 @@ namespace Lunia {
             if (name == L"AnswerSecurityCode")
                 HashType type = 0xC52F;
             if (buffer.GetMaxLength() < sizeof(type)) {  // buffer overflow
-                Logger::GetInstance()->Exception("buffer overflow on hashing type");
+                Logger::GetInstance().Exception("buffer overflow on hashing type");
             }
             buffer.Append(&type, sizeof(type));
         }
@@ -138,7 +138,7 @@ namespace Lunia {
         void StreamWriter::Write(const wchar_t* name, const Serializer::ISerializable& value) {
             HashType hash = Hash(name);
             if (buffer.GetMaxLength() < sizeof(hash)) {  // buffer overflow
-                Logger::GetInstance()->Exception("buffer overflow on hashing value");
+                Logger::GetInstance().Exception("buffer overflow on hashing value");
             }
 
             buffer.Append(&hash, sizeof(hash));
@@ -184,7 +184,7 @@ namespace Lunia {
             return IStreamReader::Type::Flat;
         }
         size_t StreamReader::GetCount(const wchar_t*) const {
-            Logger::GetInstance()->Exception("unsurppoted method in flat stream");
+            Logger::GetInstance().Exception("unsurppoted method in flat stream");
             return 0;
         }
 
@@ -204,7 +204,7 @@ namespace Lunia {
         }
 
         bool StreamReader::Exists(const wchar_t* /*name*/) const {
-            Logger::GetInstance()->Exception("unsurppoted method in flat stream");
+            Logger::GetInstance().Exception("unsurppoted method in flat stream");
             return false;
         }
 
@@ -272,10 +272,10 @@ namespace Lunia {
         // Client crap
         void StreamReader::Read(const wchar_t* name, Serializer::ISerializable& value) {
             HashType hash = Hash(name);
-            Logger::GetInstance()->Info("name[{0}] hash[{1}]", StringUtil::ToASCII(name), hash);
+            Logger::GetInstance().Info("name[{0}] hash[{1}]", StringUtil::ToASCII(name), hash);
             HashType check = *(HashType*)working;
             if (hash != check) {
-                Logger::GetInstance()->Exception("NetStream value mismatched name:{0}(hash {1}) is "
+                Logger::GetInstance().Exception("NetStream value mismatched name:{0}(hash {1}) is "
                     "not{2} [stream size:{3}, currentPosition:{4}]",  StringUtil::ToASCII(name), hash, check, GetNetStreamSize(),  (int)((char*)working - (char*)buffer));
             }
             working += sizeof(hash);
@@ -284,7 +284,7 @@ namespace Lunia {
                 value.Deserialize(*this);
             }
             catch (...) {
-                Logger::GetInstance()->Exception("buffer overflow detected on deserializing {0}({1})", StringUtil::ToASCII(name), hash);
+                Logger::GetInstance().Exception("buffer overflow detected on deserializing {0}({1})", StringUtil::ToASCII(name), hash);
             }
         }
 

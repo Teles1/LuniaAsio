@@ -12,7 +12,7 @@ namespace Lunia {
 				, m_userId(userId)
 				, m_NumberOfSlots(0)
 			{
-				Logger::GetInstance()->Info("User :: Hey, I was created!", GetId());
+				Logger::GetInstance().Info("User :: Hey, I was created!", GetId());
 			}
 
 			uint32 GetId() const;

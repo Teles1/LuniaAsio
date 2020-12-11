@@ -20,7 +20,7 @@ namespace Lunia {
 
 		void IStreamWriter::WriteRawData(const wchar_t*, const unsigned char*, unsigned int)
 		{
-			Logger::GetInstance()->Exception("active serializer implementation doesn't support writing raw-data");
+			Logger::GetInstance().Exception("active serializer implementation doesn't support writing raw-data");
 		};
 
 		void IStreamReader::Begin(const wchar_t* type, Version& version)
@@ -33,7 +33,7 @@ namespace Lunia {
 
 		void IStreamReader::ReadRawData(const wchar_t*, unsigned char*, unsigned int)
 		{
-			Logger::GetInstance()->Exception("active deserializer implementation doesn't support reading raw-data");
+			Logger::GetInstance().Exception("active deserializer implementation doesn't support reading raw-data");
 		}
 
 		void IStreamReader::Read(const wchar_t* name, std::wstring& value)

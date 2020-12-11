@@ -35,15 +35,14 @@ namespace Lunia {
         {
             T value;
         };
-
-    public:
-        static std::mutex						 m_lock;
-        static std::shared_ptr<fwPacketListener> m_instance;
     public:
         fwPacketListener(const fwPacketListener&) = delete; //anti creation  of a copy
         fwPacketListener& operator= (const fwPacketListener&) = delete; // anti copy
         ~fwPacketListener() { }
-        static std::shared_ptr<fwPacketListener>& GetInstance();
+        inline static fwPacketListener& GetInstance() {
+            static fwPacketListener m_instance;
+            return m_instance;
+        }
 
     public:
         fwPacketListener() {};
@@ -76,7 +75,7 @@ namespace Lunia {
                 it->second(user, streamReader);
             }
             else
-                Logger::GetInstance()->Warn("fwPacket::Invoke::user{0} unhandled packet [{1:#4x}]", user->GetId(), packetHeaderHash);
+                Logger::GetInstance().Warn("fwPacket::Invoke::user{0} unhandled packet [{1:#4x}]", user->GetId(), packetHeaderHash);
             //do something else ?
         }
     private:

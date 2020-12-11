@@ -93,7 +93,7 @@ namespace Lunia {
 			template<typename T>
 			void ReadBaseType(const wchar_t* name, T& value) {
 				if (!CanRead(sizeof(T))) {
-					Logger::GetInstance()->Exception("Cannot read Base Type past stream.");
+					Logger::GetInstance().Exception("Cannot read Base Type past stream.");
 				}
 				memcpy(&value, buffer, sizeof(T));
 				buffer += sizeof(T);
@@ -103,7 +103,7 @@ namespace Lunia {
 				LengthType strSize;
 				Read(name, strSize);
 				if (!CanRead(sizeof(typename T::value_type) * strSize)) {
-					Logger::GetInstance()->Exception("Cannot read string past stream.");
+					Logger::GetInstance().Exception("Cannot read string past stream.");
 				}
 				value = (typename T::value_type*)buffer;
 				buffer += sizeof(typename T::value_type) * strSize;
@@ -111,7 +111,7 @@ namespace Lunia {
 			}
 			bool CanRead(uint16 size) {
 				if (size + buffer > endOfBuffer) {
-					Logger::GetInstance()->Exception("Cannot read past stream.", 0);
+					Logger::GetInstance().Exception("Cannot read past stream.", 0);
 					return false;
 				}
 				return true;
@@ -156,7 +156,7 @@ namespace Lunia {
 				if (name == L"AnswerSecurityCode")
 					HashType type = 0xC52F;
 				if (buffer.GetMaxLength() < sizeof(type)) {  // buffer overflow
-					Logger::GetInstance()->Exception("buffer overflow on hashing type");
+					Logger::GetInstance().Exception("buffer overflow on hashing type");
 				}
 				buffer.Append(&type, sizeof(type));
 			}

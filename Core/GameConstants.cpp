@@ -231,7 +231,7 @@ namespace Lunia {
 				}
 				break;
 			}
-			Logger::GetInstance()->Info("[Constants::DirectionF::GetRealDirection] Unknown Direction ({0}/{1})", (int)myDir, (int)relativeD);
+			Logger::GetInstance().Info("[Constants::DirectionF::GetRealDirection] Unknown Direction ({0}/{1})", (int)myDir, (int)relativeD);
 			return Constants::Direction::Up;
 		}
 
@@ -261,7 +261,7 @@ namespace Lunia {
 				return Constants::DamageType::INDEPENDENCE;
 			else {
 				//throw Exception(ALLM_EXCEPTION((L"Warning : Not Exist Constants::DamageType : %s", str.c_str())));
-				Logger::GetInstance()->Info("Warning : Not Exist Constants::DamageType : {0}", StringUtil::ToASCII(str.c_str()));
+				Logger::GetInstance().Info("Warning : Not Exist Constants::DamageType : {0}", StringUtil::ToASCII(str.c_str()));
 				throw(fmt::format(L"Warning : Not Exist Constants::DamageType : {0}", str.c_str()));
 			}
 		}
@@ -296,7 +296,7 @@ namespace Lunia {
 			if (type < ClassType::Healer || type >= ClassType::NumberOfClassTypes)
 			{
 				//throw Exception(ALLM_EXCEPTION((L"Warring : Constants::GetClassHash : %d", (int)type)));
-				Logger::GetInstance()->Info("Warring : Constants::GetClassHash : {0}", (int)type);
+				Logger::GetInstance().Info("Warring : Constants::GetClassHash : {0}", (int)type);
 				throw(fmt::format(L"Warring : Constants::GetClassHash : {0}", (int)type));
 				//return classHash[0];
 			}
@@ -392,7 +392,7 @@ namespace Lunia {
 			}
 			if (type < ClassType::Healer || type >= ClassType::NumberOfClassTypes)
 			{
-				Logger::GetInstance()->Info("Warring : Constants::GetClassStr : {0}", (int)type);
+				Logger::GetInstance().Info("Warring : Constants::GetClassStr : {0}", (int)type);
 				throw(fmt::format(L"Warring : Constants::GetClassHash : {0}", (int)type));
 				//return L"Eir";
 			}
@@ -506,7 +506,7 @@ namespace Lunia {
 			case PET_ETC1:		return Equipment::Pet_Etc1;
 			case PET_ETC2:		return Equipment::Pet_Etc2;
 			}
-			Logger::GetInstance()->Info("can not found Equip position: {0}", static_cast<int>(part));
+			Logger::GetInstance().Info("can not found Equip position: {0}", static_cast<int>(part));
 			throw(fmt::format(L"can not found Equip position: {0}", static_cast<int>(part)));
 		}
 		Constants::EquipFlag Constants::GetEquipFlag(Constants::EquipParts part)
@@ -526,7 +526,7 @@ namespace Lunia {
 			case EquipParts::CASH_ETC1:			return EquipFlag::CASH_Etc1;
 			case EquipParts::CASH_ETC2:			return EquipFlag::CASH_Etc2;
 			}
-			Logger::GetInstance()->Info("can not found Equip Flag: {0}", static_cast<int>(part));
+			Logger::GetInstance().Info("can not found Equip Flag: {0}", static_cast<int>(part));
 			throw(fmt::format(L"can not found Equip Flag: {0}", static_cast<int>(part)));
 		}
 		Constants::EquipParts Constants::GetEquipParts(Equipment position)
@@ -565,7 +565,7 @@ namespace Lunia {
 			case Equipment::Pet_Etc1:			return EquipParts::PET_ETC1;
 			case Equipment::Pet_Etc2:			return EquipParts::PET_ETC2;
 			}
-			Logger::GetInstance()->Info("can not found Equip Part: {0}", static_cast<int>(position));
+			Logger::GetInstance().Info("can not found Equip Part: {0}", static_cast<int>(position));
 			throw(fmt::format(L"can not found Equip Part: {0}", static_cast<int>(position)));
 		}
 
@@ -967,7 +967,7 @@ namespace Lunia {
 			else if (wcscmp(string, L"PartyChat") == 0)			return XRated::Constants::ChatTypes::PartyChat;
 			else if (wcscmp(string, L"PartyNoticeChat") == 0)		return XRated::Constants::ChatTypes::PartyNoticeChat;
 
-			Logger::GetInstance()->Info("can't found chat types = {0}", StringUtil::ToASCII(string));
+			Logger::GetInstance().Info("can't found chat types = {0}", StringUtil::ToASCII(string));
 			throw(fmt::format(L"can't found chat types = {0}", string));
 		}
 		const wchar_t* Constants::ConvertChatTypesToString(Constants::ChatTypes type)
@@ -995,7 +995,7 @@ namespace Lunia {
 			case Constants::ChatTypes::PartyChat:			return L"PartyChat";
 			case Constants::ChatTypes::PartyNoticeChat:		return L"PartyNoticeChat";
 			default:
-				Logger::GetInstance()->Info("can't found chat types = {0}", type);
+				Logger::GetInstance().Info("can't found chat types = {0}", type);
 				throw(fmt::format(L"can't found chat types = {0}", type));
 			}
 		}
@@ -3454,7 +3454,7 @@ namespace Lunia {
 				Equipments.at(pos).InstanceEx = instance;
 				return;
 			}
-			Logger::GetInstance()->Info("invalid pet equipment position : {0}", position);
+			Logger::GetInstance().Info("invalid pet equipment position : {0}", position);
 			throw(fmt::format(L"invalid pet equipment position : {0}", position));
 		}
 		void Pet::UnEquipment(Constants::Equipment position)
@@ -3465,7 +3465,7 @@ namespace Lunia {
 				Equipments.at(pos).InstanceEx = 0;
 				return;
 			}
-			Logger::GetInstance()->Info("invalid pet equipment position : {0}", position);
+			Logger::GetInstance().Info("invalid pet equipment position : {0}", position);
 			throw(fmt::format(L"invalid pet equipment position : {0}", position));
 		}
 		void Pet::AllUnEquipment()
@@ -3485,7 +3485,7 @@ namespace Lunia {
 				}
 				return NULL;
 			}
-			Logger::GetInstance()->Info("invalid pet equipment position : {0}", position);
+			Logger::GetInstance().Info("invalid pet equipment position : {0}", position);
 			throw(fmt::format(L"invalid pet equipment position : {0}", position));
 		}
 

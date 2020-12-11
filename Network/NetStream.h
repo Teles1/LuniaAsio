@@ -55,7 +55,7 @@ namespace Lunia {
 
                 if ((unsigned int)buffer.GetMaxLength() <
                     sizeof(size) + size * sizeof(T::value_type)) {
-                    Logger::GetInstance()->Exception("buffer overflow at writing string type");
+                    Logger::GetInstance().Exception("buffer overflow at writing string type");
                 }
 
                 buffer.Append(&size, sizeof(size));
@@ -108,7 +108,7 @@ namespace Lunia {
             template <typename T>
             void ReadBaseType(const wchar_t* /*name*/, T& value) {
                 if (working + sizeof(value) > endOfBuffer)
-                    Logger::GetInstance()->Exception("buffer overflow at reading basic type");
+                    Logger::GetInstance().Exception("buffer overflow at reading basic type");
                 memcpy(&value, working, sizeof(value));
                 working += sizeof(value);
             }
@@ -116,11 +116,11 @@ namespace Lunia {
             template <typename T>
             void ReadString(const wchar_t* /*name*/, T& value) {
                 if (working + sizeof(LengthType) > endOfBuffer)
-                    Logger::GetInstance()->Exception("buffer overflow at reading string size");
+                    Logger::GetInstance().Exception("buffer overflow at reading string size");
                 LengthType size = *(LengthType*)working;
                 working += sizeof(size);
                 if (working + size * sizeof(typename T::value_type) > endOfBuffer)
-                    Logger::GetInstance()->Exception("buffer overflow at reading string");
+                    Logger::GetInstance().Exception("buffer overflow at reading string");
                 value = (typename T::value_type*)working;
                 working += (size * sizeof(typename T::value_type));
             }

@@ -2808,7 +2808,7 @@ namespace Lunia {
 				};
 				if (grade < 0 || grade >= Grade::Cnt)
 				{
-					Logger::GetInstance()->Exception("Wrong gradeType: {0}", grade);
+					Logger::GetInstance().Exception("Wrong gradeType: {0}", grade);
                     throw fmt::format("Wrong gradeType: {0}", grade);
 				}
 				return strGrade[grade];
