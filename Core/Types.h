@@ -22,6 +22,17 @@ namespace Lunia {
 }
 
 namespace Lunia {
+	/*
+		struct Example{
+			std::mutex mtx;
+			void EditMember(){
+				if this functions is going to edit something that might be needed somewhere else at the same time in different threads we
+				shall use
+				AutoLock(mtx);
+			}//AutoLock goes out of scope there fore the lock is released.
+		};
+	*/
+	typedef std::unique_lock<std::mutex> AutoLock;
 	namespace Constants {
 		const uint32 Version = 0x17;
 		const HashType NetStreamHash = 0x55E0;

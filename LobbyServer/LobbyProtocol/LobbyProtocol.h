@@ -131,7 +131,7 @@ namespace Lunia {
 				NET_SERIALIZABLE;
 			};
 
-
+			//goes from server to client.
 			struct SecondPasswordChecked : public Serializer::ISerializable
 			{
 				enum Results
@@ -192,6 +192,17 @@ namespace Lunia {
 				NET_SERIALIZABLE;
 			};
 
+
+			struct Terminate : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					NoResponse = 0xff,
+				} Result;
+
+				NET_SERIALIZABLE;
+			};
 		}//Protocol
 	}//Lobby
 }

@@ -131,8 +131,11 @@ namespace Lunia {
         public:
             //need size to avoid the strcpy warning so we can safely check for overflows.
             uint32 size;
-
-            // StaticBuffer< 1024*8 > buffer; // 8K buffer
+            void PrintOutData() {
+                for (uint32 i = 0; i < size; i++)
+                    printf("%.2X", ((unsigned char*)buffer)[i]);
+                printf("\n");
+            }
         };
 
 	}

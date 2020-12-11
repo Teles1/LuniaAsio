@@ -74,8 +74,10 @@ namespace Lunia {
             {
                 it->second(user, streamReader);
             }
-            else
+            else {
                 Logger::GetInstance().Warn("fwPacket::Invoke::user{0} unhandled packet [{1:#4x}]", user->GetId(), packetHeaderHash);
+                streamReader.PrintOutData();
+            }
             //do something else ?
         }
     private:

@@ -28,7 +28,7 @@ namespace Lunia {
 				m_autorizedUsersByUserId[user->GetId()].reset();
 			}
 
-			std::lock_guard<std::mutex> usersLock(m_usersMutex);
+			AutoLock usersLock(m_usersMutex);
 			for (int i = 0; m_users.size(); i++)
 			{
 				if (m_users[i]->GetId() == user->GetId())

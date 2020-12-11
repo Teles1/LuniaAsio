@@ -25,7 +25,6 @@ namespace Lunia {
 					user->Send(sendPacket);
 					user->QueryAliveAuth();
 				});
-
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::Auth& packet)
 				{
@@ -101,7 +100,6 @@ namespace Lunia {
 
 					user->Send(sendPacket);
 				});
-
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::CheckSecondPassword& packet)
 				{
@@ -148,6 +146,16 @@ namespace Lunia {
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SignInSecondPassword", user->GetId());
 					
+				});
+			fwPacketListener::GetInstance().Connect(
+				[](Lobby::UserSharedPtr& user, Lobby::Protocol::Terminate& packet)
+				{
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Terminate", user->GetId());
+					//Gotta safely disconect the user. 
+					Lobby::Protocol::Terminate sendPacket;
+					sendPacket.Result = Lobby::Protocol::Terminate::Results::Ok;
+					user->Send(sendPacket);
+					Net::UserRegistry::GetInstance().RemoveUser(user);
 				});
 		});
 }

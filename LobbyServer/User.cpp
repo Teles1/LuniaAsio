@@ -54,6 +54,7 @@ namespace Lunia {
 
 		void User::SetIsAuthenticated()
 		{
+			AutoLock _l(mtx);
 			this->m_isAuthenticated = true;
 		}
 
@@ -64,11 +65,8 @@ namespace Lunia {
 
 		bool User::PassedSecondPassword(const bool& newBool)
 		{
-			mtx.lock();
-			{
-				this->m_isAuthenticated = newBool;
-			}
-			mtx.unlock();
+			AutoLock _l(mtx);
+			this->m_isAuthenticated = newBool;
 			return this->m_isAuthenticated;
 		}
 
@@ -78,25 +76,20 @@ namespace Lunia {
 
 		void User::SetId(const uint32& userId)
 		{
+			AutoLock _l(mtx);
 			m_userId = userId;
 		}
 
 		void User::SetLocale(const String& inLocale)
 		{
-			mtx.lock();
-			{
-				this->m_Locale = inLocale;
-			}
-			mtx.unlock();
+			std::unique_lock<std::mutex> _l(mtx);
+			this->m_Locale = inLocale;
 		}
 
 		void User::SetAccountName(const String& inAccountName)
 		{
-			mtx.lock();
-			{
-				this->m_AccountName = inAccountName;
-			}
-			mtx.unlock();
+			std::unique_lock<std::mutex> _l(mtx);
+			this->m_AccountName = inAccountName;
 		}
 		String User::GetAccountName() const
 		{

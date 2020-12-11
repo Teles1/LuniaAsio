@@ -240,6 +240,17 @@ namespace Lunia {
 				in.Read(L"Result", reinterpret_cast<int&>(Result));
 			}
 
+			const wchar_t* Terminate::TypeName = L"Terminate";
+			const HashType Terminate::TypeHash = StringUtil::Hash(Terminate::TypeName);
+			void Terminate::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"Result", static_cast<const int>(Result));
+			}
+			void Terminate::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+			}
 		}
 	}
 }
