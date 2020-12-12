@@ -29,15 +29,12 @@ namespace Lunia {
 			}
 
 			AutoLock usersLock(m_usersMutex);
-			for (int i = 0; m_users.size(); i++)
+			for (auto it = m_users.begin(); it < m_users.end(); it++)
 			{
-				if (m_users[i]->GetId() == user->GetId())
+				if ((*it)->GetId() == user->GetId())
 				{
-
-					m_users[i]->CloseSocket();
-
-					m_users.erase(m_users.begin()+i);
-
+					(*it)->CloseSocket();
+					m_users.erase(it);
 					break;
 				}
 			}
