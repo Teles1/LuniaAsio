@@ -1,7 +1,8 @@
 # Lunia
 Lunia Emulator
+Recommendation is to make sure that you have the integration enabled to make your life easier with .libs and .objs.
 
-# Vcpkg - Recommendation is making sure that you have the integration on to make your life easier with .libs and .objs.
+# Vcpkg
 
 1. git pull https://github.com/microsoft/vcpkg
 2. go to your environment variables
