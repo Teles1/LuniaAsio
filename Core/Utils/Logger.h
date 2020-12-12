@@ -4,7 +4,7 @@
 
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>
-
+#define SPDLOG_WCHAR_TO_UTF8_SUPPORT
 #include <spdlog/spdlog.h>
 #include "spdlog/sinks/stdout_color_sinks.h"
 
@@ -12,28 +12,134 @@
 
 struct Logger{
 public:
-	template <typename... Args>
-	inline void Info(const std::string& message, const Args &... args) {
-		m_logger->info(fmt::format(message, args...));
+	/*
+		Error
+	*/
+	template<typename... Args> 
+	inline void Error(const std::wstring& message, const Args &... args) {
+		m_logger->error(message, fmt::make_format_args<fmt::wformat_context>(args...) );
 	}
-	template <typename... Args>
-	inline void Warn(const std::string& message, const Args &... args) {
-		m_logger->warn(fmt::format(message, args...));
+
+	template<typename... Args> 
+	inline void Error(const wchar_t* message, const Args &... args) {
+		fmt::wformat_args x = fmt::make_format_args<fmt::wformat_context>(args...);
+		std::wstring aux = fmt::vformat(std::wstring(message), x);
+		m_logger->error(aux);
 	}
-	template <typename... Args>
-	inline void Debug(const std::string& message, const Args &... args) {
-		m_logger->debug(fmt::format(message, args...));
-	}
-	template <typename... Args>
+
+	template<typename... Args> 
 	inline void Error(const std::string& message, const Args &... args) {
-		m_logger->error(fmt::format(message, args...));
+		m_logger->error(message, fmt::make_format_args<fmt::format_context>(args...));
 	}
-	template <typename... Args>
+
+	template<typename... Args> 
+	inline void Error(const char* message, const Args &... args) {
+		m_logger->error(message, args...);
+	}
+	/*
+		Info
+	*/
+	template<typename... Args>
+	inline void Info(const std::wstring& message, const Args &... args) {
+		m_logger->info(message, fmt::make_format_args<fmt::wformat_context>(args...));
+	}
+
+	template<typename... Args>
+	inline void Info(const wchar_t* message, const Args &... args) {
+		fmt::wformat_args x = fmt::make_format_args<fmt::wformat_context>(args...);
+		std::wstring aux = fmt::vformat(std::wstring(message), x);
+		m_logger->info(aux);
+	}
+
+	template<typename... Args>
+	inline void Info(const std::string& message, const Args &... args) {
+		m_logger->info(message, fmt::make_format_args<fmt::format_context>(args...));
+	}
+
+	template<typename... Args>
+	inline void Info(const char* message, const Args &... args) {
+		m_logger->info(message, args...);
+	}
+	/*
+		Warn
+	*/
+	template<typename... Args>
+	inline void Warn(const std::wstring& message, const Args &... args) {
+		m_logger->warn(message, fmt::make_format_args<fmt::wformat_context>(args...));
+	}
+
+	template<typename... Args>
+	inline void Warn(const wchar_t* message, const Args &... args) {
+		fmt::wformat_args x = fmt::make_format_args<fmt::wformat_context>(args...);
+		std::wstring aux = fmt::vformat(std::wstring(message), x);
+		m_logger->warn(aux);
+	}
+
+	template<typename... Args>
+	inline void Warn(const std::string& message, const Args &... args) {
+		m_logger->warn(message, fmt::make_format_args<fmt::format_context>(args...));
+	}
+
+	template<typename... Args>
+	inline void Warn(const char* message, const Args &... args) {
+		m_logger->warn(message, args...);
+	}
+
+	/*
+		Debug
+	*/
+	template<typename... Args>
+	inline void Debug(const std::wstring& message, const Args &... args) {
+		m_logger->debug(message, fmt::make_format_args<fmt::wformat_context>(args...));
+	}
+
+	template<typename... Args>
+	inline void Debug(const wchar_t* message, const Args &... args) {
+		fmt::wformat_args x = fmt::make_format_args<fmt::wformat_context>(args...);
+		std::wstring aux = fmt::vformat(std::wstring(message), x);
+		m_logger->debug(aux);
+	}
+
+	template<typename... Args>
+	inline void Debug(const std::string& message, const Args &... args) {
+		m_logger->debug(message, fmt::make_format_args<fmt::format_context>(args...));
+	}
+
+	template<typename... Args>
+	inline void Debug(const char* message, const Args &... args) {
+		m_logger->debug(message, args...);
+	}
+	/*
+		Exception
+	*/
+	template<typename... Args>
+	inline void Exception(const std::wstring& message, const Args &... args) {
+		m_logger->critical(message, fmt::make_format_args<fmt::wformat_context>(args...));
+		assert(true == false);
+	}
+
+	template<typename... Args>
+	inline void Exception(const wchar_t* message, const Args &... args) {
+		fmt::wformat_args x = fmt::make_format_args<fmt::wformat_context>(args...);
+		std::wstring aux = fmt::vformat(std::wstring(message), x);
+		m_logger->critical(aux);
+		assert(true == false);
+	}
+
+	template<typename... Args>
 	inline void Exception(const std::string& message, const Args &... args) {
-		m_logger->critical(fmt::format(message, args...));
+		m_logger->critical(message, fmt::make_format_args<fmt::format_context>(args...));
 		std::string tmpMessage(fmt::format(message, args...));
 		assert(true == false);
 	}
+
+	template<typename... Args>
+	inline void Exception(const char* message, const Args &... args) {
+		m_logger->critical(message, args...);
+		std::string tmpMessage(fmt::format(message, args...));
+		assert(true == false);
+	}
+
 private:
 	inline Logger(const std::string& name) {
 		m_logger = spdlog::stdout_color_mt(name);
