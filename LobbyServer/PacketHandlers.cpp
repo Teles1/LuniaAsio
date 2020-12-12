@@ -95,7 +95,7 @@ namespace Lunia {
 										info.StoredLevel = y["characterRebirth"]["storedLevel"].get<uint16>();
 
 										for (auto y : y["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
-											info.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint16>()));
+											info.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
 										}
 
 										for (auto y : y["items"].get<json>()) {
@@ -251,7 +251,7 @@ namespace Lunia {
 						sendPacket.CharacterInfo.StoredLevel = result.resultObjet["characterRebirth"]["storedLevel"].get<uint16>();
 
 						for (auto y : result.resultObjet["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
-							sendPacket.CharacterInfo.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint16>()));
+							sendPacket.CharacterInfo.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
 						}
 
 						for (auto y : result.resultObjet["items"].get<json>()) {
