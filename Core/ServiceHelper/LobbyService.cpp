@@ -11,7 +11,6 @@ namespace Lunia {
 				Logger::GetInstance().Error("IsValidCharacterNanme : wrong name size : {0}", name.size());
 				return false;
 			}
-
 			if (IsContained(characterName, invalidStrings.shouldNotBeContained))
 				return false;
 
@@ -30,17 +29,44 @@ namespace Lunia {
 		}
 		bool IsContained(const std::wstring& src, const std::vector<String>& dictionary){
 			for (std::vector<std::wstring>::const_iterator i = dictionary.begin(), end = dictionary.end(); i != end; ++i)
-				{
-					wchar_t* f = StringUtil::wcsistr(src.c_str(), (*i).c_str()); // case insensitive comparing
-					if (f != NULL)												 // found a string
-						return true;
-				}
-				return false;
+			{
+				//case insensitive search.
+			}
+			return false;
 		}
 		bool IsMatched(const std::wstring& src, const std::vector<String>& dictionary){
 			for (std::vector<std::wstring>::const_iterator i = dictionary.begin(), end = dictionary.end(); i != end; ++i)
 			{
 				if (src == *i)
+					return true;
+			}
+			return false;
+		}
+		InvalidStrings::InvalidStrings()
+		{
+		}
+		bool InvalidStrings::IsNumeric(const wchar_t ch)
+		{
+			return (ch >= 0x0030 && ch <= 0x0039) ? true : false;
+		}
+
+		bool InvalidStrings::IsUppercase(const wchar_t ch)
+		{
+			return (ch >= 0x0041 && ch <= 0x005a) ? true : false;
+		}
+
+		bool InvalidStrings::IsLowercase(const wchar_t ch)
+		{
+			return (ch >= 0x0061 && ch <= 0x007a) ? true : false;
+		}
+
+		bool InvalidStrings::IsLocal(const wchar_t ch) const
+		{
+			size_t cnt = localCharacterLowerBound.size();
+			while (cnt > 0)
+			{
+				--cnt;
+				if (ch >= localCharacterLowerBound[cnt] && ch <= localCharacterUpperBound[cnt])
 					return true;
 			}
 			return false;
