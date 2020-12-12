@@ -19,5 +19,5 @@ Recommendation is to make sure that you have the integration enabled to make you
 
 
 # Singletons
-Logger::GetInstance() -> Gives you access to our logging system 
+Logger::GetInstance() -> Gives you access to our logging system  
 Lunia::Net::UserRegistry::GetInstance()  -> To give you access to user management 
