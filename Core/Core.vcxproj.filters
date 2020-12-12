@@ -12,6 +12,7 @@
     <ClCompile Include="ServiceHelper\LobbyService.cpp" />
     <ClCompile Include="Utils\StringUtil\GenericConversion.cpp" />
     <ClCompile Include="Utils\Math\Color.cpp" />
+    <ClCompile Include="Utils\ConfigReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -51,6 +52,7 @@
     <ClInclude Include="Utils\ThreadPool.h" />
     <ClInclude Include="ServiceHelper\LobbyService.h" />
     <ClInclude Include="Utils\StringUtil\GenericConversion.h" />
+    <ClInclude Include="Utils\ConfigReader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
