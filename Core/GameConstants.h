@@ -220,45 +220,15 @@ namespace Lunia {
 				MissionClearCommand,
 			};
 
-			//�ű�ĳ���߰� : ��ȹ������ ���� ���� ID�� �ش��ϴ� enum�� �߰�. Character�� ������ �Ϳ��� �ٸ� ������ ����.( ��� )
-			//���� ���� ������ LuniaQuestTool�� �߰��Ѵ�.
-			//LuniaQuestTool/DataHandler/QuestStringUtil.cpp ���� �ű�ĳ���߰��� �˻�
 			enum ClassType ///< @remarks keep NumberOfClassTypes as next element of last class type.
 			{
-				Healer = 0, Knight, Wizard, Thief, Slime, DollMaster, DarkTemplar, IceSorceress, Archer, BountyHunter, Bard
-				, DualWield ///�ű�ĳ�� by kpongky( 09.06.09 )
-				, Fighter	/// �ű�ĳ�� by kpongky( 09.08.10 )
-				, DarkEir	/// �ű�ĳ�� by kpongky( 09.11.19 )
-				, Aruta		/// �ű�ĳ�� by kpongky( 10.02.11 )
-				, Gaon //�ű�ĳ��
-				, Iris //�ű�ĳ��
-
-
-				, NumberOfClassTypes, AnyClassType = 9999
-				, NoClass // for pvp slots
-				, Genus_1 = 12000	// for legs
-				, Genus_2			// two legs
-				, Genus_3			// flying type
-				, Genus_4			// 
-				, Genus_5			// 
-				, Genus_6			// 
-				, Genus_7			// 
-				, Genus_8			// 
-				, Genus_9			// -------------------- arcrus �߰� (���⸦ ��ġ�� xrated.cpp ���ִ� �ϵ� �ڵ��� ���ľ� ��. �̷� �ϵ��ڵ��� ������ ���� -_�� : "arcrus. Pet Genus" �� �˻��غ��ƿ�. =��=)
-				, Genus_10			// 
-				, Genus_11			// 
-				, Genus_12			// 
-				, Genus_13			// 
-				, Genus_14			// 
-				, Genus_15			// 
-				, Genus_16			// 
-				, Genus_17			// 
-				, Genus_18			// 
-				, Genus_19			// 
-				, Genus_20			//
-				, AnyGenus
-				, NumberOfGenusClassTypes
-
+				Healer = 0, Knight, Wizard, Thief, Slime, DollMaster, DarkTemplar, IceSorceress, Archer, BountyHunter, Bard, 
+				DualWield, Fighter, DarkEir, Aruta, Gaon , Iris, NumberOfClassTypes, AnyClassType = 9999, NoClass /* its only for pvp*/, 
+				
+				// genus
+				Genus_1 = 12000 , Genus_2, Genus_3, Genus_4, Genus_5, Genus_6	, Genus_7, Genus_8, Genus_9, Genus_10, Genus_11, 
+				Genus_12 , Genus_13, Genus_14 , Genus_15, Genus_16, Genus_17, Genus_18, Genus_19, Genus_20, AnyGenus, 
+				NumberOfGenusClassTypes
 			};
 
 			static bool IsDefaultClass(ClassType type);
@@ -294,7 +264,7 @@ namespace Lunia {
 				CashBack, CashHip, CashEtc1, CashEtc2, Pet, FameAdj, FameNoun, //  == 26
 
 				Cnt,
-				Pet_Mask = 50,		///< �ϴ� ������ �������� �ʾұ� ������ 1,2�̵������� ����.
+				Pet_Mask = 50,
 				Pet_Etc1,
 				Pet_Etc2,
 				MaxPetEquipCnt = 3,

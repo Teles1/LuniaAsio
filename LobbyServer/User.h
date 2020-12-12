@@ -29,6 +29,8 @@ namespace Lunia {
 
 			void SetIsAuthenticated();
 
+			bool DoesHaveLicense(XRated::Constants::ClassType classType);
+
 			bool IsAuthenticated() const;
 
 			bool PassedSecondPassword(const bool& newBool);
@@ -74,7 +76,7 @@ namespace Lunia {
 		public:
 			bool m_isSecondPasswordProtected;
 			uint8 m_NumberOfSlots;
-			std::vector<int32> m_AccountLicenses;
+			uint32 m_AccountLicenses;
 			std::vector<XRated::LobbyPlayerInfo> m_Characters;
 			XRated::LobbyPlayerInfo* m_selectedCharacter;
 		private:

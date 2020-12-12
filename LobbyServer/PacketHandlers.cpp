@@ -58,12 +58,7 @@ namespace Lunia {
 								//CharacterLicenses
 								{
 									user.get()->m_NumberOfSlots = result.resultObjet["characterSlots"].get<uint8>();
-									auto j_array = result.resultObjet["accountsLicense"].get<json>();
-									for (json::iterator it = j_array.begin(); it != j_array.end(); it++)
-										if ((*it).get<uint16>() > 16 || (*it).get<uint16>() < 0)
-											Logger::GetInstance().Exception("[{0}] AccountLicenses out of boundries.", user->GetId());
-										else
-											user->m_AccountLicenses.push_back((*it).get<uint16>());
+									user->m_AccountLicenses  = result.resultObjet["accountsLicense"].get<int32>();
 								}
 								
 								//Lock user's account if second password is set 
@@ -74,7 +69,10 @@ namespace Lunia {
 								{
 									Lobby::Protocol::CharacterSlots slots;
 									slots.NumberOfSlots = user->m_NumberOfSlots;
-									slots.CharacterLicenses = user->m_AccountLicenses;
+									for (int i = 0; i < 16; i++) {
+										if (static_cast<bool>(user->m_AccountLicenses & (1 << i)))
+											slots.CharacterLicenses.push_back(i);
+									}
 									user->Send(slots);
 								}
 								
@@ -155,7 +153,56 @@ namespace Lunia {
 					Lobby::Protocol::Terminate sendPacket;
 					sendPacket.Result = Lobby::Protocol::Terminate::Results::Ok;
 					user->Send(sendPacket);
-					Net::UserRegistry::GetInstance().RemoveUser(user);
+					//Net::UserRegistry::GetInstance().RemoveUser(user);
+				});
+
+			fwPacketListener::GetInstance().Connect(
+				[](Lobby::UserSharedPtr& user, Lobby::Protocol::CreateCharacter& packet)
+				{
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@CreateCharacter", user->GetId());
+					
+					bool checkLicense = true;
+					if (XRated::Constants::IsDefaultClass(packet.ClassType) == false)
+						checkLicense = user->DoesHaveLicense(packet.ClassType);
+					Net::Api api("CreateCharacter");
+					api << user->GetAccountName() << packet.Name << static_cast<int>(packet.ClassType) << checkLicense;
+					const Net::Answer result = api.RequestApi();
+					Lobby::Protocol::CreateCharacter sendPacket;
+					//sendPacket.Result = static_cast<Lobby::Protocol::CreateCharacter::Results>(result.errorCode);
+					if (result.errorCode == 0) {
+						sendPacket.CharacterInfo.CharacterName = result.resultObjet["characterName"].get<std::wstring>();
+						sendPacket.CharacterInfo.CharacterSerial = result.resultObjet["Id"].get<int64>();
+						sendPacket.CharacterInfo.VirtualIdCode = result.resultObjet["Id"].get<uint32>();
+						sendPacket.CharacterInfo.ClassType = static_cast<XRated::Constants::ClassType>(result.resultObjet["ClassNumber"].get<int>());
+						sendPacket.CharacterInfo.Level = result.resultObjet["StageLevel"].get<int>();
+						sendPacket.CharacterInfo.Exp = result.resultObjet["StageExp"].get<int>();
+						sendPacket.CharacterInfo.PvpLevel = result.resultObjet["PvpLevel"].get<int>();
+						sendPacket.CharacterInfo.PvpExp = result.resultObjet["PvpExp"].get<int>();
+						sendPacket.CharacterInfo.WarLevel = result.resultObjet["WarLevel"].get<int>();
+						sendPacket.CharacterInfo.WarExp = result.resultObjet["WarExp"].get<int>();
+						sendPacket.CharacterInfo.StateFlags = static_cast<XRated::CharacterStateFlags>(result.resultObjet["InstantStateFlag"].get<int>());
+						sendPacket.CharacterInfo.RebirthCount = result.resultObjet["characterRebirth"]["rebirthCount"].get<uint32>();
+						sendPacket.CharacterInfo.StoredLevel = result.resultObjet["characterRebirth"]["storedLevel"].get<uint16>();
+
+						for (auto y : result.resultObjet["characterLicenses"].get<json>()) {
+							sendPacket.CharacterInfo.Licenses.push_back(XRated::StageLicense());
+							sendPacket.CharacterInfo.Licenses.back().StageGroupHash = y["stageHash"].get<uint32>();
+							sendPacket.CharacterInfo.Licenses.back().Level = y["stageHash"].get<uint16>();
+						}
+
+						for (auto y : result.resultObjet["items"].get<json>()) {
+							XRated::ItemSlot slot;
+							slot.Position.Bag = y["bagNumber"].get<uint8>(); // equipment slots at
+							slot.Position.Position = y["positionNumber"].get<uint8>();
+							slot.Stacked = 1; // equipments cannot be stacked
+							slot.Id = y["itemHash"].get<uint32>();
+							slot.instanceEx.Instance = y["instance"].get<int64>();
+							slot.instanceEx.ExpireDate.Parse(y["itemExpire"].get<std::wstring>());
+							sendPacket.CharacterInfo.Equipments.push_back(slot);
+						}
+						user->m_Characters.push_back(sendPacket.CharacterInfo);
+					}
+					user->Send(sendPacket);
 				});
 		});
 }

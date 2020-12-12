@@ -58,6 +58,13 @@ namespace Lunia {
 			this->m_isAuthenticated = true;
 		}
 
+		bool User::DoesHaveLicense(XRated::Constants::ClassType classType)
+		{
+			if (static_cast<bool>(m_AccountLicenses & (1 << classType)))
+				return true;
+			return false;
+		}
+
 		bool User::IsAuthenticated() const
 		{
 			return m_isAuthenticated;
