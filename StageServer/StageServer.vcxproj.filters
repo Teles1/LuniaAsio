@@ -20,4 +20,7 @@
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Config.json" />
+  </ItemGroup>
 </Project>
