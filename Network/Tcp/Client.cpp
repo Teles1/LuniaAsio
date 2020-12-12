@@ -20,6 +20,11 @@ void ClientTcp::HandleRead() {
 		std::bind(&ClientTcp::ReceivedSome, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 }
 
+void ClientTcp::CloseSocket() {
+	m_socket.close();
+	m_socket.release();
+}
+
 ClientTcp::~ClientTcp() {
 	std::cout << "ClientTcp was destroyed" << std::endl;
 }

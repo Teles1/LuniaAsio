@@ -34,7 +34,9 @@ namespace Lunia {
 				if (m_users[i]->GetId() == user->GetId())
 				{
 
-					m_users[i].reset();
+					m_users[i]->CloseSocket();
+
+					m_users.erase(m_users.begin()+i);
 
 					break;
 				}
@@ -87,6 +89,7 @@ namespace Lunia {
 			Net::UserRegistry::GetInstance().OnUserDisconnected.Connect([](const Lobby::UserSharedPtr& user)
 				{
 					Logger::GetInstance().Info("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetId());
+
 				});
 
 			Net::UserRegistry::GetInstance().OnUserAuthenticated.Connect([](const Lobby::UserSharedPtr& user, const uint32& oldUserId)

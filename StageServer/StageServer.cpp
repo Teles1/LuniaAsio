@@ -102,20 +102,12 @@ void Process(Listener& list, void(Listener::* fb)())
 
 }
 
+
 int main()
 {
     Lunia::Net::Api api("ListCharacters");
     api << std::string("teste");
     const Lunia::Net::Answer result = api.RequestApi();
-
-    auto x = result.resultObjet["characters"].get<json>();
-
-    for (auto character : x) {
-
-        for (auto y : character["characterLicenses"].get<json>()) {
-            std::cout << y["stageHash"].get<int>() << std::endl;
-        }
-    }
 
     printf("Done\n");
     

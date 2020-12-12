@@ -11,6 +11,7 @@ namespace Lunia {
             ClientTcp(tcp::socket&& s);
             void HandleRead();
             ~ClientTcp();
+            void CloseSocket();
             void SetCryptoKey(uint32& newKey);
             uint32 GetCryptoKey();
             const std::string GetPeerAddress();

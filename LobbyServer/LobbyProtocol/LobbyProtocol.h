@@ -185,7 +185,7 @@ namespace Lunia {
 				enum Results
 				{
 					Ok = 0,
-					InvalidPassword = 1,
+					InvalidPassword = 3,
 					NoResponse = 0xff
 				} Result;
 

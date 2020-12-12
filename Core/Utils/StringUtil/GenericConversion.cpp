@@ -101,7 +101,6 @@ namespace Lunia {
 			return std::to_string(value);
 		}
 
-
 		template <> std::string To(long value) {
 			return std::to_string(value);
 		}
