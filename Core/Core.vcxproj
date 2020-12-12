@@ -180,6 +180,7 @@
     <ClInclude Include="ReferenceCounted.h" />
     <ClInclude Include="Serializer\IReferenceCounted.h" />
     <ClInclude Include="Serializer\Serializer.h" />
+    <ClInclude Include="ServiceHelper\LobbyService.h" />
     <ClInclude Include="Utils\Math\Color.h" />
     <ClInclude Include="Utils\Math\euler.h" />
     <ClInclude Include="Utils\Math\Math.h" />
@@ -188,7 +189,6 @@
     <ClInclude Include="Utils\Math\quaternion.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="Utils\Math\Vector2.h" />
-    <ClInclude Include="Utils\StringUtil\GeneralConversions.h" />
     <ClInclude Include="Utils\Math\vector4.h" />
     <ClInclude Include="Utils\StringUtil\General.h" />
     <ClInclude Include="Serializer\Serializer_old.h" />
@@ -203,6 +203,7 @@
     <ClInclude Include="Utils\Math\PseudoRandom.h" />
     <ClInclude Include="Utils\Math\vector3.h" />
     <ClInclude Include="Utils\StringUtil.h" />
+    <ClInclude Include="Utils\StringUtil\GenericConversion.h" />
     <ClInclude Include="Utils\StringUtil\StaticString.h" />
     <ClInclude Include="Utils\ThreadPool.h" />
     <ClInclude Include="Utils\Version.h" />
@@ -210,6 +211,8 @@
   <ItemGroup>
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="Serializer\Serializer.cpp" />
+    <ClCompile Include="ServiceHelper\LobbyService.cpp" />
+    <ClCompile Include="Utils\Math\Color.cpp" />
     <ClCompile Include="Utils\StringUtil\General.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -247,12 +250,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Utils\StringUtil\GeneralConversions.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="Utils\StringUtil\GenericConversion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

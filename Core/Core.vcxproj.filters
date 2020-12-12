@@ -7,9 +7,11 @@
     <ClCompile Include="Utils\Math\Random.cpp" />
     <ClCompile Include="Utils\Locator.cpp" />
     <ClCompile Include="Utils\StringUtil\General.cpp" />
-    <ClCompile Include="Utils\StringUtil\GeneralConversions.cpp" />
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="Serializer\Serializer.cpp" />
+    <ClCompile Include="ServiceHelper\LobbyService.cpp" />
+    <ClCompile Include="Utils\StringUtil\GenericConversion.cpp" />
+    <ClCompile Include="Utils\Math\Color.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -30,7 +32,6 @@
     <ClInclude Include="Utils\Locator.h" />
     <ClInclude Include="Utils\StringUtil\General.h" />
     <ClInclude Include="Utils\Math\vector4.h" />
-    <ClInclude Include="Utils\StringUtil\GeneralConversions.h" />
     <ClInclude Include="ReferenceCounted.h" />
     <ClInclude Include="com_ptr.h" />
     <ClInclude Include="Serializer\IReferenceCounted.h" />
@@ -48,6 +49,8 @@
     <ClInclude Include="IReferenceCounted.h" />
     <ClInclude Include="Utils\StringUtil.h" />
     <ClInclude Include="Utils\ThreadPool.h" />
+    <ClInclude Include="ServiceHelper\LobbyService.h" />
+    <ClInclude Include="Utils\StringUtil\GenericConversion.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

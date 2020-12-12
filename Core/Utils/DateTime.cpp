@@ -64,15 +64,15 @@ namespace Lunia {
 
 		if (extracted.size() == 1 && timeString.size() == 8)
 		{
-			year = static_cast<uint16>(StringUtil::ToInt32(std::wstring(extracted.at(0).c_str(), 0, 4)));
-			month = static_cast<uint8>(StringUtil::ToInt32(std::wstring(extracted.at(0).c_str(), 4, 2)));
-			day = static_cast<uint8>(StringUtil::ToInt32(std::wstring(extracted.at(0).c_str(), 6, 2)));
+			year = static_cast<uint16>(StringUtil::ToInt(std::wstring(extracted.at(0).c_str(), 0, 4)));
+			month = static_cast<uint8>(StringUtil::ToInt(std::wstring(extracted.at(0).c_str(), 4, 2)));
+			day = static_cast<uint8>(StringUtil::ToInt(std::wstring(extracted.at(0).c_str(), 6, 2)));
 		}
 		else if (extracted.size() == 1 && timeString.size() == 6)
 		{  
-			year = static_cast<uint16>(StringUtil::ToInt32(std::wstring(extracted.at(0).c_str(), 0, 2)));
-			month = static_cast<uint8>(StringUtil::ToInt32(std::wstring(extracted.at(0).c_str(), 2, 2)));
-			day = static_cast<uint8>(StringUtil::ToInt32(std::wstring(extracted.at(0).c_str(), 4, 2)));
+			year = static_cast<uint16>(StringUtil::ToInt(std::wstring(extracted.at(0).c_str(), 0, 2)));
+			month = static_cast<uint8>(StringUtil::ToInt(std::wstring(extracted.at(0).c_str(), 2, 2)));
+			day = static_cast<uint8>(StringUtil::ToInt(std::wstring(extracted.at(0).c_str(), 4, 2)));
 
 			if (year >= 50)
 				year += 1900; //ex)951104
@@ -81,9 +81,9 @@ namespace Lunia {
 		}
 		else if (extracted.size() >= 3)
 		{ 
-			year = static_cast<uint16>(StringUtil::ToInt32(extracted.at(0)));
-			month = static_cast<uint8>(StringUtil::ToInt32(extracted.at(1)));
-			day = static_cast<uint8>(StringUtil::ToInt32(extracted.at(2)));
+			year = static_cast<uint16>(StringUtil::ToInt(extracted.at(0)));
+			month = static_cast<uint8>(StringUtil::ToInt(extracted.at(1)));
+			day = static_cast<uint8>(StringUtil::ToInt(extracted.at(2)));
 
 			if (extracted.at(0).size() <= 2 && year >= 50)
 				year += 1900;
@@ -236,30 +236,30 @@ namespace Lunia {
 		if (extracted.size() == 1 && timeString.size() >= 4)
 		{   
 			
-			hour = static_cast<uint8>(StringUtil::ToInt32(std::wstring(timeString.c_str(), 0, 2)));
-			min = static_cast<uint8>(StringUtil::ToInt32(std::wstring(timeString.c_str(), 2, 2)));
+			hour = static_cast<uint8>(StringUtil::ToInt(std::wstring(timeString.c_str(), 0, 2)));
+			min = static_cast<uint8>(StringUtil::ToInt(std::wstring(timeString.c_str(), 2, 2)));
 
 			if (timeString.size() >= 6)
-				sec = static_cast<uint16>(StringUtil::ToInt32(std::wstring(timeString.c_str(), 4, 2)));
+				sec = static_cast<uint16>(StringUtil::ToInt(std::wstring(timeString.c_str(), 4, 2)));
 			else sec = 0;
 
 			if (timeString.size() >= 8)
-				millisec = static_cast<uint16>(StringUtil::ToInt32(std::wstring(timeString.c_str(), 6, timeString.size() - 6)));
+				millisec = static_cast<uint16>(StringUtil::ToInt(std::wstring(timeString.c_str(), 6, timeString.size() - 6)));
 			else millisec = 0;
 		}
 		else if (extracted.size() >= 1)
 		{ 
-			hour = static_cast<uint8>(StringUtil::ToInt32(extracted.at(0)));
+			hour = static_cast<uint8>(StringUtil::ToInt(extracted.at(0)));
 			if (extracted.size() >= 2)
-				min = static_cast<uint8>(StringUtil::ToInt32(extracted.at(1)));
+				min = static_cast<uint8>(StringUtil::ToInt(extracted.at(1)));
 			else min = 0;
 
 			if (extracted.size() >= 3)
-				sec = static_cast<uint16>(StringUtil::ToInt32(extracted.at(2)));
+				sec = static_cast<uint16>(StringUtil::ToInt(extracted.at(2)));
 			else sec = 0;
 
 			if (extracted.size() >= 4)
-				millisec = static_cast<uint16>(StringUtil::ToInt32(extracted.at(3)));
+				millisec = static_cast<uint16>(StringUtil::ToInt(extracted.at(3)));
 			else millisec = 0;
 		}
 		else
@@ -398,23 +398,23 @@ namespace Lunia {
 		}
 		else if (extracted.size() >= 4)
 		{
-			year = static_cast<uint16>(StringUtil::ToInt32(extracted.at(0)));
-			month = static_cast<uint8>(StringUtil::ToInt32(extracted.at(1)));
-			day = static_cast<uint8>(StringUtil::ToInt32(extracted.at(2)));
-			hour = static_cast<uint8>(StringUtil::ToInt32(extracted.at(3)));
+			year = static_cast<uint16>(StringUtil::ToInt(extracted.at(0)));
+			month = static_cast<uint8>(StringUtil::ToInt(extracted.at(1)));
+			day = static_cast<uint8>(StringUtil::ToInt(extracted.at(2)));
+			hour = static_cast<uint8>(StringUtil::ToInt(extracted.at(3)));
 
 			if (extracted.size() >= 5)
-				minute = static_cast<uint8>(StringUtil::ToInt32(extracted.at(4)));
+				minute = static_cast<uint8>(StringUtil::ToInt(extracted.at(4)));
 			else
 				minute = 0;
 
 			if (extracted.size() >= 6)
-				second = static_cast<uint16>(StringUtil::ToInt32(extracted.at(5)));
+				second = static_cast<uint16>(StringUtil::ToInt(extracted.at(5)));
 			else
 				second = 0;
 
 			if (extracted.size() >= 7)
-				milliSec = static_cast<uint16>(StringUtil::ToInt32(extracted.at(6)));
+				milliSec = static_cast<uint16>(StringUtil::ToInt(extracted.at(6)));
 			else
 				milliSec = 0;
 

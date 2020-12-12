@@ -31,7 +31,8 @@ public:
 	template <typename... Args>
 	inline void Exception(const std::string& message, const Args &... args) {
 		m_logger->critical(fmt::format(message, args...));
-		throw fmt::format(message, args...);
+		std::string tmpMessage(fmt::format(message, args...));
+		assert(true == false);
 	}
 private:
 	inline Logger(const std::string& name) {
