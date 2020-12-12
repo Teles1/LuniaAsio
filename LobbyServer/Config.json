@@ -1,0 +1,29 @@
+{
+  "Logging": {
+    "Filename": "lobby_bulky.txt",
+    "LoggingLevel": 0
+  },
+  "LobbyServer": {
+    "ShowPacket": true,
+    "Enabled": 1,
+    "Capacity": 500,
+    "UrlBase": "http://localhost/v4_3.1/lobby",
+    "PingTimeout": 30,
+    "GameGuard": 0,
+    "ServerName": "TelesLobbyDev",
+    "ListeningIp": "",
+    "ListeningPort": 15550,
+    "PvpAddress": "localhost:3061",
+    "MasterAddress": "localhost:3060",
+    "AchievementAddress": "45.2.69.163:15568"
+  },
+  "InvalidStringTable": {
+    "ExceptWords": [],
+    "ExclusionStrings": [],
+    "FobbidenNames": [],
+    "FobbidenStrings": [],
+    "InvalidNames": [],
+    "Nation": []
+    
+  }
+}
