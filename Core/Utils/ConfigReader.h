@@ -15,13 +15,11 @@ namespace Lunia {
     /*
         Default Config settings for now. I'll be changing this very soon lol It looks like actual shit.
     */
-    struct Config {
+    struct ConfigType {
     public:
-        Config() {}
+        ConfigType() {}
         struct ServerAddress ServerAddress;
         std::string ApiBase = "http://localhost:51542/Lobby";
-        std::string ServerIp = "127.0.0.1";
-        uint16 ServerPort = 15550;
         std::string ServerName = "ServerNameDefault";
         uint16 PingTimeout = 30;
         bool ShowPacket = false;
@@ -33,5 +31,5 @@ namespace Lunia {
         }Locale;
     };
 
-    void ReadConfigFile(const char* filename, Config& config);
+    void ReadConfigFile(const char* filename, ConfigType& config);
 }

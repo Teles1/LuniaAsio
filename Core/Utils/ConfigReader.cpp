@@ -4,7 +4,7 @@ namespace Lunia {
         struct stat buffer;
         return (stat(name.c_str(), &buffer) == 0);
     }
-    void ReadConfigFile(const char* filename, Config& config)
+    void ReadConfigFile(const char* filename, ConfigType& config)
     {
         if (!FileExists(ConfigFile))
             Logger::GetInstance().Exception("Config file not found <{0}>", ConfigFile);
@@ -19,7 +19,7 @@ namespace Lunia {
         if (j["Config"].is_object()) {
             auto& j_config = j["Config"];
             if (!j_config["LobbyServer"].is_null()) {
-                Logger::GetInstance().Info("LobbyServer");
+                Logger::GetInstance().Info("Instance loaded as LobbyServer");
                 auto& lobby = j_config["LobbyServer"];
 
                 config.ApiBase = lobby["ApiBase"].get<std::string>();
@@ -57,5 +57,6 @@ namespace Lunia {
         }
         else
             Logger::GetInstance().Exception("Cannot launch server without settings.");
+        Logger::GetInstance().Info("Config loaded!");
     }
 }

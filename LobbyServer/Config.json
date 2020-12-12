@@ -1,29 +1,27 @@
 {
-  "Logging": {
-    "Filename": "lobby_bulky.txt",
-    "LoggingLevel": 0
-  },
-  "LobbyServer": {
-    "ShowPacket": true,
-    "Enabled": 1,
-    "Capacity": 500,
-    "UrlBase": "http://localhost/v4_3.1/lobby",
-    "PingTimeout": 30,
-    "GameGuard": 0,
-    "ServerName": "TelesLobbyDev",
-    "ListeningIp": "",
-    "ListeningPort": 15550,
-    "PvpAddress": "localhost:3061",
-    "MasterAddress": "localhost:3060",
-    "AchievementAddress": "45.2.69.163:15568"
-  },
-  "InvalidStringTable": {
-    "ExceptWords": [],
-    "ExclusionStrings": [],
-    "FobbidenNames": [],
-    "FobbidenStrings": [],
-    "InvalidNames": [],
-    "Nation": []
-    
+  "Config": {
+    "Logging": {
+      "Filename": "lobby_bulky.txt",
+      "LoggingLevel": 0
+    },
+    "LobbyServer": {
+      "ApiBase": "http://localhost:51542/Lobby",
+      "ServerAddress": {
+        "ServerIp": "127.0.0.1",
+        "ServerPort": 15550
+      },
+      "ServerName": "Lobby_DEV",
+      "PingTimeout": 30,
+      "ShowPacket": true,
+      "Capacity": 500,
+      "AchievementAddress": {
+        "ServerIp": "127.0.0.1",
+        "ServerPort": 15000
+      }
+    },
+    "Locale": {
+      "FobbidenNames": [ "yCrazy", "Teles", "key_value" ],
+      "FobbidenStrings": []
+    }
   }
 }
