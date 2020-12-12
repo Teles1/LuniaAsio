@@ -31,11 +31,15 @@ namespace Lunia {
 
 			bool DoesHaveLicense(XRated::Constants::ClassType classType);
 
-			bool IsAccountAuthorized() const { return !GetAccountName().empty(); }
+			bool IsAccountAuthorized() const;
 
 			bool IsAuthenticated() const;
 
 			bool PassedSecondPassword(const bool& newBool);
+
+			bool IsAValidCharacterName(String& characterName);
+
+			bool DeleteCharacter(String& characterName);
 		public://Network Related;
 			void Send(Serializer::ISerializable& packet);
 
@@ -77,14 +81,19 @@ namespace Lunia {
 
 		public:
 			bool m_isSecondPasswordProtected;
+
 			uint8 m_NumberOfSlots;
+
 			uint32 m_AccountLicenses;
+
 			std::vector<XRated::LobbyPlayerInfo> m_Characters;
+
 			XRated::LobbyPlayerInfo* m_selectedCharacter;
 		private:
 			std::mutex mtx;
 		};
 		typedef std::shared_ptr<User> UserSharedPtr;
 		typedef std::weak_ptr<User> UserWeakPtr;
+		typedef std::vector<XRated::LobbyPlayerInfo>::iterator CharactersIterator;
 	}
 }

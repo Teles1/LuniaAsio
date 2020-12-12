@@ -220,7 +220,6 @@ namespace Lunia {
 					user->Send(sendPacket);
 					Net::UserRegistry::GetInstance().RemoveUser(user);
 				});
-
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::CreateCharacter& packet)
 				{
@@ -274,13 +273,13 @@ namespace Lunia {
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@DeleteCharacter", user->GetId());
 
-					if (user->IsAccountAuthorized()) {
-						std::size_t count = user->m_Characters.size();
-						std::size_t i;
-						for (auto x : user->m_Characters)
-							if (x.CharacterName != packet.Name)
-								return;
-					} else {
+					if (!user->IsAccountAuthorized()) {
+						Logger::GetInstance().Error(L"Non authorized user trying to delete a AccountName: {0}, characterName: {1}", user->GetAccountName(), packet.Name);
+						Net::UserRegistry::GetInstance().RemoveUser(user);
+						return;
+					}
+					if (!user->IsAValidCharacterName(packet.Name)) {
+						Logger::GetInstance().Error(L"User is trying to delete a characterName that does not exist. AccountName: {0}, characterName: {1}", user->GetAccountName(), packet.Name);
 						Net::UserRegistry::GetInstance().RemoveUser(user);
 						return;
 					}
@@ -290,15 +289,11 @@ namespace Lunia {
 					Lobby::Protocol::DeleteCharacter sendPacket;
 					sendPacket.Result = static_cast<Lobby::Protocol::DeleteCharacter::Results>(result.errorCode);
 					if (result.errorCode == 0) {
-
 						sendPacket.DeletedCharacter = packet.Name;
-
-						std::vector<XRated::LobbyPlayerInfo>::iterator i;
-						for (i = user->m_Characters.begin(); i != user->m_Characters.end(); ++i)
-							if (i->CharacterName == sendPacket.DeletedCharacter) {
-								user->m_Characters.erase(i);
-								break;
-							}
+						if (!user->DeleteCharacter(packet.Name)) {
+							Logger::GetInstance().Error(L"Could not Delete the specified characterName AccountName: {0}, characterName: {1}", user->GetAccountName(), packet.Name);
+							Net::UserRegistry::GetInstance().RemoveUser(user);
+						}
 					}
 					user->Send(sendPacket);
 				});
@@ -307,8 +302,8 @@ namespace Lunia {
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::SaveKeySetting& packet)
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SaveKeySetting", user->GetId());
-					std::wstring ws(packet.Keycodes);
-					std::string str(ws.begin(), ws.end());
+					StringUtil::ToASCII(packet.Keycodes);
+					
 
 				});
 		});

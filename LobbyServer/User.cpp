@@ -65,6 +65,11 @@ namespace Lunia {
 			return false;
 		}
 
+		bool User::IsAccountAuthorized() const
+		{
+			return !GetAccountName().empty();
+		}
+
 		bool User::IsAuthenticated() const
 		{
 			return m_isAuthenticated;
@@ -75,6 +80,25 @@ namespace Lunia {
 			AutoLock _l(mtx);
 			this->m_isAuthenticated = newBool;
 			return this->m_isAuthenticated;
+		}
+
+		bool User::IsAValidCharacterName(String& characterName)
+		{
+			AutoLock(mtx);
+			for (auto& x : m_Characters)
+				if (x.CharacterName == characterName)
+					return true;
+			return false;
+		}
+
+		bool User::DeleteCharacter(String& characterName)
+		{
+			for(CharactersIterator it = m_Characters.begin(); it != m_Characters.end(); it++)
+				if (it->CharacterName == characterName) {
+					m_Characters.erase(it);
+					return true;
+				}
+			return false;
 		}
 
 		uint32 User::GetId() const {
