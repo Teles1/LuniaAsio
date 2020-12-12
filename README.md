@@ -10,10 +10,10 @@ Lunia Emulator
 5. After everything is done downloading and compiling run -> vcpkg integrate install
 6. Now it's time to install our libraries. Make sure to check if they are being compiled in x64 it'll tell in the cmd
 
-#Packages being used in our project.
+# Packages being used in our project.
 vcpkg install asio:x64-windows
 vcpkg install spdlog:x64-windows
 vcpkg install fmt:x64-windows 
 vcpkg install cpr:x86-windows
 
-#Logger::GetInstance() from anywhere to give you access to logs that get outputed to the console.
+# Logger::GetInstance() from anywhere to give you access to logs that get outputed to the console.
