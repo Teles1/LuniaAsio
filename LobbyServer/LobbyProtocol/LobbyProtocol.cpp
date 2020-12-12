@@ -266,6 +266,33 @@ namespace Lunia {
 			{
 				in.Begin(TypeName);
 			}
+
+			const wchar_t* DeleteCharacter::TypeName = L"DeleteCharacter";
+			const HashType DeleteCharacter::TypeHash = StringUtil::Hash(DeleteCharacter::TypeName);
+			void DeleteCharacter::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"Result", static_cast<const int>(Result));
+				out.Write(L"DeletedCharacter", DeletedCharacter);
+			}
+			void DeleteCharacter::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"Name", Name);
+			}
+
+			const wchar_t* SaveKeySetting::TypeName = L"SaveKeySetting";
+			const HashType SaveKeySetting::TypeHash = StringUtil::Hash(SaveKeySetting::TypeName);
+			void SaveKeySetting::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+			}
+			void SaveKeySetting::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"Account", Account);
+				in.Read(L"Keycodes", Keycodes);
+			}
 		}
 	}
 }

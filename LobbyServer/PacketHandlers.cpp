@@ -105,7 +105,7 @@ namespace Lunia {
 											slot.Stacked = 1; // equipments cannot be stacked
 											slot.Id = y["itemHash"].get<uint32>();
 											slot.instanceEx.Instance = y["instance"].get<int64>();
-											slot.instanceEx.ExpireDate.Parse(y["itemExpire"].get<std::wstring>());
+											slot.instanceEx.ExpireDate.Parse(StringUtil::ToUnicode(y["itemExpire"].get<std::string>()));
 											info.Equipments.push_back(slot);
 										}
 									}
@@ -267,6 +267,49 @@ namespace Lunia {
 						user->m_Characters.push_back(sendPacket.CharacterInfo);
 					}
 					user->Send(sendPacket);
+				});
+
+			fwPacketListener::GetInstance().Connect(
+				[](Lobby::UserSharedPtr& user, Lobby::Protocol::DeleteCharacter& packet)
+				{
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@DeleteCharacter", user->GetId());
+
+					if (user->IsAccountAuthorized()) {
+						std::size_t count = user->m_Characters.size();
+						std::size_t i;
+						for (auto x : user->m_Characters)
+							if (x.CharacterName != packet.Name)
+								return;
+					} else {
+						Net::UserRegistry::GetInstance().RemoveUser(user);
+						return;
+					}
+					Net::Api api("DeleteCharacter");
+					api << packet.Name;
+					const Net::Answer result = api.RequestApi();
+					Lobby::Protocol::DeleteCharacter sendPacket;
+					sendPacket.Result = static_cast<Lobby::Protocol::DeleteCharacter::Results>(result.errorCode);
+					if (result.errorCode == 0) {
+
+						sendPacket.DeletedCharacter = packet.Name;
+
+						std::vector<XRated::LobbyPlayerInfo>::iterator i;
+						for (i = user->m_Characters.begin(); i != user->m_Characters.end(); ++i)
+							if (i->CharacterName == sendPacket.DeletedCharacter) {
+								user->m_Characters.erase(i);
+								break;
+							}
+					}
+					user->Send(sendPacket);
+				});
+
+			fwPacketListener::GetInstance().Connect(
+				[](Lobby::UserSharedPtr& user, Lobby::Protocol::SaveKeySetting& packet)
+				{
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SaveKeySetting", user->GetId());
+					std::wstring ws(packet.Keycodes);
+					std::string str(ws.begin(), ws.end());
+
 				});
 		});
 }

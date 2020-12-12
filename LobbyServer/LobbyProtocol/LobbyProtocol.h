@@ -57,7 +57,7 @@ namespace Lunia {
 				std::string EncryptedPassword;
 				bool IsPubModuleLogin;
 				char AuthString[2048];
-				std::wstring Locale;
+				String Locale;
 				int IDNumber;
 
 				NET_SERIALIZABLE
@@ -91,42 +91,42 @@ namespace Lunia {
 			//This comes from the client only.
 			struct CheckSecondPassword : public Serializer::ISerializable
 			{
-				std::wstring AccountName;
+				String AccountName;
 
 				NET_SERIALIZABLE;
 			};
 
 			struct CreateSecondPassword : public Serializer::ISerializable
 			{
-				std::wstring AccountName;
-				std::wstring Password;
+				String AccountName;
+				String Password;
 
 				NET_SERIALIZABLE;
 			};
 
 			struct DeleteSecondPassword : public Serializer::ISerializable
 			{
-				std::wstring AccountName;
-				std::wstring Password;
+				String AccountName;
+				String Password;
 
 				NET_SERIALIZABLE;
 			};
 
 			struct ModifySecondPassword : public Serializer::ISerializable
 			{
-				std::wstring AccountName;
-				std::wstring Password;
-				std::wstring NewPassword;
+				String AccountName;
+				String Password;
+				String NewPassword;
 
 				NET_SERIALIZABLE;
 			};
 
 			struct SignInSecondPassword : public Serializer::ISerializable
 			{
-				std::wstring AccountName;
-				std::wstring Password;
+				String AccountName;
+				String Password;
 				uint32 FailCount;
-				std::wstring LockExpired;
+				String LockExpired;
 
 				NET_SERIALIZABLE;
 			};
@@ -143,7 +143,7 @@ namespace Lunia {
 				NET_SERIALIZABLE;
 				uint8 PasswordInUse;
 				uint32 FailCount;
-				std::wstring LockExpired;
+				String LockExpired;
 				uint8 IsLocked;
 			};
 			
@@ -222,6 +222,32 @@ namespace Lunia {
 
 				NET_SERIALIZABLE;
 			};
+
+			struct DeleteCharacter : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					NotExistingCharacterName = 1,
+					GuildMasterCouldNotBeDeleted = 2,
+					GuildMemberCouldNotBeDeleted = 3, //Only in Allm guild system
+					WrongSocialSecretNumber = 4,
+					NoResponse = 0xff,
+				} Result;
+				String Name;
+				String DeletedCharacter;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct SaveKeySetting : public Serializer::ISerializable
+			{
+				String Account;
+				std::wstring Keycodes;
+
+				NET_SERIALIZABLE;
+			};
+
 		}//Protocol
 	}//Lobby
 }

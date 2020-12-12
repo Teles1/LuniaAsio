@@ -31,6 +31,8 @@ namespace Lunia {
 
 			bool DoesHaveLicense(XRated::Constants::ClassType classType);
 
+			bool IsAccountAuthorized() const { return !GetAccountName().empty(); }
+
 			bool IsAuthenticated() const;
 
 			bool PassedSecondPassword(const bool& newBool);

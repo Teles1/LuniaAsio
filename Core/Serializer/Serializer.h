@@ -122,7 +122,7 @@ namespace Lunia {
 
 			enum
 			{
-				MaxString = 1024
+				MaxString = 2 << 10
 			};
 
 			template <typename T>

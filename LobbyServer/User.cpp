@@ -98,6 +98,7 @@ namespace Lunia {
 			std::unique_lock<std::mutex> _l(mtx);
 			this->m_AccountName = inAccountName;
 		}
+
 		String User::GetAccountName() const
 		{
 			return this->m_AccountName;
