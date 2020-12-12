@@ -18,4 +18,6 @@ Recommendation is to make sure that you have the integration enabled to make you
 - vcpkg install cpr:x86-windows
 
 
-# Logger::GetInstance() from anywhere to give you access to logs that get outputed to the console.
+# Singletons
+Logger::GetInstance() -> Gives you access to our logging system 
+Lunia::Net::UserRegistry::GetInstance()  -> To give you access to user management 
