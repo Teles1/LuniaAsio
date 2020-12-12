@@ -19,7 +19,7 @@ namespace Lunia {
         }
         Answer Api::RequestApi() const {
             cpr::Response r = cpr::Get(cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ 1000 });
-            Logger::GetInstance().Info("[{0}]{1}", r.status_code, r.text);
+            Logger::GetInstance().Info("Api returned [{0}] =>  {1}", r.status_code, r.text);
             if (r.status_code == 200) {
                 try {
                     json result = json::parse(r.text);
