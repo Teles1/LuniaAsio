@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Math.h"
+#include "Color.h"
 
 namespace Lunia {
 	namespace Math {

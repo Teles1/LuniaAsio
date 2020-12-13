@@ -1,6 +1,6 @@
 #ifndef Color_H
 #define Color_H
-#include <Core/Types.h>
+
 namespace Lunia {
 	namespace Math {
 		namespace Color {
