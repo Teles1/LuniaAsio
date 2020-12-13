@@ -181,6 +181,11 @@
     <ClInclude Include="ReferenceCounted.h" />
     <ClInclude Include="Serializer\IReferenceCounted.h" />
     <ClInclude Include="Serializer\Serializer.h" />
+    <ClInclude Include="Serializer\Binary\StructuredBinaryStream.h" />
+    <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader.h" />
+    <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader2.h" />
+    <ClInclude Include="Serializer\Binary\StructuredBinaryStreamWriter.h" />
+    <ClInclude Include="Serializer\Binary\StructuredBinaryStreamWriter2.h" />
     <ClInclude Include="ServiceHelper\LobbyService.h" />
     <ClInclude Include="Utils\ConfigReader.h" />
     <ClInclude Include="Utils\Math\Color.h" />
