@@ -5,6 +5,32 @@
 #include <Core/GameConstants.h>
 namespace Lunia {
 	namespace Lobby {
+		#pragma region AliveStruct
+		enum Marks { AliveReceived, AliveCleared };
+		struct Alive {
+			Marks	Mark;
+
+			///	backup alive data
+			struct AliveData
+			{
+				AliveData() = default;
+				AliveData(uint32 index, uint32 value1, uint32 value2, uint32 value3);
+				uint32	index = 0;
+				uint32	value1 = 0;
+				uint32	value2 = 0;
+				uint32	value3 = 0;
+
+				bool	operator==(AliveData& aliveData)
+				{
+					if (index == aliveData.index && value1 == aliveData.value1
+						&& value2 == aliveData.value2 && value3 == aliveData.value3)
+						return	true;
+
+					return	false;
+				}
+			} answer, temp;
+		};
+		#pragma endregion
 		class User : public Net::ClientTcp {
 		public:
 			User(uint32& userId, asio::ip::tcp::socket&& socket)
@@ -29,7 +55,7 @@ namespace Lunia {
 
 			bool CheckAliveAuth() const;
 
-			void UpdateAliveAuth();
+			void UpdateAliveAuth(const Alive::AliveData& answer);
 
 			void SetIsAuthenticated();
 
@@ -50,28 +76,7 @@ namespace Lunia {
 			uint32 Parse(uint8* buffer, size_t size);
 
 		private:
-			enum Marks { AliveReceived, AliveCleared };
-			struct Alive {
-				Marks	Mark;
-
-				///	backup alive data
-				struct AliveData
-				{
-					uint32	index;
-					uint32	value1;
-					uint32	value2;
-					uint32	value3;
-
-					bool	operator==(AliveData& aliveData)
-					{
-						if (index == aliveData.index && value1 == aliveData.value1
-							&& value2 == aliveData.value2 && value3 == aliveData.value3)
-							return	true;
-
-						return	false;
-					}
-				} answer, temp;
-			} m_Alive;
+			Alive m_Alive;
 
 			uint32 m_userId;
 

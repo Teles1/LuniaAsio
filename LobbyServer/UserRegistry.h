@@ -21,7 +21,7 @@ namespace Lunia {
 		public:
 			Lobby::UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);
 
-			void RemoveUser(Lobby::UserSharedPtr& user);
+			void RemoveUser(Lobby::UserSharedPtr& user); // outside of this class we shall call this.
 
 			void AuthenticateUser(Lobby::UserSharedPtr& user);
 
@@ -34,10 +34,14 @@ namespace Lunia {
 			fwEvent<const Lobby::UserSharedPtr&, const uint32&> OnUserAuthenticated;
 
 		private:
+			void RemoveUser(Lobby::UserSharedPtr& user, AutoLock& _l); //from within the class we should send our AutoLock then finishing deleting the user.
+
 			UserRegistry(const uint32& timeout);
 
-			std::thread											m_keepAliveThread;
+			void CheckAlive();
 		private:
+			std::thread											m_keepAliveThread;
+
 			bool												m_keepAliveLoop = true; //set this to false to end the keepAlive
 
 			std::mutex											m_conditionalVar_lock;

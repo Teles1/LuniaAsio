@@ -57,7 +57,7 @@ namespace Lunia {
 			return (m_Alive.Mark == AliveReceived);
 		}
 
-		void User::UpdateAliveAuth()
+		void User::UpdateAliveAuth(const Alive::AliveData& answer)
 		{
 			m_Alive.Mark = AliveReceived;
 		}
@@ -139,5 +139,12 @@ namespace Lunia {
 		{
 			return this->m_AccountName;
 		}
-	}
+		Alive::AliveData::AliveData(uint32 index, uint32 value1, uint32 value2, uint32 value3)
+		{
+			this->index = index;
+			this->value1 = value1;
+			this->value2 = value2;
+			this->value3 = value3;
+		}
+}
 }

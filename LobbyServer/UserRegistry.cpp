@@ -19,17 +19,28 @@ namespace Lunia {
 			return user;
 		}
 		void UserRegistry::RemoveUser(Lobby::UserSharedPtr& user) {
-
 			//m_users.erase(user->GetId());
-
+			AutoLock _l(m_usersMutex);
+			this->RemoveUser(user, _l);
+		}
+		/* 
+			Pending removal on the database and cleanup.
+		*/
+		void UserRegistry::RemoveUser(Lobby::UserSharedPtr& user, AutoLock& /*No need to touch this because the scope is gonna be locked automatically*/) {
+			/*
+				Key pending aproval for this change. 
+			*/
 			m_usersByUserId[user->GetId()].reset();
 
 			if (m_autorizedUsersByUserId.find(user->GetId()) != m_autorizedUsersByUserId.end())
 			{
 				m_autorizedUsersByUserId[user->GetId()].reset();
+
+				m_autorizedUsersByUserId.erase(user->GetId());
 			}
 
-			AutoLock usersLock(m_usersMutex);
+			OnUserDisconnected(user);
+
 			for (auto it = m_users.begin(); it < m_users.end(); it++)
 			{
 				if ((*it)->GetId() == user->GetId())
@@ -40,13 +51,13 @@ namespace Lunia {
 				}
 			}
 
-			OnUserDisconnected(user);
 		}
 
 		void UserRegistry::AuthenticateUser(Lobby::UserSharedPtr& user)
 		{
 			if (user)
 			{
+				AutoLock _l(m_usersMutex);
 				Lobby::UserWeakPtr userWeak = user;
 
 				uint32 oldUserId = user->GetId();
@@ -66,8 +77,8 @@ namespace Lunia {
 		}
 
 		Lobby::UserSharedPtr UserRegistry::GetUserByUserId(uint32 userId) {
+			AutoLock _l(m_usersMutex);
 			auto ptr = Lobby::UserSharedPtr();
-
 			if (m_usersByUserId.find(userId) != m_usersByUserId.end())
 			{
 				ptr = m_usersByUserId[userId].lock();
@@ -79,23 +90,26 @@ namespace Lunia {
 			m_timeOutTimer = timeout;
 			m_keepAliveThread = std::thread([&] {
 				while (m_keepAliveLoop) {
-					if (m_usersByUserId.size() > 0) {
-						AutoLock _l(m_usersMutex);
-						//std::cout << "Mutex Locked" << std::endl;
-						for (auto& x : m_usersByUserId) {
-							//ping user here
-						}
-						//std::cout << "Mutex Destroyed" << std::endl;
-					}
+					if (m_usersByUserId.size() > 0)
+						CheckAlive();
+
 					std::unique_lock<std::mutex> _l(m_conditionalVar_lock);
-					if (m_conditionalVar.wait_for(_l, std::chrono::milliseconds(m_timeOutTimer), [&] { return !m_keepAliveLoop; })) {
-						//std::cout << "Loop has been set to false" << std::endl;
-					}
-					else {
-						//std::cout << "timed out" << std::endl;
-					}
+					if (m_conditionalVar.wait_for(_l, std::chrono::milliseconds(m_timeOutTimer), [&] { return !m_keepAliveLoop; }))
+						Logger::GetInstance().Info("Keep Alive Loop has been suceffully disabled");
 				}
 			});
+		}
+		void UserRegistry::CheckAlive()
+		{
+			AutoLock _l(m_usersMutex);
+			for (auto& x : m_users) {
+				if (x->CheckAliveAuth()) {
+					if (x->QueryAliveAuth())
+						continue;
+				}
+				Logger::GetInstance().Info("Invalid Alive Processing. Terminating user's connection => {0}", x->GetId());
+				this->RemoveUser(x, _l);
+			}
 		}
 	}
 
