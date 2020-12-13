@@ -305,9 +305,13 @@ namespace Lunia {
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SaveKeySetting", user->GetId());
 
-					json j = StringUtil::ToASCII(packet.Keycodes);
-					cpr::Response r = cpr::Post(cpr::Url("http://localhost:51542/Lobby/SaveKeySetting/Teste"), cpr::Body{ j.dump() }, cpr::Header{ {"Content-Type", "application/json"} },  cpr::Timeout{ 1000 });
-
+					Net::Api api("SaveKeySetting");
+					api << packet.Account;
+					const Net::Answer result = api.RequestPost(StringUtil::ToASCII(packet.Keycodes));
+					if (result.errorCode != 0) {
+						//key save error;
+						return;
+					}
 				});
 		});
 }

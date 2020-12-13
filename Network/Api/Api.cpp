@@ -35,6 +35,24 @@ namespace Lunia {
             }
             return std::move(Answer("Whoops!", -1));
         }
+        Answer Api::RequestPost(json value) const {
+            cpr::Response r = cpr::Post(cpr::Url(BuildUrl()), cpr::Body{ value.dump() }, m_Header, cpr::Timeout{ 1000 });
+            Logger::GetInstance().Info("Api returned [{0}] =>  {1}", r.status_code, r.text);
+            if (r.status_code == 200) {
+                try {
+                    json result = json::parse(r.text);
+                    if (result != NULL && result.is_object()) {
+                        uint16 errorCode = result["errorCode"].get<uint16>();
+                        std::string errorMessage = result["errorMessage"].get<std::string>();
+                        return std::move(Answer(errorMessage, errorCode, result["data"].get<json>()));
+                    }
+                }
+                catch (...) {
+                    Logger::GetInstance().Error("Could not parse json!");
+                }
+            }
+            return std::move(Answer("Whoops!", -1));
+        }
         std::string Api::BuildUrl() const {
             std::string ret;
             for (size_t i = 0; i < m_Url.size(); i++) {
@@ -47,7 +65,7 @@ namespace Lunia {
         void Api::AddHeaders() {
             m_Header.emplace("ServerName", "Lobby");
             m_Header.emplace("ServerIp", "127.0.0.1");
-            m_Header.emplace("ContentType", "application/json");
+            m_Header.emplace("Content-Type", "application/json");
         }
     }
 }
