@@ -94,21 +94,21 @@ namespace Lunia {
 											info.StateFlags = static_cast<XRated::CharacterStateFlags>(y["instantStateFlag"].get<int>());
 											info.RebirthCount = y["characterRebirth"]["rebirthCount"].get<uint16>();
 											info.StoredLevel = y["characterRebirth"]["storedLevel"].get<uint16>();
-											if (!result.resultObjet["characterLicenses"].is_null())
-												for (auto y : y["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
-													info.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
-												}
-											if (!result.resultObjet["items"].is_null())
-												for (auto y : y["items"].get<json>()) {
-													XRated::ItemSlot slot;
-													slot.Position.Bag = y["bagNumber"].get<uint8>(); // equipment slots at
-													slot.Position.Position = y["positionNumber"].get<uint8>();
-													slot.Stacked = 1; // equipments cannot be stacked
-													slot.Id = y["itemHash"].get<uint32>();
-													slot.instanceEx.Instance = y["instance"].get<int64>();
-													slot.instanceEx.ExpireDate.Parse(StringUtil::ToUnicode(y["itemExpire"].get<std::string>()));
-													info.Equipments.push_back(slot);
-												}
+
+											for (auto y : y["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
+												info.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
+											}
+
+											for (auto y : y["items"].get<json>()) {
+												XRated::ItemSlot slot;
+												slot.Position.Bag = y["bagNumber"].get<uint8>(); // equipment slots at
+												slot.Position.Position = y["positionNumber"].get<uint8>();
+												slot.Stacked = 1; // equipments cannot be stacked
+												slot.Id = y["itemHash"].get<uint32>();
+												slot.instanceEx.Instance = y["instance"].get<int64>();
+												slot.instanceEx.ExpireDate.Parse(StringUtil::ToUnicode(y["itemExpire"].get<std::string>()));
+												info.Equipments.push_back(slot);
+											}
 										}
 									Lobby::Protocol::ListCharacter sendPacket;
 									sendPacket.Characters = user->m_Characters;
@@ -250,21 +250,20 @@ namespace Lunia {
 						sendPacket.CharacterInfo.RebirthCount = result.resultObjet["characterRebirth"]["rebirthCount"].get<uint16>();
 						sendPacket.CharacterInfo.StoredLevel = result.resultObjet["characterRebirth"]["storedLevel"].get<uint16>();
 						
-						if (!result.resultObjet["characterLicenses"].is_null())
-							for (auto y : result.resultObjet["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
-								sendPacket.CharacterInfo.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
-							}
-						if(!result.resultObjet["items"].is_null())
-							for (auto y : result.resultObjet["items"].get<json>()) {
-								XRated::ItemSlot slot;
-								slot.Position.Bag = y["bagNumber"].get<uint8>(); // equipment slots at
-								slot.Position.Position = y["positionNumber"].get<uint8>();
-								slot.Stacked = 1; // equipments cannot be stacked
-								slot.Id = y["itemHash"].get<uint32>();
-								slot.instanceEx.Instance = y["instance"].get<int64>();
-								slot.instanceEx.ExpireDate.Parse(y["itemExpire"].get<std::wstring>());
-								sendPacket.CharacterInfo.Equipments.push_back(slot);
-							}
+						for (auto y : result.resultObjet["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
+							sendPacket.CharacterInfo.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
+						}
+
+						for (auto y : result.resultObjet["items"].get<json>()) {
+							XRated::ItemSlot slot;
+							slot.Position.Bag = y["bagNumber"].get<uint8>(); // equipment slots at
+							slot.Position.Position = y["positionNumber"].get<uint8>();
+							slot.Stacked = 1; // equipments cannot be stacked
+							slot.Id = y["itemHash"].get<uint32>();
+							slot.instanceEx.Instance = y["instance"].get<int64>();
+							slot.instanceEx.ExpireDate.Parse(y["itemExpire"].get<std::wstring>());
+							sendPacket.CharacterInfo.Equipments.push_back(slot);
+						}
 						user->m_Characters.push_back(sendPacket.CharacterInfo);
 					}
 					user->Send(sendPacket);
@@ -305,9 +304,13 @@ namespace Lunia {
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SaveKeySetting", user->GetId());
 
-					json j = StringUtil::ToASCII(packet.Keycodes);
-					cpr::Response r = cpr::Post(cpr::Url("http://localhost:51542/Lobby/SaveKeySetting/Teste"), cpr::Body{ j.dump() }, cpr::Header{ {"Content-Type", "application/json"} },  cpr::Timeout{ 1000 });
-
+					Net::Api api("SaveKeySetting");
+					api << packet.Account;
+					const Net::Answer result = api.RequestPost(StringUtil::ToASCII(packet.Keycodes));
+					if (result.errorCode != 0) {
+						//key save error;
+						return;
+					}
 				});
 		});
 }

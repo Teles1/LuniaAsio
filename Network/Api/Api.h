@@ -35,12 +35,14 @@ namespace Lunia {
             }
 
             Answer RequestApi() const;
+            Answer RequestPost(json value) const;
             std::string BuildUrl() const;
             ~Api() {}
             void AddHeaders();
         private:
             cpr::Header                                     m_Header;
             std::vector<std::string>                        m_Url;
+            json                                            m_Body;
         };
     }
 }
