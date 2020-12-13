@@ -1,5 +1,5 @@
 #pragma once
-
+#pragma warning(disable : 4996)
 template<bool IsBoolean>
 struct fwEventConnectProxy
 {

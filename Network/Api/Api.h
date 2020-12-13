@@ -1,6 +1,6 @@
 #ifndef Api_GUARD
 #define Api_GUARD
-
+#pragma warning(disable : 4996)
 #pragma once
 #include "./Core/Core.h"
 #include <cpr/cpr.h>

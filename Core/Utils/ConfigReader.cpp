@@ -12,13 +12,11 @@ namespace Lunia {
     void Config::ReadConfigFile(const char* filename)
     {
         //Reading the file to a string
-        std::wifstream wif(filename);
-        wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
-        std::wstringstream wss;
-        wss << wif.rdbuf();
-        // Done reading. Now we gonna pass the contents to the json parser and then read the config file.
-        std::wstring str(wss.str());
-        json j = json::parse(str);
+        std::ifstream ifs(filename);
+        std::stringstream ss;
+        ss << ifs.rdbuf();
+
+        json j = json::parse(ss.str());
         if (j["Config"].is_object()) {
             auto& j_config = j["Config"];
             if (!j_config["LobbyServer"].is_null()) {

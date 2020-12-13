@@ -220,7 +220,7 @@ namespace Lunia {
 				MissionClearCommand,
 			};
 
-			enum ClassType ///< @remarks keep NumberOfClassTypes as next element of last class type.
+			enum class ClassType ///< @remarks keep NumberOfClassTypes as next element of last class type.
 			{
 				Healer = 0, Knight, Wizard, Thief, Slime, DollMaster, DarkTemplar, IceSorceress, Archer, BountyHunter, Bard, 
 				DualWield, Fighter, DarkEir, Aruta, Gaon , Iris, NumberOfClassTypes, AnyClassType = 9999, NoClass /* its only for pvp*/, 

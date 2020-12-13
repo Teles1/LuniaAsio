@@ -1,6 +1,5 @@
 #ifndef Shared_GUARD
 #define Shared_GUARD
-
 #define ASIO_STANDALONE
 #ifdef _WIN32
 #define _WIN32_WINNT 0x0A00

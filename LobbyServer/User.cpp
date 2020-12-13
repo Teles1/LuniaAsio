@@ -44,12 +44,22 @@ namespace Lunia {
 
 			m_Alive.Mark = AliveCleared;
 			packet.Index = m_Alive.temp.index = ++m_AlivePacketCount;
-			packet.Value1 = m_Alive.temp.value1 = GetTickCount64();
+			packet.Value1 = m_Alive.temp.value1 = (uint32)GetTickCount64();
 			packet.Value2 = m_Alive.temp.value2 = 0;
 			packet.Value3 = m_Alive.temp.value3 = 0;
 
 			Send(packet);
 			return true;
+		}
+
+		bool User::CheckAliveAuth() const
+		{
+			return (m_Alive.Mark == AliveReceived);
+		}
+
+		void User::UpdateAliveAuth()
+		{
+			m_Alive.Mark = AliveReceived;
 		}
 
 		void User::SetIsAuthenticated()
@@ -61,7 +71,7 @@ namespace Lunia {
 		bool User::DoesHaveLicense(XRated::Constants::ClassType classType)
 		{
 			AutoLock _l(mtx);
-			if (static_cast<bool>(m_AccountLicenses & (1 << classType)))
+			if (static_cast<bool>(m_AccountLicenses & (1 << static_cast<int>(classType))))
 				return true;
 			return false;
 		}

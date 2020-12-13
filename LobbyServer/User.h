@@ -27,6 +27,10 @@ namespace Lunia {
 
 			bool QueryAliveAuth();
 
+			bool CheckAliveAuth() const;
+
+			void UpdateAliveAuth();
+
 			void SetIsAuthenticated();
 
 			bool DoesHaveLicense(XRated::Constants::ClassType classType);
