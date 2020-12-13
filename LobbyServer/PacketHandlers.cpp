@@ -302,8 +302,9 @@ namespace Lunia {
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::SaveKeySetting& packet)
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SaveKeySetting", user->GetId());
-					StringUtil::ToASCII(packet.Keycodes);
-					
+
+					json j = StringUtil::ToASCII(packet.Keycodes);
+					cpr::Response r = cpr::Post(cpr::Url("http://localhost:51542/Lobby/SaveKeySetting/Teste"), cpr::Body{ j.dump() }, cpr::Header{ {"Content-Type", "application/json"} },  cpr::Timeout{ 1000 });
 
 				});
 		});
