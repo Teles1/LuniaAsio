@@ -8,7 +8,6 @@ namespace Lunia {
 	extern std::shared_ptr<GameServerScope> g_gameServer;
 
 	namespace Lobby {
-		ConfigType Config;
 		struct LobbyServer : public Net::ServerTcp<User> {
 			LobbyServer(const char* ip, uint16 port);
 			void HandleNewConnection(const asio::error_code& err_code

@@ -7,17 +7,18 @@ namespace Lunia {
 	namespace Lobby {
 		LobbyServer::LobbyServer(const char* ip, uint16 port) : ServerTcp(ip, port)
 		{
-			Net::Api::ApiUrl = Config.ApiBase;
+			Net::Api::ApiUrl = Config::GetInstance().m_ApiBase;
 			Net::Api api("AddServer");
-			api << Config.ServerAddress.ServerPort;
+			api << Config::GetInstance().m_ServerAddress.ServerPort;
 			while (true) {
 				auto result = api.RequestApi();
 				if (result.errorCode == 0 || result.errorCode == 1) {
-					Logger::GetInstance().Info("{0} Initialized on port {1}", Lobby::Config.ServerName, Lobby::Config.ServerAddress.ServerPort);
+					Logger::GetInstance().Info("{0} Initialized on port {1}", Config::GetInstance().m_ServerName, Config::GetInstance().m_ServerAddress.ServerPort);
 					break;
 				}
 				else
 					Logger::GetInstance().Error("Could not initiaze server using the API supplied!! {0}", result.errorMessage);
+				Sleep(3000);
 			}
 		}
 		void LobbyServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
@@ -32,9 +33,9 @@ int main(int argc, char* argv[])
 {
 	//setting log name to be used on the console.
 	Logger::GetInstance("LobbyServer");
-	Lunia::ReadConfigFile("Config.json", Lunia::Lobby::Config);
+	Lunia::Config::GetInstance("Config.json");
 	//Load Config
-	Lunia::Lobby::LobbyServer lobbyServer(Lunia::Lobby::Config.ServerAddress.ServerIp.c_str(), Lunia::Lobby::Config.ServerAddress.ServerPort);
+	Lunia::Lobby::LobbyServer lobbyServer(Lunia::Config::GetInstance().m_ServerAddress.ServerIp.c_str(), Lunia::Config::GetInstance().m_ServerAddress.ServerPort);
 	lobbyServer.Run();
 	return 0;
 }
