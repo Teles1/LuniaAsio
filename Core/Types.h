@@ -32,7 +32,8 @@ namespace Lunia {
 			}//AutoLock goes out of scope there fore the lock is released.
 		};
 	*/
-	typedef std::unique_lock<std::mutex> AutoLock;
+	
+	typedef std::scoped_lock<std::mutex> AutoLock;
 	namespace Constants {
 		const uint32 Version = 0x17;
 		const HashType NetStreamHash = 0x55E0;

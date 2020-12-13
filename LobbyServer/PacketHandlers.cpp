@@ -62,7 +62,7 @@ namespace Lunia {
 								}
 								
 								//Lock user's account if second password is set 
-								if (result.resultObjet["secondPassword"].get<boolean>() == TRUE ) {
+								if (result.resultObjet["secondPassword"].get<bool>()) {
 									user->PassedSecondPassword(true);
 								}
 

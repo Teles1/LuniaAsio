@@ -1,5 +1,6 @@
 #include "UserRegistry.h"
 #include "../Core/Utils/InitFunction.h"
+#include <Core/Utils/ThreadPool.h>
 namespace Lunia {
 	namespace Net
 	{
@@ -73,6 +74,28 @@ namespace Lunia {
 			}
 
 			return ptr;
+		}
+		UserRegistry::UserRegistry(const uint32& timeout) {
+			m_timeOutTimer = timeout;
+			m_keepAliveThread = std::thread([&] {
+				while (m_keepAliveLoop) {
+					if (m_usersByUserId.size() > 0) {
+						AutoLock _l(m_usersMutex);
+						//std::cout << "Mutex Locked" << std::endl;
+						for (auto& x : m_usersByUserId) {
+							//ping user here
+						}
+						//std::cout << "Mutex Destroyed" << std::endl;
+					}
+					std::unique_lock<std::mutex> _l(m_conditionalVar_lock);
+					if (m_conditionalVar.wait_for(_l, std::chrono::milliseconds(m_timeOutTimer), [&] { return !m_keepAliveLoop; })) {
+						//std::cout << "Loop has been set to false" << std::endl;
+					}
+					else {
+						//std::cout << "timed out" << std::endl;
+					}
+				}
+			});
 		}
 	}
 

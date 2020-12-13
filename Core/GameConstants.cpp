@@ -354,7 +354,9 @@ namespace Lunia {
 		{
 			switch (type)
 			{
-				case Healer: case Knight: case Wizard: case Thief: case DollMaster: case DarkTemplar: case DarkEir: case Aruta: case Gaon: case Iris:
+				case ClassType::Healer: case ClassType::Knight: case ClassType::Wizard: case ClassType::Thief: 
+				case ClassType::DollMaster: case ClassType::DarkTemplar: case ClassType::DarkEir: 
+				case ClassType::Aruta: case ClassType::Gaon: case ClassType::Iris:
 					return true;
 			}
 
@@ -388,7 +390,7 @@ namespace Lunia {
 					, L"Genus_20"
 					, L"AnyGenus"
 				};
-				return genusClass[type - ClassType::Genus_1].c_str();
+				return genusClass[static_cast<int>(type) - static_cast<int>(ClassType::Genus_1)].c_str();
 			}
 			if (type < ClassType::Healer || type >= ClassType::NumberOfClassTypes)
 			{
@@ -2460,7 +2462,7 @@ namespace Lunia {
 			//#else
 			if (str > 10000)
 			{
-				double value = static_cast<double>(static_cast<int>((str - 1000) / 1000 * 1.35));
+				double value = static_cast<double>((str - 1000) / 1000 * 1.35);
 				return static_cast<float>(((value * value) * 0.03) + ((0.0008 * static_cast<double>(str)) + 8.28));
 			}
 			else if (str > 3000)
