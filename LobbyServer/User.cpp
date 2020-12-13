@@ -44,7 +44,7 @@ namespace Lunia {
 
 			m_Alive.Mark = AliveCleared;
 			packet.Index = m_Alive.temp.index = ++m_AlivePacketCount;
-			packet.Value1 = m_Alive.temp.value1 = GetTickCount();
+			packet.Value1 = m_Alive.temp.value1 = GetTickCount64();
 			packet.Value2 = m_Alive.temp.value2 = 0;
 			packet.Value3 = m_Alive.temp.value3 = 0;
 
@@ -94,7 +94,7 @@ namespace Lunia {
 
 		bool User::DeleteCharacter(String& characterName)
 		{
-			Autolock _l(mtx);
+			AutoLock _l(mtx);
 			for(CharactersIterator it = m_Characters.begin(); it != m_Characters.end(); it++)
 				if (it->CharacterName == characterName) {
 					m_Characters.erase(it);
@@ -115,13 +115,13 @@ namespace Lunia {
 
 		void User::SetLocale(const String& inLocale)
 		{
-			Autolock _l(mtx);
+			AutoLock _l(mtx);
 			this->m_Locale = inLocale;
 		}
 
 		void User::SetAccountName(const String& inAccountName)
 		{
-			Autolock _l(mtx);
+			AutoLock _l(mtx);
 			this->m_AccountName = inAccountName;
 		}
 
