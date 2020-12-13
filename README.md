@@ -15,7 +15,7 @@ Recommendation is to make sure that you have the integration enabled to make you
 - vcpkg install asio:x64-windows
 - vcpkg install spdlog:x64-windows
 - vcpkg install fmt:x64-windows 
-- vcpkg install cpr:x86-windows
+- vcpkg install cpr:x64-windows
 
 
 # Singletons
