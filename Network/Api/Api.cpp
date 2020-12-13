@@ -1,4 +1,5 @@
 #include "Api.h"
+#include <Core/Utils/ConfigReader.h>
 namespace Lunia {
     namespace Net {
         std::string Api::ApiUrl = "http://localhost:51542/Lobby";
@@ -45,8 +46,8 @@ namespace Lunia {
             return ApiUrl + "/" + ret;
         }
         void Api::AddHeaders() {
-            m_Header.emplace("ServerName", "Lobby");
-            m_Header.emplace("ServerIp", "127.0.0.1");
+            m_Header.emplace("ServerName", Config::GetInstance().m_ServerName);
+            m_Header.emplace("ServerIp", Config::GetInstance().m_ServerAddress.ServerIp);
             m_Header.emplace("ContentType", "application/json");
         }
     }
