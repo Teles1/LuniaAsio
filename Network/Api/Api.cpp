@@ -1,16 +1,15 @@
 #include "Api.h"
+#include <Core/Utils/ConfigReader.h>
 namespace Lunia {
     namespace Net {
         std::string Api::ApiUrl = "http://localhost:51542/Lobby";
         Api::Api(const std::string& reqPage) {
             std::string aux = reqPage; // I need it to be a non const lol
             if (aux == "") {
-                Logger::GetInstance().Error("The requested Procedure shouldn't be empty!");
-                throw "The requested Procedure shouldn't be empty!";
+                Logger::GetInstance().Exception("The requested Procedure shouldn't be empty!");
             }
             if (ApiUrl.size() == 0) {
                 Logger::GetInstance().Error("The api url shouldn't be empty!");
-                throw "The api url shouldn't be empty!";
             }
             if (aux[aux.size() - 1] != '/')
                 aux.push_back('/');
@@ -45,8 +44,8 @@ namespace Lunia {
             return ApiUrl + "/" + ret;
         }
         void Api::AddHeaders() {
-            m_Header.emplace("ServerName", "Lobby");
-            m_Header.emplace("ServerIp", "127.0.0.1");
+            m_Header.emplace("ServerName", Config::GetInstance().m_ServerName);
+            m_Header.emplace("ServerIp", Config::GetInstance().m_ServerAddress.ServerIp);
             m_Header.emplace("ContentType", "application/json");
         }
     }

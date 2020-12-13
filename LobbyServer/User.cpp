@@ -60,6 +60,7 @@ namespace Lunia {
 
 		bool User::DoesHaveLicense(XRated::Constants::ClassType classType)
 		{
+			AutoLock _l(mtx);
 			if (static_cast<bool>(m_AccountLicenses & (1 << classType)))
 				return true;
 			return false;
@@ -84,7 +85,7 @@ namespace Lunia {
 
 		bool User::IsAValidCharacterName(String& characterName)
 		{
-			AutoLock(mtx);
+			AutoLock _l(mtx);
 			for (auto& x : m_Characters)
 				if (x.CharacterName == characterName)
 					return true;
@@ -93,6 +94,7 @@ namespace Lunia {
 
 		bool User::DeleteCharacter(String& characterName)
 		{
+			Autolock _l(mtx);
 			for(CharactersIterator it = m_Characters.begin(); it != m_Characters.end(); it++)
 				if (it->CharacterName == characterName) {
 					m_Characters.erase(it);
@@ -113,13 +115,13 @@ namespace Lunia {
 
 		void User::SetLocale(const String& inLocale)
 		{
-			std::unique_lock<std::mutex> _l(mtx);
+			Autolock _l(mtx);
 			this->m_Locale = inLocale;
 		}
 
 		void User::SetAccountName(const String& inAccountName)
 		{
-			std::unique_lock<std::mutex> _l(mtx);
+			Autolock _l(mtx);
 			this->m_AccountName = inAccountName;
 		}
 
