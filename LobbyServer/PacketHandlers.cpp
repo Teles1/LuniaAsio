@@ -312,5 +312,12 @@ namespace Lunia {
 						return;
 					}
 				});
+			fwPacketListener::GetInstance().Connect(
+				[](Lobby::UserSharedPtr& user, Lobby::Protocol::Alive& packet)
+				{
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Alive", user->GetId());
+					Lobby::Alive::AliveData answer(packet.Index,packet.Value1,packet.Value2,packet.Value3);
+					user->UpdateAliveAuth(answer);
+				});
 		});
 }
