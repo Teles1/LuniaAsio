@@ -6,12 +6,10 @@ namespace Lunia {
         Api::Api(const std::string& reqPage) {
             std::string aux = reqPage; // I need it to be a non const lol
             if (aux == "") {
-                Logger::GetInstance().Error("The requested Procedure shouldn't be empty!");
-                throw "The requested Procedure shouldn't be empty!";
+                Logger::GetInstance().Exception("The requested Procedure shouldn't be empty!");
             }
             if (ApiUrl.size() == 0) {
                 Logger::GetInstance().Error("The api url shouldn't be empty!");
-                throw "The api url shouldn't be empty!";
             }
             if (aux[aux.size() - 1] != '/')
                 aux.push_back('/');
