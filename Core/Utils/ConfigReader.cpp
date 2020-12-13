@@ -1,13 +1,16 @@
 #include <Core/Utils/ConfigReader.h>
 namespace Lunia {
-    bool FileExists(const std::string& name){
+    Config::Config(const char* filename) {
+        if (!FileExists(filename))
+            Logger::GetInstance().Exception("Could not find config file provided => {0}", filename);
+        ReadConfigFile(filename);
+    }
+    bool Config::FileExists(const std::string& name){
         struct stat buffer;
         return (stat(name.c_str(), &buffer) == 0);
     }
-    void ReadConfigFile(const char* filename, ConfigType& config)
+    void Config::ReadConfigFile(const char* filename)
     {
-        if (!FileExists(ConfigFile))
-            Logger::GetInstance().Exception("Config file not found <{0}>", ConfigFile);
         //Reading the file to a string
         std::wifstream wif(filename);
         wif.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
@@ -22,13 +25,13 @@ namespace Lunia {
                 Logger::GetInstance().Info("Instance loaded as LobbyServer");
                 auto& lobby = j_config["LobbyServer"];
 
-                config.ApiBase = lobby["ApiBase"].get<std::string>();
-                config.ServerAddress = lobby["ServerAddress"].get<ServerAddress>();
-                config.ServerName = lobby["ServerName"].get<std::string>();
-                config.PingTimeout = lobby["PingTimeout"].get<uint32>();
-                config.ShowPacket = lobby["ShowPacket"].get<bool>();
-                config.Capacity = lobby["Capacity"].get<uint16>();
-                config.AchievementAddress = lobby["AchievementAddress"].get<ServerAddress>();
+                m_ApiBase = lobby["ApiBase"].get<std::string>();
+                m_ServerAddress = lobby["ServerAddress"].get<ServerAddress>();
+                m_ServerName = lobby["ServerName"].get<std::string>();
+                m_PingTimeout = lobby["PingTimeout"].get<uint32>();
+                m_ShowPacket = lobby["ShowPacket"].get<bool>();
+                m_Capacity = lobby["Capacity"].get<uint16>();
+                m_AchievementAddress = lobby["AchievementAddress"].get<ServerAddress>();
             }
             else if (!j_config["StageServer"].is_null()) {
                 Logger::GetInstance().Info("StageServer");
@@ -48,9 +51,9 @@ namespace Lunia {
                 {
                     auto& locale = j_config["Locale"];
                     if (!locale["FobbidenNames"].is_null())
-                        config.Locale.FobbidenNames = locale["FobbidenNames"].get_to(config.Locale.FobbidenNames);
+                        m_Locale.m_FobbidenNames = locale["FobbidenNames"].get_to(m_Locale.m_FobbidenNames);
                     if (!locale["FobbidenStrings"].is_null())
-                        config.Locale.FobbidenStrings = locale["FobbidenStrings"].get_to(config.Locale.FobbidenStrings);
+                        m_Locale.m_FobbidenStrings = locale["FobbidenStrings"].get_to(m_Locale.m_FobbidenStrings);
                     Logger::GetInstance().Info("Locales loaded");
                 }
             }
