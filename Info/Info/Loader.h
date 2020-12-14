@@ -16,6 +16,7 @@ namespace Lunia {
 					virtual void Deserialize(Serializer::IStreamReader& in);
 				};
 
+				/////////////////////////////////////////////////////////////////////////////
 				class LoaderManager
 				{
 				protected:
@@ -36,16 +37,41 @@ namespace Lunia {
 					template <typename T> void Read(const wchar_t* name, T& data);
 					template <typename T> bool Retrieve(uint32 hash, T& result);
 				};
+
 				class IndexedManagerWithMap;
 
+				/** Loader, IndexedManager.
+					make by kim : 2060729
+				*/
 				class Loader : public ReferenceCounted
 				{
 					com_ptr<IRefCountedStreamReader> fileReader;
 					uint32 fileOfEnd;
+					//friend IndexedManager;
 				public:
+					/*
+					virtual class FilePosData
+					{
+					public:
+						uint32 StartPos;
+						uint32 EndPos;
+					};
+					*/
+				public:
+					/** LoadIndexTable.
+					*/
 					template <typename T> void MakeIndex(std::map<uint32, FilePosData>& table, T& data);
+
+					/** MakeIndex.
+					*/
 					template <typename T> void MakeIndex(FilePosData& filePositon, const std::wstring& element, T& data);
+					/** Read.
+						This function is used to read primitive data types.
+					*/
 					template <typename T> void Read(const FilePosData& filePosition, T& result);
+
+					/** Read.
+					*/
 					template <typename T> void Read(const FilePosData& filePosition, const std::wstring& element, T& result);
 				public:
 					Loader(const wchar_t* file);
@@ -54,6 +80,17 @@ namespace Lunia {
 
 				com_ptr<Loader> CreateLoader(const wchar_t* file);
 
+				/*
+				class IIndexedManager
+				{
+				public:
+					template <typename T> virtual bool Retrieve(uint32 hash, T& result) =0;
+				public:
+					virtual ~IIndexedManager(){}
+				};
+				*/
+
+				//
 				class IndexedManagerWithMap : public ReferenceCounted
 				{
 				protected:
@@ -65,6 +102,8 @@ namespace Lunia {
 					template <typename T> bool Get(uint32 hash, T& result);
 
 				public:
+					/** Load,Save
+					*/
 					void Save(const std::wstring& file);
 					void Load(const std::wstring& file);
 
@@ -84,12 +123,37 @@ namespace Lunia {
 				template <typename T> com_ptr<IndexedManagerWithMap> CreateIndexedManagerWithMap(com_ptr<Loader> ptr, T& data);
 				com_ptr<IndexedManagerWithMap> CreateIndexedManagerWithMap(com_ptr<Loader> ptr);
 
+				//
+				/*
+				class IndexedManagerWithStructer : public ReferenceCounted
+				{
+					FilePosData	filePosition;
+					com_ptr<Loader>		loader;
+				public:
+
+					void Save(const std::wstring& file);
+					void Load(const std::wstring& file);
+				public:
+					template <typename T> bool Get(T& result);
+				public:
+					template <typename T> IndexedManagerWithStructer(com_ptr<Loader> ptr,T& data);
+					IndexedManagerWithStructer(com_ptr<Loader> ptr);
+					~IndexedManagerWithStructer();
+				};
+
+				template <typename T> com_ptr<IndexedManagerWithStructer> CreateIndexedManagerWithStructer(com_ptr<Loader> ptr,T& data);
+				com_ptr<IndexedManagerWithStructer> CreateIndexedManagerWithStructer(com_ptr<Loader> ptr);
+				*/
+
+				//
 				class IndexedManagerWithElement : public ReferenceCounted
 				{
 					const std::wstring		element;
 					FilePosData	filePosition;
 					com_ptr<Loader>		loader;
 				public:
+					/** Load,Save
+					*/
 					void Save(const std::wstring& file);
 					void Load(const std::wstring& file);
 				public:
@@ -102,6 +166,7 @@ namespace Lunia {
 
 				template <typename T> com_ptr<IndexedManagerWithElement> CreateIndexedManagerWithElement(com_ptr<Loader> ptr, const std::wstring& element, T& data);
 				com_ptr<IndexedManagerWithElement> CreateIndexedManagerWithElement(com_ptr<Loader> ptr, const std::wstring& element);
+				/////////////////////////////////////////////////////////////////////////////
 			}
 		}
 	}

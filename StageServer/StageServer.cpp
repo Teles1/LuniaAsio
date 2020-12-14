@@ -8,6 +8,7 @@
 #include <cpr/cpr.h>
 #include <Core/Utils/ThreadPool.h>
 #include <chrono>
+#include <Info/Info.h>
 using namespace Lunia;
 std::set<int> players;
 
@@ -44,6 +45,7 @@ void Populate(int size) {
 
 int main()
 {
+    /*
     Utils::thread_pool::GetInstance().push(Test);
     Sleep(5000);
     Populate(10);
@@ -52,6 +54,7 @@ int main()
     Sleep(5000);
     Populate(10);
     Sleep(6000);
-    loop = false;
+    loop = false;*/
+    Lunia::XRated::Database::DatabaseInstance();
     return 0;
 }

@@ -58,8 +58,8 @@ namespace Lunia {
 
 						if (NoticeLevel > Leveler::Nothing && _Left == _Right)
 						{
-							ALLM_WARNING((L"Database Loading....Same Key Found! [%s] ", StringUtil::ToUnicode(_Left).c_str()));
-							if (NoticeLevel == Leveler::Throw) throw LessException(_Left);
+							Logger::GetInstance().Warn(L"Database Loading....Same Key Found! [{0}]", StringUtil::ToUnicode(_Left).c_str());
+							if (NoticeLevel == Leveler::Throw) throw Exception(L"{0}", _Left);
 							return false;
 						}
 						return (_Left < _Right);
@@ -76,7 +76,7 @@ namespace Lunia {
 						if (NoticeLevel > Leveler::Nothing && r == 0)
 						{
 							Logger::GetInstance().Warn(L"Database Loading....Same Key Found! [{0}]", _Left);
-							if (NoticeLevel == Leveler::Throw) throw LessException(_Left);
+							if (NoticeLevel == Leveler::Throw) throw Exception(_Left);
 							return false;
 						}
 						return r > 0;  
@@ -96,7 +96,7 @@ namespace Lunia {
 						{
 							std::wstring temp = StringUtil::Format(L"License:%d-%d", _Left.StageGroupHash, _Left.Level);
 							Logger::GetInstance().Warn(L"Database Loading....Same Key Found! [{0}]", temp.c_str());
-							if (NoticeLevel == Leveler::Throw) throw LessException(_Left);
+							if (NoticeLevel == Leveler::Throw) throw Exception(L"{0}", _Left);
 							return false;
 						}
 						return (_Left < _Right);
@@ -109,23 +109,11 @@ namespace Lunia {
 						if (NoticeLevel > Leveler::Nothing && _Left == _Right)
 						{
 							Logger::GetInstance().Warn(L"Database Loading....Same Key Found! [{0}]", _Left);
-							if (NoticeLevel == Leveler::Throw) throw LessException(_Left);
+							if (NoticeLevel == Leveler::Throw) throw Exception(L"{0}", _Left);
 							return false;
 						}
 						return (_Left < _Right);
 					}
-
-					class LessException : public Exception
-					{
-					public:
-						LessException(T pDuplicated)
-							: duplicated(pDuplicated)
-						{}
-						const T& GetDuplicatedKey() { return duplicated; }
-					private:
-						T duplicated;
-
-					};
 
 				private:
 					IEventListener* listener;

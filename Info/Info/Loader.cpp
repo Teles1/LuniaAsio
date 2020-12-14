@@ -1,5 +1,4 @@
 #include "Loader.h"
-#include <Core/Resource/Resource.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -17,6 +16,7 @@ namespace Lunia {
 					in.Read(L"StartPos", StartPos);
 					in.Read(L"EndPos", EndPos);
 				}
+				// LoaderManager Start ////////////////////////////////////////////////////
 
 				LoaderManager::LoaderManager()
 					: fileOfEnd(0), fileReader(NULL)
@@ -46,7 +46,6 @@ namespace Lunia {
 					fileReader->SetReadCursor(fileOfEnd, IStream::CursorPosition::Begin);
 
 					Resource::SerializerStreamReader readStream = Serializer::CreateBinaryStreamReader(fileReader);
-
 					uint32 size;
 					readStream->Read(L"size", size);
 
@@ -87,7 +86,6 @@ namespace Lunia {
 					fileReader->SetReadCursor(fileOfEnd, IStream::CursorPosition::Begin);
 
 					Resource::SerializerStreamReader readStream = Serializer::CreateBinaryStreamReader(fileReader);
-
 					readStream->Read(name, result);
 
 					fileOfEnd = fileReader->GetReadCursor();
@@ -103,6 +101,8 @@ namespace Lunia {
 					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateSerializerStructuredBinaryStreamWriter(file.c_str());
 					writer->Write(L"IndexedManager", dataPointer);
 				}
+				// LoaderManager End ////////////////////////////////////////////////////
+				// Loader Start ////////////////////////////////////////////////////
 				Loader::Loader(const wchar_t* file)
 					:fileOfEnd(0), fileReader(NULL)
 				{
@@ -124,6 +124,7 @@ namespace Lunia {
 					readStream->Read(L"size", size);
 
 					uint32 readhash;
+
 					for (uint32 i = 0; i < size; ++i)
 					{
 						readStream->Read(L"header", readhash);
@@ -136,7 +137,6 @@ namespace Lunia {
 
 					fileOfEnd = fileReader->GetReadCursor();
 				}
-
 				template <typename T>
 				void Loader::MakeIndex(FilePosData& filePositon, const std::wstring& element, T& data)
 				{
@@ -152,6 +152,7 @@ namespace Lunia {
 
 					fileOfEnd = fileReader->GetReadCursor();
 				}
+
 
 				template <typename T>
 				void Loader::Read(const FilePosData& filePosition, T& result)
@@ -176,7 +177,9 @@ namespace Lunia {
 				{
 					return new Loader(file);
 				}
+				// Loader End ////////////////////////////////////////////////////
 
+				// IndexedManager Start ////////////////////////////////////////////////////
 				template <typename T>
 				IndexedManagerWithMap::IndexedManagerWithMap(com_ptr<Loader> ptr, T& data)
 					: loader(ptr)
@@ -191,6 +194,7 @@ namespace Lunia {
 				{
 					loader = NULL;
 				}
+
 
 				template <typename T>
 				bool IndexedManagerWithMap::Get(uint32 hash, T& result)
@@ -221,7 +225,9 @@ namespace Lunia {
 				{
 					return new IndexedManagerWithMap(ptr);
 				}
+				// IndexedManager End ////////////////////////////////////////////////////
 
+				// IndexedManagerWithElement Start ////////////////////////////////////////////////////
 				template <typename T>
 				IndexedManagerWithElement::IndexedManagerWithElement(com_ptr<Loader> ptr, const std::wstring& name, T& data)
 					:element(name), loader(ptr)
@@ -261,6 +267,7 @@ namespace Lunia {
 				{
 					return new IndexedManagerWithElement(ptr, element);
 				}
+				// IndexedManagerWithElement End ////////////////////////////////////////////////////
 			}
 		}
 	}

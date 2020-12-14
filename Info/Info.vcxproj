@@ -167,6 +167,9 @@
     <ClInclude Include="Info\NPCs\IndexedNPCInfo.h" />
     <ClInclude Include="Info\NPCs\NPC.h" />
     <ClInclude Include="Info\NPCs\NPCManager.h" />
+    <ClInclude Include="Info\StateBundles\IndexedStateBundles.h" />
+    <ClInclude Include="Info\StateBundles\StateBundles.h" />
+    <ClInclude Include="Info\StateBundles\StateBundlesManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp" />
@@ -177,6 +180,9 @@
     <ClCompile Include="Info\NPCs\IndexedNPCInfo.cpp" />
     <ClCompile Include="Info\NPCs\NPC.cpp" />
     <ClCompile Include="Info\NPCs\NPCManager.cpp" />
+    <ClCompile Include="Info\StateBundles\IndexedStateBundles.cpp" />
+    <ClCompile Include="Info\StateBundles\StateBundles.cpp" />
+    <ClCompile Include="Info\StateBundles\StateBundlesManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">

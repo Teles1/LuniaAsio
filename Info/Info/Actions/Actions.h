@@ -1,5 +1,7 @@
 #pragma once
-#include "ActionsManager.h"
+#include "../Database.h"
+#include "../StateBundles/StateBundles.h"
+
 namespace Lunia {
 	namespace XRated {
 		namespace Database {

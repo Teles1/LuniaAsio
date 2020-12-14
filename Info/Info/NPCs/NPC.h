@@ -1,5 +1,6 @@
 #pragma once
-#include "NPCManager.h"
+#include "../Database.h"
+#include "../Actions/Actions.h"
 
 namespace Lunia {
 	namespace XRated {

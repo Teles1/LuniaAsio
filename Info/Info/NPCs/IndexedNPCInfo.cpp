@@ -1,5 +1,5 @@
 #pragma once
-#include "../Database.h"
+#include "IndexedNPCInfo.h"
 
 namespace Lunia {
 	namespace XRated {

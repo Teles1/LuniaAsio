@@ -41,6 +41,15 @@
     <ClInclude Include="Info\Actions\IndexedActionsInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\StateBundles\IndexedStateBundles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StateBundles\StateBundles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StateBundles\StateBundlesManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -65,6 +74,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\Actions\ActionsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StateBundles\IndexedStateBundles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StateBundles\StateBundles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StateBundles\StateBundlesManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

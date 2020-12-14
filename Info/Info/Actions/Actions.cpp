@@ -1,5 +1,5 @@
 #pragma once
-#include "../Database.h"
+#include "Actions.h"
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -315,7 +315,6 @@ namespace Lunia {
 					in.Read(L"enableColorEffect", tmp, 0);
 					enableColorEffect = tmp ? true : false;
 				}
-			
 			}
 		}
 	}

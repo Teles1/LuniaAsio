@@ -1,5 +1,6 @@
 #pragma once
-#include "IndexedActionsInfo.h"
+#include "../Database.h"
+#include "Actions.h"
 
 namespace Lunia {
 	namespace XRated {

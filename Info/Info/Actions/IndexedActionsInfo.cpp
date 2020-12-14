@@ -1,10 +1,74 @@
 #pragma once
-#include "../Database.h"
+#include "IndexedActionsInfo.h"
 
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
+
+				void ActionLoaderManager::Init(const String& fileName)
+				{
+					LoaderManager::Init(fileName);
+				}
+				template <typename T>
+				void ActionLoaderManager::Init(const String& filename, T& data)
+				{
+					LoaderManager::Init(filename);
+
+					fileReader->SetReadCursor(fileOfEnd, IStream::CursorPosition::Begin);
+
+					Resource::SerializerStreamReader readStream = Serializer::CreateBinaryStreamReader(fileReader);
+
+					uint32 size;
+					readStream->Read(L"size", size);
+
+					std::wstring readhash, readhash2;
+
+					for (uint32 i = 0; i < size; ++i)
+					{
+						readStream->Read(L"header", readhash);
+						dataPointer[StringUtil::Hash(readhash.c_str())].StartPos = fileReader->GetReadCursor();
+
+						uint32 subsize;
+						readStream->Read(L"size", subsize);
+
+						for (uint32 j = 0; j < subsize; ++j)
+						{
+							readStream->Read(L"header", readhash2);
+
+							//			uint32 hash = StringUtil::Hash(readhash2.c_str());
+							data.actions[readhash2].Deserialize(*readStream);
+						}
+						// make hash to template name table(make by kim).
+						uint32 templateHash = StringUtil::Hash(readhash.c_str());
+						actionTemplateMap[templateHash] = readhash;
+
+						readStream->Read(L"actorList", data.actorList);
+						dataPointer[StringUtil::Hash(readhash.c_str())].EndPos = fileReader->GetReadCursor();
+					}
+
+					fileOfEnd = fileReader->GetReadCursor();
+
+				}
+				const wchar_t* ActionLoaderManager::GetTemplateName(uint32 key)
+				{
+					std::map<uint32, std::wstring>::iterator iter = actionTemplateMap.find(key);
+					if (iter != actionTemplateMap.end()) {
+						return iter->second.c_str();
+					}
+					return NULL;
+				}
+
+				void ActionLoaderManager::LoadTemplateTable(const std::wstring& file)
+				{
+					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateSerializerStructuredBinaryStreamReader(file.c_str());
+					reader->Read(L"ActionLoaderManager::TemplateTable", actionTemplateMap);
+				}
+				void ActionLoaderManager::SaveTemplateTable(const std::wstring& file)
+				{
+					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateSerializerStructuredBinaryStreamWriter(file.c_str());
+					writer->Write(L"ActionLoaderManager::TemplateTable", actionTemplateMap);
+				}
 				void IndexedActionInfoManager::LoadBinaryData()
 				{
 					manager.Init(L"Database/ActionInfos.b");
