@@ -1,7 +1,9 @@
+#include <Core/IStream.h>
+
 #include "XmlStreamWriter.h"
 #include "XmlStreamReader.h"
-#include "XmlStream.h"
-#include <Core/FileIO/FileStream.h>
+
+#include <Core/com_ptr.h>
 
 namespace Lunia {
 	namespace Serializer {

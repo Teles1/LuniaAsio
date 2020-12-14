@@ -1,28 +1,8 @@
 #pragma once
+#include "FileIO.h"
 #include "../ReferenceCounted.h"
-#include <Core/FileIO/FileBase.h>
 namespace Lunia {
 	namespace FileIO {
-
-		/**
-		this is a pure abstract interface
-
-		NOTICE:
-
-		it doesn't have static methods
-		it doesn't have Open/Close methods, File class has
-
-		*/
-
-		/*
-		enum SeekFrom { Top = FILE_BEGIN, End = FILE_END, Cur = FILE_CURRENT };
-		enum Mode {
-			ReadMode				=0x1,
-			WriteMode				=0x2,
-			AppendMode				=0x6
-		};
-		//*/
-
 		class IFile : public IReferenceCounted {
 		public:
 

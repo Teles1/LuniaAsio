@@ -3,8 +3,12 @@
 #include <cctype>
 #include <Core/Resource/TextLoader.h>
 #include <Core/Resource/ChunkLoader.h>
-#include "Resource_FileStreamFactory.h"
 #include <Core/FileIO/Directory.h>
+#include <Core/Serializer/Binary/XmlStream.h>
+#include <Core/Serializer/Binary/BinaryStream.h>
+#include <Core/Serializer/Binary/StructuredBinaryStream.h>
+#include <Core/FileIO/FileStream.h>
+#include <Core/Utils/StringUtil/Compare.h>
 
 namespace Lunia {
 	namespace Resource {
@@ -26,7 +30,130 @@ namespace Lunia {
 			typedef std::map<std::wstring, IStreamFactory*> StreamFactories;
 			StreamFactories streamFactories;
 
-			FileStreamFactory fileStreamFactory;
+			struct FileStreamFactory : IResource::IStreamFactory {
+				Resource& outer;
+
+				FileStreamFactory(Resource& pOuter) :outer(pOuter) {}
+
+
+				/**
+				1. We check whether zip acceleration tables have the entry.
+				2. We check the normal file system
+				*/
+				virtual StreamReader CreateStreamReader(const wchar_t* name)
+				{
+					//name is assumed to be consolidated.
+					//if (outer.useZip && ZipInstance().Exists(name))
+					//{
+					//	//assumes that the FileStreamFactory::Exists() has been called before for this, and it always should have been
+					//	//return ZipInstance().CreateZipStreamReader(outer.OpenStream(ZipInstance().GetZipFilename(name)),name);
+					//	return ZipInstance().CreateZipStreamReader(name);
+					//}
+					//else 
+					if (FileIO::File::Exists(name))
+					{
+						return new FileIO::RefCountedFileStreamReader(name);
+					}
+					else
+					{
+						wchar_t relativeName[4096];
+						outer.GetRelativeName(name, relativeName, 4096);
+						throw ResourceNotFoundException(L"Cannot find resource from file system or internal zip acceleration tables: {0}", name);
+					}
+				}
+
+				virtual StreamReader CreateStreamReader(uint8* bufferIn, uint32 bufferSz)
+				{
+					return new FileIO::RefCountedMemoryStreamReader(bufferIn, bufferSz);
+				}
+
+				virtual StreamWriter CreateStreamWriter(const wchar_t* name)
+				{
+					return new FileIO::RefCountedFileStreamWriter(name);
+				}
+
+				virtual bool             Exists(const wchar_t* name) const {
+
+					////does the file exists in the zip system
+					//if (ZipInstance().Exists(name))
+					//{
+					//	return true;
+					//}
+
+					//does the file exists on the disk
+					if (FileIO::File::Exists(name))
+					{
+						return true;
+					}
+
+					//checks if the zip for the path exists in the system already
+					/*					if (ZipInstance().IsAlreadyTraversed(name)) {
+					return false;
+					}*/
+
+					//starts traversing upwards in the directory hiearchy and trying to find .zip replacing a directory tree
+
+					int basePathIndex = -1;
+					std::wstring basePath;
+
+					std::wstring lowername = name;
+
+					for (size_t i = outer.paths.size(); i > 0; --i) {
+						std::wstring path = outer.paths[i - 1];
+
+						if (lowername.find(path) != std::wstring::npos) {
+							basePathIndex = int(i - 1);
+
+							basePath = outer.paths[basePathIndex];
+
+							if (!basePath.empty()) {
+								if (basePath[basePath.length() - 1] == L'/') {
+									basePath = std::wstring(basePath.begin(), basePath.end() - 1); //we remove possible last /
+								}
+							}
+							//							ALLM_IMPORTANT((L"found path where to stop =%s", path.c_str()));
+							break;
+						}
+					}
+
+					//try finding .zip that has the file by traversing upwards the directory tree
+					std::wstring zipfilename = name;
+
+					bool stopIteration = false;
+					while ((!zipfilename.empty()) && (!stopIteration)) {
+						Locator locator(zipfilename);
+						if (basePathIndex != -1) {
+							//we check if we have reached the base path and stop iteration
+							if (StringUtil::EqualsCaseInsensitive(basePath, locator.GetPathNoFilename().c_str())) {
+								//ALLM_IMPORTANT((L"stopping iterator, base path reached"));
+								stopIteration = true;
+								continue;
+							}
+						}
+
+						zipfilename = locator.GetPathNoFilename().c_str();
+						if (locator.GetFilename().empty()) return false;
+						if (zipfilename.empty()) return false;
+
+						zipfilename += L".zip";
+
+						//		ALLM_INFO((L"trying to find zip filename=%s", zipfilename.c_str()));
+
+						if (FileIO::File::Exists(zipfilename.c_str())) {
+							//if (!ZipInstance().ZipExists(zipfilename.c_str())) {
+							//	//ALLM_INFO((L"preloading zip"));
+							//	ZipInstance().LoadZip(outer.OpenStream(zipfilename.c_str()));
+							//	return ZipInstance().Exists(name);//we stop traversing when the first zip is found to keep things simple
+							//}
+							//else {
+							return false;//we already checked existance for loaded zips.. first line of this method
+						//}
+						}
+					}
+
+					return false;
+				}
+			} fileStreamFactory;
 
 			bool isAbsolute(const std::wstring& path) const {
 				if (path.find(L":") != std::wstring::npos) {
@@ -70,7 +197,7 @@ namespace Lunia {
 				assert(maximumSize > 0);
 				//make path absolute.
 				bool absolute = false;
-				//wcsncpy(buffer, name, maximumSize-1);
+				//wcsncpy_s(buffer, name, maximumSize-1);
 				for (size_t i = 0; i < maximumSize - 1; ++i)
 				{
 					buffer[i] = name[i];
@@ -376,7 +503,7 @@ namespace Lunia {
 									tmp2 = paths[i - 1] + buffer;
 								}
 
-								wcsncpy(buffer, tmp2.c_str(), size - 1);
+								wcsncpy_s(buffer, size, tmp2.c_str(), size - 1);
 								buffer[size - 1] = 0;
 								//								 //ALLM_IMPORTANT((L"#2 CONSOLIDATED=%s", buffer))
 								return;
@@ -385,7 +512,7 @@ namespace Lunia {
 					}
 				}
 
-				wcsncpy(buffer, target, size - 1);
+				wcsncpy_s(buffer, size, target, size - 1);
 				buffer[size - 1] = 0;
 				//				  ALLM_IMPORTANT((L"#3 CONSOLIDATED=%s", buffer))
 			}
@@ -394,7 +521,7 @@ namespace Lunia {
 			{
 				if (std::wstring(name).find(L"://") != std::wstring::npos)
 				{
-					wcsncpy(buffer, name, size - 1);
+					wcsncpy_s(buffer, size, name, size - 1);
 					buffer[size - 1] = 0;
 					return;
 				}
@@ -403,13 +530,13 @@ namespace Lunia {
 				//for (size_t i=0; i<paths.size(); ++i) {
 				for (size_t i = paths.size(); i > 0; --i) {
 					if (ExistsDispatch(paths[i - 1] + name)) {
-						wcsncpy(buffer, (paths[i - 1] + name).c_str(), size - 1);
+						wcsncpy_s(buffer, size, (paths[i - 1] + name).c_str(), size - 1);
 						buffer[size - 1] = 0;
 						return;
 					}
 				}
 
-				wcsncpy(buffer, name, size - 1);
+				wcsncpy_s(buffer, size, name, size - 1);
 				buffer[size - 1] = 0;
 			}
 
@@ -434,13 +561,13 @@ namespace Lunia {
 						//we have a potentical candidate and actually this shouldn't fail or we don't check it for failure at least ;)
 						std::wstring relativeName(tmp.begin() + paths[i - 1].length(), tmp.end());
 						//ALLM_INFO((L"relative name for %s is %s", name, relativeName.c_str()));
-						wcsncpy(buffer, relativeName.c_str(), size - 1);
+						wcsncpy_s(buffer, size, relativeName.c_str(), size - 1);
 						buffer[size - 1] = 0;
 						return;
 					}
 				}
 
-				wcsncpy(buffer, name, size - 1);
+				wcsncpy_s(buffer, size, name, size - 1);
 				buffer[size - 1] = 0;
 
 			}
@@ -453,11 +580,11 @@ namespace Lunia {
 
 				if (paths.size() > 1) {
 					//primary data path
-					wcsncpy(buffer, paths[1].c_str(), size - 1);
+					wcsncpy_s(buffer, size, paths[1].c_str(), size - 1);
 				}
 				else {
 					//start directory of the application
-					wcsncpy(buffer, paths[0].c_str(), size - 1);
+					wcsncpy_s(buffer, size, paths[0].c_str(), size - 1);
 				}
 				buffer[size - 1] = 0;
 			}

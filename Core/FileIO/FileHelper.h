@@ -1,7 +1,8 @@
-/* internal helper header - not exposed */
 #pragma once
 
+#include "../helper.h"
 #include "File.h"
+#include "Directory.h"
 
 #define THROWFILEEXCEPTION(filename) ThrowFileException(filename)
 #define THROW_CUSTOM_FILE_

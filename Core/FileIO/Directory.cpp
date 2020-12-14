@@ -1,5 +1,5 @@
 #include "FileHelper.h"
-#include "Directory.h"
+#include <Core/Utils/StringUtil/GenericConversion.h>
 
 namespace Lunia {
 	namespace FileIO {

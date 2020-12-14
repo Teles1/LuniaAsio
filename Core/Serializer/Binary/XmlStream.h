@@ -1,5 +1,7 @@
 #pragma once
 #include <Core/Serializer/Serializer.h>
+#include <Core/com_ptr.h>
+#include <Core/IStream.h>
 
 namespace Lunia {
 	namespace Serializer {

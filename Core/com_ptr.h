@@ -2,7 +2,8 @@
 #define LUNIA_COMMON_COM_PTR_H
 
 namespace Lunia {
-	template <class tc> class com_ptr {
+	template <class tc> 
+	class com_ptr {
 		tc* m_Ptr;
 
 	public:
@@ -15,8 +16,9 @@ namespace Lunia {
 			return *m_Ptr;
 		}
 
-		template <class A> com_ptr<tc>(const com_ptr<A>& cp) {
-			m_Ptr = static_cast<A*>(cp.get());
+		template <class A> 
+		com_ptr<tc>(const com_ptr<A>& cp) {
+			m_Ptr = reinterpret_cast<tc*>(cp.get());
 			if (m_Ptr != 0)  m_Ptr->AddRef();
 		}
 

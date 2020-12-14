@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Types.h"
+#include <Core/Utils/StringUtil.h>
 
 namespace Lunia {
 	namespace FileIO {

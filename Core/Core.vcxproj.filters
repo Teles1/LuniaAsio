@@ -21,6 +21,9 @@
     <ClCompile Include="Resource\Xml\XmlParser.cpp" />
     <ClCompile Include="Serializer\Binary\XmlSerializer.cpp" />
     <ClCompile Include="Serializer\Binary\XmlStream.cpp" />
+    <ClCompile Include="Buffer.cpp" />
+    <ClCompile Include="Serializer\Binary\BinaryStream.cpp" />
+    <ClCompile Include="Helper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -94,6 +97,14 @@
     <ClInclude Include="Serializer\Binary\XmlStream.h" />
     <ClInclude Include="Serializer\Binary\XmlStreamReader.h" />
     <ClInclude Include="Serializer\Binary\XmlStreamWriter.h" />
+    <ClInclude Include="Buffer.h" />
+    <ClInclude Include="Serializer\Binary\BinaryStream.h" />
+    <ClInclude Include="Serializer\Binary\BinaryStreamReader.h" />
+    <ClInclude Include="Serializer\Binary\BinaryStreamWriter.h" />
+    <ClInclude Include="FileIO\FileIO.h" />
+    <ClInclude Include="Helper.h" />
+    <ClInclude Include="CriticalSection.h" />
+    <ClInclude Include="Base.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

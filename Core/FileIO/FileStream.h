@@ -1,5 +1,5 @@
 #pragma once
-
+#include "FileIO.h"
 #include "../ReferenceCounted.h"
 #include "../IStream.h"
 

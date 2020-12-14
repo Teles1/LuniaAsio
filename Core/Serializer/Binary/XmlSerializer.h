@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Core/Serializer/Serializer.h>
+#include <Core/Utils/Math/Math.h>
 #include <Core/Resource/Xml/Xml.h>
 
 namespace Lunia { namespace Serializer {

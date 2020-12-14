@@ -59,7 +59,7 @@ namespace Lunia {
 					buffer[size+i]=0;
 				}*/
 				stream->Read(buffer, size * sizeof(T::value_type));
-				value = reinterpret_cast<T::value_type*>(buffer);
+				value = reinterpret_cast<typename T::value_type*>(buffer);
 				delete buffer;
 
 			}
@@ -251,7 +251,7 @@ namespace Lunia {
 			virtual unsigned int inline Read(const wchar_t* name, wchar_t* buffer, unsigned int size) {
 				std::wstring source;
 				Read(name, source);
-				wcsncpy(buffer, source.c_str(), size - 1);
+				wcsncpy_s(buffer, size, source.c_str(), size - 1);
 				buffer[size - 1] = 0;
 				return unsigned int(source.size());
 			}
@@ -259,7 +259,7 @@ namespace Lunia {
 			virtual unsigned int inline Read(const wchar_t* name, char* buffer, unsigned int size) {
 				std::string source;
 				Read(name, source);
-				strncpy(buffer, source.c_str(), size - 1);
+				strncpy_s(buffer, size, source.c_str(), size - 1);
 				buffer[size - 1] = 0;
 				return unsigned int(source.size());
 			}

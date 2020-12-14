@@ -1,4 +1,5 @@
 #include "XmlSerializer.h"
+#include <Core/Utils/StringUtil.h> 
 #pragma warning( disable:4996 ) // avoid warn at while(false)
 
 namespace Lunia { namespace Serializer {
