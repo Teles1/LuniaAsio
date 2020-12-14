@@ -1,5 +1,5 @@
 #pragma once
-#include "../Database.h"
+#include <Info/Info/Loader.h>
 #include "NPC.h"
 #include "NPCManager.h"
 
@@ -14,7 +14,7 @@ namespace Lunia {
 
 					NonPlayerInfo* Retrieve(uint32 hash);
 					NonPlayerInfo* Retrieve(const wchar_t* id);
-					BasicResist::Resist* Retrieve(Database::Info::NonPlayerInfo::Races race) { return NPCInfoManager::Retrieve(race); }
+					inline BasicResist::Resist* Retrieve(Database::Info::NonPlayerInfo::Races race) { return NPCInfoManager::Retrieve(race); }
 
 					virtual bool Remove(const wchar_t* id);
 					virtual bool Remove(uint32 hash);

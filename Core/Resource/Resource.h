@@ -33,7 +33,7 @@ namespace Lunia {
 		{
 			static_wstring<> filename;
 		public:
-			const wchar_t* GetFileName() { return filename.c_str(); }
+			inline const wchar_t* GetFileName() { return filename.c_str(); }
 		public:
 			ResourceNotFoundException(const wchar_t* desc, const wchar_t* pFilename)
 				: ResourceException(desc), filename(pFilename) {}
@@ -76,10 +76,10 @@ namespace Lunia {
 				virtual ~IEventListener() {}
 
 				//@deprecated  you may increase progress variables here and render loading prgress
-				virtual void Completed(const wchar_t*) {}
+				inline virtual void Completed(const wchar_t*) {}
 
-				virtual void OnResourceChanged(const wchar_t*) {}
-				virtual void OnResourceOpened(const wchar_t*) {}
+				inline virtual void OnResourceChanged(const wchar_t*) {}
+				inline virtual void OnResourceOpened(const wchar_t*) {}
 			};
 
 			virtual ICacheController& GetCacheController() = 0;
@@ -136,7 +136,7 @@ namespace Lunia {
 			/**
 			See above.
 			*/
-			std::wstring GetFullName(const wchar_t* name) const {
+			inline std::wstring GetFullName(const wchar_t* name) const {
 				wchar_t buffer[4096];
 				GetFullName(name, buffer, 4096);
 				return buffer;
@@ -147,7 +147,7 @@ namespace Lunia {
 			/**
 			See above.
 			*/
-			std::wstring GetConsolidatedName(const wchar_t* name) const {
+			inline std::wstring GetConsolidatedName(const wchar_t* name) const {
 				wchar_t buffer[4096];
 				GetConsolidatedName(name, buffer, 4096);
 				return buffer;
@@ -161,7 +161,7 @@ namespace Lunia {
 			/**
 			See above.
 			*/
-			std::wstring GetPrimaryDataPath() const {
+			inline std::wstring GetPrimaryDataPath() const {
 				wchar_t buffer[4096];
 				GetPrimaryDataPath(buffer, 4096);
 				return buffer;
@@ -178,7 +178,7 @@ namespace Lunia {
 			/**
 			See above.
 			*/
-			std::wstring GetRelativeName(const wchar_t* name) const {
+			inline std::wstring GetRelativeName(const wchar_t* name) const {
 				wchar_t buffer[4096];
 				GetRelativeName(name, buffer, 4096);
 				return buffer;
@@ -258,7 +258,7 @@ namespace Lunia {
 			/**
 			See above.
 			*/
-			void AddPath(const std::wstring& path) { this->AddPath(path.c_str()); }
+			inline void AddPath(const std::wstring& path) { this->AddPath(path.c_str()); }
 
 			/**
 			Checks whether the resource exists or not.
@@ -283,7 +283,7 @@ namespace Lunia {
 			/**
 			See above.
 			*/
-			void Load(const std::wstring& name, const wchar_t** elements, int elementCount, ITextLoaderListener* listener) { Load(name.c_str(), elements, elementCount, listener); }
+			inline void Load(const std::wstring& name, const wchar_t** elements, int elementCount, ITextLoaderListener* listener) { Load(name.c_str(), elements, elementCount, listener); }
 
 			/**
 			Parses standard chunk based file and provides you convenient callbacks on the chunks you wanted, ignores
@@ -299,7 +299,7 @@ namespace Lunia {
 			/**
 			See above.
 			*/
-			void Load(const std::wstring& name, unsigned int* chunkIDs, unsigned int chunkIDCount, IChunkLoaderListener* listener) { Load(name.c_str(), chunkIDs, chunkIDCount, listener); }
+			inline void Load(const std::wstring& name, unsigned int* chunkIDs, unsigned int chunkIDCount, IChunkLoaderListener* listener) { Load(name.c_str(), chunkIDs, chunkIDCount, listener); }
 
 			/**
 			Provides raw binary interface to handle the file
@@ -309,7 +309,7 @@ namespace Lunia {
 			/**
 			See above.
 			*/
-			com_ptr<IStream>  OpenStream(const std::wstring& name) { return OpenStream(name.c_str()); }
+			inline com_ptr<IStream>  OpenStream(const std::wstring& name) { return OpenStream(name.c_str()); }
 
 			/**
 			Must be called by the client.

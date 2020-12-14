@@ -1,10 +1,11 @@
 /* internal helper header - not exposed */
 #pragma once
+#include <Core/Helper.h>
 
 #define XML_STATIC
 #define XML_UNICODE
 #define XML_UNICODE_WCHAR_T
-#include "expat.h"
+#include <expat.h>
 
 #include "XmlParser.h"
 

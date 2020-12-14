@@ -126,8 +126,8 @@ namespace Lunia {
 							, typeStr(str)
 						{}
 
-						Type GetInvalidType() const { return type; }
-						const std::wstring& GetInvalidTypeStr() const { return typeStr; }
+						inline Type GetInvalidType() const { return type; }
+						inline const std::wstring& GetInvalidTypeStr() const { return typeStr; }
 					private:
 						Type type;
 						std::wstring typeStr;

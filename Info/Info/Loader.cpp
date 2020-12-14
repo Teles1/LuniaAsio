@@ -1,4 +1,6 @@
 #include "Loader.h"
+#include <Core/Serializer/Binary/BinaryStream.h> 
+#include <Core/com_ptr.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -194,7 +196,6 @@ namespace Lunia {
 				{
 					loader = NULL;
 				}
-
 
 				template <typename T>
 				bool IndexedManagerWithMap::Get(uint32 hash, T& result)

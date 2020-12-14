@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef LUNIA_LOADER_H
+#define LUNIA_LOADER_H
 #include "Database.h"
 
 namespace Lunia {
@@ -171,3 +172,5 @@ namespace Lunia {
 		}
 	}
 }
+
+#endif

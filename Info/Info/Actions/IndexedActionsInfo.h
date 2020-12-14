@@ -1,5 +1,5 @@
 #pragma once
-#include "../Database.h"
+#include <Info/Info/Loader.h>
 #include "ActionsManager.h"
 
 namespace Lunia {
@@ -34,7 +34,7 @@ namespace Lunia {
 					virtual bool Remove(const wchar_t* id);
 					virtual bool Remove(uint32 hash);
 				public:
-					void ClearCache() { actionMap.clear(); }
+					inline void ClearCache() { actionMap.clear(); }
 				public:
 					void MakeIndexAndSave();
 

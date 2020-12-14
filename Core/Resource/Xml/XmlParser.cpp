@@ -1,7 +1,7 @@
 #include "XmlHelper.h"
 #include "XmlParser.h"
 
-#include "../../FileIO/File.h"
+#include <Core/FileIO/File.h>
 
 namespace Lunia {
 	namespace Xml {

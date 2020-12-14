@@ -1,5 +1,5 @@
 #pragma once
-#include "../Database.h"
+#include <Info/Info/Loader.h>
 #include "NPC.h"
 
 namespace Lunia {
@@ -12,13 +12,13 @@ namespace Lunia {
 						struct Resist : public Serializer::ISerializable {
 							float resist[11];		//[regist type]
 						public:
-							float& operator[] (int a) {
+							inline float& operator[] (int a) {
 								if (a < 0 || a >= (sizeof(resist) / sizeof(float)))
 									throw std::invalid_argument("invalid argument range");
 								return resist[a];
 							};
 						public:
-							virtual void Serialize(Serializer::IStreamWriter& out) const
+							inline virtual void Serialize(Serializer::IStreamWriter& out) const
 							{
 								out.Begin(L"AllM::XRated::Database::Info::NPCInfoManager::BasicResist::Resist");
 								out.Write(L"FIRE", resist[0]);
@@ -34,7 +34,7 @@ namespace Lunia {
 								out.Write(L"INDEPENDENCE", resist[10]);
 							}
 
-							virtual void Deserialize(Serializer::IStreamReader& in)
+							inline virtual void Deserialize(Serializer::IStreamReader& in)
 							{
 								in.Begin(L"AllM::XRated::Database::Info::NPCInfoManager::BasicResist::Resist");
 								in.Read(L"FIRE", resist[0]);
@@ -76,9 +76,9 @@ namespace Lunia {
 					void Add(const NonPlayerInfo& info);
 
 					typedef NPCInfoMap::iterator NPCInfoIter;
-					NPCInfoIter Begin() { return Npcs.begin(); }
-					NPCInfoIter End() { return Npcs.end(); }
-					size_t Size() { return Npcs.size(); }
+					inline NPCInfoIter Begin() { return Npcs.begin(); }
+					inline NPCInfoIter End() { return Npcs.end(); }
+					inline size_t Size() { return Npcs.size(); }
 
 					void LoadXmlData();
 					virtual void LoadBinaryData();

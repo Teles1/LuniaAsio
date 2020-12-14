@@ -11,8 +11,6 @@ namespace Lunia {
 
 			class LuniaDatabase {
 				public:
-
-
 					void Init();
 
 					struct Collection {

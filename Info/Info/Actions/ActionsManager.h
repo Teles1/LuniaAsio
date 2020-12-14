@@ -1,5 +1,5 @@
 #pragma once
-#include "../Database.h"
+#include <Info/Info/Loader.h>
 #include "Actions.h"
 
 namespace Lunia {
@@ -18,22 +18,22 @@ namespace Lunia {
 						struct iterator {
 							ActionList::iterator current;
 
-							iterator(ActionList::iterator iter) { current = iter; }
-							ActionInfo* operator* () { return &current->second; }
-							void operator++ () { ++current; }
-							bool operator== (const iterator& iter) { return (current == iter.current); }
-							bool operator!= (const iterator& iter) { return (current != iter.current); }
+							inline iterator(ActionList::iterator iter) { current = iter; }
+							inline ActionInfo* operator* () { return &current->second; }
+							inline void operator++ () { ++current; }
+							inline bool operator== (const iterator& iter) { return (current == iter.current); }
+							inline bool operator!= (const iterator& iter) { return (current != iter.current); }
 						};
 
-						iterator begin() { return iterator(actions.begin()); }
-						iterator end() { return iterator(actions.end()); }
+						inline iterator begin() { return iterator(actions.begin()); }
+						inline iterator end() { return iterator(actions.end()); }
 
-						ActionInfo* operator[] (const wchar_t* actionName) {
+						inline ActionInfo* operator[] (const wchar_t* actionName) {
 							if (actions.find(actionName) == actions.end())
 								return NULL;
 							return &actions[actionName];
 						}
-						ActionInfo* operator[] (uint32 actionName) {
+						inline ActionInfo* operator[] (uint32 actionName) {
 							ActionList::iterator i = actions.begin();
 							while (i != actions.end()) {
 								uint32 hash = StringUtil::Hash((*i).first.c_str());
@@ -68,11 +68,11 @@ namespace Lunia {
 					ActionMap actionMap;
 					AutoActionListMap AutoActions;
 
-					void Clear() { actionMap.clear(); }
+					inline void Clear() { actionMap.clear(); }
 					void LoadActionList(Actions::ActorList&, const wchar_t* xml/*, const wchar_t* name*/);
 					void LoadActions(Actions::ActionList&, const wchar_t* xml);
-					void LoadActionList(const std::wstring& templateName, const wchar_t* xml/*, const wchar_t* name*/) { LoadActionList(actionMap[templateName].actorList, xml); }
-					void LoadActions(const std::wstring& templateName, const wchar_t* xml) { LoadActions(actionMap[templateName].actions, xml); }
+					inline void LoadActionList(const std::wstring& templateName, const wchar_t* xml/*, const wchar_t* name*/) { LoadActionList(actionMap[templateName].actorList, xml); }
+					inline void LoadActions(const std::wstring& templateName, const wchar_t* xml) { LoadActions(actionMap[templateName].actions, xml); }
 
 
 				public:

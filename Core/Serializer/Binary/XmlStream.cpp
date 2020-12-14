@@ -12,7 +12,7 @@ namespace Lunia {
 		   return new XmlStreamWriter(stream);
 		}
 
-		com_ptr<IRefCountedStreamReader>  CreateXmlStreamReader(Lunia::IStreamReader& stream) {
+		com_ptr<IRefCountedStreamReader> CreateXmlStreamReader(Lunia::IStreamReader& stream) {
 		   return new XmlStreamReader(stream);
 		}
 
@@ -20,7 +20,7 @@ namespace Lunia {
 		  return new XmlStreamWriter(stream);
 		}
 		
-		com_ptr<IRefCountedStreamReader>  CreateXmlStreamReader(com_ptr<Lunia::IRefCountedStreamReader> stream) {
+		com_ptr<IRefCountedStreamReader> CreateXmlStreamReader(com_ptr<Lunia::IRefCountedStreamReader> stream) {
 		  return new XmlStreamReader(stream);
 		}
 

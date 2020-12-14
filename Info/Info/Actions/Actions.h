@@ -1,5 +1,5 @@
 #pragma once
-#include "../Database.h"
+#include <Info/Info/Loader.h>
 #include "../StateBundles/StateBundles.h"
 
 namespace Lunia {
@@ -62,7 +62,7 @@ namespace Lunia {
 					*/
 					template<enum StateInfo::Type T> struct StateFinder
 					{
-						bool operator()(const ActionInfo::State& state) const { return (state.type == T) ? true : false; }
+						inline bool operator()(const ActionInfo::State& state) const { return (state.type == T) ? true : false; }
 					};
 
 					struct LinkedProjectile : public Serializer::ISerializable
@@ -137,7 +137,7 @@ namespace Lunia {
 						
 					}
 
-					const wchar_t* GetName() const { return actionName.c_str(); }
+					inline const wchar_t* GetName() const { return actionName.c_str(); }
 
 					virtual void Serialize(Serializer::IStreamWriter& out) const;
 					virtual void Deserialize(Serializer::IStreamReader& in);

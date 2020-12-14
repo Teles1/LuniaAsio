@@ -92,7 +92,6 @@
     <ClInclude Include="Resource\Xml\XmlBase.h" />
     <ClInclude Include="Resource\Xml\XmlHelper.h" />
     <ClInclude Include="Resource\Xml\XmlParser.h" />
-    <ClInclude Include="Resource\Xml\expat.h" />
     <ClInclude Include="Serializer\Binary\XmlSerializer.h" />
     <ClInclude Include="Serializer\Binary\XmlStream.h" />
     <ClInclude Include="Serializer\Binary\XmlStreamReader.h" />

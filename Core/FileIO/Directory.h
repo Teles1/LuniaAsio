@@ -14,7 +14,7 @@ namespace Lunia {
 			@return				number of files in the directory
 			*/
 			static int Count(const wchar_t* path);
-			static int Count(String& path) { return Count(path.c_str()); }
+			inline static int Count(String& path) { return Count(path.c_str()); }
 
 
 			/**
@@ -29,7 +29,7 @@ namespace Lunia {
 								This parameter may be a relative path or a full path. In either case, the full path of the specified directory is calculated and stored as the current directory.
 			*/
 			static void SetCurrentDirectory(const wchar_t* path);
-			static void SetCurrentDirectory(String& path) { SetCurrentDirectory(path.c_str()); }
+			inline static void SetCurrentDirectory(String& path) { SetCurrentDirectory(path.c_str()); }
 
 			/**
 			Creates a new directory. the function applies a inherited security descriptor to the new directory.
@@ -38,7 +38,7 @@ namespace Lunia {
 			@remarks this function creates directories with recursive way.
 			*/
 			static void Create(const wchar_t* path);
-			static void Create(String& path) { Create(path.c_str()); }
+			inline static void Create(String& path) { Create(path.c_str()); }
 
 			/**
 			Determines whether the specified directory exists.
@@ -47,7 +47,7 @@ namespace Lunia {
 			@return @b true if the directory exists on the specified path; otherwise, @b false
 			*/
 			static bool Exists(const wchar_t* path);
-			static bool Exists(String& path) { return Exists(path.c_str()); }
+			inline static bool Exists(String& path) { return Exists(path.c_str()); }
 
 			/**
 			Constructor
@@ -64,7 +64,7 @@ namespace Lunia {
 			@param path		path to be opened
 			*/
 			void Open(const wchar_t* path);
-			void Open(String& path) { Open(path.c_str()); }
+			inline void Open(String& path) { Open(path.c_str()); }
 
 			/**
 			Open zip file and treat as directory

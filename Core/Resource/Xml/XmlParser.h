@@ -13,74 +13,6 @@ namespace Lunia {
 			virtual void EndElementCallback(const wchar_t* name)=0;
 			virtual void ReadDataCallback(const wchar_t* contents, int len)=0;
 		};
-
-
-		/** @brief Basic and simple parser that is only consisted as callbacks by element and character data.
-			RawParser works on streaming of data. it's very fast. but little bit annoying to use.
-
-			Example,
-			@code
-
-#include <iostream>
-
-#include "AllM/StringUtil/StringUtil.h"
-#include "AllM/Xml/Xml.h"
-#include "AllM/Foreach.h"
-
-using namespace std;
-
-class ParserCallback : public Xml::IXmlRawParseCallback
-{
-public:
-	void BeginElementCallback(const wchar_t* name, const map<wstring, wstring>& attributes)
-	{
-		typedef std::map<wstring, wstring> Attributes;
-
-		wstring str(name);
-		cout<<" BeginElementCallback : name="<< StringUtil::ToASCII(str).c_str();
-		cout<<endl;
-
-		ForEach(const Attributes::value_type& p, attributes)
-		{
-			string& key=StringUtil::ToASCII(p.first);
-			string& val=StringUtil::ToASCII(p.second);
-			
-			cout<<"\t"<<key.c_str()<<"="<<val.c_str()<<endl;
-		}
-	}
-
-	void EndElementCallback(const wchar_t* name)
-	{
-		wstring str(name);
-		cout<<" EndElementCallback : name="<< StringUtil::ToASCII(str).c_str();
-
-		cout<<endl;
-	}
-
-	void ReadDataCallback(const wchar_t* contents, int len)
-	{
-		wstring str(contents,len);
-		cout<<"ReadDataCallback : "<< StringUtil::ToASCII(str).c_str();
-
-		cout<<endl;
-	}
-};
-
-int main(int, char**)
-{
-	using namespace Xml;
-
-	wchar_t* buffer=L"<xml><aaa bbb=\"ccc\">wwwwwwww</aaa></xml>";
-
-	ParserCallback c;
-	RawParser r(&c);
-	r.Parse(buffer);
-
-	return 0;
-}
-
-			@endcode
-		*/
 		class RawParser
 		{
 		private:
@@ -125,44 +57,6 @@ int main(int, char**)
 		public:
 			virtual void ElementCallback(Element* e)=0;
 		};
-
-		/** @brief Highlevel parser that uses RawParser internally.
-
-			Example,
-			@code
-
-#include <windows.h>
-#include <iostream>
-
-#include "AllM/StringUtil/StringUtil.h"
-#include "AllM/Xml/Xml.h"
-
-using namespace std;
-
-int main(int, char**)
-{
-	using namespace Xml;
-
-	wchar_t* buffer=L"<xml><aaa bbb=\"ccc\">wwwwwwww</aaa></xml>";
-
-	Xml::Parser p;
-	p.Parse(buffer);
-
-	Xml::ElementCollection r;
-	p.FindElements(L"aaa", &r);
-	if (r.size()) // element found
-	{
-		cout<<"Element :"<<StringUtil::ToASCII(r.front()->Name).c_str()<<endl;
-		cout<<r.front()->SubElements.size()<< " of sub-elements"<<endl;
-		cout<<"Data "<<StringUtil::ToASCII(r.front()->CharacterData).c_str()<<endl;
-		cout<<"Attribute bbb="<<StringUtil::ToASCII(r.front()->Attributes[L"bbb"]).c_str()<<endl;
-	}
-
-}
-
-			@endcode
-		
-		*/
 		class Parser : public RawParser, public IXmlRawParseCallback
 		{
 		private:
@@ -182,7 +76,7 @@ int main(int, char**)
 			virtual ~Parser();
 
 			/** Retrieve elements of root element */
-			ElementCollection& GetElements() { return this->elementRoot->SubElements ; }
+			inline ElementCollection& GetElements() { return this->elementRoot->SubElements ; }
 
 			/** Find element collection (list) with element name */
 			void FindElements(const wchar_t* name, ElementCollection* result /*out*/);

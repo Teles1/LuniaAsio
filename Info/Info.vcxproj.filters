@@ -29,9 +29,6 @@
     <ClInclude Include="Info\Less.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Info\Loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Info\Actions\Actions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,6 +45,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Info\StateBundles\StateBundlesManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\GlobalInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,6 +86,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\StateBundles\StateBundlesManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\GlobalInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -10,11 +10,12 @@ namespace Lunia {
 				{
 					loader = CreateLoader(L"Database/NPCInfos.b");
 					npcManager = CreateIndexedManagerWithMap(loader);
-					com_ptr<IndexedManagerWithElement> basicResistManager = CreateIndexedManagerWithElement(loader, L"basicResist");
+					com_ptr<IndexedManagerWithElement> basicResistManager;
+					//com_ptr<IndexedManagerWithElement> basicResistManager = CreateIndexedManagerWithElement(loader, L"basicResist");
 
-					npcManager->Load(L"Database/NPCInfosIndex.b");
-					basicResistManager->Load(L"Database/BasicResistIndex.b");
-					basicResistManager->Get(basicResist);
+					//npcManager->Load(L"Database/NPCInfosIndex.b");
+					//basicResistManager->Load(L"Database/BasicResistIndex.b");
+					//basicResistManager->Get(basicResist);
 				}
 				void IndexedNPCInfoManager::MakeIndexAndSave()
 				{
