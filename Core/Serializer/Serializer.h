@@ -900,5 +900,5 @@ namespace Lunia {
     static const Lunia::HashType TypeHash;						  \
     virtual void Serialize(Serializer::IStreamWriter &out) const; \
     virtual void Deserialize(Serializer::IStreamReader &in);      \
-    const wchar_t *GetTypeName() { return TypeName; }
+    inline const wchar_t *GetTypeName() { return TypeName; }
 #endif

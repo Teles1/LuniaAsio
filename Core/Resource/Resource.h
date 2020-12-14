@@ -2,14 +2,14 @@
 
 #include <Core/Serializer/Serializer.h>
 
+#include "BinaryLoader.h"
 #include "ITextLoaderListener.h"
 #include "IChunkLoaderListener.h"
+#include "ICacheController.h"
 
 #include "../IStream.h"
 #include <Core/Utils/Locator.h>
 #include "../com_ptr.h"
-#include "ICacheController.h"
-#include "../FileIO/File.h"
 
 namespace Lunia {
 	namespace Resource {

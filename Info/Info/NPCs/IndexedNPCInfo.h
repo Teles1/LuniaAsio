@@ -22,7 +22,7 @@ namespace Lunia {
 				public:
 					void MakeIndexAndSave();
 				public:
-					void ClearCache() { Npcs.clear(); }
+					inline void ClearCache() { Npcs.clear(); }
 				private:
 					com_ptr<Loader>			loader;
 					com_ptr<IndexedManagerWithMap>	npcManager;

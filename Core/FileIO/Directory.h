@@ -1,5 +1,6 @@
 #pragma once
 #include "FileBase.h"
+#include "FileHelper.h"
 
 namespace Lunia {
 	namespace FileIO {

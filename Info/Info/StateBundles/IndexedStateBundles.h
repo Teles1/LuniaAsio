@@ -20,7 +20,7 @@ namespace Lunia {
 				public:
 					void MakeIndexAndSave();
 				public:
-					void ClearCache() { stateBundles.clear(); }
+					inline void ClearCache() { stateBundles.clear(); }
 				private:
 					LoaderManager manager;
 				};

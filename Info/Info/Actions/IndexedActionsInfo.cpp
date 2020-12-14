@@ -82,7 +82,6 @@ namespace Lunia {
 					manager.Init(L"Database/ActionInfos.b", data);
 					manager.Save(L"Database/ActionInfosIndex.b");
 					manager.SaveTemplateTable(L"Database/ActionTemplateTable.b");
-
 				}
 
 				ActionInfo* IndexedActionInfoManager::Retrieve(const wchar_t* templateName, const wchar_t* actionName)

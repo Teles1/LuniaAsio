@@ -1,14 +1,15 @@
 #include "Resource.h"
-#include "CacheController.h"
-#include <cctype>
-#include <Core/Resource/TextLoader.h>
-#include <Core/Resource/ChunkLoader.h>
-#include <Core/FileIO/Directory.h>
 #include <Core/Serializer/Binary/XmlStream.h>
 #include <Core/Serializer/Binary/BinaryStream.h>
 #include <Core/Serializer/Binary/StructuredBinaryStream.h>
+#include <Core/ReferenceCounted.h>
 #include <Core/FileIO/FileStream.h>
+#include "TextLoader.h"
+#include "ChunkLoader.h"
+#include "ConstantManager2.h"
+#include "CacheController.h"
 #include <Core/Utils/StringUtil/Compare.h>
+#include <cctype>
 
 namespace Lunia {
 	namespace Resource {

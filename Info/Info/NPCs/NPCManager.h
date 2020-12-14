@@ -20,7 +20,7 @@ namespace Lunia {
 						public:
 							inline virtual void Serialize(Serializer::IStreamWriter& out) const
 							{
-								out.Begin(L"AllM::XRated::Database::Info::NPCInfoManager::BasicResist::Resist");
+								out.Begin(L"BinaryBufferXRated::Database::Info::NPCInfoManager::BasicResist::Resist");
 								out.Write(L"FIRE", resist[0]);
 								out.Write(L"WATER", resist[1]);
 								out.Write(L"ICE", resist[2]);
@@ -36,7 +36,7 @@ namespace Lunia {
 
 							inline virtual void Deserialize(Serializer::IStreamReader& in)
 							{
-								in.Begin(L"AllM::XRated::Database::Info::NPCInfoManager::BasicResist::Resist");
+								in.Begin(L"BinaryBufferXRated::Database::Info::NPCInfoManager::BasicResist::Resist");
 								in.Read(L"FIRE", resist[0]);
 								in.Read(L"WATER", resist[1]);
 								in.Read(L"ICE", resist[2]);

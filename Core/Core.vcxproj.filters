@@ -24,6 +24,7 @@
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="Serializer\Binary\BinaryStream.cpp" />
     <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="Resource\BinaryLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -104,6 +105,7 @@
     <ClInclude Include="Helper.h" />
     <ClInclude Include="CriticalSection.h" />
     <ClInclude Include="Base.h" />
+    <ClInclude Include="Resource\BinaryLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

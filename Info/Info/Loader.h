@@ -108,7 +108,7 @@ namespace Lunia {
 					void Save(const std::wstring& file);
 					void Load(const std::wstring& file);
 
-					void GetHashs(std::vector<uint32>& vt) const
+					inline void GetHashs(std::vector<uint32>& vt) const
 					{
 						vt.clear();
 						DataPointerConstIter it = dataPointer.begin();
