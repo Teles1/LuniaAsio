@@ -46,13 +46,13 @@ namespace Lunia {
 			}
 
 		public:
-			StructuredBinaryStreamWriter2(Lunia::IStreamWriter& pStream)
+			inline StructuredBinaryStreamWriter2(Lunia::IStreamWriter& pStream)
 				: stream(&pStream)
 			{
 				WriteHeader();
 			}
 
-			StructuredBinaryStreamWriter2(com_ptr<Lunia::IRefCountedStreamWriter>& pStream)
+			inline StructuredBinaryStreamWriter2(com_ptr<Lunia::IRefCountedStreamWriter>& pStream)
 				: stream(pStream.get()), refcountedStream(pStream)
 			{
 				WriteHeader();

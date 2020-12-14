@@ -21,15 +21,15 @@ namespace Lunia {
 			struct Visitor :ICache::IAssetVisitor
 			{
 				uint32 total;
-				Visitor() : total(0)
+				inline Visitor() : total(0)
 				{
 				}
-				~Visitor()
+				inline ~Visitor()
 				{
 					float totalmb = total / 1024.0f / 1024.0f;
 					Logger::GetInstance().Warn(L"------------------------------------------------------------------------ Total Memory Used={0} MB", totalmb);
 				}
-				virtual void Visit(const ICache::IAsset& asset)
+				inline virtual void Visit(const ICache::IAsset& asset)
 				{
 					std::wstring tags = L"";
 
@@ -47,13 +47,13 @@ namespace Lunia {
 			struct VisitorSize :ICache::IAssetVisitor
 			{
 				uint32 total;
-				VisitorSize() : total(0)
+				inline VisitorSize() : total(0)
 				{
 				}
-				~VisitorSize()
+				inline ~VisitorSize()
 				{
 				}
-				virtual void Visit(const ICache::IAsset& asset)
+				inline virtual void Visit(const ICache::IAsset& asset)
 				{
 					total += asset.GetMemoryUsage();
 				}
@@ -64,17 +64,17 @@ namespace Lunia {
 				uint32 total;
 				uint32 count;
 				FileIO::File& file;
-				VisitorForFile(FileIO::File& pFile) : file(pFile), total(0), count(0)
+				inline VisitorForFile(FileIO::File& pFile) : file(pFile), total(0), count(0)
 				{
 
 				}
-				~VisitorForFile()
+				inline ~VisitorForFile()
 				{
 					float totalmb = total / 1024.0f;
 					Write(fmt::format(L"Total Memory Used, {0}", totalmb));
 					Write(fmt::format(L"Average Memory Used, {0}", (count == 0) ? 0 : static_cast<float>(totalmb) / static_cast<float>(count)));
 				}
-				virtual void Visit(const ICache::IAsset& asset)
+				inline virtual void Visit(const ICache::IAsset& asset)
 				{
 					std::wstring str = asset.GetName();
 
@@ -90,7 +90,7 @@ namespace Lunia {
 					total += asset.GetMemoryUsage();
 					++count;
 				}
-				void Write(const std::wstring& str)
+				inline void Write(const std::wstring& str)
 				{
 					std::string astring = StringUtil::ToASCII(str);
 					astring += "\r\n";
@@ -99,11 +99,11 @@ namespace Lunia {
 
 			};
 		public:
-			CacheController()
+			inline CacheController()
 				:updateTime(0.0f)
 			{
 			}
-			virtual void PrintStats()
+			inline virtual void PrintStats()
 			{
 				for (size_t i = 0; i < caches.size(); ++i)
 				{
@@ -113,7 +113,7 @@ namespace Lunia {
 					caches[i]->VisitAssets(visitor);
 				}
 			}
-			virtual void PrintStatsFile()
+			inline virtual void PrintStatsFile()
 			{
 				std::wstring directory = FileIO::Directory::GetCurrentDirectory() + L"/Statistics/";
 				std::wstring statisticsDirectory = FileIO::Directory::GetCurrentDirectory() + L"/Statistics";
@@ -143,16 +143,16 @@ namespace Lunia {
 					caches[i]->VisitAssets(visitor);
 				}
 			}
-			virtual int GetCacheCount()
+			inline virtual int GetCacheCount()
 			{
 				return static_cast<int>(caches.size());
 			}
-			virtual const wchar_t* GetCacheName(int index)
+			inline virtual const wchar_t* GetCacheName(int index)
 			{
 				return caches[index]->GetName();
 			}
 
-			virtual uint32 GetMemoryUsage(const wchar_t* cacheName)
+			inline virtual uint32 GetMemoryUsage(const wchar_t* cacheName)
 			{
 
 				uint32 total = 0;
@@ -170,12 +170,12 @@ namespace Lunia {
 				return total;
 			}
 
-			virtual void AddCache(ICache* cache)
+			inline virtual void AddCache(ICache* cache)
 			{
 				caches.push_back(cache);
 			}
 
-			virtual void RemoveCache(ICache* cache)
+			inline virtual void RemoveCache(ICache* cache)
 			{
 				for (size_t i = 0; i < caches.size(); ++i)
 				{
@@ -188,7 +188,7 @@ namespace Lunia {
 				}
 			}
 
-			virtual void Update(float dt)
+			inline virtual void Update(float dt)
 			{
 				/*updateTime-=dt;
 				if(updateTime > 0) return;
@@ -201,7 +201,7 @@ namespace Lunia {
 				}
 			}
 
-			virtual void Tag(uint32 readTagMask, uint32 referenceRead, uint32 writeTagMask, uint32 referenceWrite)
+			inline virtual void Tag(uint32 readTagMask, uint32 referenceRead, uint32 writeTagMask, uint32 referenceWrite)
 			{
 				for (size_t i = 0; i < caches.size(); ++i)
 				{
@@ -209,7 +209,7 @@ namespace Lunia {
 				}
 			}
 
-			virtual void Free(uint32 tagMask, uint32 reference)
+			inline virtual void Free(uint32 tagMask, uint32 reference)
 			{
 				//first pass
 				for (size_t i = 0; i < caches.size(); ++i)

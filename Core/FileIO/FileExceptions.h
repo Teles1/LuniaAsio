@@ -12,12 +12,12 @@ namespace Lunia {
 			String what;
 
 		public:
-			FileException(const wchar_t* filename, const wchar_t* desc) :
+			inline FileException(const wchar_t* filename, const wchar_t* desc) :
 				fileName(filename), Exception(L"{0} [{1}]", desc, filename)
 			{
 			}
 
-			String& GetFileName() { return this->fileName; }
+			inline String& GetFileName() { return this->fileName; }
 		};
 
 		/******************************************************************************************/
@@ -26,42 +26,42 @@ namespace Lunia {
 
 		class FileNotFoundException : public FileException {
 		public:
-			FileNotFoundException(const wchar_t* filename) : FileException(filename, L"File not found") {}
+			inline FileNotFoundException(const wchar_t* filename) : FileException(filename, L"File not found") {}
 		};
 
 		class AccessDeniedException : public FileException {
 		public:
-			AccessDeniedException(const wchar_t* filename) : FileException(filename, L"Access denied") {}
+			inline AccessDeniedException(const wchar_t* filename) : FileException(filename, L"Access denied") {}
 		};
 
 		class PathNotFoundException : public FileException {
 		public:
-			PathNotFoundException(const wchar_t* filename) : FileException(filename, L"Path not found") {}
+			inline PathNotFoundException(const wchar_t* filename) : FileException(filename, L"Path not found") {}
 		};
 
 		class TooManyOpenFilesException : public FileException {
 		public:
-			TooManyOpenFilesException(const wchar_t* filename) : FileException(filename, L"Too many files are opened") {}
+			inline TooManyOpenFilesException(const wchar_t* filename) : FileException(filename, L"Too many files are opened") {}
 		};
 
 		class FileExistsException : public FileException {
 		public:
-			FileExistsException(const wchar_t* filename) : FileException(filename, L"Already file exists") {}
+			inline FileExistsException(const wchar_t* filename) : FileException(filename, L"Already file exists") {}
 		};
 
 		class InvalidNameException : public FileException {
 		public:
-			InvalidNameException(const wchar_t* filename) : FileException(filename, L"Invalid file/directory name") {}
+			inline InvalidNameException(const wchar_t* filename) : FileException(filename, L"Invalid file/directory name") {}
 		};
 
 		class BadUnitException : public FileException {
 		public:
-			BadUnitException(const wchar_t* filename) : FileException(filename, L"Bad unit") {}
+			inline BadUnitException(const wchar_t* filename) : FileException(filename, L"Bad unit") {}
 		};
 
 		class HandleEofException : public FileException {
 		public:
-			HandleEofException(const wchar_t* filename) : FileException(filename, L"End of file handle") {}
+			inline HandleEofException(const wchar_t* filename) : FileException(filename, L"End of file handle") {}
 		};
 
 		/******************************************************************************************/
@@ -70,9 +70,9 @@ namespace Lunia {
 
 		class IndexNotFoundException : public FileException {
 		public:
-			IndexNotFoundException(const wchar_t* filename, const wchar_t* index) :
+			inline IndexNotFoundException(const wchar_t* filename, const wchar_t* index) :
 				indexName(index), FileException(filename, L"Index not found") {}
-			String& GetIndexName() { return this->indexName; }
+			inline String& GetIndexName() { return this->indexName; }
 		private:
 			String indexName;
 		};

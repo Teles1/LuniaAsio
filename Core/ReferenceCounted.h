@@ -7,24 +7,24 @@ namespace Lunia {
 	template <typename TParent> class ReferenceCountedImpl : public TParent {
 		mutable int refCount;
 	public:
-		explicit ReferenceCountedImpl(const ReferenceCountedImpl<TParent>&) :refCount(0) {}
-		ReferenceCountedImpl& operator=(const ReferenceCountedImpl<TParent>&) { return *this; }
+		inline explicit ReferenceCountedImpl(const ReferenceCountedImpl<TParent>&) :refCount(0) {}
+		inline ReferenceCountedImpl& operator=(const ReferenceCountedImpl<TParent>&) { return *this; }
 
-		bool operator==(const ReferenceCountedImpl<TParent>& other) const {
+		inline bool operator==(const ReferenceCountedImpl<TParent>& other) const {
 			return true;
 		}
 
-		bool operator!=(const ReferenceCountedImpl<TParent>& other) const {
+		inline bool operator!=(const ReferenceCountedImpl<TParent>& other) const {
 			return false;
 		}
 
 
-		ReferenceCountedImpl() :refCount(0) {}
-		virtual ~ReferenceCountedImpl() {}
+		inline ReferenceCountedImpl() :refCount(0) {}
+		inline virtual ~ReferenceCountedImpl() {}
 
-		int GetRefCount() const { return refCount; }
-		int AddRef() const { ++refCount; return refCount; }
-		int Release() const { if ((--refCount) < 1) { int tmp = refCount; delete this; return tmp; } return refCount; }
+		inline int GetRefCount() const { return refCount; }
+		inline int AddRef() const { ++refCount; return refCount; }
+		inline int Release() const { if ((--refCount) < 1) { int tmp = refCount; delete this; return tmp; } return refCount; }
 	};
 
 	class ReferenceCounted : virtual public IReferenceCounted {
@@ -35,20 +35,20 @@ namespace Lunia {
 		//@todo should we use this or not!?
 		//	   ReferenceCounted(const ReferenceCounted& ) {  }
 	public:
-		ReferenceCounted() { m_RefCounter = 0; }
+		inline ReferenceCounted() { m_RefCounter = 0; }
 		inline virtual ~ReferenceCounted() {}
 
-		explicit ReferenceCounted(const ReferenceCounted&) :m_RefCounter(0) {}
+		inline explicit ReferenceCounted(const ReferenceCounted&) :m_RefCounter(0) {}
 		inline ReferenceCounted& operator=(const ReferenceCounted&) { return *this; }
 
 
 
 
-		virtual int inline GetRefCount() const { return m_RefCounter; }
+		inline virtual int GetRefCount() const { return m_RefCounter; }
 
-		virtual int inline AddRef() const { ++m_RefCounter; return m_RefCounter; }
+		inline virtual int AddRef() const { ++m_RefCounter; return m_RefCounter; }
 
-		virtual int inline Release() const {
+		inline virtual int Release() const {
 			--m_RefCounter;
 			int tmp = m_RefCounter;
 			if (m_RefCounter < 1) {
@@ -70,27 +70,27 @@ namespace Lunia {
 		const int feedBackCount;
 		IFeedBackListener<TParent>* owner;
 	public:
-		explicit ReferenceCountedWithFeedBackImpl(const ReferenceCountedWithFeedBackImpl<TParent>&) :refCount(0) {}
-		ReferenceCountedWithFeedBackImpl& operator=(const ReferenceCountedWithFeedBackImpl<TParent>&) { return *this; }
+		inline explicit ReferenceCountedWithFeedBackImpl(const ReferenceCountedWithFeedBackImpl<TParent>&) :refCount(0) {}
+		inline ReferenceCountedWithFeedBackImpl& operator=(const ReferenceCountedWithFeedBackImpl<TParent>&) { return *this; }
 
-		bool operator==(const ReferenceCountedWithFeedBackImpl<TParent>& other) const {
+		inline bool operator==(const ReferenceCountedWithFeedBackImpl<TParent>& other) const {
 			return true;
 		}
 
-		bool operator!=(const ReferenceCountedWithFeedBackImpl<TParent>& other) const {
+		inline bool operator!=(const ReferenceCountedWithFeedBackImpl<TParent>& other) const {
 			return false;
 		}
 
 
-		ReferenceCountedWithFeedBackImpl(IFeedBackListener<TParent>* pOwner, int pFeedBackCount) :refCount(0), owner(pOwner), feedBackCount(pFeedBackCount) {}
-		virtual ~ReferenceCountedWithFeedBackImpl() {}
+		inline ReferenceCountedWithFeedBackImpl(IFeedBackListener<TParent>* pOwner, int pFeedBackCount) :refCount(0), owner(pOwner), feedBackCount(pFeedBackCount) {}
+		inline virtual ~ReferenceCountedWithFeedBackImpl() {}
 
-		void UnBindFeedBackListener() {
+		inline void UnBindFeedBackListener() {
 			owner = NULL;
 		}
-		int GetRefCount() const { return refCount; }
-		int AddRef() const { ++refCount; return refCount; }
-		int Release() const {
+		inline int GetRefCount() const { return refCount; }
+		inline int AddRef() const { ++refCount; return refCount; }
+		inline int Release() const {
 			--refCount;
 
 			if (refCount < 1) {
@@ -113,13 +113,13 @@ namespace Lunia {
 		struct WeakProxy : public ReferenceCountedImpl<IReferenceCountedWithWeakProxy::IWeakProxy> {
 			mutable bool alive;
 
-			WeakProxy() :alive(true) {}
+			inline WeakProxy() :alive(true) {}
 
-			virtual bool IsAlive() const {
+			inline virtual bool IsAlive() const {
 				return alive;
 			};
 
-			void Kill() const {
+			inline void Kill() const {
 				alive = false;
 			};
 		};
@@ -127,19 +127,19 @@ namespace Lunia {
 		mutable com_ptr<WeakProxy> proxy;
 
 	public:
-		ReferenceCountedWithWeakProxyImpl& operator=(const ReferenceCountedWithWeakProxyImpl&) { return *this; }
-		explicit ReferenceCountedWithWeakProxyImpl(const ReferenceCountedWithWeakProxyImpl&) :refCount(0) {}
+		inline ReferenceCountedWithWeakProxyImpl& operator=(const ReferenceCountedWithWeakProxyImpl&) { return *this; }
+		inline explicit ReferenceCountedWithWeakProxyImpl(const ReferenceCountedWithWeakProxyImpl&) :refCount(0) {}
 
 
-		ReferenceCountedWithWeakProxyImpl<TParent>() : refCount(0) {}
-		~ReferenceCountedWithWeakProxyImpl<TParent>() {
+		inline ReferenceCountedWithWeakProxyImpl<TParent>() : refCount(0) {}
+		inline ~ReferenceCountedWithWeakProxyImpl<TParent>() {
 			if (proxy != 0) proxy->Kill();
 		}
 
-		int GetRefCount() const { return refCount; }
-		int AddRef() const { ++refCount; return refCount; }
-		int Release() const { if ((--refCount) < 1) { int tmp = refCount; delete this; return tmp; } return refCount; }
-		virtual IReferenceCountedWithWeakProxy::IWeakProxy* GetWeakProxy() const {
+		inline int GetRefCount() const { return refCount; }
+		inline int AddRef() const { ++refCount; return refCount; }
+		inline int Release() const { if ((--refCount) < 1) { int tmp = refCount; delete this; return tmp; } return refCount; }
+		inline virtual IReferenceCountedWithWeakProxy::IWeakProxy* GetWeakProxy() const {
 			if (proxy == 0) {
 				new WeakProxy();
 			}

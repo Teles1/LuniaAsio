@@ -69,13 +69,13 @@ namespace Lunia {
 
 
 		public:
-			StructuredBinaryStreamReader(Lunia::IStreamReader& pStream)
+			inline StructuredBinaryStreamReader(Lunia::IStreamReader& pStream)
 				: stream(&pStream)
 			{
 				VerifyHeader();
 			}
 
-			StructuredBinaryStreamReader(com_ptr<Lunia::IRefCountedStreamReader>& pStream)
+			inline StructuredBinaryStreamReader(com_ptr<Lunia::IRefCountedStreamReader>& pStream)
 				: stream(pStream.get()), refcountedStream(pStream)
 			{
 				VerifyHeader();

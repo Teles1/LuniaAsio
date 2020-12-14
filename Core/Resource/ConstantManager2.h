@@ -10,7 +10,7 @@ namespace Lunia {
 		struct ConstantManager2 {
 		
 		public:
-			static ConstantManager2& GetInstance() {
+			inline static ConstantManager2& GetInstance() {
 				static ConstantManager2 m_Instance;
 				return m_Instance;
 			};
@@ -28,9 +28,9 @@ namespace Lunia {
 				Constants* current;
 				void operator=(const Loader&) {}
 			public:
-				Loader(ConstantManager2& pOuter) : outer(pOuter), current(0) {}
+				inline Loader(ConstantManager2& pOuter) : outer(pOuter), current(0) {}
 
-				virtual Iteration OnElement(const std::wstring& element, const Parameters& params) {
+				virtual Iteration inline OnElement(const std::wstring& element, const Parameters& params) {
 					using namespace StringUtil;
 
 					if (element == L"constant") {
@@ -42,7 +42,7 @@ namespace Lunia {
 					return Normal;
 				}
 
-				void Load(const std::wstring& pFilename) {
+				void inline Load(const std::wstring& pFilename) {
 
 					filename = pFilename;
 					current = new Constants();
@@ -56,7 +56,7 @@ namespace Lunia {
 			} loader;
 
 
-			Pair Get(const std::wstring& name) {
+			Pair inline Get(const std::wstring& name) {
 				if (name == L"") throw Exception(L"invalid filename (empty string)");
 				Objects::iterator i = objects.find(name);
 				if (i != objects.end()) {
@@ -74,15 +74,15 @@ namespace Lunia {
 					}
 				}
 			}
-			ConstantManager2() : loader(*this) {}
-			~ConstantManager2() {
+			inline ConstantManager2() : loader(*this) {}
+			inline ~ConstantManager2() {
 				for (Objects::iterator i = objects.begin(); i != objects.end(); ++i) {
 					delete (*i).second;
 				}
 			}
 
 		};
-		ConstantManager2& ConstantManager2Instance() { return ConstantManager2::GetInstance(); }
+		inline ConstantManager2& ConstantManager2Instance() { return ConstantManager2::GetInstance(); }
 	}
 }
 #endif

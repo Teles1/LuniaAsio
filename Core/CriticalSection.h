@@ -17,10 +17,10 @@ namespace Lunia
 		CRITICAL_SECTION cs;
 
 	public:
-		CriticalSection() { ::InitializeCriticalSection(&this->cs); }
-		CriticalSection(const CriticalSection&) { ::InitializeCriticalSection(&this->cs); }
-		CriticalSection& operator=(const CriticalSection&) { return *this; }
-		virtual ~CriticalSection() { ::DeleteCriticalSection(&this->cs); }
+		inline CriticalSection() { ::InitializeCriticalSection(&this->cs); }
+		inline CriticalSection(const CriticalSection&) { ::InitializeCriticalSection(&this->cs); }
+		inline CriticalSection& operator=(const CriticalSection&) { return *this; }
+		inline virtual ~CriticalSection() { ::DeleteCriticalSection(&this->cs); }
 		inline void Lock() { ::EnterCriticalSection(&this->cs); }
 		inline void Unlock() { ::LeaveCriticalSection(&this->cs); }
 	};
@@ -29,10 +29,10 @@ namespace Lunia
 	{
 	private:
 		CriticalSection& l;
-		void operator=(const CriticalSectionLock&) {}
+		inline void operator=(const CriticalSectionLock&) {}
 
 	public:
-		CriticalSectionLock(CriticalSection& locker) : l(locker) { l.Lock(); }
-		~CriticalSectionLock() { l.Unlock(); }
+		inline CriticalSectionLock(CriticalSection& locker) : l(locker) { l.Lock(); }
+		inline ~CriticalSectionLock() { l.Unlock(); }
 	};
 } // namespace AllM

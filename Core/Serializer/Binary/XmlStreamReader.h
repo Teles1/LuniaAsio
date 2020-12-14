@@ -35,7 +35,7 @@ namespace Lunia {
 
 
 			template <typename T>
-			void read(const wchar_t* name, T& value) {
+			void inline read(const wchar_t* name, T& value) {
 				value=StringUtil::To<T>( GetElement(name).Attributes[L"value"]);
 			}
 
@@ -43,7 +43,7 @@ namespace Lunia {
 			Lunia::IStreamReader* stream;
 			com_ptr<IRefCountedStreamReader> refcountedStream;
 
-			void init() {
+			void inline init() {
 			
 				unsigned int size=stream->GetSize();
 
@@ -82,19 +82,19 @@ namespace Lunia {
 				}
 			}
 
-			void Read(const wchar_t* name, std::wstring& value) {
+			void inline Read(const wchar_t* name, std::wstring& value) {
 				value=GetElement(name).Attributes[L"value"];
 			}
-			void Read(const wchar_t* name, std::string& value) {read(name,value);}
+			void inline Read(const wchar_t* name, std::string& value) {read(name,value);}
 			
 
 			
 		public:
 
-			XmlStreamReader(Lunia::IStreamReader& pStream):stream(&pStream) {
+			inline XmlStreamReader(Lunia::IStreamReader& pStream):stream(&pStream) {
 				init();
 			}
-			XmlStreamReader(com_ptr<Lunia::IRefCountedStreamReader>& pStream):stream(pStream.get()), refcountedStream(pStream) {
+			inline XmlStreamReader(com_ptr<Lunia::IRefCountedStreamReader>& pStream):stream(pStream.get()), refcountedStream(pStream) {
 				init();
 			}
 

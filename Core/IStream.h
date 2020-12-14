@@ -14,7 +14,7 @@ namespace Lunia {
 
 	class IStream {
 	public:
-		virtual ~IStream() {}
+		inline virtual ~IStream() {}
 
 		enum CursorPosition {
 			Begin,
@@ -53,11 +53,11 @@ namespace Lunia {
 		*/
 		virtual unsigned int Write(const unsigned char* buffer, unsigned size) = 0;
 
-		virtual unsigned int Write(const wchar_t* str) { return Write(reinterpret_cast<const unsigned char*>(str), unsigned int(wcslen(str)) * unsigned int(sizeof(wchar_t))); }
-		virtual unsigned int Write(const std::wstring& str) { return Write(str.c_str()); }
+		inline virtual unsigned int Write(const wchar_t* str) { return Write(reinterpret_cast<const unsigned char*>(str), unsigned int(wcslen(str)) * unsigned int(sizeof(wchar_t))); }
+		inline virtual unsigned int Write(const std::wstring& str) { return Write(str.c_str()); }
 
-		virtual unsigned int Write(const char* str) { return Write(reinterpret_cast<const unsigned char*>(str), unsigned int(strlen(str))); }
-		virtual unsigned int Write(const std::string& str) { return Write(str.c_str()); }
+		inline virtual unsigned int Write(const char* str) { return Write(reinterpret_cast<const unsigned char*>(str), unsigned int(strlen(str))); }
+		inline virtual unsigned int Write(const std::string& str) { return Write(str.c_str()); }
 		/**
 		writes the read cursor number of bytes from a given position
 
@@ -73,7 +73,7 @@ namespace Lunia {
 		virtual int          GetWriteCursor() const = 0;
 
 		//template helper method for writing structs
-		template <typename T> int WriteStruct(T* buffer, int count = 1) {
+		template <typename T> inline int WriteStruct(T* buffer, int count = 1) {
 			return Write(reinterpret_cast<unsigned char*>(buffer), sizeof(T) * count);
 		}
 	};
@@ -115,11 +115,11 @@ namespace Lunia {
 		//virtual int GetAvailable()=0; //returns data length that is available (read wont block)
 
 		//template helper method for reading structs
-		template <typename T> int ReadStruct(T* buffer, int count = 1) {
+		template <typename T> inline int ReadStruct(T* buffer, int count = 1) {
 			return Read(reinterpret_cast<unsigned char*>(buffer), sizeof(T) * count);
 		}
 
-		template <typename T> T Read() {
+		template <typename T> inline T Read() {
 			unsigned char buffer[sizeof(T)];
 			Read(buffer, sizeof(T));
 			return *reinterpret_cast<T*>(buffer);

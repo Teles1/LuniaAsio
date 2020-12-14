@@ -42,7 +42,7 @@ namespace Lunia {
 
 	public:
 
-		Splitter<tc>(tc& pLine, typename tc::value_type pDelimiter) : line(pLine), delimiter(pDelimiter) {}
+		inline Splitter<tc>(tc& pLine, typename tc::value_type pDelimiter) : line(pLine), delimiter(pDelimiter) {}
 
 
 		struct iterator {
@@ -54,29 +54,29 @@ namespace Lunia {
 			Splitter& outer;
 
 
-			iterator(Splitter& pOuter, typename tc::iterator a, typename tc::iterator b) :outer(pOuter), iters(a, b) {}
+			inline iterator(Splitter& pOuter, typename tc::iterator a, typename tc::iterator b) :outer(pOuter), iters(a, b) {}
 
-			std::pair<typename tc::iterator, typename tc::iterator> operator*() {
+			inline std::pair<typename tc::iterator, typename tc::iterator> operator*() {
 				return iters;
 			}
-			bool operator==(const iterator& iter) const {
+			inline bool operator==(const iterator& iter) const {
 				return ((iters.second == iter.second) && (iters.first == iter.first));
 			}
 
-			bool operator!=(const iterator& iter) const {
+			inline bool operator!=(const iterator& iter) const {
 				return (((iters.second != iter.iters.second) || (iters.first != iter.iters.first)));
 			}
 
-			void operator++() {
+			inline void operator++() {
 				iters = Split(iters.second, outer.line.end(), outer.delimiter);
 			}
 		};
 
-		iterator end() {
+		inline iterator end() {
 			return iterator(*this, line.end(), line.end());
 		}
 
-		iterator begin() {
+		inline iterator begin() {
 			iterator i = iterator(*this, line.begin(), line.begin());
 			++i;
 			return i;

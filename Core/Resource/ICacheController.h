@@ -70,37 +70,37 @@ namespace Lunia {
 			uint32 GetAssetCount() const=0;*/
 
 			//helper methods
-			void FreeNonUsed()
+			void inline FreeNonUsed()
 			{
 				Free(Tag::InUse, 0);
 			}
 
-			void FreeEverything()
+			void inline FreeEverything()
 			{
 				Free(0, 0);
 			}
 
-			void FreeNonGlobal()
+			void inline FreeNonGlobal()
 			{
 				Free(Tag::Global, 0);
 			}
 
-			void FreeNonGlobalAndNonUsed()
+			void inline FreeNonGlobalAndNonUsed()
 			{
 				Free(Tag::Global | Tag::InUse, 0);
 			}
 
-			void FreeUntouchedAndNonGlobal()
+			void inline FreeUntouchedAndNonGlobal()
 			{
 				Free(Tag::Touched | Tag::Global, 0);
 			}
 
-			void TagAllAsUntouched()
+			void inline TagAllAsUntouched()
 			{
 				Tag(Tag::Touched, Tag::Touched, Tag::Touched, 0);
 			}
 
-			void TagTouchedAsGlobal()
+			void inline TagTouchedAsGlobal()
 			{
 				Tag(Tag::Touched, Tag::Touched, Tag::Global, Tag::Global);
 			}

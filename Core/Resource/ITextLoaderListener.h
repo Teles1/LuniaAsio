@@ -31,32 +31,32 @@ namespace Lunia {
 				std::wstring value;
 			public:
 
-				operator std::string() const { return StringUtil::To<std::string>(value); }
+				operator std::string() inline const { return StringUtil::To<std::string>(value); }
 
-				operator std::wstring() const { return value.c_str();/* c_str() avoids buffer sharing between string objects, and therefore avoids heap memory deallocation problems across dlls */ }
+				operator std::wstring() inline  const { return value.c_str();/* c_str() avoids buffer sharing between string objects, and therefore avoids heap memory deallocation problems across dlls */ }
 
 
-				operator unsigned int() const {
+				operator unsigned int() inline const {
 					return StringUtil::To<unsigned int>(value);
 				}
 
-				operator int() const {
+				operator int() inline  const {
 					return StringUtil::To<int>(value);
 				}
 
-				operator float() const {
+				operator float() inline const {
 					return StringUtil::To<float>(value);
 				}
 
-				operator double() const {
+				operator double() inline const {
 					return StringUtil::To<double>(value);
 				}
 
-				operator float2() const {
+				operator float2() inline const {
 					return StringUtil::To<float2>(value);
 				}
 
-				operator float3() const {
+				operator float3() inline const {
 					return StringUtil::To<float3>(value);
 				}
 
@@ -64,9 +64,9 @@ namespace Lunia {
 					return StringUtil::To<float4>(value);
 				}
 
-				Parameter(const std::wstring& pValue) :value(pValue) {}
-				Parameter(const wchar_t* pValue) :value(pValue) {}
-				Parameter() {}
+				inline Parameter(const std::wstring& pValue) :value(pValue) {}
+				inline Parameter(const wchar_t* pValue) :value(pValue) {}
+				inline Parameter() {}
 			};
 
 			enum Iteration {
@@ -87,10 +87,10 @@ namespace Lunia {
 				typedef Params::iterator iterator;
 				typedef Params::value_type value_type;
 
-				Params::const_iterator begin() const { return buffer.begin(); }
-				Params::const_iterator end() const { return buffer.end(); }
+				Params::const_iterator begin() inline const { return buffer.begin(); }
+				Params::const_iterator end() inline const { return buffer.end(); }
 
-				const Parameter& operator[](const std::wstring& index) const {
+				inline const Parameter& operator[](const std::wstring& index) const {
 					Params::const_iterator it = buffer.find(index);
 					if (it == buffer.end()) {
 						return empty;
@@ -98,10 +98,10 @@ namespace Lunia {
 					return it->second;
 				}
 
-				void Add(const std::wstring& value, const std::wstring& param) {
+				inline void Add(const std::wstring& value, const std::wstring& param) {
 					buffer[value] = Parameter(param);
 				}
-				const_iterator find(const std::wstring& index) const {
+				inline const_iterator find(const std::wstring& index) const {
 					return buffer.find(index);
 				}
 			};
@@ -112,7 +112,7 @@ namespace Lunia {
 
 			virtual Iteration OnElement(const std::wstring& element, const Parameters& params) = 0;
 
-			virtual ~ITextLoaderListener() {}
+			inline virtual ~ITextLoaderListener() {}
 
 		};
 	}

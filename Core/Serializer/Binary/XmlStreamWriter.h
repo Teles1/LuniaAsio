@@ -88,15 +88,15 @@ namespace Lunia {
 
 		public:
 
-			XmlStreamWriter(Lunia::IStreamWriter& pStream): stream(&pStream) {
+			inline XmlStreamWriter(Lunia::IStreamWriter& pStream): stream(&pStream) {
 				writeStartDocument();
 			}
 
-			XmlStreamWriter(com_ptr<Lunia::IRefCountedStreamWriter>& pStream): stream(pStream.get()),refcountedStream(pStream) {
+			inline XmlStreamWriter(com_ptr<Lunia::IRefCountedStreamWriter>& pStream): stream(pStream.get()),refcountedStream(pStream) {
 				writeStartDocument();
 			}
 
-			~XmlStreamWriter() {
+			inline ~XmlStreamWriter() {
 				writeEndDocument();
 			}
 

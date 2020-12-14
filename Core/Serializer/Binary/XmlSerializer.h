@@ -78,26 +78,26 @@ namespace Lunia { namespace Serializer {
 			static void PutInto(std::wstring& buffer, const wchar_t* name, const std::string& val);
 			static void GetFrom(Xml::Element& element, const wchar_t* name, std::string& val);
 
-			template <typename T> static void PutInto(std::wstring& buffer,
+			template <typename T> static inline void PutInto(std::wstring& buffer,
 				const wchar_t* name, const std::vector<T>& val)
 			{
 				PutContainerInto(buffer, L"vector", name, val.begin(), val.end(), (int)val.size());
 			}
 
-			template <typename T> static void GetFrom(Xml::Element& element,
+			template <typename T> static inline void GetFrom(Xml::Element& element,
 				const wchar_t* name, std::vector<T>& val)
 			{
 				val.clear();
 				GetContainerFrom(element, L"vector", name, std::back_inserter(val));
 			}
 
-			template <typename T> static void PutInto(std::wstring& buffer,
+			template <typename T> static inline void PutInto(std::wstring& buffer,
 				const wchar_t* name, const std::list<T>& val)
 			{
 				PutContainerInto(buffer, L"list", name, val.begin(), val.end(), (int)val.size());
 			}
 
-			template <typename T> static void GetFrom(Xml::Element& element,
+			template <typename T> static inline void GetFrom(Xml::Element& element,
 				const wchar_t* name, std::list<T>& val)
 			{
 				val.clear();
@@ -106,26 +106,26 @@ namespace Lunia { namespace Serializer {
 
 
 
-			template <typename T1, typename T2> static void PutInto(std::wstring& buffer,
+			template <typename T1, typename T2> static inline void PutInto(std::wstring& buffer,
 				const wchar_t* name, const std::map<T1, T2>& val)
 			{
 				PutContainerInto(buffer, L"map", name, val.begin(), val.end(), (int)val.size());
 			}
 
-			template <typename T1, typename T2> static void GetFrom(Xml::Element& element,
+			template <typename T1, typename T2> static inline void GetFrom(Xml::Element& element,
 				const wchar_t* name, std::map<T1, T2>& val)
 			{
 				val.clear();
 				GetKeyedContainerFrom(element, L"map", name, val);
 			}
 
-			template <typename T1, typename T2> static void PutInto(std::wstring& buffer,
+			template <typename T1, typename T2> static inline void PutInto(std::wstring& buffer,
 				const wchar_t* name, const std::unordered_map<T1, T2>& val)
 			{
 				PutContainerInto(buffer, L"hash_map", name, val.begin(), val.end(), (int)val.size());
 			}
 
-			template <typename T1, typename T2> static void GetFrom(Xml::Element& element,
+			template <typename T1, typename T2> static inline void GetFrom(Xml::Element& element,
 				const wchar_t* name, std::unordered_map<T1, T2>& val)
 			{
 				val.clear();
@@ -141,7 +141,7 @@ namespace Lunia { namespace Serializer {
 			template <typename T> static void PutInto(std::wstring& buffer, const wchar_t* name, const T* t) { PutInto(buffer, name, *t); }
 			template <typename T> static void GetFrom(Xml::Element& element, const wchar_t* name, T*& t) { GetFrom(element, name, *t); } // Creates instance
 
-			template <typename Iterator> static void PutContainerInto(
+			template <typename Iterator> static inline void PutContainerInto(
 				std::wstring& buffer, const wchar_t* elementname, const wchar_t* name, const Iterator& begin, const Iterator& end, int size)
 			{
 				buffer+=L"<"; buffer+=elementname; buffer+=L" name=\""; buffer+=name;
@@ -157,7 +157,7 @@ namespace Lunia { namespace Serializer {
 				buffer+=L"</"; buffer+=elementname; buffer+=L">";
 			}
 
-			template <typename Inserter> static void GetContainerFrom(
+			template <typename Inserter> static inline void GetContainerFrom(
 				Xml::Element& element, const wchar_t* elementname, const wchar_t* name, Inserter it)
 			{
 				Xml::ElementCollection result;
@@ -176,7 +176,7 @@ namespace Lunia { namespace Serializer {
 				}
 			}
 
-			template <typename T1, typename T2> static void PutInto(
+			template <typename T1, typename T2> static inline void PutInto(
 				std::wstring& buffer, const wchar_t* name, const std::pair<T1, T2>& val)
 			{
 				buffer+=L"<pair name=\"";
@@ -187,7 +187,7 @@ namespace Lunia { namespace Serializer {
 				buffer+=L"</pair>";
 			}
 
-			template <typename T1, typename T2> static void GetFrom(
+			template <typename T1, typename T2> static inline void GetFrom(
 				Xml::Element& element, const wchar_t* name, std::pair<T1, T2>& val)
 			{
 				Xml::ElementCollection result;
@@ -197,14 +197,14 @@ namespace Lunia { namespace Serializer {
 				GetFrom(*result.front(), L"second", val.second);
 			}
 
-			template <typename T1, typename T2> static void GetPairFrom(
+			template <typename T1, typename T2> static inline void GetPairFrom(
 				Xml::Element& element, std::pair<T1, T2>& val)
 			{
 				GetFrom(element, L"first", val.first);
 				GetFrom(element, L"second", val.second);
 			}
 
-			template <typename KeyedContainer> static void GetKeyedContainerFrom(
+			template <typename KeyedContainer> static inline void GetKeyedContainerFrom(
 				Xml::Element& element, const wchar_t* elementname, const wchar_t* name, KeyedContainer& val)
 			{
 				Xml::ElementCollection result;
