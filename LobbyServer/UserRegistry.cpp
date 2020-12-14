@@ -30,27 +30,26 @@ namespace Lunia {
 			/*
 				Key pending aproval for this change. 
 			*/
-			m_usersByUserId[user->GetId()].reset();
+			OnUserDisconnected(user);;
+
+			m_usersByUserId.erase(user->GetId());
 
 			if (m_autorizedUsersByUserId.find(user->GetId()) != m_autorizedUsersByUserId.end())
 			{
-				m_autorizedUsersByUserId[user->GetId()].reset();
-
 				m_autorizedUsersByUserId.erase(user->GetId());
 			}
-
-			OnUserDisconnected(user);
 
 			for (auto it = m_users.begin(); it < m_users.end(); it++)
 			{
 				if ((*it)->GetId() == user->GetId())
 				{
 					(*it)->CloseSocket();
+
 					m_users.erase(it);
+
 					break;
 				}
 			}
-
 		}
 
 		void UserRegistry::AuthenticateUser(Lobby::UserSharedPtr& user)
@@ -62,7 +61,7 @@ namespace Lunia {
 
 				uint32 oldUserId = user->GetId();
 
-				m_usersByUserId[user->GetId()].reset();
+				m_usersByUserId.erase(user->GetId());
 
 				m_usersByUserId[m_curUserId] = userWeak;
 				m_autorizedUsersByUserId[m_curUserId] = userWeak;
