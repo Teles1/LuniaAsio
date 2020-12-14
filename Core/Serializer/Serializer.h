@@ -6,7 +6,7 @@
 #include <set>
 #include <deque>
 
-#include "IReferenceCounted.h"
+#include <Core/IReferenceCounted.h>
 #include <Core/Utils/Math/Math.h>
 #include <Core/Utils/StringUtil.h>
 #include <Core/Utils/Locator.h>
@@ -900,5 +900,5 @@ namespace Lunia {
     static const Lunia::HashType TypeHash;						  \
     virtual void Serialize(Serializer::IStreamWriter &out) const; \
     virtual void Deserialize(Serializer::IStreamReader &in);      \
-    const wchar_t *GetTypeName() { return TypeName; }
+    inline const wchar_t *GetTypeName() { return TypeName; }
 #endif

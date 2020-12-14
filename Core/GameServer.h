@@ -1,6 +1,6 @@
 #pragma once
 #include "fwEvent.h"
-
+#include <iostream>
 template<typename TScope>
 class GameServer
 {
@@ -13,7 +13,7 @@ public:
 	~GameServer() { };
 
 	template<typename T>
-	TScope& GetScope()
+	inline TScope& GetScope()
 	{
 		static_assert(std::is_same<T, TScope>::value, "Couldn't access GameServer Scope was it was passed the wrong Scope");
 
@@ -21,7 +21,7 @@ public:
 	}
 
 	template<typename T>
-	bool IsScope()
+	inline bool IsScope()
 	{
 		return std::is_same<T, TScope>::value;
 	}

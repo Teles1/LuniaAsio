@@ -256,7 +256,7 @@ namespace Lunia {
 
 			void set(const char* value)
 			{
-				strncpy(buffer, value, Size - 1);
+				strncpy_s(buffer, value, Size - 1);
 				buffer[Size - 1] = 0;
 				len = getSize(buffer);
 			}
@@ -275,7 +275,7 @@ namespace Lunia {
 			{
 				if (len >= Size)
 					len = Size - 1;
-				strncpy(buffer, value, len);
+				strncpy_s(buffer, value, len);
 				buffer[len] = 0;
 				this->len = len;
 			}

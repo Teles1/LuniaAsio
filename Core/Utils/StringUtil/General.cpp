@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include <Core/FileIO/Directory.h>
 
 #include "General.h"
 
@@ -47,12 +48,7 @@ namespace Lunia {
 		}
 
 		std::wstring RemoveDots(const std::wstring& str2) {
-
-
-
 			std::wstring str = str2;
-			// balal/rear/../reareako.txt
-
 			size_t pos1 = str.find(L"/..");
 			while (pos1 != std::wstring::npos) {
 				bool found = false;
@@ -71,9 +67,6 @@ namespace Lunia {
 
 				pos1 = str.find(L"/..");
 			}
-
-
-
 			return str;
 		}
 
@@ -169,6 +162,84 @@ namespace Lunia {
 			changeString += string.substr(lastFindPos);
 
 			return changeString;
+		}
+
+		Filename::Filename()
+		{
+			Parse(L"");
+		}
+
+		Filename::Filename(const Filename& filename)
+			: FileName(filename.FileName), Extension(filename.Extension), Drive(filename.Drive), Path(filename.Path)
+		{
+		}
+
+		Filename::Filename(const std::wstring& filename)
+		{
+			Parse(filename);
+		}
+
+		void Filename::Parse(const std::wstring& filename)
+		{
+			if (filename.empty()) Parse(FileIO::Directory::GetCurrentDirectory());// Why doesn't it return here?
+
+			size_t pos = filename.find(':');
+			if (pos == std::wstring::npos) // no drives - need to set current working directory
+			{
+				std::wstring currentDirectory = FileIO::Directory::GetCurrentDirectory();
+				if (filename[0] != L'\\' && filename[0] != L'/' &&
+					currentDirectory[currentDirectory.size() - 1] != L'\\' && currentDirectory[currentDirectory.size() - 1] != L'/')
+					currentDirectory += L'/';
+
+				if (filename.find(L"..") == 0) // finding relative path
+				{
+					std::wstring f = filename;
+
+					while (f.find(L"..") == 0)
+					{
+						if (f.size() < 3) break;
+						if (f[2] != L'\\' && f[2] != L'/') break;
+						currentDirectory = currentDirectory.substr(0, currentDirectory.find_last_of(L"\\/", currentDirectory.size() - 2) + 1);
+						f = f.substr(3);
+					}
+					currentDirectory += f;
+				}
+				else
+					currentDirectory += filename;
+
+				pos = currentDirectory.find(':');
+				Drive = currentDirectory.substr(0, pos + 1); // set drive
+
+				size_t lastDotPos = currentDirectory.find_last_of(L'.');
+				size_t lastSlashPos = currentDirectory.find_last_of(L"\\/");
+				if (lastDotPos < lastSlashPos || lastDotPos == std::wstring::npos) // no filename (only directory)
+				{
+					Path = currentDirectory + filename; // set path
+					if (Path[Path.size() - 1] != L'\\' && Path[Path.size() - 1] != L'/')
+						Path += L'/';
+					return;
+				}
+
+				Path = currentDirectory.substr(pos + 1, lastSlashPos - pos); // set path
+				Extension = currentDirectory.substr(lastDotPos); // set extension
+				FileName = currentDirectory.substr(lastSlashPos + 1, lastDotPos - (lastSlashPos + 1));
+			}
+			else // with drives - abolusute path
+			{
+				Drive = filename.substr(0, pos + 1); // set drive
+				size_t lastDotPos = filename.find_last_of(L'.');
+				size_t lastSlashPos = filename.find_last_of(L"\\/");
+				if (lastDotPos < lastSlashPos || lastDotPos == std::wstring::npos) // no filename (only directory)
+				{
+					Path = filename; // set path
+					if (Path[Path.size() - 1] != L'\\' && Path[Path.size() - 1] != L'/')
+						Path += L'/';
+					return;
+				}
+				Path = filename.substr(pos + 1, lastSlashPos - pos);
+				Extension = filename.substr(lastDotPos); // set extension
+				FileName = filename.substr(lastSlashPos + 1, lastDotPos - (lastSlashPos + 1));
+			}
 		}
 	}
 }

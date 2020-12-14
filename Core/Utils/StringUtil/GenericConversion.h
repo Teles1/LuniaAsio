@@ -95,7 +95,7 @@ namespace Lunia {
 		class IConvertable
 		{
 		public:
-			class ParseException : public AllM::Exception { public: ParseException(const wchar_t* msg) : AllM::Exception(msg) { } };
+			class ParseException : public Exception { public: ParseException(const wchar_t* msg) : Exception(msg) { } };
 
 			virtual std::wstring ToString() const = 0;
 			virtual void Parse(const std::wstring&) = 0;

@@ -76,7 +76,7 @@ namespace Lunia {
 						buffer[size+i]=0;
 					}*/
 				stream->Read(buffer, size);
-				value = reinterpret_cast<T::value_type*>(buffer);
+				value = reinterpret_cast<typename T::value_type*>(buffer);
 				delete buffer;
 
 			}
@@ -86,13 +86,13 @@ namespace Lunia {
 
 
 		public:
-			StructuredBinaryStreamReader2(Lunia::IStreamReader& pStream)
+			inline StructuredBinaryStreamReader2(Lunia::IStreamReader& pStream)
 				: stream(&pStream)
 			{
 				VerifyHeader();
 			}
 
-			StructuredBinaryStreamReader2(com_ptr<Lunia::IRefCountedStreamReader>& pStream)
+			inline StructuredBinaryStreamReader2(com_ptr<Lunia::IRefCountedStreamReader>& pStream)
 				: stream(pStream.get()), refcountedStream(pStream)
 			{
 				VerifyHeader();
@@ -135,7 +135,7 @@ namespace Lunia {
 				if (minorVersionOut) *minorVersionOut = minorVersionFromFile;
 
 				/*if (majorVersionFromFile != majorVersion) {
-				   throw AllM::Exception(ALLM_EXCEPTION((L"a class %s version mismatch, serialized version=(%d,%d), required version=(%d,%d)", type, majorVersionFromFile, minorVersionFromFile, majorVersion, minorVersion)));
+				   throw Exception(ALLM_EXCEPTION((L"a class %s version mismatch, serialized version=(%d,%d), required version=(%d,%d)", type, majorVersionFromFile, minorVersionFromFile, majorVersion, minorVersion)));
 				}
 
 				if (minorVersionFromFile != minorVersion) {
@@ -264,7 +264,7 @@ namespace Lunia {
 			virtual unsigned int inline Read(const wchar_t* name, wchar_t* buffer, unsigned int size) {
 				std::wstring source;
 				Read(name, source);
-				wcsncpy(buffer, source.c_str(), size - 1);
+				wcsncpy_s(buffer, size, source.c_str(), size - 1);
 				buffer[size - 1] = 0;
 				return unsigned int(source.size());
 			}
@@ -272,7 +272,7 @@ namespace Lunia {
 			virtual unsigned int inline Read(const wchar_t* name, char* buffer, unsigned int size) {
 				std::string source;
 				Read(name, source);
-				strncpy(buffer, source.c_str(), size - 1);
+				strncpy_s(buffer, size, source.c_str(), size - 1);
 				buffer[size - 1] = 0;
 				return unsigned int(source.size());
 			}
