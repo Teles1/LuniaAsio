@@ -16,6 +16,7 @@ Recommendation is to make sure that you have the integration enabled to make you
 - vcpkg install spdlog:x64-windows
 - vcpkg install fmt:x64-windows 
 - vcpkg install cpr:x64-windows
+- vcpkg install expat:x64-windows [ on add this you need reimplement in your project bro ]
 
 
 # Singletons
