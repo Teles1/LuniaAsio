@@ -5,10 +5,8 @@
 #include <Core/GameConstants.h>
 namespace Lunia {
 	namespace Lobby {
-		#pragma region AliveStruct
-		enum Marks { AliveReceived, AliveCleared };
+
 		struct Alive {
-			Marks	Mark;
 
 			///	backup alive data
 			struct AliveData
@@ -30,7 +28,7 @@ namespace Lunia {
 				}
 			} answer, temp;
 		};
-		#pragma endregion
+
 		class User : public Net::ClientTcp {
 		public:
 			User(uint32& userId, asio::ip::tcp::socket&& socket)
@@ -51,11 +49,14 @@ namespace Lunia {
 
 			String GetAccountName() const;
 
-			bool QueryAliveAuth();
+			/* Old Name: QueryAliveAuth */
+			bool SatisfyAlivePingWait();
 
-			bool CheckAliveAuth() const;
+			/* Old Name: CheckAliveAuth */
+			bool IsWaitingOnAlivePing() const;
 
-			void UpdateAliveAuth(const Alive::AliveData& answer);
+			/* Old Name: UpdateAliveAuth */
+			void SetAliveAsLastTickAlivePing(const Alive::AliveData& answer);
 
 			void SetIsAuthenticated();
 
@@ -76,11 +77,13 @@ namespace Lunia {
 			uint32 Parse(uint8* buffer, size_t size);
 
 		private:
-			Alive m_Alive;
+			//Alive m_lastTickAlivePing;
+
+			bool m_waitingOnAlivePing;
 
 			uint32 m_userId;
 
-			uint32 m_AlivePacketCount;
+			//uint32 m_alivePacketCount;
 
 			String m_Locale;
 

@@ -23,7 +23,7 @@ namespace Lunia {
 					sendPacket.ServerTime = DateTime::Now();
 					sendPacket.UserIP = user->GetPeerAddress();
 					user->Send(sendPacket);
-					user->QueryAliveAuth();
+					user->SatisfyAlivePingWait();
 				});
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::Auth& packet)
@@ -317,7 +317,8 @@ namespace Lunia {
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Alive", user->GetId());
 					Lobby::Alive::AliveData answer(packet.Index,packet.Value1,packet.Value2,packet.Value3);
-					user->UpdateAliveAuth(answer);
+
+					user->SetAliveAsLastTickAlivePing(answer);
 				});
 		});
 }

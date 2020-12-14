@@ -18,19 +18,24 @@ namespace Lunia {
 
 			return user;
 		}
+
+		/* 
+			Pending removal on the database and cleanup.
+		*/
 		void UserRegistry::RemoveUser(Lobby::UserSharedPtr& user) {
 			//m_users.erase(user->GetId());
 			AutoLock _l(m_usersMutex);
 			this->RemoveUser(user, _l);
 		}
-		/* 
+		/*
 			Pending removal on the database and cleanup.
 		*/
 		void UserRegistry::RemoveUser(Lobby::UserSharedPtr& user, AutoLock& /*No need to touch this because the scope is gonna be locked automatically*/) {
 			/*
-				Key pending aproval for this change. 
+				Key pending aproval for this change.
 			*/
-			OnUserDisconnected(user);;
+
+			OnUserDisconnected(user);
 
 			m_usersByUserId.erase(user->GetId());
 
@@ -86,9 +91,10 @@ namespace Lunia {
 		UserRegistry::UserRegistry(const uint32& timeout) {
 			m_timeOutTimer = timeout;
 			m_keepAliveThread = std::thread([&] {
-				while (m_keepAliveLoop) {
+				while (m_keepAliveLoop) 
+				{
 					if (m_usersByUserId.size() > 0)
-						CheckAlive();
+						NextAlivePingForAll();
 
 					std::unique_lock<std::mutex> _l(m_conditionalVar_lock);
 					if (m_conditionalVar.wait_for(_l, std::chrono::milliseconds(m_timeOutTimer), [&] { return !m_keepAliveLoop; }))
@@ -96,16 +102,20 @@ namespace Lunia {
 				}
 			});
 		}
-		void UserRegistry::CheckAlive()
+		void UserRegistry::NextAlivePingForAll()
 		{
 			AutoLock _l(m_usersMutex);
-			for (auto& x : m_users) {
-				if (x->CheckAliveAuth()) {
-					if (x->QueryAliveAuth())
-						continue;
+			for (auto& user : m_users) {
+				if (user->IsWaitingOnAlivePing()) 
+				{
+					user->SatisfyAlivePingWait();
 				}
-				Logger::GetInstance().Info("Invalid Alive Processing. Terminating user's connection => {0}", x->GetId());
-				this->RemoveUser(x, _l);
+				else 
+				{
+					Logger::GetInstance().Info("Invalid Alive Processing. Terminating user's connection => {0}", user->GetId());
+
+					this->RemoveUser(user, _l);
+				}
 			}
 		}
 	}

@@ -38,28 +38,36 @@ namespace Lunia {
 			HandleRead();
 			return (uint32)size;
 		}
-		bool User::QueryAliveAuth()
+		bool User::SatisfyAlivePingWait()
 		{
 			Lobby::Protocol::Alive packet;
 
-			m_Alive.Mark = AliveCleared;
-			packet.Index = m_Alive.temp.index = ++m_AlivePacketCount;
-			packet.Value1 = m_Alive.temp.value1 = (uint32)GetTickCount64();
-			packet.Value2 = m_Alive.temp.value2 = 0;
-			packet.Value3 = m_Alive.temp.value3 = 0;
+			this->m_waitingOnAlivePing = false;
+
+			/*
+			// Doesnt seem to be needing values at all?!
+
+			packet.Index  = m_lastTickAlivePing.temp.index  = ++m_AlivePacketCount;
+			packet.Value1 = m_lastTickAlivePing.temp.value1 = (uint32)GetTickCount64();
+			packet.Value2 = m_lastTickAlivePing.temp.value2 = 0;
+			packet.Value3 = m_lastTickAlivePing.temp.value3 = 0;
+			*/
 
 			Send(packet);
+
 			return true;
 		}
 
-		bool User::CheckAliveAuth() const
+		bool User::IsWaitingOnAlivePing() const
 		{
-			return (m_Alive.Mark == AliveReceived);
+			return this->m_waitingOnAlivePing;
 		}
 
-		void User::UpdateAliveAuth(const Alive::AliveData& answer)
+		void User::SetAliveAsLastTickAlivePing(const Alive::AliveData& answer)
 		{
-			m_Alive.Mark = AliveReceived;
+			//this->m_lastTickAlivePing = answer;
+
+			this->m_waitingOnAlivePing = true;
 		}
 
 		void User::SetIsAuthenticated()

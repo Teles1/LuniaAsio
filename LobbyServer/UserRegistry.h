@@ -38,7 +38,7 @@ namespace Lunia {
 
 			UserRegistry(const uint32& timeout);
 
-			void CheckAlive();
+			void NextAlivePingForAll();
 		private:
 			std::thread											m_keepAliveThread;
 
