@@ -25,7 +25,7 @@ namespace Lunia {
 			public:
 				typedef BaseAttributesType::iterator iterator;
 
-				const String& operator[] (const String::value_type* key)
+				inline const String& operator[] (const String::value_type* key)
 				{
 					for(BaseAttributesType::iterator i=attr.begin(); i!=attr.end(); ++i)
 						if (i->first==key)
@@ -33,23 +33,23 @@ namespace Lunia {
 					return empty;
 				}
 
-				String& operator[] (const String& key)
+				inline String& operator[] (const String& key)
 				{
 					attr.push_back( std::pair<String, String>(key, L"") );
 					return attr.back().second;
 				}
 
-				BaseAttributesType::iterator begin()
+				inline BaseAttributesType::iterator begin()
 				{
 					return attr.begin();
 				}
 
-				BaseAttributesType::iterator end()
+				inline BaseAttributesType::iterator end()
 				{
 					return attr.end();
 				}
 
-                BaseAttributesType::iterator find(const String& key)
+				inline BaseAttributesType::iterator find(const String& key)
 				{
 					for(BaseAttributesType::iterator i=attr.begin(); i!=attr.end(); ++i)
 						if (i->first==key)
@@ -58,7 +58,7 @@ namespace Lunia {
 				}
 
 				// caspian added below
-				size_t size()
+				inline size_t size()
 				{
 					return attr.size();
 				}

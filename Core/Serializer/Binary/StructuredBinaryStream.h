@@ -17,10 +17,10 @@ namespace Lunia {
 				static const uint32 Version1 = 0xfe123;
 				static const uint32 Version2 = 0xfe124;
 			};
-			bool IsValid() { return IsVersion1() || IsVersion2(); }
-			bool IsVersion1() { return identifier == Identifier::Version1; }
-			bool IsVersion2() { return identifier == Identifier::Version2; }
-			StructuredBinaryStreamHeader() : identifier(Identifier::Version2) {}
+			inline bool IsValid() { return IsVersion1() || IsVersion2(); }
+			inline bool IsVersion1() { return identifier == Identifier::Version1; }
+			inline bool IsVersion2() { return identifier == Identifier::Version2; }
+			inline StructuredBinaryStreamHeader() : identifier(Identifier::Version2) {}
 			unsigned int identifier;
 		};
 	}

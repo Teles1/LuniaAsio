@@ -17,12 +17,12 @@ namespace Lunia {
 
 
 		private: // helpers
-			template <typename T> void write(const wchar_t* /*name*/, T& value)
+			template <typename T> inline void write(const wchar_t* /*name*/, T& value)
 			{
 				stream->Write((const unsigned char*)&value, sizeof(value));
 			}
 
-			template <typename T> void writeString(const wchar_t* /*name*/, const T& value)
+			template <typename T> inline void writeString(const wchar_t* /*name*/, const T& value)
 			{
 				int size = (int)value.size();
 				++size; // end of string
@@ -30,49 +30,49 @@ namespace Lunia {
 				stream->Write((const unsigned char*)value.c_str(), (unsigned int)(size * sizeof(T::value_type)));
 			}
 		public:
-			BinaryStreamWriter(Lunia::IStreamWriter& pStream)
+			inline BinaryStreamWriter(Lunia::IStreamWriter& pStream)
 				: stream(&pStream)
 			{
 			}
 
-			BinaryStreamWriter(com_ptr<Lunia::IRefCountedStreamWriter>& pStream)
+			inline BinaryStreamWriter(com_ptr<Lunia::IRefCountedStreamWriter>& pStream)
 				: stream(pStream.get()), refcountedStream(pStream)
 			{
 			}
 
 		public: /* IStreamWriter implementation */
 
-			virtual Type GetType() const {
+			virtual Type inline GetType() const {
 				return Type::Flat;
 			}
 
-			virtual void Begin(const wchar_t* /*name*/, int /*majorVersion*/, int /*minorVersion*/) {}
+			virtual void inline Begin(const wchar_t* /*name*/, int /*majorVersion*/, int /*minorVersion*/) {}
 
-			virtual void Write(const wchar_t* name, const Locator& locator) {
+			virtual void inline Write(const wchar_t* name, const Locator& locator) {
 				Write(name, locator.GetRelativePath());
 			}
 
-			virtual void Write(const wchar_t* name, bool value) { write(name, value); }
-			virtual void Write(const wchar_t* name, char value) { write(name, value); }
-			virtual void Write(const wchar_t* name, unsigned char value) { write(name, value); }
-			virtual void Write(const wchar_t* name, signed short value) { write(name, value); }
-			virtual void Write(const wchar_t* name, unsigned short value) { write(name, value); }
-			virtual void Write(const wchar_t* name, int value) { write(name, value); }
-			virtual void Write(const wchar_t* name, unsigned int value) { write(name, value); }
-			virtual void Write(const wchar_t* name, __int64 value) { write(name, value); }
-			virtual void Write(const wchar_t* name, unsigned __int64 value) { write(name, value); }
-			virtual void Write(const wchar_t* name, double value) { write(name, value); }
-			virtual void Write(const wchar_t* name, float value) { write(name, value); }
-			virtual void Write(const wchar_t* name, const float2& value) { write(name, value); }
-			virtual void Write(const wchar_t* name, const float3& value) { write(name, value); }
-			virtual void Write(const wchar_t* name, const float4& value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, bool value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, char value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, unsigned char value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, signed short value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, unsigned short value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, int value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, unsigned int value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, __int64 value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, unsigned __int64 value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, double value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, float value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, const float2& value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, const float3& value) { write(name, value); }
+			virtual inline void Write(const wchar_t* name, const float4& value) { write(name, value); }
 
 			//			virtual void Write(const wchar_t* name, const std::string& value) { writeString(name, value); }
 			//			virtual void Write(const wchar_t* name, const std::wstring& value) { writeString(name, value); }
-			virtual void Write(const wchar_t* /*name*/, const ISerializable& value) { value.Serialize(*this); }
+			virtual void inline Write(const wchar_t* /*name*/, const ISerializable& value) { value.Serialize(*this); }
 
-			virtual void  Write(const wchar_t* name, const wchar_t* buffer) { writeString(name, std::wstring(buffer)); }
-			virtual void  Write(const wchar_t* name, const char* buffer) { writeString(name, std::string(buffer)); }
+			virtual void inline Write(const wchar_t* name, const wchar_t* buffer) { writeString(name, std::wstring(buffer)); }
+			virtual void inline Write(const wchar_t* name, const char* buffer) { writeString(name, std::string(buffer)); }
 
 
 

@@ -28,7 +28,7 @@ namespace Lunia {
 				Terminate
 			};
 
-			virtual Iteration OnChunk(unsigned int chunkid, IStream&) = 0;
+			virtual Iteration inline OnChunk(unsigned int chunkid, IStream&) = 0;
 
 
 			template<int mainLevel, int subLevel, int version> struct ChunkID {

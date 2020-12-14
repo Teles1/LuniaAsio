@@ -115,12 +115,12 @@ namespace Lunia {
 					class StateTypeNotFoundException : public Exception
 					{
 					public:
-						StateTypeNotFoundException(Type t)
+						inline StateTypeNotFoundException(Type t)
 							: Exception(L"##StateTypeNotFoundException## Wrong state type : %d", t)
 							, type(t)
 							, typeStr(L"")
 						{}
-						StateTypeNotFoundException(const wchar_t* str)
+						inline StateTypeNotFoundException(const wchar_t* str)
 							: Exception(L"##StateTypeNotFoundException## Wrong state type : %s", str)
 							, type(Type::NONE)
 							, typeStr(str)

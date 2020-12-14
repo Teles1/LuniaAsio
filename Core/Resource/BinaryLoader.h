@@ -25,7 +25,7 @@ namespace Lunia {
 				public:
 					virtual void Read(unsigned char* buffer, unsigned int size) = 0;
 
-					template <typename T> void ReadStruct(T* buffer, int count = 1) {
+					template <typename T> inline void ReadStruct(T* buffer, int count = 1) {
 						Read(reinterpret_cast<unsigned char*>(buffer), sizeof(T) * count);
 					}
 				};

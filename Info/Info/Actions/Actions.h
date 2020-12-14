@@ -87,7 +87,7 @@ namespace Lunia {
 							float startTime;
 							float endTime;
 							unsigned int key; 
-							Input() : key(0) {}
+							inline Input() : key(0) {}
 
 							virtual void Serialize(Serializer::IStreamWriter& out) const;
 							virtual void Deserialize(Serializer::IStreamReader& in);

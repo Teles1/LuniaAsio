@@ -26,7 +26,7 @@ namespace Lunia {
 		class ResourceException : public Exception
 		{
 		public:
-			ResourceException(const wchar_t* desc) : Exception(desc) {}
+			inline ResourceException(const wchar_t* desc) : Exception(desc) {}
 		};
 
 		class ResourceNotFoundException : public ResourceException
@@ -35,7 +35,7 @@ namespace Lunia {
 		public:
 			inline const wchar_t* GetFileName() { return filename.c_str(); }
 		public:
-			ResourceNotFoundException(const wchar_t* desc, const wchar_t* pFilename)
+			inline ResourceNotFoundException(const wchar_t* desc, const wchar_t* pFilename)
 				: ResourceException(desc), filename(pFilename) {}
 		};
 

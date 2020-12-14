@@ -16,7 +16,7 @@ namespace Lunia {
 			String filename;
 
 		private:
-			File& operator=(const File&) { return *this; }
+			inline File& operator=(const File&) { return *this; }
 
 		public:
 

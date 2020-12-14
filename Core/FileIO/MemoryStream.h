@@ -13,7 +13,7 @@ namespace Lunia {
 
 		public:
 
-			virtual int SetReadCursor(int offset, IStream::CursorPosition seek) {
+			inline virtual int SetReadCursor(int offset, IStream::CursorPosition seek) {
 				if (seek == IStream::Begin) readPos = offset;
 				if (seek == IStream::Current) readPos += offset;
 				if (seek == IStream::End) readPos = this->size + offset;
@@ -21,7 +21,7 @@ namespace Lunia {
 				return readPos;
 			}
 
-			virtual int GetReadCursor() const {
+			inline virtual int GetReadCursor() const {
 				return readPos;
 			}
 

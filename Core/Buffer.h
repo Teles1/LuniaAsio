@@ -18,23 +18,23 @@ namespace Lunia {
 		StreamBuffer(int initialSize = 1024, bool isDynamicSize = true);
 		virtual ~StreamBuffer();
 
-		const void* GetData() const { return data; }
-		const void* SetData(unsigned char* dataNew, int sizeNew) { data = dataNew; size = sizeNew; }
+		inline const void* GetData() const { return data; }
+		inline void* SetData(unsigned char* dataNew, int sizeNew) { data = dataNew; size = sizeNew; }
 
 	public: /* IStream implements */
-		virtual const wchar_t* GetName() const { return L"StreamBuffer"; }
-		virtual unsigned int GetSize() const { return size; }
+		inline virtual const wchar_t* GetName() const { return L"StreamBuffer"; }
+		inline virtual unsigned int GetSize() const { return size; }
 
 
 	public: /* IStreamReader implements */
 		virtual unsigned int Read(unsigned char* buffer, unsigned int size);
 		virtual int SetReadCursor(int offset, IStream::CursorPosition base);
-		virtual int GetReadCursor() const { return readPos; }
+		inline virtual int GetReadCursor() const { return readPos; }
 
 	public: /* IStramWriter implements */
 		virtual unsigned int Write(const unsigned char* buffer, unsigned size);
 		virtual int SetWriteCursor(int position, IStream::CursorPosition base);
-		virtual int GetWriteCursor() const { return writePos; }
+		inline virtual int GetWriteCursor() const { return writePos; }
 	};
 	// Deprecated /////////////////////////////////////////////////////////////////////////////////
 

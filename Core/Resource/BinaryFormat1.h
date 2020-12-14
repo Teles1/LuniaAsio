@@ -16,7 +16,7 @@ namespace Lunia {
 				unsigned int id;
 				unsigned int version;
 
-				Header() : id(Constant::ID), version(Constant::Version) {}
+				inline Header() : id(Constant::ID), version(Constant::Version) {}
 			};
 
 			struct Chunk {
@@ -24,7 +24,7 @@ namespace Lunia {
 				int nextSibling;
 				int nextChild;
 
-				Chunk(unsigned int pID = 0, int pNextSibling = Constant::Empty, int pNextChild = Constant::Empty) :id(pID), nextSibling(pNextSibling), nextChild(pNextChild) {}
+				inline Chunk(unsigned int pID = 0, int pNextSibling = Constant::Empty, int pNextChild = Constant::Empty) :id(pID), nextSibling(pNextSibling), nextChild(pNextChild) {}
 			};
 		};
 	}

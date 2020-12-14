@@ -16,10 +16,10 @@ namespace Lunia {
 				unsigned int* chunks;
 				int chunkCount;
 
-				Instance(unsigned int* pChunks, int pChunkCount) : chunks(pChunks), chunkCount(pChunkCount) {}
+				inline Instance(unsigned int* pChunks, int pChunkCount) : chunks(pChunks), chunkCount(pChunkCount) {}
 			};
 
-			bool IsWanted(Instance& instance, unsigned int id) {
+			inline bool IsWanted(Instance& instance, unsigned int id) {
 				for (int i = 0; i < instance.chunkCount; ++i) {
 					if (instance.chunks[i] == id) return true;
 				}
@@ -28,7 +28,7 @@ namespace Lunia {
 
 
 
-			virtual void Load(IStream& stream, unsigned int* chunks, int chunkCount, IChunkLoaderListener* listener) {
+			virtual inline void Load(IStream& stream, unsigned int* chunks, int chunkCount, IChunkLoaderListener* listener) {
 
 				Instance instance(chunks, chunkCount);
 				//				ALLM_INFO((L"start stream cursor=%d, size=%d", stream.GetReadCursor(), stream.GetSize()));

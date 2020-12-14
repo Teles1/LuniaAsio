@@ -23,7 +23,7 @@ namespace Lunia {
 
 			ITextLoaderListener* listener;
 
-			void checkConstants(std::wstring& str) {
+			void inline checkConstants(std::wstring& str) {
 				if (constants.empty()) return; //hack to stop checking constants for files that are not having <using file="bla"/>...
 				if (str.find('$') != std::wstring::npos) {
 					if (constants.find(str) != constants.end()) {
@@ -35,7 +35,7 @@ namespace Lunia {
 				}
 			}
 
-			void onNewConstants(const ITextLoaderListener::Parameters& params) {
+			void inline onNewConstants(const ITextLoaderListener::Parameters& params) {
 				ConstantManager2::Pair pair = ConstantManager2Instance().Get(params[L"file"]);
 				constants.insert(pair.first, pair.second);
 				/*				for (; pair.first != pair.second; ++pair.first) {
@@ -43,7 +43,7 @@ namespace Lunia {
 				}*/
 			}
 
-			bool isWanted(const std::wstring& element) {
+			bool inline isWanted(const std::wstring& element) {
 				for (int i = 0; i < elementCount; ++i) {
 					if (elements[i] == element) return true;
 				}
@@ -51,14 +51,14 @@ namespace Lunia {
 				return false;
 			}
 
-			void modifyValue(std::wstring& value) {
+			void inline modifyValue(std::wstring& value) {
 				if (value[0] == L'|') { value = name + value; }
 				if (value[0] == L'/') { value = path + value; }
 				checkConstants(value);
 			}
 
 
-			void parseLeaf(Xml::Element* element, const std::wstring& parent) {
+			void inline parseLeaf(Xml::Element* element, const std::wstring& parent) {
 				if (terminate) return;
 				std::wstring fullname;
 
@@ -118,7 +118,7 @@ namespace Lunia {
 				if (ir == ITextLoaderListener::Terminate) { terminate = true; }
 			}
 
-			void parse() {
+			void inline parse() {
 				using namespace Xml;
 				terminate = false;
 
@@ -167,7 +167,7 @@ namespace Lunia {
 
 		public:
 
-			void Load(IStream& pStream, const wchar_t* pName, const wchar_t** pElements, int pElementCount, ITextLoaderListener* pListener) {
+			void inline Load(IStream& pStream, const wchar_t* pName, const wchar_t** pElements, int pElementCount, ITextLoaderListener* pListener) {
 				//	constants[L"$Path"]=StringUtil::ExtractPath(stream->GetName());
 				path = StringUtil::ParseFilePath(pStream.GetName());
 				stream = &pStream;

@@ -46,12 +46,12 @@ namespace Lunia {
 						NoticeLevel = Leveler::Nothing;
 					}
 
-					void SetEventListener(IEventListener* pListener)
+					inline void SetEventListener(IEventListener* pListener)
 					{
 						listener = pListener;
 					}
 
-					template<typename T>	bool operator()(const T& _Left, const T& _Right) const
+					template<typename T>	inline bool operator()(const T& _Left, const T& _Right) const
 					{	// apply operator< to operands
 						if (listener != NULL && _Left == _Right)
 							listener->DuplicationDetected(_Left);
@@ -66,7 +66,7 @@ namespace Lunia {
 					}
 
 					//Template Specification
-					template<wchar_t*>	bool operator()(const wchar_t* _Left, const wchar_t* _Right) const
+					template<wchar_t*>	inline bool operator()(const wchar_t* _Left, const wchar_t* _Right) const
 					{
 						int r = wcscmp(_Left, _Right);
 
@@ -82,12 +82,12 @@ namespace Lunia {
 						return r > 0;  
 					}
 
-					template<std::wstring&>	bool operator()(const std::wstring& _Left, const std::wstring& _Right) const
+					template<std::wstring&>	inline bool operator()(const std::wstring& _Left, const std::wstring& _Right) const
 					{	// apply operator< to operands
 						return operator()(_Left.c_str(), _Right.c_str());
 					}
 
-					template<XRated::StageLocation&>	bool operator()(const Lunia::XRated::StageLocation& _Left, const Lunia::XRated::StageLocation& _Right) const
+					template<XRated::StageLocation&>	inline bool operator()(const Lunia::XRated::StageLocation& _Left, const Lunia::XRated::StageLocation& _Right) const
 					{	// apply operator< to operands
 						if (listener != NULL && _Left == _Right)
 							listener->DuplicationDetected(_Left);
@@ -101,7 +101,7 @@ namespace Lunia {
 						}
 						return (_Left < _Right);
 					}
-					template<typename T> bool operator() (const T* _Left, const T* _Right) const
+					template<typename T> inline bool operator() (const T* _Left, const T* _Right) const
 					{
 						if (listener != NULL && _Left == _Right)
 							listener->DuplicationDetected(_Left);
@@ -122,7 +122,7 @@ namespace Lunia {
 				class InstantLeveler
 				{
 				public:
-					InstantLeveler(Leveler& leveler, const char* called = NULL, Leveler::Level instantLevel = Leveler::Warning)
+					inline InstantLeveler(Leveler& leveler, const char* called = NULL, Leveler::Level instantLevel = Leveler::Warning)
 						: priorLevel(leveler.NoticeLevel), target(&leveler), calledFunc(called)
 					{
 						if (target->NoticeLevel < instantLevel)
@@ -131,13 +131,13 @@ namespace Lunia {
 						}
 					}
 					template<typename T>
-					InstantLeveler(std::less<T>&, const char*, int = 0)
+					inline InstantLeveler(std::less<T>&, const char*, int = 0)
 						: target(NULL)
 					{
 
 					}
 
-					~InstantLeveler()
+					inline ~InstantLeveler()
 					{
 						if (target != NULL)
 							target->NoticeLevel = priorLevel;
