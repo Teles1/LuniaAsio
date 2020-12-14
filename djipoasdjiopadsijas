@@ -1,0 +1,922 @@
+[33mcommit 80098ca8a73c378dcd53e82f4366ee159dd4f9c9[m[33m ([m[1;36mHEAD -> [m[1;32m8-trying-read-binary-fuck-stuff-don-t-pull-this[m[33m, [m[1;31morigin/8-trying-read-binary-fuck-stuff-don-t-pull-this[m[33m)[m
+Merge: 0f4b11b 7a94f4e
+Author: Crazy <mtfactions@gmail.com>
+Date:   Mon Dec 14 20:22:23 2020 -0300
+
+    Merge branch '8-trying-read-binary-fuck-stuff-don-t-pull-this' of https://gitlab.com/lunia-development/Lunia into 8-trying-read-binary-fuck-stuff-don-t-pull-this
+
+[33mcommit 0f4b11b6d88b9e8f0317fa9731dde3b5452d01ef[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Mon Dec 14 20:21:34 2020 -0300
+
+    FUCK YOU TELES
+
+[33mcommit 7a94f4ec494cc94e9c0bb429decf92549552fd72[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Mon Dec 14 17:22:58 2020 -0500
+
+    .
+
+[33mcommit 0ccd20283b535cb9632a3a2341f389094706a019[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Mon Dec 14 17:39:39 2020 -0300
+
+     trying resolve unresolved external symbol
+
+[33mcommit bca54990c72ef8cfe248ac6f7b19a13c084f510b[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Mon Dec 14 16:39:29 2020 -0300
+
+    added expat 2020
+
+[33mcommit dc59095ffa9b14494942fd2c82018eb476b6b851[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Mon Dec 14 10:40:09 2020 -0300
+
+    Info works nice, need rework in linker for stageserver/info :eyes:
+
+[33mcommit 7eae427a7b4bb5585d6b53128b48c4cac0e07aba[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Mon Dec 14 02:30:53 2020 -0300
+
+    creating structures
+
+[33mcommit c89ba12108144e1f21d8c5864a8345bbf12d147c[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Mon Dec 14 01:50:17 2020 -0300
+
+     isso tá compilando oWo
+
+[33mcommit 388cfe7031ce0874f825e718c03bd421afd7d273[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Mon Dec 14 00:35:57 2020 -0300
+
+     added files
+
+[33mcommit cf673d5b6e9e02a8cd98f8ae3c0c3cc2fd87806e[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Sun Dec 13 21:12:57 2020 -0300
+
+    we literally have an isAuthenticated bool
+    why wasnt i using it?!
+
+[33mcommit 9932584dbc36ed3250df24fb7762b00e83b1626a[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Sun Dec 13 21:10:14 2020 -0300
+
+    actually clear user's reference on disconnect/authenticate
+
+[33mcommit eff26b0f710eaabca966f344b34212e34e5760b6[m
+Merge: 24af438 4fe3b7c
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 23:18:39 2020 +0000
+
+    Merge branch '7-keepaliveloop-implementation' into 'main'
+    
+    *Changes on the issue related to this branch.
+    
+    Closes #7
+    
+    See merge request lunia-development/Lunia!14
+
+[33mcommit 4fe3b7ce39ab164b48375d462b549ad85e5ecdd1[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 18:16:31 2020 -0500
+
+    *Changes on the issue related to this branch.
+
+[33mcommit 24af438bcb74197619a46d46dc633a47b8577675[m[33m ([m[1;32mmain[m[33m)[m
+Merge: c614218 1e9f31a
+Author: yCr4zY <mtfactions@gmail.com>
+Date:   Sun Dec 13 21:31:24 2020 +0000
+
+    Merge branch '6-implemented-binary-write-reader-logic' into 'main'
+    
+    implemented binary write reader logic
+    
+    Closes #6
+    
+    See merge request lunia-development/Lunia!11
+
+[33mcommit 1e9f31a075c5d1610ff200715de26c59edcfd1da[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Sun Dec 13 18:30:54 2020 -0300
+
+    implemented binary write reader logic
+
+[33mcommit c61421890578c4c58a4ae76270ec062ca9861027[m
+Merge: b8e3517 067ffd4
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 21:23:34 2020 +0000
+
+    Merge branch '5-changed-our-project-from-c-14-to-17' into 'main'
+    
+    Explained on the issue.
+    
+    Closes #5
+    
+    See merge request lunia-development/Lunia!10
+
+[33mcommit 067ffd411f174725ec04e875a77f11465046eb39[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 16:22:47 2020 -0500
+
+    Explained on the issue.
+
+[33mcommit b8e351730230615dcc7d3b3f6cd5458a868a6e6e[m
+Merge: fbd44c3 123001d
+Author: Lucas Andrade <lsadsa@hotmail.com>
+Date:   Sun Dec 13 20:08:29 2020 +0000
+
+    Merge branch 'lucas' into 'main'
+    
+    Change validation to boolean on SecondPassword
+    
+    See merge request lunia-development/Lunia!9
+
+[33mcommit 123001dfb6eb686fe87a53f27c08be132a6bc48c[m
+Author: Lucas <landrade@fsp.usp.br>
+Date:   Sun Dec 13 17:07:33 2020 -0300
+
+    Change validation to boolean on SecondPassword
+
+[33mcommit fbd44c32426a9efd3dab70ace934d510243d95a8[m
+Merge: b8f3841 d61977a
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 15:53:32 2020 +0000
+
+    Merge branch '4-typo-on-user-cpp' into 'main'
+    
+    *Typo fixed
+    
+    Closes #4
+    
+    See merge request lunia-development/Lunia!8
+
+[33mcommit d61977ac4735794c882015dac1ed6bfc4ba1c1ec[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 10:52:56 2020 -0500
+
+    *Typo fixed
+
+[33mcommit b8f3841681d1fc1201753d604f946465297c9e1c[m
+Merge: 0bd2b6f 5e92487
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 10:47:02 2020 -0500
+
+    Merge branch 'main' of https://gitlab.com/lunia-development/Lunia into main
+
+[33mcommit 0bd2b6f3f4aa79335d6ebb1fd3712fd2c06cdb21[m
+Merge: 84a6640 9b62aa4
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 10:45:52 2020 -0500
+
+    Merge branch '2-fixed-the-api' into main
+
+[33mcommit 9b62aa48252bdbaab06f1ae87c6d48065a274b83[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 10:39:09 2020 -0500
+
+    *missing locks where we need locks
+
+[33mcommit 5e9248759bb7f5f842d56ba864088590b0e9d6a4[m
+Merge: 9c0075e def3c91
+Author: yCr4zY <mtfactions@gmail.com>
+Date:   Sun Dec 13 12:48:39 2020 +0000
+
+    Merge branch '3-removed-verification-null-in-foreach' into 'main'
+    
+    removed verification
+    
+    Closes #3
+    
+    See merge request lunia-development/Lunia!4
+
+[33mcommit def3c916a197ce0d7c7cda368d4977a4a55d2580[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Sun Dec 13 09:47:54 2020 -0300
+
+    removed verification
+
+[33mcommit 9c0075ee7a971ae0d9d202ec1ecedfb865424412[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Sun Dec 13 09:38:23 2020 -0300
+
+    added post method in api
+
+[33mcommit 42ca10ff820cda5ca113883f62ebb0c3669fe443[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 21:51:06 2020 -0500
+
+    .
+
+[33mcommit 2f06a80fe8cb10272ceafdc35f2bf2145becc9ad[m
+Merge: 84a6640 2b43414
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 02:45:13 2020 +0000
+
+    Merge branch '1-problem-on-listcharacter' into 'main'
+    
+    Resolve "Problem on ListCharacter"
+    
+    Closes #1
+    
+    See merge request lunia-development/Lunia!3
+
+[33mcommit 2b43414bd0afb13488bb9e143735be61880301e1[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 21:44:35 2020 -0500
+
+    *
+
+[33mcommit 5ea02fceea08b246b90d9e328f43c686b196a1cc[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 21:35:08 2020 -0500
+
+    .
+
+[33mcommit 84a66405c428f72a66fa177a3062ee096260307a[m
+Merge: 1a9e881 2f3dfe0
+Author: Crazy <mtfactions@gmail.com>
+Date:   Sat Dec 12 23:05:25 2020 -0300
+
+    Merge branch 'main' of https://gitlab.com/lunia-development/Lunia into main
+
+[33mcommit 1a9e88145a49fc68fef387ad92b4e78b714f190f[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Sat Dec 12 23:05:17 2020 -0300
+
+    *created logic for savekeysettings
+
+[33mcommit 2f3dfe06181478f8ff6472bf48d7782ee435e4c6[m
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 01:30:07 2020 +0000
+
+    Update README.md
+
+[33mcommit 3af935222225792dab1f25985f56e61ce1b02df9[m
+Merge: f69639a 52103c6
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 13 00:27:14 2020 +0000
+
+    Merge branch '1-config-singleton' into 'main'
+    
+    *
+    
+    See merge request lunia-development/Lunia!2
+
+[33mcommit 52103c62a7d31fc90b301664d8360ac784353039[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 19:22:27 2020 -0500
+
+    *
+
+[33mcommit f69639a7982058301ebedaa2798fe4395c2d3847[m
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 23:46:38 2020 +0000
+
+    Update README.md
+
+[33mcommit 3ea150ce20ffa8c1337659e60e607bdaf648aaf7[m
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 23:46:30 2020 +0000
+
+    Update README.md
+
+[33mcommit 81997c18e134d5041db620d68ee9d643e38e25b0[m
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 23:43:56 2020 +0000
+
+    Update README.md
+
+[33mcommit 2a7cac62152afd46a9ff57ac19f57c906764a2a5[m
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 23:43:13 2020 +0000
+
+    Update README.md
+
+[33mcommit c8aeaa30de382836fb011b9444e8c627c0f1a436[m
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 23:42:47 2020 +0000
+
+    Update README.md
+
+[33mcommit 69e3d68b7e45b97e49656f3318e505456523e2f0[m
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 23:42:35 2020 +0000
+
+    Update README.md
+
+[33mcommit 13b302e3923fb7244ac7f0540ec9c5c7272200b2[m
+Author: Henrique Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 23:41:46 2020 +0000
+
+    Update README.md
+
+[33mcommit ab6ed06c6818be7e3068feb42079190e9c6c32a0[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 18:10:19 2020 -0500
+
+    *Small clarification for the api.
+
+[33mcommit 60969c2d3bb7a38adf812343fd76328c4ef7cfa6[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 18:08:01 2020 -0500
+
+    ConfigReader Added.
+
+[33mcommit 5b7ae947f946887e1f67ee2f5448636a56b9801c[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 17:55:45 2020 -0500
+
+    *Modified the Create/Delete characters a bit
+    *Moved some of the modifiers to inside of the user struct
+
+[33mcommit f29a9a8868f4026331862879529b0a65ad51ff5a[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 17:54:17 2020 -0500
+
+    *BareBones config reader.
+
+[33mcommit 7e6bdd5625fd948e9f7e3fcfe0254726f0b12ff0[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 17:53:40 2020 -0500
+
+    *Logger now support wstring.
+    *Be sure to use only one or the other
+
+[33mcommit 63df88f4c4423c105d964cc004017110b9da841c[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Sat Dec 12 16:15:03 2020 -0300
+
+    nao lembro oq fiz
+
+[33mcommit b06e89ad079642922b5a446ae94a35ef199700fb[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 11:57:22 2020 -0500
+
+    *fixed warning
+
+[33mcommit c4abd6dff6f02b37f3a34a862382ca173f8a17d7[m
+Merge: baed023 2f5ae4e
+Author: Crazy <mtfactions@gmail.com>
+Date:   Sat Dec 12 13:53:58 2020 -0300
+
+    Merge branch 'main' of https://github.com/Teles1/Lunia into main
+
+[33mcommit baed023d6e79704f986518f41babf457575f8e68[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Sat Dec 12 13:53:02 2020 -0300
+
+    client socket is closed and erased m_users
+
+[33mcommit 03c400cb798f89713d575b9f74f532645cb8b461[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Sat Dec 12 13:43:25 2020 -0300
+
+    removed user for tcp - socket
+
+[33mcommit 2f5ae4eb63748ffc2513498093ca84a9a0195719[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 12 06:52:34 2020 -0500
+
+    .
+
+[33mcommit 03e50b114c4ebaa4c646b884a41fb852392cf711[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Sat Dec 12 00:28:03 2020 -0300
+
+    monte de merda
+
+[33mcommit e33c1aee4652ebf4a3e0afcfac0d9e9651e39d1a[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Fri Dec 11 22:17:00 2020 -0500
+
+    .
+
+[33mcommit e7b06e5a6cdc24b0471507f732b4b57ea329c9dc[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Fri Dec 11 22:14:50 2020 -0500
+
+    *Now we use StringUtils from allm's
+
+[33mcommit b1f5fa971f137286b8630a95d68e0a3e0124faa2[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Fri Dec 11 17:41:53 2020 -0500
+
+    *Create character
+
+[33mcommit 7a1121a6dccbdb85aefe64a322bda4d7307e86f3[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Fri Dec 11 13:29:58 2020 -0500
+
+    *Created a typedef for lock_guards
+    *Added a buggy user terminate.
+
+[33mcommit 4033d2f54aa53dacab68932cc2efce2dd030e7d1[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Fri Dec 11 12:21:02 2020 -0500
+
+    *Singletons are now returning a reference to their class
+
+[33mcommit 68bbecfe7ef14c1879c877f96f0778715adcf421[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 23:27:33 2020 -0500
+
+    *Properly merged key's commit into mine's
+
+[33mcommit 347c161862447a8c0534b00d88c9e3f097175239[m
+Merge: b44795b 068c06b
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 23:20:25 2020 -0500
+
+    Merge branch 'main' of https://github.com/Teles1/Lunia into main
+
+[33mcommit b44795b4d5839ad39057b313003671cbfe94a7c0[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 23:18:22 2020 -0500
+
+    *Added the begining of the secondpassword
+    *Remove the "User" keyword from the functions from whitin the user's scope.
+    *Added a few more protocols.
+    *Changed the API to handle automatically different DataTypes
+
+[33mcommit 068c06b83882b555e9eabfa19f35523c921162a4[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Thu Dec 10 19:44:44 2020 -0300
+
+    * Faster user lockup
+    
+    * usersByUserId
+    
+    * authorizedUsers map
+
+[33mcommit f506e4995d8ff03cb0a21efa9228554ca719eea5[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Thu Dec 10 17:39:56 2020 -0300
+
+    dont remove the user just yet
+    because that will crash the server lol
+
+[33mcommit 684059a123cb2c224a0eefdaa31654e515f8ec35[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 15:32:58 2020 -0500
+
+    *ThreadPool Lib added.
+    *ListCharacter begun.
+
+[33mcommit e004024b3fcbce1677159104fa1b50c8f6cafc97[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 09:49:26 2020 -0500
+
+    *Moved to GameConstants.
+
+[33mcommit 7a1751c326037b1e9ce5089a624841e085384ad8[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 09:47:52 2020 -0500
+
+    *double mutex fixed
+    *Parse now returns the packet size(might change this back)
+
+[33mcommit 9f973e0385fc728d7b94b729a2f90e715d4d7585[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 09:28:14 2020 -0500
+
+    Merged Properly now.
+
+[33mcommit 3bb9b94d51f7750daac8e6d84341e1d23333f77e[m
+Merge: 7560527 b7986cd
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 09:14:33 2020 -0500
+
+    Merge branch 'main' of https://github.com/Teles1/Lunia into main
+
+[33mcommit 75605276ac85693a182ebd9e3af8e6f78d519845[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 09:04:42 2020 -0500
+
+    *Fixed a problem with Locator
+
+[33mcommit 587fee5a599c0a0cf5d501dbc44d0d149ffd2646[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 08:05:32 2020 -0500
+
+    working
+
+[33mcommit 2d2f0687da89bb6b42662eda5f3df90a0f823ac2[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 07:54:34 2020 -0500
+
+    Compiling :D
+
+[33mcommit 941b86cd33f82c8223592df688d0681cd55361fc[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 05:50:25 2020 -0500
+
+    .
+
+[33mcommit 03d01eccfd4db6bf66f226bd01f5cee810ea1948[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 04:28:55 2020 -0500
+
+    .
+
+[33mcommit 836e4808d6dfdf51441b16713868c3987b5f81ee[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Thu Dec 10 04:25:36 2020 -0500
+
+    *Compiling problems are mostly gone for Core.h
+
+[33mcommit e9507b8e3cc98e24f23e36ffa0459a2e20ab11ae[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Wed Dec 9 20:34:22 2020 -0500
+
+    .
+
+[33mcommit 847462f8069124e39fb77206a035d31399759e35[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Wed Dec 9 19:26:13 2020 -0500
+
+    sda
+
+[33mcommit 6818842c815a2a6a4494b63f74385d8f709d182e[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Wed Dec 9 16:26:02 2020 -0500
+
+    .
+
+[33mcommit c7cd693f24b5d93e920e092c65b6fbda49afbab9[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Wed Dec 9 16:24:56 2020 -0500
+
+    fix on a throw excption
+
+[33mcommit fe3087dc2510c4629a9604cf57b15c7ecbd6281f[m
+Author: Crazy <mtfactions@gmail.com>
+Date:   Wed Dec 9 18:12:59 2020 -0300
+
+    fixed gameconstants.h, now need create a logic in .cpp
+
+[33mcommit 4510f05a2ab3a7efb8c3ba2090017dd9419d0730[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Wed Dec 9 15:13:48 2020 -0500
+
+    .
+
+[33mcommit b7986cd4117c9b16ab26797c70d96b11214f54bb[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Wed Dec 9 17:11:06 2020 -0300
+
+    * Switch case for Auth protocol results
+    
+    * Temporary id for new connections
+
+[33mcommit 097aa0194545cbd4dd1c7434953b1437d38aa34c[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 8 23:30:30 2020 -0500
+
+    *Fixing compiling problems
+
+[33mcommit f7f5206cc0c89b17f62538d8f6b642a7595df86b[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Wed Dec 9 01:04:15 2020 -0300
+
+    gitignore ./packages
+
+[33mcommit 541449036ebeafa0a9cb51a705f672f40d58cfbd[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Wed Dec 9 01:02:08 2020 -0300
+
+    * Move GameServer initialization to LobbyServer
+    
+    * adds g_gamerServer global
+
+[33mcommit 0aa8453afdc92205e7578242334974d76247054a[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Wed Dec 9 01:00:51 2020 -0300
+
+    stageserver vai p caralho
+
+[33mcommit 48ddc59e3320e8e918b5c1ec14a7c537f0d9bbe7[m
+Merge: a4f7342 a98e24d
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Wed Dec 9 01:00:05 2020 -0300
+
+    Merge branch 'main' of https://github.com/Teles1/Lunia into main
+
+[33mcommit a4f7342c02d357413c2c0e55a8dacf88cdcf899f[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Wed Dec 9 00:59:45 2020 -0300
+
+    gitignore .vcpkg.props
+
+[33mcommit a98e24d4660c77b47c0b6443931235cd603826d7[m
+Author: Teles1 <66783472+Teles1@users.noreply.github.com>
+Date:   Tue Dec 8 22:59:27 2020 -0500
+
+    Delete vcpkg.C.vcpkg.props
+
+[33mcommit 2fb850463977ae57e1c35bd74988faeb9f959903[m
+Author: Teles1 <66783472+Teles1@users.noreply.github.com>
+Date:   Tue Dec 8 22:59:21 2020 -0500
+
+    Delete vcpkg.C.vcpkg.targets
+
+[33mcommit 9c863cf0e1ab13f8b11e6c75ebebf4699ecc2c17[m
+Author: Teles1 <66783472+Teles1@users.noreply.github.com>
+Date:   Tue Dec 8 22:59:13 2020 -0500
+
+    Delete vcpkg.C.vcpkg.1.0.0.nupkg
+
+[33mcommit fb07681a1d7f5347fc8df7b4961a4f73f869c75d[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 8 21:58:26 2020 -0500
+
+    *Added a return result for our api Struct
+    *Trying to fix StageServer compiling problems
+
+[33mcommit 37fad23a074aefd003229e75671c464d53690250[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 8 19:39:27 2020 -0500
+
+    *Started Dealing with the packets
+    *Created a VERY bare bones API caller just to get things going.
+    *Now we can get user's ip address
+
+[33mcommit 93a31b3670d74230f1dbec82768255b18ecc7c84[m
+Merge: ea160d9 f02fa6b
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Tue Dec 8 18:13:49 2020 -0300
+
+    Merge branch 'main' of https://github.com/Teles1/Lunia into main
+
+[33mcommit ea160d929d4b06aaf36825f31716330bfbf7e2f2[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Tue Dec 8 18:13:07 2020 -0300
+
+    adds GameServer and GameServerScopes
+
+[33mcommit f02fa6b7823047f7511eb66c78dfc0c92525a81b[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 8 16:08:37 2020 -0500
+
+    *Logger Sigleton created
+    *Replaces the macros with the new Log Singleton
+
+[33mcommit d4df533a2bcf3e7ab20569f31a6053f019341d1f[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Tue Dec 8 16:18:07 2020 -0300
+
+    * InitFunction is now a unique file
+    
+    * Removed/changed some logging
+    
+    * fwPacketListener singleton
+    
+    * PacketHandler unique file
+
+[33mcommit c0c5a610e92094f0b4d701eb7e97c430d3b22642[m
+Merge: b2463ca 9d25c61
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 8 14:07:39 2020 -0500
+
+    Merge branch 'main' of https://github.com/Teles1/Lunia into main
+
+[33mcommit b2463ca5706403b2744673672a80639cd6a6505d[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 8 14:07:32 2020 -0500
+
+    Added a implicit conversion to avoid warnings
+
+[33mcommit 9d25c614c59462c423adb78508aeb939740a4e5e[m
+Author: Teles1 <66783472+Teles1@users.noreply.github.com>
+Date:   Tue Dec 8 13:42:06 2020 -0500
+
+    Update README.md
+
+[33mcommit b5adff76cfd2847e8cd25d32ce40435ab5f519b1[m
+Merge: ce406ef e9a936d
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Tue Dec 8 15:40:20 2020 -0300
+
+    Merge branch 'main' of https://github.com/Teles1/Lunia into main
+
+[33mcommit ce406ef726ff9561bcc49ae12d730d75cd566f97[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Tue Dec 8 15:40:11 2020 -0300
+
+    include fmt/format
+
+[33mcommit e9a936dd76245917789d5e8e9e404f0856faabd3[m
+Author: Teles1 <66783472+Teles1@users.noreply.github.com>
+Date:   Tue Dec 8 13:36:57 2020 -0500
+
+    Update README.md
+
+[33mcommit 9e7acfcdfd63f44caa91d74ccf6b7f6bda4ee38b[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 8 13:28:52 2020 -0500
+
+    removal of includes
+
+[33mcommit 681114afc81d5864bc2eccb3d7668dd79e8af34b[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 8 03:08:21 2020 -0500
+
+    Changed Compiling settings, project general.
+
+[33mcommit b1c6a64ceb7fa2ee1e3b84e2e157182c081f18ee[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 8 02:13:09 2020 -0500
+
+    Small Cleanup and added UserSharedPtr to the packet handler
+
+[33mcommit 8c7c2db29fad896c9e714348bfb742a71cde3438[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 8 01:26:41 2020 -0500
+
+    Boost Asio Standalone
+
+[33mcommit 7cc270acf79c4bf43f5855e8da5053e1e4ecf519[m
+Merge: 60b8702 d1afd74
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 8 01:23:45 2020 -0500
+
+    Merge branch 'main' of https://github.com/Teles1/Lunia into main
+
+[33mcommit d1afd74743ff49ea17baee5984bf20bc925e90f6[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Tue Dec 8 03:20:06 2020 -0300
+
+    make crypto key public, sendAsync len is not a reference anymore
+
+[33mcommit e6c091c14743da541797c2c5ae81a1c4dfb7f7b6[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Tue Dec 8 03:19:25 2020 -0300
+
+    adds new packetHandler, deletes old stuff
+
+[33mcommit 60b8702b405f6bb7ed06f3323d5f25dd7ac8f1d6[m
+Merge: 0f8131a df5777f
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Mon Dec 7 23:55:41 2020 -0500
+
+    Merge branch 'main' of https://github.com/Teles1/Lunia into main
+
+[33mcommit 1a490af9ed9f135c7bbaf3d0d24ac5c84e6ffd09[m
+Merge: 2a09bae df5777f
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Mon Dec 7 16:25:09 2020 -0300
+
+    Merge branch 'main' of https://github.com/Teles1/Lunia into main
+
+[33mcommit 2a09baec44e849fb83262ebe7474117dd087b232[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Mon Dec 7 16:25:05 2020 -0300
+
+    fix tabbing, User destructor
+
+[33mcommit 0f8131ad677200089c2a4e942f7788d481b69869[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Mon Dec 7 14:20:28 2020 -0500
+
+    Use of asio standalone without boost.
+
+[33mcommit df5777f4384154695797975453b3acd0e8a0e11d[m
+Author: Teles1 <66783472+Teles1@users.noreply.github.com>
+Date:   Mon Dec 7 14:14:59 2020 -0500
+
+    Update README.md
+
+[33mcommit db2e8c4546799829bd8bca251664dddecdf2ed12[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Mon Dec 7 12:35:18 2020 -0500
+
+    User contains fwEvent.h so we shoudn't need it her
+
+[33mcommit 4891ca056067401caae2c82353d1b946ef7b33c7[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Mon Dec 7 09:00:12 2020 -0500
+
+    Singleton for UserRegistry
+
+[33mcommit 741482e219c3b9247ef9a23e116f2c39e4a0430d[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 6 23:14:13 2020 -0500
+
+    .
+
+[33mcommit 8f7f512bedb2c1ed1e3e3a7a07432a2b9b7833f4[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 6 15:22:42 2020 -0500
+
+    fixing compiling problems
+
+[33mcommit 6b8c02673608910e4cb297a9231b9711d52bcfd3[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sun Dec 6 15:08:15 2020 -0500
+
+    New TcpServer
+
+[33mcommit 6c11ce69cfc7c5dfcf00224ea930f70af649629e[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Sun Dec 6 17:06:57 2020 -0300
+
+    StreamWriter::Begin now uses hashes directly
+
+[33mcommit a1e724dfb48cf5a2c7bd626be5e0788183692b0e[m
+Merge: f9cfaf9 b052a54
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 5 19:32:05 2020 -0500
+
+    Merge branch 'main' of https://github.com/Teles1/Lunia into main
+
+[33mcommit f9cfaf9cd963a7e931ed1b1a9a43cc237356cdf8[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 5 19:16:26 2020 -0500
+
+    Some base work.
+
+[33mcommit b052a549858cdb3c99d2dd8d490ad469f251d032[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Sat Dec 5 21:02:42 2020 -0300
+
+    remove unused (commented) test struct
+
+[33mcommit eeadd911023e1628a3620df5d538f512f2e6bd73[m
+Author: slashkeyvalue <felipekvalue@gmail.com>
+Date:   Sat Dec 5 21:01:21 2020 -0300
+
+    basic fwEvent impl, packet handlers, both just for reference
+
+[33mcommit 9ddcb9bc7fddb41cf0aa6fbd8025f292dcba66c3[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Sat Dec 5 13:58:53 2020 -0500
+
+    Not so bad Parsing System for Encrypted messages.
+
+[33mcommit 537384c8e11cfdbaaec054d6bc3d01bb6e82ba98[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Fri Dec 4 15:32:58 2020 -0500
+
+    Removing Debugging.lib
+
+[33mcommit f6e91365b29d144237bc05eb4f44288ded85e1eb[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Fri Dec 4 05:26:35 2020 -0500
+
+    Now Using Precompiled Headers.
+
+[33mcommit 4ef7b2471d47ac32509a68173ea655a09c97293e[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Wed Dec 2 06:41:09 2020 -0500
+
+    quick fix on DateTime
+
+[33mcommit 865d1172df6b5a7162a2e1340c2bc87ee9d2d950[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Wed Dec 2 06:22:20 2020 -0500
+
+    Begin sending responses to the client..
+
+[33mcommit 686ffcdcc55fc2ea9d7b69abcf83ffcfa0bd018b[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Tue Dec 1 23:41:30 2020 -0500
+
+    Capable of generating the cryptoKey
+
+[33mcommit 5e31c7d9aff94a08ec30e89fab5b065e130a0cc1[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Mon Nov 30 22:52:51 2020 -0500
+
+    Initial Figuring out
+
+[33mcommit e61ac0f3f773f1de6aa083f214d405c8979de448[m
+Author: yCr4zY <mtfactions@gmail.com>
+Date:   Mon Nov 30 13:56:29 2020 -0300
+
+    Added Network FIle
+
+[33mcommit 2be0db301a7620938048b724e21e4696c92ed48d[m
+Author: Teles <mteleshenrique@gmail.com>
+Date:   Mon Nov 30 11:19:18 2020 -0500
+
+    Initial Commit
+
+[33mcommit a7968a7954d29dae4de0d7aa4e8f97d7881cbb33[m
+Author: Teles1 <66783472+Teles1@users.noreply.github.com>
+Date:   Mon Nov 30 11:15:17 2020 -0500
+
+    Update .gitignore
+
+[33mcommit f7793e87ec6a2669cb54b137ad75e78676679b6e[m
+Author: Teles1 <66783472+Teles1@users.noreply.github.com>
+Date:   Mon Nov 30 11:13:55 2020 -0500
+
+    Update .gitignore
+
+[33mcommit d60671c6bd11a91f3e7c277000fd885ff1e2d65d[m
+Author: Teles1 <66783472+Teles1@users.noreply.github.com>
+Date:   Mon Nov 30 11:13:19 2020 -0500
+
+    Initial commit
