@@ -34,10 +34,8 @@ namespace Lunia {
 
 			m_usersByUserId.erase(user->GetId());
 
-			if (m_autorizedUsersByUserId.find(user->GetId()) != m_autorizedUsersByUserId.end())
-			{
+			if (user->IsAuthenticated())
 				m_autorizedUsersByUserId.erase(user->GetId());
-			}
 
 			for (auto it = m_users.begin(); it < m_users.end(); it++)
 			{
