@@ -135,7 +135,7 @@ namespace Lunia {
 				if (minorVersionOut) *minorVersionOut = minorVersionFromFile;
 
 				/*if (majorVersionFromFile != majorVersion) {
-				   throw AllM::Exception(ALLM_EXCEPTION((L"a class %s version mismatch, serialized version=(%d,%d), required version=(%d,%d)", type, majorVersionFromFile, minorVersionFromFile, majorVersion, minorVersion)));
+				   throw Exception(ALLM_EXCEPTION((L"a class %s version mismatch, serialized version=(%d,%d), required version=(%d,%d)", type, majorVersionFromFile, minorVersionFromFile, majorVersion, minorVersion)));
 				}
 
 				if (minorVersionFromFile != minorVersion) {

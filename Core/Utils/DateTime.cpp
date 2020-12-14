@@ -150,7 +150,7 @@ namespace Lunia {
 		return L"";
 	}
 	void DateTime::Date::Deserialize(Serializer::IStreamReader& in) {
-		in.Begin(L"AllM::Date");
+		in.Begin(L"Date");
 		uint16 aux = 0;
 		in.Read(L"Year", aux);
 		dateValue.Year = aux;
@@ -160,7 +160,7 @@ namespace Lunia {
 		dateValue.Day = static_cast<uint8>(aux);
 	}
 	void DateTime::Date::Serialize(Serializer::IStreamWriter& out)  const {
-		out.Begin(L"AllM::Date");
+		out.Begin(L"Date");
 		out.Write(L"Year", static_cast<uint16>(dateValue.Year));
 		out.Write(L"Month", static_cast<uint16>(dateValue.Month));
 		out.Write(L"Day", static_cast<uint16>(dateValue.Day));
@@ -311,7 +311,7 @@ namespace Lunia {
 		return sec;
 	}
 	void DateTime::Time::Deserialize(Serializer::IStreamReader& in) {
-		in.Begin(L"AllM::Time");
+		in.Begin(L"Time");
 		uint16 tmp;
 		in.Read(L"Hour", tmp);
 		timeValue.Hour = static_cast<uint8>(tmp);
@@ -439,7 +439,7 @@ namespace Lunia {
 		return data;
 	}
 	void DateTime::Deserialize(Serializer::IStreamReader& in) {
-		in.Begin(L"AllM::DateTime");
+		in.Begin(L"DateTime");
 		uint16 tmp;
 		in.Read(L"Year", tmp); dateData.SetYear(tmp);
 		in.Read(L"Month", tmp); dateData.SetMonth(static_cast<uint8>(tmp));
@@ -450,7 +450,7 @@ namespace Lunia {
 		in.Read(L"MilliSec", tmp); timeData.SetMilliSec(tmp);
 	}
 	void DateTime::Serialize(Serializer::IStreamWriter& out)  const {
-		out.Begin(L"AllM::DateTime");
+		out.Begin(L"DateTime");
 		uint16 tmp;
 		tmp = dateData.GetYear();
 		out.Write(L"Year", tmp);

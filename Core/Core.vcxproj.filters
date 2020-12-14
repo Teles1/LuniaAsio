@@ -13,6 +13,14 @@
     <ClCompile Include="Utils\StringUtil\GenericConversion.cpp" />
     <ClCompile Include="Utils\Math\Color.cpp" />
     <ClCompile Include="Utils\ConfigReader.cpp" />
+    <ClCompile Include="FileIO\FileHelper.cpp" />
+    <ClCompile Include="FileIO\File.cpp" />
+    <ClCompile Include="Resource\Resource.cpp" />
+    <ClCompile Include="FileIO\Directory.cpp" />
+    <ClCompile Include="Resource\Xml\XmlHelper.cpp" />
+    <ClCompile Include="Resource\Xml\XmlParser.cpp" />
+    <ClCompile Include="Serializer\Binary\XmlSerializer.cpp" />
+    <ClCompile Include="Serializer\Binary\XmlStream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -46,10 +54,9 @@
     <ClInclude Include="Types.h" />
     <ClInclude Include="Serializer\Serializer_old.h" />
     <ClInclude Include="Serializer\Serializer.h" />
-	  <ClInclude Include="Serializer\Binary\StructuredBinaryStream.h" />
+    <ClInclude Include="Serializer\Binary\StructuredBinaryStream.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader2.h" />
-    <ClInclude Include="Serializer\Binary\StructuredBinaryStreamWriter.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamWriter2.h" />
     <ClInclude Include="IStream.h" />
     <ClInclude Include="IReferenceCounted.h" />
@@ -58,6 +65,35 @@
     <ClInclude Include="ServiceHelper\LobbyService.h" />
     <ClInclude Include="Utils\StringUtil\GenericConversion.h" />
     <ClInclude Include="Utils\ConfigReader.h" />
+    <ClInclude Include="FileIO\File.h" />
+    <ClInclude Include="FileIO\FileExceptions.h" />
+    <ClInclude Include="FileIO\FileHelper.h" />
+    <ClInclude Include="FileIO\FileBase.h" />
+    <ClInclude Include="FileIO\FileStream.h" />
+    <ClInclude Include="FileIO\MemoryStream.h" />
+    <ClInclude Include="FileIO\IFile.h" />
+    <ClInclude Include="Resource\Resource.h" />
+    <ClInclude Include="Resource\ICache.h" />
+    <ClInclude Include="Resource\ICacheController.h" />
+    <ClInclude Include="Resource\IChunkLoaderListener.h" />
+    <ClInclude Include="Resource\ITextLoaderListener.h" />
+    <ClInclude Include="Resource\CacheController.h" />
+    <ClInclude Include="FileIO\Directory.h" />
+    <ClInclude Include="Resource\Resource_FileStreamFactory.h" />
+    <ClInclude Include="Utils\StringUtil\Compare.h" />
+    <ClInclude Include="Resource\TextLoader.h" />
+    <ClInclude Include="Resource\ConstantManager2.h" />
+    <ClInclude Include="Resource\ChunkLoader.h" />
+    <ClInclude Include="Resource\BinaryFormat1.h" />
+    <ClInclude Include="Resource\Xml\Xml.h" />
+    <ClInclude Include="Resource\Xml\XmlBase.h" />
+    <ClInclude Include="Resource\Xml\XmlHelper.h" />
+    <ClInclude Include="Resource\Xml\XmlParser.h" />
+    <ClInclude Include="Resource\Xml\expat.h" />
+    <ClInclude Include="Serializer\Binary\XmlSerializer.h" />
+    <ClInclude Include="Serializer\Binary\XmlStream.h" />
+    <ClInclude Include="Serializer\Binary\XmlStreamReader.h" />
+    <ClInclude Include="Serializer\Binary\XmlStreamWriter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
