@@ -32,6 +32,15 @@
     <ClInclude Include="Info\Loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\Actions\Actions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Actions\ActionsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Actions\IndexedActionsInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -47,6 +56,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\Loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Actions\Actions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Actions\IndexedActionsInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Actions\ActionsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

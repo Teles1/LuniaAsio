@@ -130,6 +130,36 @@ namespace Lunia {
 				private:
 					IEventListener* listener;
 				};
+
+				class InstantLeveler
+				{
+				public:
+					InstantLeveler(Leveler& leveler, const char* called = NULL, Leveler::Level instantLevel = Leveler::Warning)
+						: priorLevel(leveler.NoticeLevel), target(&leveler), calledFunc(called)
+					{
+						if (target->NoticeLevel < instantLevel)
+						{
+							target->NoticeLevel = instantLevel;
+						}
+					}
+					template<typename T>
+					InstantLeveler(std::less<T>&, const char*, int = 0)
+						: target(NULL)
+					{
+
+					}
+
+					~InstantLeveler()
+					{
+						if (target != NULL)
+							target->NoticeLevel = priorLevel;
+					}
+
+				private:
+					Leveler::Level priorLevel;
+					Leveler* target;
+					std::string calledFunc;
+				};
 			}
 		}
 	}

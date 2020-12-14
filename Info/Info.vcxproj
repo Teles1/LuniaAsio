@@ -158,6 +158,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Info.h" />
+    <ClInclude Include="Info\Actions\Actions.h" />
+    <ClInclude Include="Info\Actions\ActionsManager.h" />
+    <ClInclude Include="Info\Actions\IndexedActionsInfo.h" />
     <ClInclude Include="Info\Database.h" />
     <ClInclude Include="Info\Less.h" />
     <ClInclude Include="Info\Loader.h" />
@@ -167,6 +170,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp" />
+    <ClCompile Include="Info\Actions\Actions.cpp" />
+    <ClCompile Include="Info\Actions\ActionsManager.cpp" />
+    <ClCompile Include="Info\Actions\IndexedActionsInfo.cpp" />
     <ClCompile Include="Info\Loader.cpp" />
     <ClCompile Include="Info\NPCs\IndexedNPCInfo.cpp" />
     <ClCompile Include="Info\NPCs\NPC.cpp" />

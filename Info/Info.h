@@ -2,6 +2,7 @@
 
 #include <Core/Core.h>
 #include "./Info/Database.h"
+#include "Info/GlobalInfo.h"
 
 namespace Lunia {
 	namespace XRated {

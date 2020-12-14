@@ -1,5 +1,4 @@
 #pragma once
-
 #include "NPCManager.h"
 
 namespace Lunia {
