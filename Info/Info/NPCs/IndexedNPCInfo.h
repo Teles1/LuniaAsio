@@ -1,6 +1,5 @@
 #pragma once
-#include <Info/Info/Loader.h>
-#include "NPC.h"
+#include "Info/Info/Loader.h"
 #include "NPCManager.h"
 
 namespace Lunia {
@@ -19,7 +18,7 @@ namespace Lunia {
 					virtual bool Remove(const wchar_t* id);
 					virtual bool Remove(uint32 hash);
 
-				public:
+				private:
 					void MakeIndexAndSave();
 				public:
 					inline void ClearCache() { Npcs.clear(); }

@@ -36,19 +36,19 @@ namespace Lunia {
 		//	   ReferenceCounted(const ReferenceCounted& ) {  }
 	public:
 		ReferenceCounted() { m_RefCounter = 0; }
-		virtual ~ReferenceCounted() {}
+		inline virtual ~ReferenceCounted() {}
 
 		explicit ReferenceCounted(const ReferenceCounted&) :m_RefCounter(0) {}
-		ReferenceCounted& operator=(const ReferenceCounted&) { return *this; }
+		inline ReferenceCounted& operator=(const ReferenceCounted&) { return *this; }
 
 
 
 
-		virtual int GetRefCount() const { return m_RefCounter; }
+		virtual int inline GetRefCount() const { return m_RefCounter; }
 
-		virtual int AddRef() const { ++m_RefCounter; return m_RefCounter; }
+		virtual int inline AddRef() const { ++m_RefCounter; return m_RefCounter; }
 
-		virtual int Release() const {
+		virtual int inline Release() const {
 			--m_RefCounter;
 			int tmp = m_RefCounter;
 			if (m_RefCounter < 1) {

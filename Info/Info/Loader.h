@@ -94,7 +94,7 @@ namespace Lunia {
 				//
 				class IndexedManagerWithMap : public ReferenceCounted
 				{
-				protected:
+				private:
 					std::map<uint32, FilePosData> dataPointer;
 					typedef std::map<uint32, FilePosData>::iterator DataPointerIter;
 					typedef std::map<uint32, FilePosData>::const_iterator DataPointerConstIter;

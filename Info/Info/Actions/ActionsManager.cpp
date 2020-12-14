@@ -126,7 +126,7 @@ namespace Lunia {
 
 				void ActionInfoManager::LoadBinaryData()
 				{
-					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/ActionInfos.b");
+					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"C:/Users/WINDOWS/Desktop/Lunia/x64/Debug/Database/ActionInfos.b");
 					reader->Read(L"ActionInfoManager", *this);
 				}
 
@@ -134,7 +134,6 @@ namespace Lunia {
 				{
 					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(xml);
 					reader->Read(L"Actions", actorList);
-
 				}
 
 				void ActionInfoManager::LoadActions(Actions::ActionList& actionList, const wchar_t* xml)

@@ -6,7 +6,7 @@
 #include <set>
 #include <deque>
 
-#include "IReferenceCounted.h"
+#include <Core/IReferenceCounted.h>
 #include <Core/Utils/Math/Math.h>
 #include <Core/Utils/StringUtil.h>
 #include <Core/Utils/Locator.h>

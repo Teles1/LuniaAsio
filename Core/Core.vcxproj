@@ -206,7 +206,6 @@
     <ClInclude Include="Resource\IChunkLoaderListener.h" />
     <ClInclude Include="Resource\ITextLoaderListener.h" />
     <ClInclude Include="Resource\Resource.h" />
-    <ClInclude Include="Resource\Resource_FileStreamFactory.h" />
     <ClInclude Include="Resource\TextLoader.h" />
     <ClInclude Include="Serializer\Binary\BinaryStream.h" />
     <ClInclude Include="Serializer\Binary\BinaryStreamReader.h" />
@@ -215,7 +214,6 @@
     <ClInclude Include="Serializer\Binary\XmlStream.h" />
     <ClInclude Include="Serializer\Binary\XmlStreamReader.h" />
     <ClInclude Include="Serializer\Binary\XmlStreamWriter.h" />
-    <ClInclude Include="Serializer\IReferenceCounted.h" />
     <ClInclude Include="Serializer\Serializer.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStream.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader.h" />

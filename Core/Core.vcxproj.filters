@@ -47,7 +47,6 @@
     <ClInclude Include="Utils\Math\vector4.h" />
     <ClInclude Include="ReferenceCounted.h" />
     <ClInclude Include="com_ptr.h" />
-    <ClInclude Include="Serializer\IReferenceCounted.h" />
     <ClInclude Include="Utils\Math\Math.h" />
     <ClInclude Include="Utils\Math\euler.h" />
     <ClInclude Include="Utils\Math\matrix4x4.h" />
@@ -83,7 +82,6 @@
     <ClInclude Include="Resource\ITextLoaderListener.h" />
     <ClInclude Include="Resource\CacheController.h" />
     <ClInclude Include="FileIO\Directory.h" />
-    <ClInclude Include="Resource\Resource_FileStreamFactory.h" />
     <ClInclude Include="Utils\StringUtil\Compare.h" />
     <ClInclude Include="Resource\TextLoader.h" />
     <ClInclude Include="Resource\ConstantManager2.h" />

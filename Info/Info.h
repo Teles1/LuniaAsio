@@ -3,7 +3,9 @@
 #include <Core/Core.h>
 #include "./Info/Database.h"
 #include "Info/GlobalInfo.h"
-#include "Info/NPCs/IndexedNPCInfo.h"
+#include "Info/NPCs/NPCManager.h"
+#include "Info/Actions/ActionsManager.h"
+#include "Info/StateBundles/StateBundlesManager.h"
 
 namespace Lunia {
 	namespace XRated {
@@ -14,7 +16,9 @@ namespace Lunia {
 					void Init();
 
 					struct Collection {
-						Info::IndexedNPCInfoManager npcs;
+						Info::ActionInfoManager actions;
+						Info::NPCInfoManager npcs;
+						Info::StateBundleInfoManager stateBundles;
 					} InfoCollections;
 			};
 

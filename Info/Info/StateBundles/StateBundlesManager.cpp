@@ -49,7 +49,7 @@ namespace Lunia {
 
 				void StateBundleInfoManager::LoadBinaryData()
 				{
-					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/StateBundleInfos.b");
+					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"C:\\Users\\WINDOWS\\Desktop\\Lunia\\x64\\Debug\\Database\\StateBundleInfos.b");
 					reader->Read(L"StateBundleInfoManager", *this);
 				}
 

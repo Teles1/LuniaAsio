@@ -109,7 +109,7 @@ namespace Lunia{
 
 				void NPCInfoManager::LoadBinaryData()
 				{
-					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/NPCInfos.b");
+					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"C:/Users/WINDOWS/Desktop/Lunia/x64/Debug/Database/NPCInfos.b");
 					reader->Read(L"NPCInfoManager", *this);
 				}
 
