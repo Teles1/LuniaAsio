@@ -89,7 +89,7 @@ namespace Lunia {
 					writer.Write(binary->GetStream(), bufSize); */
 
 					std::cout << "Compressing data" << std::endl;
-					uint8* outBuf;
+					//uint8* outBuf;
 					//lzmaCompress(inBuf, bufSize, outBuf);
 				}
 
