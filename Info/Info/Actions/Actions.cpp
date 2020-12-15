@@ -78,6 +78,7 @@ namespace Lunia {
 					in.Read(L"params", params, std::map<std::wstring, std::wstring>());
 					in.Read(L"optionalStates", optionalStates, std::vector<ActionInfo::State>());
 
+					std::wcout << startTime  << L" "  << endTime << std::endl;
 
 					if (optionalStates.size() > 1)
 						throw Exception(L"Not Implimented for multi optionalStates. 2008.03.03 Kanak.");

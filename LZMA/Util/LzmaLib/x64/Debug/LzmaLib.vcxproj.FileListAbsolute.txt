@@ -1,0 +1,2 @@
+C:\Users\WINDOWS\Desktop\Lunia\x64\Debug\LzmaLib.pdb
+C:\Users\WINDOWS\Desktop\Lunia\LZMA\Util\LzmaLib\x64\Debug\LzmaLib.pdb

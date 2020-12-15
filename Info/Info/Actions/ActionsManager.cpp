@@ -1,4 +1,5 @@
 #pragma once
+#include "CompressedActionsManager.h"
 #include "ActionsManager.h"
 namespace Lunia {
 	namespace XRated {
@@ -22,7 +23,9 @@ namespace Lunia {
 					}
 					else { //Binary loading
 						std::wstring fullLoading;
-						ActionInfoManager::LoadBinaryData();
+						CompressedActionInfoManager compressed;
+						compressed.LoadBinaryData();
+						//ActionInfoManager::LoadBinaryData();
 					}
 
 					MakeLinkedActionLink();
@@ -213,6 +216,7 @@ namespace Lunia {
 					in.Begin(L"XRated::Database::Info::ActionInfoManager");
 					in.Read(L"actionMap", actionMap);
 					in.Read(L"AutoActions", AutoActions, AutoActionListMap());
+
 				}
 
 				void ActionInfoManager::Actions::Serialize(Serializer::IStreamWriter& out) const

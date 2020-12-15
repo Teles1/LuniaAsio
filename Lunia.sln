@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StageServer", "StageServer\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Info", "Info\Info.vcxproj", "{E559AD97-6832-455E-9A44-C91244F7CA56}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LzmaLib", "LZMA\Util\LzmaLib\LzmaLib.vcxproj", "{37F13C79-76A5-43A4-83AD-E265D8ACCD84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,26 @@ Global
 		{E559AD97-6832-455E-9A44-C91244F7CA56}.RelWithDebInfo|x64.Build.0 = Release|x64
 		{E559AD97-6832-455E-9A44-C91244F7CA56}.RelWithDebInfo|x86.ActiveCfg = Release|Win32
 		{E559AD97-6832-455E-9A44-C91244F7CA56}.RelWithDebInfo|x86.Build.0 = Release|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.Debug|x64.ActiveCfg = Debug|x64
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.Debug|x86.ActiveCfg = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.Debug|x86.Build.0 = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.MinSizeRel|Any CPU.ActiveCfg = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.MinSizeRel|Any CPU.Build.0 = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.MinSizeRel|x64.ActiveCfg = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.MinSizeRel|x64.Build.0 = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.MinSizeRel|x86.ActiveCfg = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.MinSizeRel|x86.Build.0 = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.Release|Any CPU.ActiveCfg = Release|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.Release|x64.ActiveCfg = Release|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.Release|x86.ActiveCfg = Release|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.Release|x86.Build.0 = Release|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.RelWithDebInfo|Any CPU.ActiveCfg = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.RelWithDebInfo|Any CPU.Build.0 = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.RelWithDebInfo|x64.ActiveCfg = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.RelWithDebInfo|x64.Build.0 = Debug|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.RelWithDebInfo|x86.ActiveCfg = Release|Win32
+		{37F13C79-76A5-43A4-83AD-E265D8ACCD84}.RelWithDebInfo|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

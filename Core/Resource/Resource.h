@@ -97,6 +97,7 @@ namespace Lunia {
 
 			};
 
+			uint32 UNCOMPRESSED_SIZE;
 			//lets remove these, do not use
 			int CurrentProgress;
 			//lets remove these, do not use	
@@ -227,6 +228,8 @@ namespace Lunia {
 			virtual SerializerStreamWriter CreateDefaultSerializer(const wchar_t* target) = 0;
 			virtual SerializerStreamReader CreateDefaultDeserializer(const wchar_t* target) = 0;
 
+			virtual SerializerStreamReader CreateDefaultDeserializer_CBF(const wchar_t* target) = 0;
+
 			/**
 			Returns the file extension for binary serialized files
 			@author kim
@@ -315,6 +318,7 @@ namespace Lunia {
 			Must be called by the client.
 			*/
 			virtual void Update(float dt) = 0;
+
 
 		};
 		IResource& ResourceSystemInstance();

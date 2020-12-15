@@ -10,6 +10,7 @@
 #include "CacheController.h"
 #include <Core/Utils/StringUtil/Compare.h>
 #include <cctype>
+#include <iostream>
 
 namespace Lunia {
 	namespace Resource {
@@ -633,6 +634,10 @@ namespace Lunia {
 			com_ptr<Serializer::IRefCountedStreamWriter> CreateDefaultSerializer(const wchar_t* target)
 			{
 				return Serializer::CreateStructuredBinaryStreamWriter(CreateStreamWriter(target));
+			}
+
+			com_ptr<Serializer::IRefCountedStreamReader> CreateDefaultDeserializer_CBF(const wchar_t* target) {
+				throw ResourceNotFoundException(L"file not found {0}", IResource::GetRelativeName(target).c_str());
 			}
 
 			com_ptr<Serializer::IRefCountedStreamReader> CreateDefaultDeserializer(const wchar_t* target)
