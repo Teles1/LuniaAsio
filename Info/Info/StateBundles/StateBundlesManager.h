@@ -1,5 +1,4 @@
 #pragma once
-#include <Info/Info/Loader.h>
 #include "StateBundles.h"
 
 namespace Lunia {

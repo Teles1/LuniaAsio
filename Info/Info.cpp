@@ -11,7 +11,8 @@ namespace Lunia {
 			void LuniaDatabase::Init() {
 				//InfoCollections.actions.Init(false);
 				//InfoCollections.npcs.Init(false);
-				InfoCollections.stateBundles.Init(false);
+				//InfoCollections.stateBundles.Init(false);
+				InfoCollections.itemInfos.Init(false);
 			}
 
 			LuniaDatabase& DatabaseInstance() {

@@ -130,6 +130,7 @@
       <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
+      <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -169,10 +170,15 @@
     <ClInclude Include="Info\Actions\Actions.h" />
     <ClInclude Include="Info\Actions\ActionsManager.h" />
     <ClInclude Include="Info\Actions\IndexedActionsInfo.h" />
+    <ClInclude Include="Info\CompressedLoader.h" />
     <ClInclude Include="Info\Database.h" />
     <ClInclude Include="Info\GlobalInfo.h" />
+    <ClInclude Include="Info\IndexedInfoManager.h" />
+    <ClInclude Include="Info\Items\CompressedItemInfoManager.h" />
+    <ClInclude Include="Info\Items\IndexedItemInfoManager.h" />
+    <ClInclude Include="Info\Items\Item.h" />
+    <ClInclude Include="Info\Items\ItemManager.h" />
     <ClInclude Include="Info\Less.h" />
-    <ClInclude Include="Info\Loader.h" />
     <ClInclude Include="Info\NPCs\IndexedNPCInfo.h" />
     <ClInclude Include="Info\NPCs\NPC.h" />
     <ClInclude Include="Info\NPCs\NPCManager.h" />
@@ -185,8 +191,13 @@
     <ClCompile Include="Info\Actions\Actions.cpp" />
     <ClCompile Include="Info\Actions\ActionsManager.cpp" />
     <ClCompile Include="Info\Actions\IndexedActionsInfo.cpp" />
+    <ClCompile Include="Info\CompressedLoader.cpp" />
     <ClCompile Include="Info\GlobalInfo.cpp" />
-    <ClCompile Include="Info\Loader.cpp" />
+    <ClCompile Include="Info\IndexedInfoManager.cpp" />
+    <ClCompile Include="Info\Items\CompressedItemInfoManager.cpp" />
+    <ClCompile Include="Info\Items\IndexedItemInfoManager.cpp" />
+    <ClCompile Include="Info\Items\Item.cpp" />
+    <ClCompile Include="Info\Items\ItemManager.cpp" />
     <ClCompile Include="Info\NPCs\IndexedNPCInfo.cpp" />
     <ClCompile Include="Info\NPCs\NPC.cpp" />
     <ClCompile Include="Info\NPCs\NPCManager.cpp" />
@@ -197,6 +208,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
       <Project>{dd113a77-1c14-40e5-ae12-e50feecb28a4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\henri\Desktop\lzma\C\Util\Lzma\LzmaUtil.vcxproj">
+      <Project>{db04fc8b-5cee-4751-a53f-d33c58f0b15f}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
