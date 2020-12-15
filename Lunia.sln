@@ -13,7 +13,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StageServer", "StageServer\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Info", "Info\Info.vcxproj", "{E559AD97-6832-455E-9A44-C91244F7CA56}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LzmaUtil", "C:\Users\henri\Desktop\lzma\C\Util\Lzma\LzmaUtil.vcxproj", "{DB04FC8B-5CEE-4751-A53F-D33C58F0B15F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LzmaUtil", "Lzma\Util\Lzma\LzmaUtil.vcxproj", "{DB04FC8B-5CEE-4751-A53F-D33C58F0B15F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

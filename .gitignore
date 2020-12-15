@@ -44,3 +44,4 @@
 *.user
 *.vcpkg.props
 *packages/*
+Debug/

@@ -1,5 +1,5 @@
 #include "./CompressedLoader.h"
-#include "C:/Users/henri/Desktop/lzma/C/LzmaLib.h"
+#include <Lzma/LzmaLib.h>
 #include <iostream>
 #include <Core/Serializer/Binary/BinaryStream.h>
 #include <Core/FileIO/FileStream.h>
