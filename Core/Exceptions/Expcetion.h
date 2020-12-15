@@ -39,8 +39,25 @@ namespace Lunia {
 			this->Message = StringUtil::ToUnicode(aux);
 		}
 
+		inline Exception(const std::wstring& message) {
+			this->Message = message;
+		}
+
+		inline Exception(const wchar_t* message) {
+			this->Message = std::move(message);
+		}
+
+		inline Exception(const std::string& message) {
+			this->Message = StringUtil::ToUnicode(message);
+		}
+
+		inline Exception(const char* message) {
+			this->Message = StringUtil::ToUnicode(message);
+		}
+
 		const char* what() const throw () {
-			return StringUtil::ToASCII(this->Message).c_str();
+			std::string msg = StringUtil::ToASCII(this->Message);
+			return msg.c_str();
 		}
 	};
 }
