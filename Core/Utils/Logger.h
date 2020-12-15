@@ -115,7 +115,7 @@ public:
 	template<typename... Args>
 	inline void Exception(const std::wstring& message, const Args &... args) {
 		m_logger->critical(message, fmt::make_format_args<fmt::wformat_context>(args...));
-		assert(true == false);
+		throw message.c_str();
 	}
 
 	template<typename... Args>
@@ -123,21 +123,21 @@ public:
 		fmt::wformat_args x = fmt::make_format_args<fmt::wformat_context>(args...);
 		std::wstring aux = fmt::vformat(std::wstring(message), x);
 		m_logger->critical(aux);
-		assert(true == false);
+		throw aux.c_str();
 	}
 
 	template<typename... Args>
 	inline void Exception(const std::string& message, const Args &... args) {
 		m_logger->critical(message, fmt::make_format_args<fmt::format_context>(args...));
 		std::string tmpMessage(fmt::format(message, args...));
-		assert(true == false);
+		throw tmpMessage.c_str();
 	}
 
 	template<typename... Args>
 	inline void Exception(const char* message, const Args &... args) {
 		m_logger->critical(message, args...);
 		std::string tmpMessage(fmt::format(message, args...));
-		assert(true == false);
+		throw tmpMessage.c_str();
 	}
 
 private:

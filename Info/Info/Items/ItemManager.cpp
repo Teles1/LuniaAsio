@@ -49,9 +49,6 @@ namespace Lunia {
 
 							while (aList != NULL)
 							{
-								
-								
-								
 								Lunia::XRated::UnidentifiedItemInfo::ProbabilityTableList::iterator fIter = aList->begin();
 
 								do
@@ -63,7 +60,6 @@ namespace Lunia {
 									}
 
 								} while (fIter != aList->end());
-
 
 								aList = uIter->second.GetProbabilityTableForModify(++level);
 							}
