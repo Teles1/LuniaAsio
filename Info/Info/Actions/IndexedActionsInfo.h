@@ -1,6 +1,6 @@
 #pragma once
-#include "Info/Info/Loader.h"
 #include "ActionsManager.h"
+#include <Info/Info/IndexedInfoManager.h>
 
 namespace Lunia {
 	namespace XRated {

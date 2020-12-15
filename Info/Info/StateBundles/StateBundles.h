@@ -1,6 +1,7 @@
 #pragma once
-#include <Info/Info/Loader.h>
-
+#include <Core/Serializer/Serializer.h>
+#include <Info/Info/GlobalInfo.h>
+#include <Core/GameConstants.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
