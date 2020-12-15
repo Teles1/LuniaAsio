@@ -37,6 +37,40 @@ namespace Lunia {
             Answer RequestApi() const;
             Answer RequestPost(json value) const;
             std::string BuildUrl() const;
+
+            template<typename F>
+            void GetAsync(F callback)
+            {
+                auto cb = cpr::GetCallback([callback](cpr::Response r)
+                    {
+                        Logger::GetInstance().Info("Api::GetAsync => status_code = {0}, text = {1}", r.status_code, r.text);
+
+                        Answer answ("Whoops!", -1);
+
+                        if (r.status_code == 200)
+                        {
+                            try 
+                            {
+                                json result = json::parse(r.text);
+
+                                if (result != NULL && result.is_object()) {
+
+                                    uint16 errorCode = result["errorCode"].get<uint16>();
+                                    std::string errorMessage = result["errorMessage"].get<std::string>();
+
+                                    answ = Answer(errorMessage, errorCode, result["data"].get<json>());
+                                }
+                            }
+                            catch (...) {
+                                Logger::GetInstance().Error("Could not parse json!");
+                            }
+                        }
+
+                        callback(answ);
+
+                    }, cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ 1000 });
+            }
+
             ~Api() {}
             void AddHeaders();
         private:
