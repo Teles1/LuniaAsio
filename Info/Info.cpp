@@ -9,9 +9,9 @@ namespace Lunia {
 				return m_Instance;
 			};
 			void LuniaDatabase::Init() {
-				InfoCollections.actions.Init(false);
+				//InfoCollections.actions.Init(false);
 				//InfoCollections.npcs.Init(false);
-				//InfoCollections.stateBundles.Init(false);
+				InfoCollections.stateBundles.Init(false);
 			}
 
 			LuniaDatabase& DatabaseInstance() {

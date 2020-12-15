@@ -168,7 +168,6 @@
     <ClInclude Include="Info.h" />
     <ClInclude Include="Info\Actions\Actions.h" />
     <ClInclude Include="Info\Actions\ActionsManager.h" />
-    <ClInclude Include="Info\Actions\CompressedActionsManager.h" />
     <ClInclude Include="Info\Actions\IndexedActionsInfo.h" />
     <ClInclude Include="Info\Database.h" />
     <ClInclude Include="Info\GlobalInfo.h" />
@@ -185,7 +184,6 @@
     <ClCompile Include="Info.cpp" />
     <ClCompile Include="Info\Actions\Actions.cpp" />
     <ClCompile Include="Info\Actions\ActionsManager.cpp" />
-    <ClCompile Include="Info\Actions\CompressedActionsManager.cpp" />
     <ClCompile Include="Info\Actions\IndexedActionsInfo.cpp" />
     <ClCompile Include="Info\GlobalInfo.cpp" />
     <ClCompile Include="Info\Loader.cpp" />

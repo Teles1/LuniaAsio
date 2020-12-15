@@ -5,7 +5,6 @@
 #include <vector>
 #include <set>
 #include <deque>
-#include <iostream>
 
 #include <Core/IReferenceCounted.h>
 #include <Core/Utils/Math/Math.h>
@@ -357,7 +356,9 @@ namespace Lunia {
 					in.Begin(L"associative_array");
 					unsigned int size;
 					in.Read(L"size", size);
+
 					for (unsigned int i = 0; i < size; ++i) {
+
 						std::pair<T::key_type, T::mapped_type> value;
 						in.Read((L"item_first_" + StringUtil::To<std::wstring>(i)).c_str(), value.first);
 						in.Read((L"item_second_" + StringUtil::To<std::wstring>(i)).c_str(), value.second);
