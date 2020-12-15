@@ -248,6 +248,40 @@ namespace Lunia {
 				NET_SERIALIZABLE;
 			};
 
+			struct SelectCharacter : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					InvalidAccount,
+					Blocked,
+					NotExistingCharacter,
+					InvalidCharacter,
+					AlreadySelectedCharacter,
+					NotPhoneAuthed,
+
+					NoResponse = 0xff,
+				} Result;
+				String SelectedCharacter;
+				XRated::CharacterStateFlags CharacterStates;
+
+				String CharacterName; //client request
+				NET_SERIALIZABLE;
+			};
+
+			struct ListSquareStatus : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					NoResponse = 0xff,
+				} Result;
+
+				std::vector<XRated::SquareInfo> SuqareList;
+
+				NET_SERIALIZABLE;
+			};
+
 		}//Protocol
 	}//Lobby
 }

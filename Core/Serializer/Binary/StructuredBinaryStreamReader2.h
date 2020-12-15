@@ -154,7 +154,7 @@ namespace Lunia {
 
 				//dataSize-=sizeof(uint32)*3; // begin header - type hash, maj ver, min ver
 
-				while (levelStartPosition.top() + dataSize > stream->GetReadCursor())
+				while (levelStartPosition.top() + dataSize > (uint32)stream->GetReadCursor())
 				{
 					/*if (stream->GetSizeLeft() < 2*sizeof(uint32)) {
 						stream->SetReadCursor(lastPosition, IStream::CursorPosition::Begin);
@@ -184,7 +184,7 @@ namespace Lunia {
 				int dataSize = sizeIndex.top();
 				int lastPosition = stream->GetReadCursor();
 
-				while (levelStartPosition.top() + dataSize > stream->GetReadCursor())
+				while (levelStartPosition.top() + dataSize > (uint32)stream->GetReadCursor())
 				{
 					/*if (stream->GetSizeLeft() < 2*sizeof(uint32)) {
 						stream->SetReadCursor(lastPosition, IStream::CursorPosition::Begin);

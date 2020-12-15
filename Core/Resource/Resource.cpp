@@ -283,7 +283,7 @@ namespace Lunia {
 							{
 								slashPosition[i] = slashPosition[i - 1];
 							}
-							slashPosition[0] = pos + 1;
+							slashPosition[0] = (int32)pos + 1;
 							if (slashPosition[RecursionLimit - 1] != -1) throw Exception(L"recursion limit reached");
 
 							prevSlash = true;
@@ -439,7 +439,7 @@ namespace Lunia {
 							if (buffer[i] == 0) break;
 							if (buffer[i] == L'|')
 							{
-								pipeChar = i;
+								pipeChar = (int)i;
 								buffer[i] = 0;
 								break;
 							}
@@ -486,7 +486,7 @@ namespace Lunia {
 						}
 						if (buffer[i] == L'|')
 						{
-							pipeChar = i;
+							pipeChar = (int)i;
 							buffer[i] = 0;
 							break;
 						}
