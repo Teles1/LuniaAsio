@@ -1,8 +1,7 @@
 #pragma once
-#include <Info/Info/Loader.h>
 #include "StateBundles.h"
 #include "StateBundlesManager.h"
-
+#include <Info/Info/IndexedInfoManager.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
