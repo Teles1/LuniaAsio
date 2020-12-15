@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Info\Actions\CompressedActionsManager.h" />
     <ClInclude Include="Info.h" />
     <ClInclude Include="Info\Actions\Actions.h" />
     <ClInclude Include="Info\Actions\ActionsManager.h" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Info\StateBundles\StateBundlesManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Info\Actions\CompressedActionsManager.cpp" />
     <ClCompile Include="Info.cpp" />
     <ClCompile Include="Info\Actions\Actions.cpp" />
     <ClCompile Include="Info\Actions\ActionsManager.cpp" />

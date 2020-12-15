@@ -68,6 +68,9 @@
     <ClInclude Include="Info\IndexedInfoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\Actions\CompressedActionsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -119,6 +122,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\IndexedInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Actions\CompressedActionsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
