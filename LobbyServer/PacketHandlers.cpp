@@ -4,6 +4,7 @@
 #include "./Network/Api/Api.h"
 #include "UserRegistry.h"
 #include <Core/Utils/ThreadPool.h>
+#include <Core/Utils/ConfigReader.h>
 
 namespace Lunia {
 	static utils::InitFunction init([]()
@@ -268,7 +269,6 @@ namespace Lunia {
 					}
 					user->Send(sendPacket);
 				});
-
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::DeleteCharacter& packet)
 				{
@@ -298,7 +298,6 @@ namespace Lunia {
 					}
 					user->Send(sendPacket);
 				});
-
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::SaveKeySetting& packet)
 				{
@@ -319,6 +318,55 @@ namespace Lunia {
 					Lobby::Alive::AliveData answer(packet.Index,packet.Value1,packet.Value2,packet.Value3);
 
 					user->SetAliveAsLastTickAlivePing(answer);
+				});
+			fwPacketListener::GetInstance().Connect(
+				[](Lobby::UserSharedPtr& user, Lobby::Protocol::SelectCharacter& packet)
+				{
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SelectCharacter", user->GetId());
+					Net::Api api("SelectCharacter");
+					api << Config::GetInstance().m_ServerName;
+					auto result = api.RequestApi();
+					Lobby::Protocol::SelectCharacter sendPacket;
+					if (result.errorCode == 0) {
+						
+					}
+					user->Send(sendPacket);
+				});
+			fwPacketListener::GetInstance().Connect(
+				[](Lobby::UserSharedPtr& user, Lobby::Protocol::ListSquareStatus& packet)
+				{
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListSquareStatus", user->GetId());
+					Net::Api api("ListSquareStatus");
+					api << Config::GetInstance().m_ServerName;
+					auto result = api.RequestApi();
+					Lobby::Protocol::ListSquareStatus sendPacket;
+					if (result.errorCode == 0) {
+						if (result.resultObjet.size() > 0) {
+							for (auto& x : result.resultObjet) {
+								XRated::SquareInfo info;
+								info.StageGroupHash = x["stageGroupHash"].get<uint32>();
+								info.AccessLevel = x["accessLevel"].get<uint16>();
+								info.Capacity = x["capacity"].get<uint16>();
+								{
+									float helper = (float)x["connectionCount"].get<uint32>() / info.Capacity;
+									if (helper > 0.95f)
+										info.Status = XRated::SquareInfo::SquareStatus::Full;
+									else if (helper > 0.70f)
+										info.Status = XRated::SquareInfo::SquareStatus::Cloudy;
+									else if (helper > 0.40f)
+										info.Status = XRated::SquareInfo::SquareStatus::Normal;
+									else
+										info.Status = XRated::SquareInfo::SquareStatus::Quiet;
+								}
+								info.Name = StringUtil::ToUnicode(x["squareName"].get<std::string>());
+								info.OrderNumber = x["orderNumber"].get<uint16>();
+								sendPacket.SuqareList.push_back(info);
+							}
+						}
+						else 
+							Logger::GetInstance().Warn("There are no square stages to be listed");
+					}
+					user->Send(sendPacket);
 				});
 		});
 }

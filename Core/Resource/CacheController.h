@@ -94,7 +94,7 @@ namespace Lunia {
 				{
 					std::string astring = StringUtil::ToASCII(str);
 					astring += "\r\n";
-					file.Write(reinterpret_cast<const unsigned char*>(astring.c_str()), astring.size());
+					file.Write(reinterpret_cast<const unsigned char*>(astring.c_str()), (long)astring.size());
 				}
 
 			};
