@@ -21,6 +21,26 @@ namespace Lunia {
 	typedef unsigned short			LengthType;
 }
 
+/*
+	Templates and multiple-file projects
+
+	From the point of view of the compiler, templates are not normal functions or classes. They are compiled on demand, meaning that the code 
+	of a template function is not compiled until an instantiation with specific template arguments is required. At that moment, when an 
+	instantiation is required, the compiler generates a function specifically for those arguments from the template.
+
+	When projects grow it is usual to split the code of a program in different source code files. In these cases, the interface and implementation 
+	are generally separated. Taking a library of functions as example, the interface generally consists of declarations of the prototypes of all 
+	the functions that can be called. These are generally declared in a "header file" with a .h extension, and the implementation (the definition
+	of these functions) is in an independent file with c++ code.
+
+	Because templates are compiled when required, this forces a restriction for multi-file projects: the implementation (definition) of a template 
+	class or function must be in the same file as its declaration. That means that we cannot separate the interface in a separate header file, 
+	and that we must include both interface and implementation in any file that uses the templates.
+
+	Since no code is generated until a template is instantiated when required, compilers are prepared to allow the inclusion more than once of the 
+	same template file with both declarations and definitions in a project without generating linkage errors.
+*/
+
 namespace Lunia {
 	/*
 		struct Example{
