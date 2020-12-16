@@ -13,7 +13,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StageServer", "StageServer\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Info", "Info\Info.vcxproj", "{E559AD97-6832-455E-9A44-C91244F7CA56}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LzmaUtil", "Lzma\Util\Lzma\LzmaUtil.vcxproj", "{DB04FC8B-5CEE-4751-A53F-D33C58F0B15F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LzmaUtil", "LZMA\Util\Lzma\LzmaUtil.vcxproj", "{DB04FC8B-5CEE-4751-A53F-D33C58F0B15F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -175,7 +175,7 @@ Global
 		{E559AD97-6832-455E-9A44-C91244F7CA56}.Template|x86.ActiveCfg = Release|Win32
 		{E559AD97-6832-455E-9A44-C91244F7CA56}.Template|x86.Build.0 = Release|Win32
 		{DB04FC8B-5CEE-4751-A53F-D33C58F0B15F}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{DB04FC8B-5CEE-4751-A53F-D33C58F0B15F}.Debug|x64.ActiveCfg = Debug|Win32
+		{DB04FC8B-5CEE-4751-A53F-D33C58F0B15F}.Debug|x64.ActiveCfg = Debug|x64
 		{DB04FC8B-5CEE-4751-A53F-D33C58F0B15F}.Debug|x86.ActiveCfg = Debug|Win32
 		{DB04FC8B-5CEE-4751-A53F-D33C58F0B15F}.Debug|x86.Build.0 = Debug|Win32
 		{DB04FC8B-5CEE-4751-A53F-D33C58F0B15F}.MinSizeRel|Any CPU.ActiveCfg = Debug|Win32

@@ -9,10 +9,11 @@ namespace Lunia {
 				return m_Instance;
 			};
 			void LuniaDatabase::Init() {
+				InfoCollections.compressed.LoadBinaryData();
 				//InfoCollections.actions.Init(false);
 				//InfoCollections.npcs.Init(false);
 				//InfoCollections.stateBundles.Init(false);
-				InfoCollections.itemInfos.Init(false);
+				//InfoCollections.itemInfos.Init(false);
 			}
 
 			LuniaDatabase& DatabaseInstance() {
