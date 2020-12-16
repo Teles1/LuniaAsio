@@ -30,12 +30,17 @@ namespace Lunia {
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::Auth& packet)
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Auth", user->GetId());
+					
 					user->SetLocale(packet.Locale);
+					
 					Net::Api api("CheckAccount");
+					
 					api << packet.AccountId;
 					api << packet.EncryptedPassword;
 					api << user->GetPeerAddress();
+
 					const Net::Answer result = api.RequestApi();
+
 					Lobby::Protocol::Auth sendPacket;
 
 					sendPacket.Result = static_cast<Lobby::Protocol::Auth::Results>(result.errorCode);
@@ -44,82 +49,38 @@ namespace Lunia {
 					{
 					case Lobby::Protocol::Auth::Results::Ok:
 					{
-						user->SetAccountName(packet.AccountId); //It's fine because we already know that the account exists and the user is authenticated
+						user->SetAccountName(packet.AccountId);
+
+						// result.resultObjet["secondPassword"].get<bool>();
+						bool hasSecondPasswordAuthentication = true; 
+						if (hasSecondPasswordAuthentication)
+						{
+							user->SetHasSecondPasswordAuthentication();
+
+							{
+								Lobby::Protocol::CharacterSlots toSendPacket;
+
+								toSendPacket.NumberOfSlots = 988989897;
+								toSendPacket.CharacterLicenses = { };
+
+								user->Send(toSendPacket);
+							}
+							
+							{
+								Lobby::Protocol::ListCharacter toSendPacket;
+
+								toSendPacket.Characters = { };
+
+								user->Send(toSendPacket);
+							}
+						
+						}
+						else
+						{
+							Net::UserRegistry::GetInstance().AuthenticateUser(user);
+						}
 
 						sendPacket.AccountId = std::move(packet.AccountId);
-
-						Net::UserRegistry::GetInstance().AuthenticateUser(user);
-						//send Character List
-						auto listCharacter = [&](int threadId, Lobby::UserSharedPtr& user) {
-							Net::Api api("ListCharacters");
-							api << user->GetAccountName();
-							auto result(api.RequestApi());
-							if (result.errorCode == 0) {
-								
-								//CharacterLicenses
-								{
-									user.get()->m_NumberOfSlots = result.resultObjet["characterSlots"].get<uint8>();
-									user->m_AccountLicenses  = result.resultObjet["accountsLicense"].get<int32>();
-								}
-								
-								//Lock user's account if second password is set 
-								if (result.resultObjet["secondPassword"].get<bool>()) {
-									user->PassedSecondPassword(true);
-								}
-
-								{
-									Lobby::Protocol::CharacterSlots slots;
-									slots.NumberOfSlots = user->m_NumberOfSlots;
-									for (int i = 0; i < 16; i++) {
-										if (static_cast<bool>(user->m_AccountLicenses & (1 << i)))
-											slots.CharacterLicenses.push_back(i);
-									}
-									user->Send(slots);
-								}
-								
-								{
-									if(!result.resultObjet["characters"].is_null())
-										for (auto y : result.resultObjet["characters"]) {
-											user->m_Characters.push_back(XRated::LobbyPlayerInfo());
-											XRated::LobbyPlayerInfo& info = user->m_Characters.back();
-											info.CharacterName = StringUtil::ToUnicode(y["characterName"].get<std::string>());
-											info.CharacterSerial = y["id"].get<int64>();
-											info.VirtualIdCode = y["id"].get<uint32>();
-											info.ClassType = static_cast<XRated::Constants::ClassType>(y["classNumber"].get<int>());
-											info.Level = y["stageLevel"].get<uint16>();
-											info.Exp = y["stageExp"].get<uint32>();
-											info.PvpLevel = y["pvpLevel"].get<uint16>();
-											info.PvpExp = y["pvpExp"].get<uint32>();
-											info.WarLevel = y["warLevel"].get<uint16>();
-											info.WarExp = y["warExp"].get<uint32>();
-											info.StateFlags = static_cast<XRated::CharacterStateFlags>(y["instantStateFlag"].get<int>());
-											info.RebirthCount = y["characterRebirth"]["rebirthCount"].get<uint16>();
-											info.StoredLevel = y["characterRebirth"]["storedLevel"].get<uint16>();
-
-											for (auto y : y["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
-												info.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
-											}
-
-											for (auto y : y["items"].get<json>()) {
-												XRated::ItemSlot slot;
-												slot.Position.Bag = y["bagNumber"].get<uint8>(); // equipment slots at
-												slot.Position.Position = y["positionNumber"].get<uint8>();
-												slot.Stacked = 1; // equipments cannot be stacked
-												slot.Id = y["itemHash"].get<uint32>();
-												slot.instanceEx.Instance = y["instance"].get<int64>();
-												slot.instanceEx.ExpireDate.Parse(StringUtil::ToUnicode(y["itemExpire"].get<std::string>()));
-												info.Equipments.push_back(slot);
-											}
-										}
-									Lobby::Protocol::ListCharacter sendPacket;
-									sendPacket.Characters = user->m_Characters;
-									user->Send(sendPacket);
-								}
-							}
-							else
-								Logger::GetInstance().Warn("[{}] Error requesting for the user's character list", user->GetId());
-						};
-						Utils::thread_pool::GetInstance().push(listCharacter, user);
 						break;
 					}
 					default:
@@ -133,25 +94,49 @@ namespace Lunia {
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::CheckSecondPassword& packet)
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@CheckSecondPassword", user->GetId());
-					Net::Api api("Auth_2nd_Check");
-					api << user->GetAccountName();
-					const Net::Answer result = api.RequestApi();
-					if (result.errorCode == -1) {
-						//Api call failed. Do something
-						
-					}
-					else {
-						Lobby::Protocol::SecondPasswordChecked sendPacket;
-						if (result.errorCode == 0)
-							user->PassedSecondPassword(true);
+					
+					Lobby::Protocol::SecondPasswordChecked toSendPacket;
 
-						sendPacket.PasswordInUse = (uint8)result.errorCode;
-						sendPacket.FailCount = result.resultObjet["failCount"].get<uint32>();
-						sendPacket.LockExpired = StringUtil::ToUnicode(result.resultObjet["lockExpired"].get<std::string>());
-						sendPacket.IsLocked = result.resultObjet["isLocked"].get<uint8>();
-						sendPacket.Result = static_cast<Lobby::Protocol::SecondPasswordChecked::Results>(0);
-						user->Send(sendPacket);
+					toSendPacket.Result = Lobby::Protocol::SecondPasswordChecked::Results::Ok;
+					toSendPacket.PasswordInUse = 0;
+					toSendPacket.FailCount = 0;
+					toSendPacket.LockExpired = L"";
+					toSendPacket.IsLocked = 0;
+
+					if (user->HasSecondPasswordAuthentication())
+					{
+						Net::Api api("Auth_2nd_Check");
+
+						api << user->GetAccountName();
+
+						const Net::Answer result = api.RequestApi();
+
+						auto resultCode = static_cast<Lobby::Protocol::SecondPasswordChecked::Results>(result.errorCode);
+
+						switch (resultCode)
+						{
+						case Lobby::Protocol::SecondPasswordChecked::Results::Ok:
+
+							Net::UserRegistry::GetInstance().AuthenticateUser(user);
+
+							toSendPacket.PasswordInUse = (uint8)result.errorCode;
+							
+							toSendPacket.FailCount = result.resultObjet["failCount"].get<uint32>();
+							
+							toSendPacket.LockExpired = StringUtil::ToUnicode(result.resultObjet["lockExpired"].get<std::string>());
+							
+							toSendPacket.IsLocked = result.resultObjet["isLocked"].get<uint8>();
+							
+							toSendPacket.Result = static_cast<Lobby::Protocol::SecondPasswordChecked::Results>(0);
+
+							break;
+						default:
+							// NoResponse
+							break;
+						}
 					}
+
+					user->Send(toSendPacket);
 				});
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::CreateSecondPassword& packet)
@@ -274,12 +259,12 @@ namespace Lunia {
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@DeleteCharacter", user->GetId());
 
-					if (!user->IsAccountAuthorized()) {
+					if (!user->IsAuthenticated()) {
 						Logger::GetInstance().Error(L"Non authorized user trying to delete a AccountName: {0}, characterName: {1}", user->GetAccountName(), packet.Name);
 						Net::UserRegistry::GetInstance().RemoveUser(user);
 						return;
 					}
-					if (!user->IsAValidCharacterName(packet.Name)) {
+					if (!user->HasAnyCharacterWithName(packet.Name)) {
 						Logger::GetInstance().Error(L"User is trying to delete a characterName that does not exist. AccountName: {0}, characterName: {1}", user->GetAccountName(), packet.Name);
 						Net::UserRegistry::GetInstance().RemoveUser(user);
 						return;
@@ -323,14 +308,54 @@ namespace Lunia {
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::SelectCharacter& packet)
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SelectCharacter", user->GetId());
-					Net::Api api("SelectCharacter");
-					api << Config::GetInstance().m_ServerName;
-					auto result = api.RequestApi();
-					Lobby::Protocol::SelectCharacter sendPacket;
-					if (result.errorCode == 0) {
-						
+					
+					if (!user->HasAnyCharacterWithName(packet.CharacterName))
+						return;
+					// not exist character name(%s) is requested to select. this might be hacked.
+
+					if (user->IsAuthenticated() /*&& !user->HasActiveCharacter()*/)
+					{
+						Net::Api request("SelectCharacter");
+
+						//request << sender->GetAccountName()
+						//		<< packet.CharacterName;
+
+						Lobby::UserWeakPtr userWeak{ user };
+
+						request.GetAsync([userWeak](Lunia::Net::Answer& answ)
+							{
+								auto newUserLocked = userWeak.lock();
+
+								if (!newUserLocked)
+									return;
+
+								if (!newUserLocked->IsAuthenticated())
+								{
+									// Client dies
+									return;
+								}
+
+								Lobby::Protocol::SelectCharacter toSendPacket;
+
+								auto selectCharacterResult = static_cast<Lobby::Protocol::SelectCharacter::Results>(answ.errorCode);
+
+								toSendPacket.Result = selectCharacterResult;
+
+								/*
+								if (selectCharacterResult == Lobby::Protocol::SelectCharacter::Results::Ok)
+								{
+									
+									auto newActiveCharacter = answ.resultObjet["A"].get<int64>();
+
+									newUserLocked->SetActiveCharacter(newActiveCharacter);
+									newUserLocked->SetActiveCharacterStateFlag();
+
+									toSendPacket.SelectedCharacter = newActiveCharacter;
+									toSendPacket.CharacterStates = answ.resultObjet["A"].get<int64>();
+								}
+								*/
+							});
 					}
-					user->Send(sendPacket);
 				});
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::ListSquareStatus& packet)

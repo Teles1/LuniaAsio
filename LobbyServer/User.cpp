@@ -70,12 +70,6 @@ namespace Lunia {
 			this->m_waitingOnAlivePing = true;
 		}
 
-		void User::SetIsAuthenticated()
-		{
-			AutoLock _l(mtx);
-			this->m_isAuthenticated = true;
-		}
-
 		bool User::DoesHaveLicense(XRated::Constants::ClassType classType)
 		{
 			AutoLock _l(mtx);
@@ -84,24 +78,28 @@ namespace Lunia {
 			return false;
 		}
 
-		bool User::IsAccountAuthorized() const
-		{
-			return !GetAccountName().empty();
-		}
-
 		bool User::IsAuthenticated() const
 		{
 			return m_isAuthenticated;
 		}
 
-		bool User::PassedSecondPassword(const bool& newBool)
+		void User::SetIsAuthenticated()
 		{
-			AutoLock _l(mtx);
-			this->m_isAuthenticated = newBool;
-			return this->m_isAuthenticated;
+			//AutoLock _l(mtx);
+			this->m_isAuthenticated = true;
 		}
 
-		bool User::IsAValidCharacterName(String& characterName)
+		bool User::HasSecondPasswordAuthentication() const
+		{
+			return this->m_hasSecondPasswordAuthentication;
+		}
+
+		void User::SetHasSecondPasswordAuthentication()
+		{
+			this->m_hasSecondPasswordAuthentication = true;
+		}
+
+		bool User::HasAnyCharacterWithName(String& characterName)
 		{
 			AutoLock _l(mtx);
 			for (auto& x : m_Characters)

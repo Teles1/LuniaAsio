@@ -31,7 +31,7 @@ namespace Lunia {
 
 			fwEvent<const Lobby::UserSharedPtr&>				OnUserDisconnected;
 
-			fwEvent<const Lobby::UserSharedPtr&, const uint32&> OnUserAuthenticated;
+			fwEvent<const Lobby::UserSharedPtr&>                OnUserAuthenticated;
 
 		private:
 			void RemoveUser(Lobby::UserSharedPtr& user, AutoLock& _l); //from within the class we should send our AutoLock then finishing deleting the user.

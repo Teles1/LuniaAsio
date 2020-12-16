@@ -62,15 +62,26 @@ namespace Lunia {
 
 			bool DoesHaveLicense(XRated::Constants::ClassType classType);
 
-			bool IsAccountAuthorized() const;
-
 			bool IsAuthenticated() const;
 
-			bool PassedSecondPassword(const bool& newBool);
-
-			bool IsAValidCharacterName(String& characterName);
+			bool HasAnyCharacterWithName(String& characterName);
 
 			bool DeleteCharacter(String& characterName);
+
+			bool HasActiveCharacter();
+
+			bool IsActiveCharacterNameEqual(String& charaterName);
+
+			XRated::LobbyPlayerInfo GetActiveCharacter();
+
+			void MakeActiveCharacterFromAPIRequest();
+
+			void SetActiveCharacter();
+
+			bool HasSecondPasswordAuthentication() const;
+
+			void SetHasSecondPasswordAuthentication();
+
 		public://Network Related;
 			void Send(Serializer::ISerializable& packet);
 
@@ -89,10 +100,10 @@ namespace Lunia {
 
 			String m_AccountName;
 
-			bool m_isAuthenticated;
+			bool m_hasSecondPasswordAuthentication = false;
 
+			bool m_isAuthenticated = false;
 		public:
-			bool m_isSecondPasswordProtected;
 
 			uint8 m_NumberOfSlots;
 

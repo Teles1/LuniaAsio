@@ -1,20 +1,26 @@
 #include "UserRegistry.h"
 #include "../Core/Utils/InitFunction.h"
 #include <Core/Utils/ThreadPool.h>
+#include "./Network/Api/Api.h"
+
 namespace Lunia {
 	namespace Net
 	{
 		Lobby::UserSharedPtr UserRegistry::MakeUser(asio::ip::tcp::socket& socket) {
-			Lobby::UserSharedPtr user(new Lobby::User(m_curTempUserId, std::move(socket)));
-			Lobby::UserWeakPtr userWeak = user;
+			Lobby::UserSharedPtr user(new Lobby::User(m_curUserId, std::move(socket)));
+			Lobby::UserWeakPtr userWeak{ user };
 
 			m_users.push_back(user);
 
-			m_usersByUserId[m_curTempUserId] = userWeak;
+			m_usersByUserId[m_curUserId] = userWeak;
+			m_usersByUserId[m_curUserId] = userWeak;
+			m_autorizedUsersByUserId[m_curUserId] = userWeak;
+
+			user->SetId(m_curUserId);
 
 			OnUserConnected(user);
 
-			m_curTempUserId--;
+			m_curUserId--;
 
 			return user;
 		}
@@ -59,22 +65,9 @@ namespace Lunia {
 		{
 			if (user)
 			{
-				AutoLock _l(m_usersMutex);
-				Lobby::UserWeakPtr userWeak = user;
-
-				uint32 oldUserId = user->GetId();
-
-				m_usersByUserId.erase(user->GetId());
-
-				m_usersByUserId[m_curUserId] = userWeak;
-				m_autorizedUsersByUserId[m_curUserId] = userWeak;
-
-				user->SetId(m_curUserId);
 				user->SetIsAuthenticated();
 
-				m_curUserId++;
-
-				OnUserAuthenticated(user, oldUserId);
+				OnUserAuthenticated(user);
 			}
 		}
 
@@ -133,9 +126,94 @@ namespace Lunia {
 
 				});
 
-			Net::UserRegistry::GetInstance().OnUserAuthenticated.Connect([](const Lobby::UserSharedPtr& user, const uint32& oldUserId)
+
+			Net::UserRegistry::GetInstance().OnUserAuthenticated.Connect([](const Lobby::UserSharedPtr& user)
 				{
-					Logger::GetInstance().Info("UserRegistry :: OnUserAuthenticated :: userId@{0} oldUserId@{1}", user->GetId(), oldUserId);
+					Logger::GetInstance().Info("UserRegistry :: OnUserAuthenticated :: userId@{0}", user->GetId());
+				
+					Net::Api apiRequest("ListCharacters");
+
+					apiRequest << user->GetAccountName();
+
+					auto requestResult(apiRequest.RequestApi());
+
+					if (requestResult.errorCode == 0) 
+					{
+
+						//CharacterLicenses
+						{
+							user.get()->m_NumberOfSlots = requestResult.resultObjet["characterSlots"].get<uint8>();
+							user->m_AccountLicenses = requestResult.resultObjet["accountsLicense"].get<int32>();
+						}
+
+						//Lock user's account if second password is set 
+						//if (!result.resultObjet["secondPassword"].get<bool>())
+							//user->SetIsAuthenticated();
+
+						{
+							Lobby::Protocol::CharacterSlots toSendPacket;
+
+							toSendPacket.NumberOfSlots = user->m_NumberOfSlots;
+
+							for (int i = 0; i < 16; i++) {
+								if (static_cast<bool>(user->m_AccountLicenses & (1 << i)))
+									toSendPacket.CharacterLicenses.push_back(i);
+							}
+
+							user->Send(toSendPacket);
+						}
+
+						if (!requestResult.resultObjet["characters"].is_null()) {
+							for (auto y : requestResult.resultObjet["characters"]) {
+								user->m_Characters.push_back(XRated::LobbyPlayerInfo());
+
+								XRated::LobbyPlayerInfo& info = user->m_Characters.back();
+
+								info.CharacterName   = StringUtil::ToUnicode(y["characterName"].get<std::string>());
+								info.CharacterSerial = y["id"].get<int64>();
+								info.VirtualIdCode   = y["id"].get<uint32>();
+								info.ClassType		 = static_cast<XRated::Constants::ClassType>(y["classNumber"].get<int>());
+								info.Level			 = y["stageLevel"].get<uint16>();
+								info.Exp			 = y["stageExp"].get<uint32>();
+								info.PvpLevel		 = y["pvpLevel"].get<uint16>();
+								info.PvpExp			 = y["pvpExp"].get<uint32>();
+								info.WarLevel		 = y["warLevel"].get<uint16>();
+								info.WarExp			 = y["warExp"].get<uint32>();
+								info.StateFlags		 = static_cast<XRated::CharacterStateFlags>(y["instantStateFlag"].get<int>());
+								info.RebirthCount	 = y["characterRebirth"]["rebirthCount"].get<uint16>();
+								info.StoredLevel	 = y["characterRebirth"]["storedLevel"].get<uint16>();
+
+								for (auto y : y["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
+									info.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
+								}
+
+								for (auto y : y["items"].get<json>()) {
+									XRated::ItemSlot slot;
+
+									slot.Position.Bag        = y["bagNumber"].get<uint8>(); // equipment slots at
+									slot.Position.Position   = y["positionNumber"].get<uint8>();
+									slot.Stacked		     = 1; // equipments cannot be stacked
+									slot.Id				     = y["itemHash"].get<uint32>();
+									slot.instanceEx.Instance = y["instance"].get<int64>();
+									slot.instanceEx.ExpireDate.Parse(StringUtil::ToUnicode(y["itemExpire"].get<std::string>()));
+									
+									info.Equipments.push_back(slot);
+								}
+							}
+						}
+
+						{
+							Lobby::Protocol::ListCharacter toSendPacket;
+
+							toSendPacket.Characters = user->m_Characters;
+
+							user->Send(toSendPacket);
+						}
+					}
+					else
+					{
+						Logger::GetInstance().Warn("[{}] Error requesting for the user's character list", user->GetId());
+					}
 				});
 		});
 }
