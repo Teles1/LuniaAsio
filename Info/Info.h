@@ -8,6 +8,7 @@
 #include "Info/StateBundles/StateBundlesManager.h"
 #include "Info/Items/IndexedItemInfoManager.h"
 #include "Info/Actions/CompressedActionsManager.h"
+#include <Info/Info/Items/CompressedItemInfoManager.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -18,7 +19,8 @@ namespace Lunia {
 					void Init();
 
 					struct Collection {
-						Info::CompressedActionInfoManager compressed;
+						//Info::CompressedActionInfoManager compressed;
+						Info::CompressedItemInfoManager itemInfos;
 						//Info::ActionInfoManager actions;
 						//Info::NPCInfoManager npcs;
 						//Info::StateBundleInfoManager stateBundles;
