@@ -239,7 +239,8 @@ namespace Lunia {
 			}
 
 			inline virtual const wchar_t* GetName() const {
-				throw new Exception(L"GetName not supported for MemoryStreamReader");
+				//throw new Exception(L"GetName not supported for MemoryStreamReader");
+				return L"";
 			}
 
 

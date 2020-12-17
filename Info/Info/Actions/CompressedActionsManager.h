@@ -20,7 +20,6 @@ namespace Lunia {
 						virtual void Serialize(Serializer::IStreamWriter& out) const;
 						virtual void Deserialize(Serializer::IStreamReader& in);
 					};
-
 					virtual void LoadBinaryData();
 					ActionInfoManager::Actions& Retrieve(const int templateOffset);
 					inline void ClearCache() { actionMap.clear(); }
