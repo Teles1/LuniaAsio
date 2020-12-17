@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props" Condition="Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -134,7 +135,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;$(OutDir)Info.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;$(OutDir)Info.lib;$(OutDir)Lzma.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -165,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.json" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
@@ -173,11 +175,22 @@
     <ProjectReference Include="..\Info\Info.vcxproj">
       <Project>{e559ad97-6832-455e-9a44-c91244f7ca56}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\LzmaLib\LzmaLib.vcxproj">
+      <Project>{c3e4f721-0d5e-43d3-903a-de230ea2ed09}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Network\Network.vcxproj">
       <Project>{a90c00e8-c1ba-48f1-987d-5017300d2f75}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets" Condition="Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props'))" />
+    <Error Condition="!Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets'))" />
+  </Target>
 </Project>

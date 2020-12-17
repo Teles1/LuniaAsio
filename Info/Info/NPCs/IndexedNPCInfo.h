@@ -1,7 +1,6 @@
 #pragma once
-#include "Info/Info/Loader.h"
+#include <Info/Info/IndexedInfoManager.h>
 #include "NPCManager.h"
-
 namespace Lunia {
 	namespace XRated {
 		namespace Database {

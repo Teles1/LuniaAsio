@@ -1,7 +1,6 @@
 #pragma once
-#include "Info/Info/Loader.h"
 #include "Actions.h"
-
+#include <Info/Info/Less.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {

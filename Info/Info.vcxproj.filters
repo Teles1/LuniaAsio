@@ -47,10 +47,28 @@
     <ClInclude Include="Info\StateBundles\StateBundlesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Info\Loader.h">
+    <ClInclude Include="Info\GlobalInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Info\GlobalInfo.h">
+    <ClInclude Include="Info\Items\IndexedItemInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Items\Item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Items\ItemManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Items\CompressedItemInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\CompressedLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\IndexedInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Actions\CompressedActionsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -65,9 +83,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\NPCs\NPCManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Info\Loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\Actions\Actions.cpp">
@@ -91,5 +106,29 @@
     <ClCompile Include="Info\GlobalInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Info\Items\IndexedItemInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Items\Item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Items\ItemManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\CompressedLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Items\CompressedItemInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\IndexedInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Actions\CompressedActionsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
