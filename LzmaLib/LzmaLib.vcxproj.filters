@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Spec">
+      <UniqueIdentifier>{8ba2ca90-7cd7-4d61-853b-7f589c994073}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Alloc.c" />
+    <ClCompile Include="LzFind.c" />
+    <ClCompile Include="LzFindMt.c" />
+    <ClCompile Include="LzmaDec.c" />
+    <ClCompile Include="LzmaEnc.c" />
+    <ClCompile Include="LzmaLib.c" />
+    <ClCompile Include="Threads.c" />
+    <ClCompile Include="LzmaLibExports.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="7zTypes.h" />
+    <ClInclude Include="Alloc.h" />
+    <ClInclude Include="LzFind.h" />
+    <ClInclude Include="LzFindMt.h" />
+    <ClInclude Include="LzHash.h" />
+    <ClInclude Include="LzmaDec.h" />
+    <ClInclude Include="LzmaEnc.h" />
+    <ClInclude Include="LzmaLib.h" />
+    <ClInclude Include="Threads.h" />
+    <ClInclude Include="Precomp.h" />
+    <ClInclude Include="Compiler.h" />
+    <ClInclude Include="7zVersion.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
+    <ResourceCompile Include="7zVersion.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="LzmaLib.def">
+      <Filter>Spec</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

@@ -6,7 +6,7 @@
 #include "Info/NPCs/NPCManager.h"
 #include "Info/Actions/ActionsManager.h"
 #include "Info/StateBundles/StateBundlesManager.h"
-#include "Info/Items/IndexedItemInfoManager.h"
+#include "Info/Items/CompressedItemInfoManager.h"
 
 namespace Lunia {
 	namespace XRated {
@@ -20,7 +20,7 @@ namespace Lunia {
 						//Info::ActionInfoManager actions;
 						//Info::NPCInfoManager npcs;
 						//Info::StateBundleInfoManager stateBundles;
-						Info::IndexedItemInfoManager itemInfos;
+						Info::CompressedItemInfoManager itemInfos;
 					} InfoCollections;
 			};
 

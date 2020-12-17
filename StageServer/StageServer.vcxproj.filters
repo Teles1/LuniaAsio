@@ -22,5 +22,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.json" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
