@@ -324,13 +324,30 @@ namespace Lunia {
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SelectCharacter", user->GetId());
 					Net::Api api("SelectCharacter");
-					api << Config::GetInstance().m_ServerName;
+					//api << Config::GetInstance().m_ServerName;
+					api << user->GetAccountName();
+					api << packet.CharacterName;
 					auto result = api.RequestApi();
+
 					Lobby::Protocol::SelectCharacter sendPacket;
-					if (result.errorCode == 0) {
-						
-					}
+					sendPacket.Result = static_cast<Lobby::Protocol::SelectCharacter::Results>(0);
+					sendPacket.CharacterName = StringUtil::ToUnicode(result.resultObjet["characterName"].get<std::string>());
+					
+					// TODO : Fix it latter with achievement
+					sendPacket.CharacterStates = static_cast<XRated::CharacterStateFlags>(0);
+
 					user->Send(sendPacket);
+				});
+			fwPacketListener::GetInstance().Connect(
+				[](Lobby::UserSharedPtr& user, Lobby::Protocol::DeselectCharacter& packet)
+				{
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@DeselectCharacter", user->GetId());
+					Net::Api api("DeselectCharacter");
+					api << user->GetAccountName();
+					const Net::Answer result = api.RequestApi();
+					if (result.errorCode != 0) {
+						return;
+					}
 				});
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::ListSquareStatus& packet)

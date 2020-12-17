@@ -309,6 +309,17 @@ namespace Lunia {
 				in.Read(L"Name", CharacterName);
 			}
 
+			const wchar_t* DeselectCharacter::TypeName = L"DeselectCharacter";
+			const HashType DeselectCharacter::TypeHash = StringUtil::Hash(DeselectCharacter::TypeName);
+			void DeselectCharacter::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+			}
+			void DeselectCharacter::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+			}
+
 			const wchar_t* ListSquareStatus::TypeName = L"ListSquareStatus";
 			const HashType ListSquareStatus::TypeHash = StringUtil::Hash(ListSquareStatus::TypeName);
 			void ListSquareStatus::Serialize(Serializer::IStreamWriter& out) const
