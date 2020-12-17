@@ -52,46 +52,44 @@ namespace Lunia {
 					Resource::StreamReader cbfreader = Resource::ResourceSystemInstance().CreateStreamReader(L"C:\\Users\\WINDOWS\\Desktop\\Lunia\\x64\\Debug\\Database\\ActionInfos.cbf");
 					cbfreader->SetReadCursor(templateOffset, Lunia::IStream::Begin);
 					/* CompressedBlockSizeInBytes */
-					for (int i = 0; i < 1368; i++) {
-						printf("Decimal: %d - ", cbfreader->GetReadCursor());
-						std::cout << "Offset: " << std::hex << cbfreader->GetReadCursor();
-						uint8* Buffer = reinterpret_cast<uint8*>(new char[4]);
-						cbfreader->Read(Buffer, 4);
-						/* BlockLength */
-						size_t compSize = *(int*)Buffer;
-						printf(" - Size : (Decimal: %d, Hex: 0%.2x) \n", compSize, compSize);
-						/* BlockRead */
-						uint8* Block = reinterpret_cast<uint8*>(new char[compSize]);
-						cbfreader->Read(Block, compSize);
-						/* Block Reader */
-						Resource::StreamReader reader = new FileIO::RefCountedMemoryStreamReader(Block, compSize);
-						uint32 count(0);
-						/* Loop in Block Size Left */
-						while (reader->GetSizeLeft() > 0)
-						{
-							/* Reading and setting a first block data in ReplayBuffer*/
-							reader->Read(Block, 4);
-							size_t srcSize = *(int*)Block + LZMA_PROPS_SIZE;
-							reader->Read(Block, 4);
-							uint32 UNCOMPRESSED_SIZE = *(int*)Block;
-							uint8* lReplayBuffer = reinterpret_cast<uint8*>(new char[srcSize]);
-							reader->Read(lReplayBuffer, srcSize);
+					printf("Decimal: %d - ", cbfreader->GetReadCursor());
+					std::cout << "Offset: " << std::hex << cbfreader->GetReadCursor();
+					uint8* Buffer = reinterpret_cast<uint8*>(new char[4]);
+					cbfreader->Read(Buffer, 4);
+					/* BlockLength */
+					size_t compSize = *(int*)Buffer;
+					printf(" - Size : (Decimal: %d, Hex: 0%.2x) \n", compSize, compSize);
+					/* BlockRead */
+					uint8* Block = reinterpret_cast<uint8*>(new char[compSize]);
+					cbfreader->Read(Block, compSize);
+					/* Block Reader */
+					Resource::StreamReader reader = new FileIO::RefCountedMemoryStreamReader(Block, compSize);
+					uint32 count(0);
+					/* Loop in Block Size Left */
+					while (reader->GetSizeLeft() > 0)
+					{
+						/* Reading and setting a first block data in ReplayBuffer*/
+						reader->Read(Block, 4);
+						size_t srcSize = *(int*)Block + LZMA_PROPS_SIZE;
+						reader->Read(Block, 4);
+						uint32 UNCOMPRESSED_SIZE = *(int*)Block;
+						uint8* lReplayBuffer = reinterpret_cast<uint8*>(new char[srcSize]);
+						reader->Read(lReplayBuffer, srcSize);
 
-							/* Setting buffer input and output sizes*/
-							std::vector<uint8> inBuf(srcSize);
-							std::vector<uint8> outBuf;
-							outBuf.resize(UNCOMPRESSED_SIZE);
-							memcpy(&inBuf[0], lReplayBuffer, srcSize);
+						/* Setting buffer input and output sizes*/
+						std::vector<uint8> inBuf(srcSize);
+						std::vector<uint8> outBuf;
+						outBuf.resize(UNCOMPRESSED_SIZE);
+						memcpy(&inBuf[0], lReplayBuffer, srcSize);
 
-							/*decoding and decrypting the binary owo*/
-							size_t dstLen = outBuf.size();
-							size_t srcLen = inBuf.size() - LZMA_PROPS_SIZE;
-							SRes res = LzmaUncompress(&outBuf[0], &dstLen, &inBuf[LZMA_PROPS_SIZE], &srcLen, &inBuf[0], LZMA_PROPS_SIZE);
+						/*decoding and decrypting the binary owo*/
+						size_t dstLen = outBuf.size();
+						size_t srcLen = inBuf.size() - LZMA_PROPS_SIZE;
+						SRes res = LzmaUncompress(&outBuf[0], &dstLen, &inBuf[LZMA_PROPS_SIZE], &srcLen, &inBuf[0], LZMA_PROPS_SIZE);
 
-							Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], compSize));
-							ActionInfoManager::Actions a;
-							BlockDecrypted->Read(L"actionMap", a);
-						}
+						Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], dstLen));
+						ActionInfoManager::Actions a;
+						BlockDecrypted->Read(L"actionMap", a);
 					}
 				}
 			}

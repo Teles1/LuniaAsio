@@ -244,14 +244,13 @@ namespace Lunia {
 			}
 
 
-			inline TMemoryStreamReader(uint8* data, uint32 datazs)
-				: size(datazs), readPos(0), stream(data)
+			inline TMemoryStreamReader(uint8* data, uint32 datazs) : size(datazs), readPos(0), stream(data)
 			{
-				/* printf("TMemoryStreamReader initialized\n");
+				printf("TMemoryStreamReader initialized\n");
 				for (int i = 0; i < datazs; i++){
 					printf("%.2X ", data[i]);
 				}
-				printf("\n"); */
+				printf("\n");
 			}
 		};
 

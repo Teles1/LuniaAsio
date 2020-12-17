@@ -20,7 +20,7 @@ namespace Lunia {
 
 					struct Collection {
 						//Info::CompressedActionInfoManager compressed;
-						Info::CompressedItemInfoManager itemInfos;
+						//Info::CompressedItemInfoManager itemInfos;
 						//Info::ActionInfoManager actions;
 						//Info::NPCInfoManager npcs;
 						//Info::StateBundleInfoManager stateBundles;
