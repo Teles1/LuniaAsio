@@ -13,7 +13,7 @@ int main()
 	Lunia::XRated::Database::Info::CompressedActionInfoManager a;
 	//a.LoadBinaryData();
 	//a.Retrieve(0); // yeah, this works fine
-	a.Retrieve(0x4aed4d); // yeah, this works fine
+	a.Retrieve(0); // yeah, this works fine
 	//a.Retrieve(0x3bec);
 	return 0;
 }

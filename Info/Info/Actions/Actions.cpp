@@ -315,8 +315,6 @@ namespace Lunia {
 					int tmp;
 					in.Read(L"enableColorEffect", tmp, 0);
 					enableColorEffect = tmp ? true : false;
-
-					std::wcout << L"AnimationName: " << animationName << std::endl;
 				}
 			}
 		}

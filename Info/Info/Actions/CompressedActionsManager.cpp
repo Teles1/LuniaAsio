@@ -66,6 +66,8 @@ namespace Lunia {
 					Resource::StreamReader reader = new FileIO::RefCountedMemoryStreamReader(Block, compSize);
 					uint32 count(0);
 					/* Loop in Block Size Left */
+					std::vector<uint8> completeBuff;
+					size_t completeSize = 0;
 					while (reader->GetSizeLeft() > 0)
 					{
 						/* Reading and setting a first block data in ReplayBuffer*/
@@ -89,7 +91,13 @@ namespace Lunia {
 
 						Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], dstLen));
 						ActionInfoManager::Actions a;
-						BlockDecrypted->Read(L"actionMap", a);
+						BlockDecrypted->Read(L"ActionMap", a);
+
+						//if do you want save all outbuf in a vector uncomment this and good luck <3
+						//std::move(outBuf.begin(), outBuf.end(), std::back_inserter(completeBuff));
+						//completeSize += dstLen;
+						//Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&completeBuff[0], completeSize));
+
 					}
 				}
 			}
