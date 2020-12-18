@@ -328,33 +328,39 @@ namespace Lunia {
 					api << user->GetAccountName();
 					api << packet.CharacterName;
 					auto result = api.RequestApi();
+					if (result.errorCode == 0 && user->IsAValidCharacterName(packet.CharacterName) && user->SetSelectedCharacter(packet.CharacterName)) {
+						Lobby::Protocol::SelectCharacter sendPacket;
+						sendPacket.Result = static_cast<Lobby::Protocol::SelectCharacter::Results>(0);
+						sendPacket.CharacterName = StringUtil::ToUnicode(result.resultObjet["characterName"].get<std::string>());
 
-					Lobby::Protocol::SelectCharacter sendPacket;
-					sendPacket.Result = static_cast<Lobby::Protocol::SelectCharacter::Results>(0);
-					sendPacket.CharacterName = StringUtil::ToUnicode(result.resultObjet["characterName"].get<std::string>());
-					
-					// TODO : Fix it latter with achievement
-					sendPacket.CharacterStates = static_cast<XRated::CharacterStateFlags>(0);
+						// TODO : Fix it latter with achievement
+						sendPacket.CharacterStates = static_cast<XRated::CharacterStateFlags>(0);
 
-					user->Send(sendPacket);
+						user->Send(sendPacket);
+					}
+					//send terminate in case this fails. Either users doesnt have the character or the api returned an error.
 				});
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::DeselectCharacter& packet)
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@DeselectCharacter", user->GetId());
 					Net::Api api("DeselectCharacter");
-					api << user->GetAccountName();
+					api << user->GetCharacterName();
 					const Net::Answer result = api.RequestApi();
-					if (result.errorCode != 0) {
-						return;
+					Lobby::Protocol::DeselectCharacter sendPacket;
+					if (result.errorCode == 0)
+						sendPacket.Result = Lobby::Protocol::DeselectCharacter::Results::Ok;
+					else {
+						Logger::GetInstance().Warn(L"Could not deselect users={0}, character={1}.", user->GetId(), user->GetCharacterName());
+						sendPacket.Result = Lobby::Protocol::DeselectCharacter::Results::NoResponse;
 					}
+					user->Send(sendPacket);
 				});
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::ListSquareStatus& packet)
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListSquareStatus", user->GetId());
 					Net::Api api("ListSquareStatus");
-					api << Config::GetInstance().m_ServerName;
 					auto result = api.RequestApi();
 					Lobby::Protocol::ListSquareStatus sendPacket;
 					if (result.errorCode == 0) {
@@ -383,6 +389,7 @@ namespace Lunia {
 						else 
 							Logger::GetInstance().Warn("There are no square stages to be listed");
 					}
+					sendPacket.Result = static_cast<Lobby::Protocol::ListSquareStatus::Results>(result.errorCode);
 					user->Send(sendPacket);
 				});
 		});

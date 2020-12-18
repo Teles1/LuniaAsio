@@ -71,6 +71,10 @@ namespace Lunia {
 			bool IsAValidCharacterName(String& characterName);
 
 			bool DeleteCharacter(String& characterName);
+
+			const String& GetCharacterName() const;
+
+			bool SetSelectedCharacter(String& characterName);
 		public://Network Related;
 			void Send(Serializer::ISerializable& packet);
 
@@ -100,7 +104,7 @@ namespace Lunia {
 
 			std::vector<XRated::LobbyPlayerInfo> m_Characters;
 
-			XRated::LobbyPlayerInfo* m_selectedCharacter;
+			XRated::LobbyPlayerInfo m_selectedCharacter;
 		private:
 			std::mutex mtx;
 		};
