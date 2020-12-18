@@ -314,6 +314,7 @@ namespace Lunia {
 			void DeselectCharacter::Serialize(Serializer::IStreamWriter& out) const
 			{
 				out.Begin(TypeName);
+				out.Write(L"Result", static_cast<const int>(Result));
 			}
 			void DeselectCharacter::Deserialize(Serializer::IStreamReader& in)
 			{

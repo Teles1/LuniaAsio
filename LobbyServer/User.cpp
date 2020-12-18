@@ -121,6 +121,22 @@ namespace Lunia {
 			return false;
 		}
 
+		const String& User::GetCharacterName() const
+		{
+			return m_selectedCharacter.CharacterName;
+		}
+
+		bool User::SetSelectedCharacter(String& characterName)
+		{
+			AutoLock _l(mtx);
+			for (auto& x : m_Characters)
+				if (x.CharacterName == characterName) {
+					m_selectedCharacter = x;
+					return true;
+				}
+			return false;
+		}
+
 		uint32 User::GetId() const {
 			return m_userId;
 		}
