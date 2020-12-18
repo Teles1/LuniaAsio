@@ -268,7 +268,16 @@ namespace Lunia {
 				String CharacterName; //client request
 				NET_SERIALIZABLE;
 			};
+			struct DeselectCharacter : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					NoResponse = 0xff,
+				} Result;
 
+				NET_SERIALIZABLE;
+			};
 			struct ListSquareStatus : public Serializer::ISerializable
 			{
 				enum Results
