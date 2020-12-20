@@ -1,7 +1,8 @@
 #pragma once
 #include "LobbyServer.h"
 #include "Network/Api/Api.h"
-
+#include <LobbyServer/Common.h>
+#include <Core/Utils/InitFunction.h>
 namespace Lunia {
 	std::shared_ptr<GameServerScope> g_gameServer = std::make_shared<GameServerScope>();
 	namespace Lobby {
@@ -23,9 +24,28 @@ namespace Lunia {
 		}
 		void LobbyServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
 		{
-			Net::UserRegistry::GetInstance().MakeUser(socket)->HandleRead();
+			Lobby::UserRegistry().MakeUser(socket)->HandleRead();
 			Logger::GetInstance().Info("Connection handled by Lobby");
 		}
+
+		static utils::InitFunction initFunction([]()
+			{
+				UserRegistry().OnUserConnected.Connect([](const UserSharedPtr& user)
+					{
+						Logger::GetInstance().Info("UserRegistry :: OnUserConnected :: userId@{0}", user->GetId());
+					});
+
+				UserRegistry().OnUserDisconnected.Connect([](const UserSharedPtr& user)
+					{
+						Logger::GetInstance().Info("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetId());
+
+					});
+
+				UserRegistry().OnUserAuthenticated.Connect([](const UserSharedPtr& user, const uint32& oldUserId)
+					{
+						Logger::GetInstance().Info("UserRegistry :: OnUserAuthenticated :: userId@{0} oldUserId@{1}", user->GetId(), oldUserId);
+					});
+			});
 	}
 }
 
@@ -34,7 +54,7 @@ int main(int argc, char* argv[])
 	//setting log name to be used on the console.
 	Logger::GetInstance("LobbyServer");
 	Lunia::Config::GetInstance("Config.json");
-	Lunia::Net::UserRegistry::GetInstance(Lunia::Config::GetInstance().m_PingTimeout);
+	Lunia::Lobby::UserRegistry(Lunia::Config::GetInstance().m_PingTimeout);
 	//Load Config
 	Lunia::Lobby::LobbyServer lobbyServer(Lunia::Config::GetInstance().m_ServerAddress.ServerIp.c_str(), Lunia::Config::GetInstance().m_ServerAddress.ServerPort);
 	lobbyServer.Run();
