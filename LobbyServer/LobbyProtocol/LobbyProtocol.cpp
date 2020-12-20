@@ -309,6 +309,23 @@ namespace Lunia {
 				in.Read(L"Name", CharacterName);
 			}
 
+			const wchar_t* AchievementServerAssigned::TypeName = L"AchievementServerAssigned";
+			const HashType AchievementServerAssigned::TypeHash = StringUtil::Hash(AchievementServerAssigned::TypeName);
+			void AchievementServerAssigned::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.WriteEnum(L"Result", Result);
+				out.Write(L"ServerName", ServerName);
+				out.Write(L"serverAddress", serverAddress);
+			}
+			void AchievementServerAssigned::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.ReadEnum(L"Result", Result);
+				in.Read(L"ServerName", ServerName);
+				in.Read(L"serverAddress", serverAddress);
+			}
+
 			const wchar_t* DeselectCharacter::TypeName = L"DeselectCharacter";
 			const HashType DeselectCharacter::TypeHash = StringUtil::Hash(DeselectCharacter::TypeName);
 			void DeselectCharacter::Serialize(Serializer::IStreamWriter& out) const

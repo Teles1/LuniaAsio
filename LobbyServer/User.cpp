@@ -141,6 +141,7 @@ namespace Lunia {
 		void User::SetCharacterStateFlags(const XRated::CharacterStateFlags& flag)
 		{
 			if (IsCharacterSelected()) {
+				AutoLock _l(mtx);
 				m_CharacterStateFlags = m_selectedCharacter.StateFlags.EquipmentSet;
 				m_CharacterStateFlags = flag;
 				Net::Api api("UpdateCharacterStateFlags");

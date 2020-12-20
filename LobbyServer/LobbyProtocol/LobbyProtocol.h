@@ -1,7 +1,7 @@
 #pragma once
-#include "Core/Serializer/Serializer.h"
-#include "Core/Utils/DateTime.h"
 #include <Core/GameConstants.h>
+#include <Network/CommonProtocol/Protocol.h>
+
 namespace Lunia {
 	namespace Lobby {
 		namespace Protocol {
@@ -265,7 +265,24 @@ namespace Lunia {
 				String SelectedCharacter;
 				XRated::CharacterStateFlags CharacterStates;
 
-				String CharacterName; //client request
+				//client request dasopikosidpajdsjiaosdaiojsdajiodsaoji321oi309213211!!!!!!!!
+				String CharacterName; 
+				NET_SERIALIZABLE;
+			};
+
+			struct AchievementServerAssigned : public Serializer::ISerializable {
+				struct Result
+				{
+					enum Type
+					{
+						Ok = 0,
+						Unknown = 1,
+						InvalidPacket = 999
+					};
+				};
+				Result::Type Result;
+				std::wstring ServerName;
+				Lunia::Protocol::Address serverAddress;
 				NET_SERIALIZABLE;
 			};
 

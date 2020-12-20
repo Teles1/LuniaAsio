@@ -331,17 +331,37 @@ namespace Lunia {
 					Lobby::Protocol::SelectCharacter sendPacket;
 					sendPacket.Result = static_cast<Lobby::Protocol::SelectCharacter::Results>(result.errorCode);
 					if (result.errorCode == 0 && user->IsAValidCharacterName(packet.CharacterName) && user->SetSelectedCharacter(packet.CharacterName)) {
-						sendPacket.CharacterName = StringUtil::ToUnicode(result.resultObject["characterName"].get<std::string>());
+						sendPacket.SelectedCharacter = StringUtil::ToUnicode(result.resultObject["characterName"].get<std::string>());
 						sendPacket.CharacterStates = user->GetCharacterStateFlags();
+						sendPacket.CharacterStates.IsPcRoom = 1; // AllM also sets this for some reason.
 						sendPacket.CharacterStates.IsAdmin = 1;
 						//after checking if the user is admin or not we gonna update the flags.
 						user->SetCharacterStateFlags(sendPacket.CharacterStates);
 						//Family check if there is a family to be joined as a guest will come in here
 
 						//aswell as making sure to send the achievement server to the client in here.
-
-						user->Send(sendPacket);
+						{
+							Net::Api achivementApi("FindAchievementServer");
+							achivementApi << packet.CharacterName;
+							achivementApi.GetAsync(
+								[&](Net::Answer& result) {
+									Lobby::Protocol::AchievementServerAssigned packetAchievement;
+									packetAchievement.Result = Lobby::Protocol::AchievementServerAssigned::Result::Ok;
+									if (result.errorCode == 0) {
+										if (user->IsAValidCharacterName(packet.CharacterName) && !result.resultObject.is_null()) {
+											packetAchievement.ServerName = StringUtil::ToUnicode(result.resultObject["serverName"].get<std::string>());
+											packetAchievement.serverAddress.Ip = result.resultObject["clientIp"].get<std::string>();
+											packetAchievement.serverAddress.Port = result.resultObject["clientPort"].get<uint16>();
+										}
+										user->Send(packetAchievement);
+									}
+								});
+							
+						}
 					}
+					else
+						Logger::GetInstance().Warn(L"Error Selecting user's={0}, characterName={1}", user->GetAccountName(), packet.CharacterName);
+					user->Send(sendPacket);
 					//send terminate in case this fails. Either users doesnt have the character or the api returned an error.
 				});
 			fwPacketListener::GetInstance().Connect(
