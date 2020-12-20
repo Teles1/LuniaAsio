@@ -180,7 +180,6 @@
     <ClCompile Include="LobbyServer.cpp" />
     <ClCompile Include="PacketHandlers.cpp" />
     <ClCompile Include="User.cpp" />
-    <ClCompile Include="UserRegistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
@@ -191,13 +190,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common.h" />
     <ClInclude Include="fwPacketListener.h" />
     <ClInclude Include="LobbyServer.h" />
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h" />
     <ClInclude Include="User.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="UserRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.json" />
