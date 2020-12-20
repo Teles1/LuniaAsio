@@ -1678,7 +1678,7 @@ namespace Lunia {
 		struct LobbyPlayerInfo : public Serializer::ISerializable
 		{
 			String CharacterName;
-			int64 CharacterSerial; // Robotex
+			int64 CharacterSerial = -1; // Robotex
 			uint32 VirtualIdCode;
 			Constants::ClassType ClassType;
 			uint16 Level;

@@ -58,12 +58,12 @@ namespace Lunia {
 								
 								//CharacterLicenses
 								{
-									user.get()->m_NumberOfSlots = result.resultObjet["characterSlots"].get<uint8>();
-									user->m_AccountLicenses  = result.resultObjet["accountsLicense"].get<int32>();
+									user.get()->m_NumberOfSlots = result.resultObject["characterSlots"].get<uint8>();
+									user->m_AccountLicenses  = result.resultObject["accountsLicense"].get<int32>();
 								}
 								
 								//Lock user's account if second password is set 
-								if (result.resultObjet["secondPassword"].get<bool>()) {
+								if (result.resultObject["secondPassword"].get<bool>()) {
 									user->PassedSecondPassword(true);
 								}
 
@@ -78,8 +78,8 @@ namespace Lunia {
 								}
 								
 								{
-									if(!result.resultObjet["characters"].is_null())
-										for (auto y : result.resultObjet["characters"]) {
+									if(!result.resultObject["characters"].is_null())
+										for (auto y : result.resultObject["characters"]) {
 											user->m_Characters.push_back(XRated::LobbyPlayerInfo());
 											XRated::LobbyPlayerInfo& info = user->m_Characters.back();
 											info.CharacterName = StringUtil::ToUnicode(y["characterName"].get<std::string>());
@@ -146,9 +146,9 @@ namespace Lunia {
 							user->PassedSecondPassword(true);
 
 						sendPacket.PasswordInUse = (uint8)result.errorCode;
-						sendPacket.FailCount = result.resultObjet["failCount"].get<uint32>();
-						sendPacket.LockExpired = StringUtil::ToUnicode(result.resultObjet["lockExpired"].get<std::string>());
-						sendPacket.IsLocked = result.resultObjet["isLocked"].get<uint8>();
+						sendPacket.FailCount = result.resultObject["failCount"].get<uint32>();
+						sendPacket.LockExpired = StringUtil::ToUnicode(result.resultObject["lockExpired"].get<std::string>());
+						sendPacket.IsLocked = result.resultObject["isLocked"].get<uint8>();
 						sendPacket.Result = static_cast<Lobby::Protocol::SecondPasswordChecked::Results>(0);
 						user->Send(sendPacket);
 					}
@@ -237,25 +237,25 @@ namespace Lunia {
 					Lobby::Protocol::CreateCharacter sendPacket;
 					sendPacket.Result = static_cast<Lobby::Protocol::CreateCharacter::Results>(result.errorCode);
 					if (result.errorCode == 0) {
-						sendPacket.CharacterInfo.CharacterName = StringUtil::ToUnicode(result.resultObjet["characterName"].get<std::string>());
-						sendPacket.CharacterInfo.CharacterSerial = result.resultObjet["id"].get<int64>();
-						sendPacket.CharacterInfo.VirtualIdCode = result.resultObjet["id"].get<uint32>();
-						sendPacket.CharacterInfo.ClassType = static_cast<XRated::Constants::ClassType>(result.resultObjet["classNumber"].get<int>());
-						sendPacket.CharacterInfo.Level = result.resultObjet["stageLevel"].get<uint16>();
-						sendPacket.CharacterInfo.Exp = result.resultObjet["stageExp"].get<uint32>();
-						sendPacket.CharacterInfo.PvpLevel = result.resultObjet["pvpLevel"].get<uint16>();
-						sendPacket.CharacterInfo.PvpExp = result.resultObjet["pvpExp"].get<uint32>();
-						sendPacket.CharacterInfo.WarLevel = result.resultObjet["warLevel"].get<uint16>();
-						sendPacket.CharacterInfo.WarExp = result.resultObjet["warExp"].get<uint32>();
-						sendPacket.CharacterInfo.StateFlags = static_cast<XRated::CharacterStateFlags>(result.resultObjet["instantStateFlag"].get<int>());
-						sendPacket.CharacterInfo.RebirthCount = result.resultObjet["characterRebirth"]["rebirthCount"].get<uint16>();
-						sendPacket.CharacterInfo.StoredLevel = result.resultObjet["characterRebirth"]["storedLevel"].get<uint16>();
+						sendPacket.CharacterInfo.CharacterName = StringUtil::ToUnicode(result.resultObject["characterName"].get<std::string>());
+						sendPacket.CharacterInfo.CharacterSerial = result.resultObject["id"].get<int64>();
+						sendPacket.CharacterInfo.VirtualIdCode = result.resultObject["id"].get<uint32>();
+						sendPacket.CharacterInfo.ClassType = static_cast<XRated::Constants::ClassType>(result.resultObject["classNumber"].get<int>());
+						sendPacket.CharacterInfo.Level = result.resultObject["stageLevel"].get<uint16>();
+						sendPacket.CharacterInfo.Exp = result.resultObject["stageExp"].get<uint32>();
+						sendPacket.CharacterInfo.PvpLevel = result.resultObject["pvpLevel"].get<uint16>();
+						sendPacket.CharacterInfo.PvpExp = result.resultObject["pvpExp"].get<uint32>();
+						sendPacket.CharacterInfo.WarLevel = result.resultObject["warLevel"].get<uint16>();
+						sendPacket.CharacterInfo.WarExp = result.resultObject["warExp"].get<uint32>();
+						sendPacket.CharacterInfo.StateFlags = static_cast<XRated::CharacterStateFlags>(result.resultObject["instantStateFlag"].get<int>());
+						sendPacket.CharacterInfo.RebirthCount = result.resultObject["characterRebirth"]["rebirthCount"].get<uint16>();
+						sendPacket.CharacterInfo.StoredLevel = result.resultObject["characterRebirth"]["storedLevel"].get<uint16>();
 						
-						for (auto y : result.resultObjet["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
+						for (auto y : result.resultObject["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
 							sendPacket.CharacterInfo.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
 						}
 
-						for (auto y : result.resultObjet["items"].get<json>()) {
+						for (auto y : result.resultObject["items"].get<json>()) {
 							XRated::ItemSlot slot;
 							slot.Position.Bag = y["bagNumber"].get<uint8>(); // equipment slots at
 							slot.Position.Position = y["positionNumber"].get<uint8>();
@@ -331,7 +331,7 @@ namespace Lunia {
 					if (result.errorCode == 0 && user->IsAValidCharacterName(packet.CharacterName) && user->SetSelectedCharacter(packet.CharacterName)) {
 						Lobby::Protocol::SelectCharacter sendPacket;
 						sendPacket.Result = static_cast<Lobby::Protocol::SelectCharacter::Results>(0);
-						sendPacket.CharacterName = StringUtil::ToUnicode(result.resultObjet["characterName"].get<std::string>());
+						sendPacket.CharacterName = StringUtil::ToUnicode(result.resultObject["characterName"].get<std::string>());
 
 						// TODO : Fix it latter with achievement
 						sendPacket.CharacterStates = static_cast<XRated::CharacterStateFlags>(0);
@@ -360,37 +360,69 @@ namespace Lunia {
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::ListSquareStatus& packet)
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListSquareStatus", user->GetId());
-					Net::Api api("ListSquareStatus");
-					auto result = api.RequestApi();
-					Lobby::Protocol::ListSquareStatus sendPacket;
-					if (result.errorCode == 0) {
-						if (result.resultObjet.size() > 0) {
-							for (auto& x : result.resultObjet) {
-								XRated::SquareInfo info;
-								info.StageGroupHash = x["stageGroupHash"].get<uint32>();
-								info.AccessLevel = x["accessLevel"].get<uint16>();
-								info.Capacity = x["capacity"].get<uint16>();
-								{
-									float helper = (float)x["connectionCount"].get<uint32>() / info.Capacity;
-									if (helper > 0.95f)
-										info.Status = XRated::SquareInfo::SquareStatus::Full;
-									else if (helper > 0.70f)
-										info.Status = XRated::SquareInfo::SquareStatus::Cloudy;
-									else if (helper > 0.40f)
-										info.Status = XRated::SquareInfo::SquareStatus::Normal;
-									else
-										info.Status = XRated::SquareInfo::SquareStatus::Quiet;
+					if (user->IsCharacterSelected()) {
+						Net::Api api("ListSquareStatus");
+						auto result = api.RequestApi();
+						Lobby::Protocol::ListSquareStatus sendPacket;
+						if (result.errorCode == 0) {
+							if (result.resultObject.size() > 0) {
+								for (auto& x : result.resultObject) {
+									XRated::SquareInfo info;
+									info.StageGroupHash = x["stageGroupHash"].get<uint32>();
+									info.AccessLevel = x["accessLevel"].get<uint16>();
+									info.Capacity = x["capacity"].get<uint16>();
+									{
+										float helper = (float)x["connectionCount"].get<uint32>() / info.Capacity;
+										if (helper > 0.95f)
+											info.Status = XRated::SquareInfo::SquareStatus::Full;
+										else if (helper > 0.70f)
+											info.Status = XRated::SquareInfo::SquareStatus::Cloudy;
+										else if (helper > 0.40f)
+											info.Status = XRated::SquareInfo::SquareStatus::Normal;
+										else
+											info.Status = XRated::SquareInfo::SquareStatus::Quiet;
+									}
+									info.Name = StringUtil::ToUnicode(x["squareName"].get<std::string>());
+									info.OrderNumber = x["orderNumber"].get<uint16>();
+									sendPacket.SuqareList.push_back(info);
 								}
-								info.Name = StringUtil::ToUnicode(x["squareName"].get<std::string>());
-								info.OrderNumber = x["orderNumber"].get<uint16>();
-								sendPacket.SuqareList.push_back(info);
 							}
+							else
+								Logger::GetInstance().Warn("There are no square stages to be listed");
 						}
-						else 
-							Logger::GetInstance().Warn("There are no square stages to be listed");
+						sendPacket.Result = static_cast<Lobby::Protocol::ListSquareStatus::Results>(result.errorCode);
+						user->Send(sendPacket);
 					}
-					sendPacket.Result = static_cast<Lobby::Protocol::ListSquareStatus::Results>(result.errorCode);
-					user->Send(sendPacket);
+					else
+						user->Error(Lobby::ErrorLevel::Curious, L"");
+					
+				});
+			fwPacketListener::GetInstance().Connect(
+				[](Lobby::UserSharedPtr& user, Lobby::Protocol::JoinSquare& packet)
+				{
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@JoinSquare", user->GetId());
+					if (user->IsAccountAuthorized() && user->IsCharacterSelected()) {
+						Lobby::Protocol::Join sendPacket;
+						sendPacket.Result = Lobby::Protocol::Join::Results::NoResponse;
+						Net::Api api("JoinSquare");
+						api << user->GetCharacterName() << packet.SquareName;
+						api.GetAsync(
+							[&](Net::Answer& answer) {
+								sendPacket.Result = static_cast<Lobby::Protocol::Join::Results>(answer.errorCode);
+								if (answer.errorCode == 0 && !answer.resultObject.is_null()) {
+									sendPacket.KeyCode = answer.resultObject["reservationSerial"].get<std::string>();
+									sendPacket.Port = answer.resultObject["serverPort"].get<uint16>();
+									sendPacket.ServerIp = answer.resultObject["serverAddress"].get<std::string>();
+								}
+								else
+									Logger::GetInstance().Info("User[{0}] JoinSquare call failed.", user->GetId());
+							});
+
+						user->Send(sendPacket);
+					}
+					else
+						Logger::GetInstance().Info("User[{0}] is trying to call JoinSquare unauthenticated.", user->GetId());
+					
 				});
 		});
 }

@@ -268,6 +268,7 @@ namespace Lunia {
 				String CharacterName; //client request
 				NET_SERIALIZABLE;
 			};
+
 			struct DeselectCharacter : public Serializer::ISerializable
 			{
 				enum Results
@@ -278,6 +279,7 @@ namespace Lunia {
 
 				NET_SERIALIZABLE;
 			};
+
 			struct ListSquareStatus : public Serializer::ISerializable
 			{
 				enum Results
@@ -287,6 +289,37 @@ namespace Lunia {
 				} Result;
 
 				std::vector<XRated::SquareInfo> SuqareList;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct JoinSquare : public Serializer::ISerializable
+			{
+				String SquareName;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct Join : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					NoResponse = 0xff,
+					UserAlreadyInGame = 1,
+					AlreadyExistingStage = 2,
+					WrongStageName = 3,
+					StageNotFound = 4,
+					StageIsLocked = 5,
+					StageIsFull = 6,
+					UnableToAutodetect = 7,
+					ServerNotFound = 8,
+					ServerTooBusy = 13
+				} Result;
+
+				std::string ServerIp;
+				uint16 Port;
+				std::string KeyCode;
 
 				NET_SERIALIZABLE;
 			};

@@ -137,6 +137,33 @@ namespace Lunia {
 			return false;
 		}
 
+		bool User::IsCharacterSelected() const
+		{
+			return m_selectedCharacter.CharacterSerial != -1;
+		}
+
+		void User::Error(ErrorLevel error, const String& message)
+		{
+			switch (error)
+			{
+			case ErrorLevel::Pvp:
+			case ErrorLevel::Curious:
+				break;
+			case ErrorLevel::Critical:
+			case ErrorLevel::Unexpected:
+			{
+				std::string operation(error == ErrorLevel::Critical ? "critical" : "unexpected");
+				std::string characterName;
+				if (m_selectedCharacter.CharacterSerial != -1)
+					characterName = StringUtil::ToASCII(m_selectedCharacter.CharacterName);
+
+				/* LOGGING */
+			}
+			break;
+			}
+			//Some sort of disconnecting process going in here. 
+		}
+
 		uint32 User::GetId() const {
 			return m_userId;
 		}

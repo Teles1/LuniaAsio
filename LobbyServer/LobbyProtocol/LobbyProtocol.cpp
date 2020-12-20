@@ -333,6 +333,38 @@ namespace Lunia {
 			{
 				in.Begin(TypeName);
 			}
+
+			const wchar_t* JoinSquare::TypeName = L"JoinSquare";
+			const HashType JoinSquare::TypeHash = StringUtil::Hash(JoinSquare::TypeName);
+			void JoinSquare::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"SquareName", SquareName);
+			}
+			void JoinSquare::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"SquareName", SquareName);
+			}
+
+			const wchar_t* Join::TypeName = L"Join";
+			const HashType Join::TypeHash = StringUtil::Hash(Join::TypeName);
+			void Join::Serialize(Serializer::IStreamWriter& out) const
+			{
+				out.Begin(TypeName);
+				out.Write(L"Result", static_cast<const int>(Result));
+				out.Write(L"ServerIp", ServerIp);
+				out.Write(L"Port", Port);
+				out.Write(L"KeyCode", KeyCode);
+			}
+			void Join::Deserialize(Serializer::IStreamReader& in)
+			{
+				in.Begin(TypeName);
+				in.Read(L"Result", reinterpret_cast<int&>(Result));
+				in.Read(L"ServerIp", ServerIp);
+				in.Read(L"Port", Port);
+				in.Read(L"KeyCode", KeyCode);
+			}
 		}
 	}
 }

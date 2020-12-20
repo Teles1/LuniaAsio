@@ -14,11 +14,11 @@ namespace Lunia {
         struct Answer {
         public:
             Answer(const std::string& errorMessage, const uint16& errorCode, const json& jsonAnswer = json())
-                : errorMessage(errorMessage), errorCode(errorCode), resultObjet(jsonAnswer){}
+                : errorMessage(errorMessage), errorCode(errorCode), resultObject(jsonAnswer){}
             Answer() = delete;
             std::string errorMessage;
-            uint16 errorCode;
-            json resultObjet;
+            int16 errorCode;
+            json resultObject;
         };
         struct Api {
             static std::string ApiUrl;
@@ -28,7 +28,8 @@ namespace Lunia {
             template <typename T> inline void Append(const T& param) { Append(StringUtil::ToASCII(param)); }
             template <> inline void Append(const std::string& param) { m_Url.push_back(param); }
 
-            template<typename T> inline Api& operator<< (const T& param)
+            template<typename T> 
+            inline Api& operator<< (const T& param)
             {
                 Append(param);
                 return *this;
@@ -39,7 +40,7 @@ namespace Lunia {
             std::string BuildUrl() const;
 
             template<typename F>
-            void GetAsync(F callback)
+            inline void GetAsync(const F& callback)
             {
                 auto cb = cpr::GetCallback([callback](cpr::Response r)
                     {
@@ -48,23 +49,15 @@ namespace Lunia {
                         Answer answ("Whoops!", -1);
 
                         if (r.status_code == 200)
-                        {
                             try 
                             {
                                 json result = json::parse(r.text);
-
-                                if (result != NULL && result.is_object()) {
-
-                                    uint16 errorCode = result["errorCode"].get<uint16>();
-                                    std::string errorMessage = result["errorMessage"].get<std::string>();
-
-                                    answ = Answer(errorMessage, errorCode, result["data"].get<json>());
-                                }
+                                if (result != NULL && result.is_object())
+                                    answ = Answer( result["errorMessage"].get<std::string>(), result["errorCode"].get<int16>(), result["data"].get<json>() );
                             }
                             catch (...) {
                                 Logger::GetInstance().Error("Could not parse json!");
                             }
-                        }
 
                         callback(answ);
 

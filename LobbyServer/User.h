@@ -28,7 +28,12 @@ namespace Lunia {
 				}
 			} answer, temp;
 		};
-
+		enum class ErrorLevel {
+			Curious,			///< not that critical but it should not happen by normal client.
+			Critical,			///< critical, it's doubtful about a sort of hack.
+			Unexpected,			///< internal wrong situation
+			Pvp
+		};
 		class User : public Net::ClientTcp {
 		public:
 			User(uint32& userId, asio::ip::tcp::socket&& socket)
@@ -75,6 +80,10 @@ namespace Lunia {
 			const String& GetCharacterName() const;
 
 			bool SetSelectedCharacter(String& characterName);
+
+			bool IsCharacterSelected() const;
+
+			void Error(ErrorLevel error, const String& message); // error handling with different outcome based on severity.
 		public://Network Related;
 			void Send(Serializer::ISerializable& packet);
 
