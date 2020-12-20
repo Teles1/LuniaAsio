@@ -1,10 +1,10 @@
 #pragma once
 #include "Network/Tcp/Client.h"
-#include "LobbyProtocol/LobbyProtocol.h"
+#include "StageServerProtocol/StageServerProtocol.h"
 #include <vector>
 #include <Core/GameConstants.h>
 namespace Lunia {
-	namespace Lobby {
+	namespace StageServer {
 
 		struct Alive {
 
@@ -81,10 +81,6 @@ namespace Lunia {
 
 			bool SetSelectedCharacter(String& characterName);
 
-			void SetCharacterStateFlags(const XRated::CharacterStateFlags& flag);
-
-			XRated::CharacterStateFlags GetCharacterStateFlags() const { return m_CharacterStateFlags; }
-
 			bool IsCharacterSelected() const;
 
 			void Error(ErrorLevel error, const String& message); // error handling with different outcome based on severity.
@@ -118,8 +114,6 @@ namespace Lunia {
 			std::vector<XRated::LobbyPlayerInfo> m_Characters;
 
 			XRated::LobbyPlayerInfo m_selectedCharacter;
-
-			XRated::CharacterStateFlags m_CharacterStateFlags;
 		private:
 			std::mutex mtx;
 		};

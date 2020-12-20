@@ -159,10 +159,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PacketHandler.cpp" />
     <ClCompile Include="StageServer.cpp" />
+    <ClCompile Include="StageServerProtocol\StageServerProtocol.cpp" />
+    <ClCompile Include="User.cpp" />
+    <ClCompile Include="UserRegistry.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header.h" />
+    <ClInclude Include="fwPacketListener.h" />
+    <ClInclude Include="StageServer.h" />
+    <ClInclude Include="StageServerProtocol\StageServerProtocol.h" />
+    <ClInclude Include="User.h" />
+    <ClInclude Include="UserRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.json" />

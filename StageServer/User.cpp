@@ -2,9 +2,9 @@
 #include "fwPacketListener.h"
 #include "UserRegistry.h"
 #include "Network/NetStream.h"
-#include "./Network/Api/Api.h"
+#include <Network/CommonProtocol/Protocol.h>
 namespace Lunia {
-	namespace Lobby
+	namespace StageServer
 	{
 		void User::Send(Serializer::ISerializable& packet)
 		{
@@ -41,7 +41,7 @@ namespace Lunia {
 		}
 		bool User::SatisfyAlivePingWait()
 		{
-			Lobby::Protocol::Alive packet;
+			Lunia::Protocol::Alive packet;
 
 			this->m_waitingOnAlivePing = false;
 
@@ -114,7 +114,7 @@ namespace Lunia {
 		bool User::DeleteCharacter(String& characterName)
 		{
 			AutoLock _l(mtx);
-			for(CharactersIterator it = m_Characters.begin(); it != m_Characters.end(); it++)
+			for (CharactersIterator it = m_Characters.begin(); it != m_Characters.end(); it++)
 				if (it->CharacterName == characterName) {
 					m_Characters.erase(it);
 					return true;
@@ -136,19 +136,6 @@ namespace Lunia {
 					return true;
 				}
 			return false;
-		}
-
-		void User::SetCharacterStateFlags(const XRated::CharacterStateFlags& flag)
-		{
-			if (IsCharacterSelected()) {
-				m_CharacterStateFlags = m_selectedCharacter.StateFlags.EquipmentSet;
-				m_CharacterStateFlags = flag;
-				Net::Api api("UpdateCharacterStateFlags");
-				api << GetAccountName() << GetCharacterName() << (int)m_CharacterStateFlags;
-				if (api.RequestApi().errorCode != 0)
-					Logger::GetInstance().Warn(L"Could not update StateFlags for user = {0}, character = {1}", GetAccountName(), GetCharacterName());
-			}else
-				Logger::GetInstance().Warn(L"Account ={0} doesn't have a selected character and there is a call to update flags.", GetAccountName());
 		}
 
 		bool User::IsCharacterSelected() const
@@ -211,5 +198,5 @@ namespace Lunia {
 			this->value2 = value2;
 			this->value3 = value3;
 		}
-}
+	}
 }
