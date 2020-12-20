@@ -328,13 +328,17 @@ namespace Lunia {
 					api << user->GetAccountName();
 					api << packet.CharacterName;
 					auto result = api.RequestApi();
+					Lobby::Protocol::SelectCharacter sendPacket;
+					sendPacket.Result = static_cast<Lobby::Protocol::SelectCharacter::Results>(result.errorCode);
 					if (result.errorCode == 0 && user->IsAValidCharacterName(packet.CharacterName) && user->SetSelectedCharacter(packet.CharacterName)) {
-						Lobby::Protocol::SelectCharacter sendPacket;
-						sendPacket.Result = static_cast<Lobby::Protocol::SelectCharacter::Results>(0);
 						sendPacket.CharacterName = StringUtil::ToUnicode(result.resultObject["characterName"].get<std::string>());
+						sendPacket.CharacterStates = user->GetCharacterStateFlags();
+						sendPacket.CharacterStates.IsAdmin = 1;
+						//after checking if the user is admin or not we gonna update the flags.
+						user->SetCharacterStateFlags(sendPacket.CharacterStates);
+						//Family check if there is a family to be joined as a guest will come in here
 
-						// TODO : Fix it latter with achievement
-						sendPacket.CharacterStates = static_cast<XRated::CharacterStateFlags>(0);
+						//aswell as making sure to send the achievement server to the client in here.
 
 						user->Send(sendPacket);
 					}

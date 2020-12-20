@@ -5,12 +5,12 @@
       "LoggingLevel": 0
     },
     "LobbyServer": {
-      "ApiBase": "http://localhost/v4_3.1/lobby",
+      "ApiBase": "http://localhost:51542/Stage",
       "ServerAddress": {
         "ServerIp": "127.0.0.1",
-        "ServerPort": 15550
+        "ServerPort": 15551
       },
-      "ServerName": "TelesLobbyDev",
+      "ServerName": "StageServerDev",
       "PingTimeout": 30,
       "ShowPacket": true,
       "Capacity": 500,
