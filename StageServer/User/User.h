@@ -3,6 +3,7 @@
 #include <StageServer/StageServerProtocol/StageServerProtocol.h>
 #include <Core/GameConstants.h>
 #include <StageServer/Service.h>
+#include <Core/Logic/Logic.h>
 
 namespace Lunia {
 	namespace StageServer {
@@ -60,6 +61,11 @@ namespace Lunia {
 			StageStates				m_StageStateFlags;
 			XRated::StageLicense	m_LastStage;
 			XRated::StageLicense	m_CurrentStage;
+		public: //Auth
+			XRated::Logic::ILogic::PlayerInitialData	m_PlayerData;
+			uint32										m_CurrentStageHash;
+			XRated::CharacterStateFlags					m_CharacterStateFlags;
+
 		};
 		typedef std::shared_ptr<User> UserSharedPtr;
 		typedef std::weak_ptr<User> UserWeakPtr;

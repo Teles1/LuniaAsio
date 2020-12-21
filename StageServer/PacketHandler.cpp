@@ -3,6 +3,7 @@
 #include <Core/ErrorDefinition.h>
 #include <StageServer/User/UserRegistry.h>
 #include <Network/Api/Api.h>
+#include <StageServer/User/UserManager.h>
 
 namespace Lunia {
 	namespace StageServer {
@@ -49,6 +50,18 @@ namespace Lunia {
 
 										Net::Api api("Auth");
 										api << user->GetCharacterName();
+										api.GetAsync(
+											[&](const Net::Answer& result) {
+												if (result.errorCode == 0) {
+													if (!result.resultObject.is_null()) {
+														UserManager().Auth(user, result.resultObject);
+													}
+													else
+														Logger::GetInstance().Warn(L"Api responded succefuly but the data was empty Auth user = {0}", user->GetId());
+												}
+												else
+													Logger::GetInstance().Warn(L"Could not handle the call api to Auth user = {0}", user->GetId());
+											});
 									}
 									else
 										Logger::GetInstance().Warn("Result code is 0 but the data is empty.");

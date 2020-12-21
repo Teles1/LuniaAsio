@@ -25,6 +25,8 @@
     <ClCompile Include="Serializer\Binary\BinaryStream.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Resource\BinaryLoader.cpp" />
+    <ClCompile Include="Logic\Logic.cpp" />
+    <ClCompile Include="Logic\Sector\Sector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -105,6 +107,8 @@
     <ClInclude Include="Base.h" />
     <ClInclude Include="Resource\BinaryLoader.h" />
     <ClInclude Include="ErrorDefinition.h" />
+    <ClInclude Include="Logic\Logic.h" />
+    <ClInclude Include="Logic\Sector\Sector.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
