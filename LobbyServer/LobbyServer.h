@@ -1,8 +1,9 @@
 #pragma once
-#include "Network/Tcp/Server.h"
-#include "UserRegistry.h"
-#include "../Core/GameServer.h"
+#include <Network/Tcp/Server.h>
+#include <Core/GameServer.h>
 #include <Core/Utils/ConfigReader.h>
+#include <LobbyServer/User.h>
+
 namespace Lunia {
 	typedef GameServer< ScopeLobby > GameServerScope;
 	extern std::shared_ptr<GameServerScope> g_gameServer;

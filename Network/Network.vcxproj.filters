@@ -17,6 +17,7 @@
     <ClInclude Include="Api\Api.h" />
     <ClInclude Include="NetStream.h" />
     <ClInclude Include="CommonProtocol\Protocol.h" />
+    <ClInclude Include="UserRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

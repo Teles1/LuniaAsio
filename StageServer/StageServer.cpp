@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Network/Api/Api.h"
 #include "StageServer.h"
+#include <StageServer/Common.h>
 
 namespace Lunia {
 	namespace StageServer {
@@ -22,7 +23,7 @@ namespace Lunia {
 		}
 		void StageServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
 		{
-			Net::UserRegistry::GetInstance().MakeUser(socket)->HandleRead();
+			UserRegistry().MakeUser(socket)->HandleRead();
 			Logger::GetInstance().Info("Connection handled by StageServer");
 		}
 	}

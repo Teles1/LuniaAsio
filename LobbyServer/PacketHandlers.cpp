@@ -2,7 +2,7 @@
 #include "../Core/Utils/InitFunction.h"
 #include <Core/Utils/Math/Random.h>
 #include "./Network/Api/Api.h"
-#include "UserRegistry.h"
+#include <LobbyServer/Common.h>
 #include <Core/Utils/ThreadPool.h>
 #include <Core/Utils/ConfigReader.h>
 
@@ -48,7 +48,7 @@ namespace Lunia {
 
 						sendPacket.AccountId = std::move(packet.AccountId);
 
-						Net::UserRegistry::GetInstance().AuthenticateUser(user);
+						Lobby::UserRegistry().AuthenticateUser(user);
 						//send Character List
 						auto listCharacter = [&](int threadId, Lobby::UserSharedPtr& user) {
 							Net::Api api("ListCharacters");
@@ -123,7 +123,7 @@ namespace Lunia {
 						break;
 					}
 					default:
-						//Net::UserRegistry::GetInstance().RemoveUser(user);
+						//Lobby::UserRegistry().RemoveUser(user);
 						break;
 					}
 
@@ -220,7 +220,7 @@ namespace Lunia {
 					Lobby::Protocol::Terminate sendPacket;
 					sendPacket.Result = Lobby::Protocol::Terminate::Results::Ok;
 					user->Send(sendPacket);
-					Net::UserRegistry::GetInstance().RemoveUser(user);
+					Lobby::UserRegistry().RemoveUser(user);
 				});
 			fwPacketListener::GetInstance().Connect(
 				[](Lobby::UserSharedPtr& user, Lobby::Protocol::CreateCharacter& packet)
@@ -276,12 +276,12 @@ namespace Lunia {
 
 					if (!user->IsAccountAuthorized()) {
 						Logger::GetInstance().Error(L"Non authorized user trying to delete a AccountName: {0}, characterName: {1}", user->GetAccountName(), packet.Name);
-						Net::UserRegistry::GetInstance().RemoveUser(user);
+						Lobby::UserRegistry().RemoveUser(user);
 						return;
 					}
 					if (!user->IsAValidCharacterName(packet.Name)) {
 						Logger::GetInstance().Error(L"User is trying to delete a characterName that does not exist. AccountName: {0}, characterName: {1}", user->GetAccountName(), packet.Name);
-						Net::UserRegistry::GetInstance().RemoveUser(user);
+						Lobby::UserRegistry().RemoveUser(user);
 						return;
 					}
 					Net::Api api("DeleteCharacter");
@@ -293,7 +293,7 @@ namespace Lunia {
 						sendPacket.DeletedCharacter = packet.Name;
 						if (!user->DeleteCharacter(packet.Name)) {
 							Logger::GetInstance().Error(L"Could not Delete the specified characterName AccountName: {0}, characterName: {1}", user->GetAccountName(), packet.Name);
-							Net::UserRegistry::GetInstance().RemoveUser(user);
+							Lobby::UserRegistry().RemoveUser(user);
 						}
 					}
 					user->Send(sendPacket);

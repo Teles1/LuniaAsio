@@ -1,8 +1,8 @@
 #include "User.h"
 #include "fwPacketListener.h"
-#include "UserRegistry.h"
 #include "Network/NetStream.h"
 #include "./Network/Api/Api.h"
+#include <LobbyServer/Common.h>
 namespace Lunia {
 	namespace Lobby
 	{
@@ -32,7 +32,7 @@ namespace Lunia {
 
 			Net::StreamReader sReader(buffer);
 
-			auto userPtr = Net::UserRegistry::GetInstance().GetUserByUserId(this->GetId());
+			auto userPtr = UserRegistry().GetUserByUserId(this->GetId());
 
 			fwPacketListener::GetInstance().Invoke(userPtr, sReader.GetSerializedTypeHash(), sReader);
 
