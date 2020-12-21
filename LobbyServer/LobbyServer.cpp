@@ -33,8 +33,8 @@ int main(int argc, char* argv[])
 {
 	//setting log name to be used on the console.
 	Logger::GetInstance("LobbyServer");
-	Lunia::Config::GetInstance("Config.json");
-	Lunia::Net::UserRegistry::GetInstance(Lunia::Config::GetInstance().m_PingTimeout);
+	Lunia::Config::GetInstance("Config_Lobby.json");
+	Lunia::Lobby::UserRegistry(Lunia::Config::GetInstance().m_PingTimeout);
 	//Load Config
 	Lunia::Lobby::LobbyServer lobbyServer(Lunia::Config::GetInstance().m_ServerAddress.ServerIp.c_str(), Lunia::Config::GetInstance().m_ServerAddress.ServerPort);
 	lobbyServer.Run();

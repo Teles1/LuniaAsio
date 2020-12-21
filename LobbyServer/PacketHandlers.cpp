@@ -429,18 +429,20 @@ namespace Lunia {
 						Lobby::Protocol::Join sendPacket;
 						sendPacket.Result = Lobby::Protocol::Join::Results::NoResponse;
 						Net::Api api("JoinSquare");
-						api << user->GetCharacterName() << packet.SquareName;
-						api.GetAsync(
+						json j;
+						j["characterName"] = StringUtil::ToASCII(user->GetCharacterName());
+						j["squareName"] = StringUtil::ToASCII(packet.SquareName);
+						api.PostAsync(
 							[&](Net::Answer& answer) {
 								sendPacket.Result = static_cast<Lobby::Protocol::Join::Results>(answer.errorCode);
 								if (answer.errorCode == 0 && !answer.resultObject.is_null()) {
-									sendPacket.KeyCode = answer.resultObject["reservationSerial"].get<std::string>();
+									sendPacket.KeyCode = std::to_string(answer.resultObject["reservationSerial"].get<int>());
 									sendPacket.Port = answer.resultObject["serverPort"].get<uint16>();
 									sendPacket.ServerIp = answer.resultObject["serverAddress"].get<std::string>();
 								}
 								else
 									Logger::GetInstance().Info("User[{0}] JoinSquare call failed.", user->GetId());
-							});
+							}, j);
 
 						user->Send(sendPacket);
 					}

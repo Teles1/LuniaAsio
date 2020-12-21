@@ -28,8 +28,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Config.json" />
     <None Include="packages.config" />
+    <None Include="Config_Stage.json" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StageServer.h">

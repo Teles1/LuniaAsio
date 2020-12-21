@@ -10,8 +10,8 @@ namespace Lunia {
 			Net::Api api("AddServer");
 			api << Config::GetInstance().m_ServerAddress.ServerPort;
 			while (true) {
-				auto result = api.RequestApi();
-				if (result.errorCode == 0 || result.errorCode == 1) {
+				auto result = api.RequestPost(Config::GetInstance().m_SquareList);
+				if (result.errorCode == 0) {
 					Logger::GetInstance().Info("{0} Initialized on port {1}", Config::GetInstance().m_ServerName, Config::GetInstance().m_ServerAddress.ServerPort);
 					break;
 				}
@@ -32,8 +32,8 @@ int main(int argc, char* argv[])
 {
 	//setting log name to be used on the console.
 	Logger::GetInstance("StageServer");
-	Lunia::Config::GetInstance("Config.json");
-	Lunia::Net::UserRegistry::GetInstance(Lunia::Config::GetInstance().m_PingTimeout);
+	Lunia::Config::GetInstance("Config_Stage.json");
+	Lunia::StageServer::UserRegistry(Lunia::Config::GetInstance().m_PingTimeout);
 	//Load Config
 	Lunia::StageServer::StageServer stageServer(Lunia::Config::GetInstance().m_ServerAddress.ServerIp.c_str(), Lunia::Config::GetInstance().m_ServerAddress.ServerPort);
 	stageServer.Run();
