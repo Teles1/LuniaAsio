@@ -9,8 +9,8 @@ ClientNetworkIO::ClientNetworkIO(asio::ip::tcp::socket&& socket) :
 
 void ClientNetworkIO::MakeSocketAsyncReadSome()
 {
-	m_socket.async_read_some(asio::buffer(m_lastReceivedBuffer, READ_BUFFER_LENGTH),
-		std::bind(&ClientNetworkIO::SocketAsyncReadSome, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+	m_socket.async_read_some(asio::buffer(m_buffer, READ_BUFFER_LENGTH),
+		std::bind(&ClientNetworkIO::SocketAsyncReadSome, this/* shared_from_this() */, std::placeholders::_1, std::placeholders::_2));
 }
 
 void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t size)
@@ -18,49 +18,56 @@ void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t siz
 	if (!ec)
 	{
 
-		int bytesRead = 0;
+		/*
+		Header:
+			Size
+			NetStream
+			Hash
+		*/
 
-		uint8_t buffer[READ_BUFFER_LENGTH] = { 0 };                        /* TODO Should we copy it or just read from the original? */
-		memcpy(buffer, m_lastReceivedBuffer, sizeof(m_lastReceivedBuffer)); /* TODO Should we copy it or just read from the original? */
-
-		// uint8_t 
+		size_t bytesRead = 0;
 
 		while (bytesRead < size)
 		{
-
 			if (size - bytesRead >= PACKET_HEADER_SIZE) /* We are still reading the Header */
 			{
-				/*
-				Header:
-					Size
-					NetStream
-					Hash
-				*/
-
 				uint32_t encryptionKey = m_decryptor.GetKey(); /* TODO Should probably a reference */
 
 				if (m_hasEncryptionKey)
-					m_decryptor.Translate(buffer + bytesRead, PACKET_HEADER_SIZE);
+					m_decryptor.Translate(&m_buffer[bytesRead], PACKET_HEADER_SIZE);
 
-				unsigned short length = (unsigned short)*buffer + bytesRead;
+				unsigned short * length = reinterpret_cast<unsigned short *>(&m_buffer[bytesRead]);
 
-				uint16_t isNetStream = ((uint16_t)(*buffer + bytesRead + 2)) == (uint16_t)0x55E0; /* hash::NetStream */
+				unsigned short * maybeNetStream = reinterpret_cast<unsigned short*>(&m_buffer[bytesRead + 2]);
+
+				bool isNetStream = *maybeNetStream == NETSTREAM_HASHED;
 
 				if (isNetStream)
 				{
+					unsigned short lengthNoHeader = *length - PACKET_HEADER_SIZE;
 
-					if (length - PACKET_HEADER_SIZE > size)
+					if (lengthNoHeader > size)
 					{
 						/* Dunno, packet is fucked */
 					}
 					else
 					{
+						char * bufferNoHeader = &m_buffer[bytesRead + PACKET_HEADER_SIZE];
+
 						if (m_hasEncryptionKey)
-							m_decryptor.Translate(&buffer[bytesRead + PACKET_HEADER_SIZE], length - PACKET_HEADER_SIZE);
+							m_decryptor.Translate(bufferNoHeader, lengthNoHeader);
 
-						OnSocketReadPacket(&buffer[bytesRead], length);
+						// unsigned short * packetNameHashed = reinterpret_cast<unsigned short*>(bufferNoHeader);
 
-						bytesRead += length;
+						// std::cout << "packetNameHashed " << *packetNameHashed << std::endl;
+
+						/*
+							WARN packetNameHashed might be +1 for some reason ?! 
+						*/
+
+						bytesRead += *length;
+
+						OnSocketReadPacket(bufferNoHeader, lengthNoHeader); 
 					}
 				}
 				else
@@ -73,9 +80,16 @@ void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t siz
 				break;
 			}
 		}
+
+		MakeSocketAsyncReadSome();
 	}
 	else
 	{
 		std::cout << "ErroCode " << ec << std::endl;
 	}
+};
+
+void ClientNetworkIO::SocketAsyncWriteSome()
+{
+
 };

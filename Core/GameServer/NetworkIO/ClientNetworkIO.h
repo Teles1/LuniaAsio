@@ -8,18 +8,21 @@ struct ClientNetworkIO : std::enable_shared_from_this<ClientNetworkIO> /* TODO I
 {
 	static const uint16_t READ_BUFFER_LENGTH = 2 << 12;
 	static const uint16_t PACKET_HEADER_SIZE = sizeof(uint16_t) + sizeof(unsigned short);
+	static const uint16_t NETSTREAM_HASHED   = (uint16_t) 0x55E0;
 
 	ClientNetworkIO(asio::ip::tcp::socket&& socket);
 
 	~ClientNetworkIO() { };
 
-	void Drop() { } ;
-
+private:
 	void MakeSocketAsyncReadSome();
 
 	void SocketAsyncReadSome(const asio::error_code& ec, size_t size);
 
-	void SocketAsyncWriteSome() { } ;
+	void SocketAsyncWriteSome();
+
+public:
+	void Drop() { };
 
 	void SetEncryptionKey(uint32_t& key) { };
 
@@ -34,7 +37,7 @@ struct ClientNetworkIO : std::enable_shared_from_this<ClientNetworkIO> /* TODO I
 	};
 
 public:
-	fwEvent<uint8_t*, unsigned short&> OnSocketReadPacket;
+	fwEvent<char*, unsigned short&> OnSocketReadPacket;
 
 private:
 
@@ -42,7 +45,7 @@ private:
 
 	Lunia::Net::Crypt::Box m_decryptor; /* TODO Should probably be a singleton */
 
-	uint8_t m_lastReceivedBuffer[READ_BUFFER_LENGTH] = { };
+	char m_buffer[READ_BUFFER_LENGTH];
 
 	bool m_hasEncryptionKey = false;
 };

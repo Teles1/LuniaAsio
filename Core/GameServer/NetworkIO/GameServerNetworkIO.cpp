@@ -5,9 +5,6 @@ GameServerNetworkIO::GameServerNetworkIO(const char* addr, uint16_t port_num) :
 	, m_socket(m_ioService)
 {
 	MakeAcceptorAsyncAcceptHandler();
-
-	std::cout << "addr " << addr << std::endl;
-	std::cout << "port_num " << port_num << std::endl;
 }
 
 void GameServerNetworkIO::RunNetworkIOService()

@@ -55,8 +55,6 @@ static utils::InitFunction init([]()
 	});
 	*/
 
-	g_gameServer->Proxy->Say();
-
 	g_gameServer->Proxy->GetClientRegistry().ForAllClients([]()
 	{
 		std::cout << "Every player got that" << std::endl;
