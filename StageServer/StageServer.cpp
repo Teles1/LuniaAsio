@@ -2,6 +2,7 @@
 #include "Network/Api/Api.h"
 #include "StageServer.h"
 #include <StageServer/User/UserRegistry.h>
+#include <StageServer/PacketHandler.h>
 
 namespace Lunia {
 	namespace StageServer {
@@ -37,6 +38,7 @@ int main(int argc, char* argv[])
 	Logger::GetInstance("StageServer");
 	Lunia::Config::GetInstance("Config_Stage.json");
 	Lunia::StageServer::UserRegistry::GetInstance(Lunia::Config::GetInstance().m_PingTimeout);
+	Lunia::StageServer::InitHandlers();
 	//Load Config
 	Lunia::StageServer::StageServer stageServer(Lunia::Config::GetInstance().m_ServerAddress.ServerIp.c_str(), Lunia::Config::GetInstance().m_ServerAddress.ServerPort);
 	stageServer.Run();

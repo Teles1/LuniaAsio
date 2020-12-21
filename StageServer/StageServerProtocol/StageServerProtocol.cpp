@@ -48,8 +48,9 @@ namespace Lunia {
             }
             void Stage::Deserialize(Serializer::IStreamReader& in) {
                 in.Begin(TypeName);
-                in.Read(L"charactername", charactername);
-                in.Read(L"targetStage", targetStage);
+                in.Read(L"secukey", secukey);
+                in.Read(L"Version", Version);
+                in.Read(L"Locale", Locale);
             }
 		}
 	}

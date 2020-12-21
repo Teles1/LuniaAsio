@@ -50,5 +50,8 @@
     <ClInclude Include="Service.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="PacketHandler.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

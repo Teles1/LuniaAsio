@@ -171,6 +171,7 @@
     <ClInclude Include="StageServer.h" />
     <ClInclude Include="StageServerProtocol\StageServerProtocol.h" />
     <ClInclude Include="Service.h" />
+    <ClInclude Include="PacketHandler.h" />
     <ClInclude Include="User\User.h" />
     <ClInclude Include="User\UserRegistry.h" />
   </ItemGroup>
