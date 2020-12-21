@@ -3,7 +3,6 @@
 #include "Network/Api/Api.h"
 
 namespace Lunia {
-	std::shared_ptr<GameServerScope> g_gameServer = std::make_shared<GameServerScope>();
 	namespace Lobby {
 		LobbyServer::LobbyServer(const char* ip, uint16 port) : ServerTcp(ip, port)
 		{
@@ -41,15 +40,29 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-#include "../Core/Utils/InitFunction.h"
-static utils::InitFunction InitFunction([]()
+#include <Core/GameServer.h>
+
+static utils::InitFunction init([]()
 {
-	if (Lunia::g_gameServer->IsScope<ScopeLobby>())
+	GameServer<ServerProxyLobby>* g_gameServer = new GameServer<ServerProxyLobby>();
+
+	g_gameServer->OnAcceptorCreated.Connect([]()
 	{
-		ScopeLobby lobbyGameServer = Lunia::g_gameServer->GetScope<ScopeLobby>();
+		std::cout << "Acceptor Created" << std::endl;
+	});
 
-		//lobbyGameServer.A();
+	g_gameServer->Proxy->Say();
 
-		std::cout << "g_gameServer : IsScope<ScopeStage> : " << (Lunia::g_gameServer->IsScope<ScopeStage>() == 1 ? "true" : "false") << std::endl;
-	}
+	g_gameServer->Proxy->GetClientRegistry().ForAllClients([]()
+	{
+		std::cout << "Every player got that" << std::endl;
+	});
+
+	/*
+	g_gameServer->PacketListener.Connect([]()
+	{
+
+	});
+	*/
+
 });

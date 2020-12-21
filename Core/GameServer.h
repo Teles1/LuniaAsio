@@ -1,72 +1,140 @@
 #pragma once
 #include "fwEvent.h"
 #include <iostream>
-template<typename TScope>
+#include "Utils/InitFunction.h"
+
+#include <LobbyServer/fwPacketListener.h>
+
+template<typename TServerProxy>
 class GameServer
 {
 public:
 	GameServer() 
 	{
-		OnGameServerAcceptorCreated();
+		OnAcceptorCreated();
 	};
 
 	~GameServer() { };
 
-	template<typename T>
-	inline TScope& GetScope()
-	{
-		static_assert(std::is_same<T, TScope>::value, "Couldn't access GameServer Scope was it was passed the wrong Scope");
+public:
 
-		return scope;
-	}
+	TServerProxy* Proxy;
 
-	template<typename T>
-	inline bool IsScope()
-	{
-		return std::is_same<T, TScope>::value;
-	}
+	fwEvent<> OnAcceptorCreated;
+
+	fwEvent<> OnSocketConnectionCreated;
+
+	fwEvent<> OnSocketConnectionDropped;
+
+	Lunia::fwPacketListener PacketListener;
 
 public:
-	fwEvent<> OnGameServerAcceptorCreated;
+
 
 private:
-	TScope scope;
+
+	/*
+		make fwPacketListener use the () operator instead of ::Invoke
+	*/
+};
+
+struct Client // : std::enable_shared_from_this
+{
+	Client() { };
+
+	~Client() { };
+};
+
+struct ClientProxyLobby : Client
+{
 
 };
 
-struct ScopedServer
+struct ClientProxyStage : Client
 {
-public:
-	ScopedServer() { };
 
-	~ScopedServer() { };
-
-	//uint16 users = 0;
 };
 
-struct ScopeLobby : public ScopedServer
+struct ClientProxyPvp : Client
 {
+
+};
+
+template<typename TClientScope>
+struct ClientRegistry
+{
+private:
+	typedef std::shared_ptr<TClientScope> ClientSharedPtr;
+	typedef std::weak_ptr  <TClientScope> ClientWeakPtr;
+
 public:
-	void A()
+	ClientRegistry() { };
+
+	~ClientRegistry() { };
+
+public:
+
+	fwEvent<ClientSharedPtr&> OnClientCreated;
+
+	fwEvent<ClientSharedPtr&> OnClientDropped;
+
+public:
+
+	template<typename F>
+	void ForAllClients(F f)
 	{
-		std::cout << "ScopeLobby A" << std::endl;
+
+	}
+
+private:
+
+	std::vector<ClientSharedPtr> m_clients;
+};
+
+template<typename TClientScope>
+struct ServerProxy // : std::enable_shared_from_this
+{
+public:
+	ServerProxy() { };
+
+	~ServerProxy() { };
+
+public:
+
+	ClientRegistry<TClientScope>& GetClientRegistry()
+	{
+		// lock
+		return m_clientRegistry;
+		// unlock
+	}
+
+private:
+	ClientRegistry<TClientScope> m_clientRegistry;
+};
+
+struct ServerProxyLobby : ServerProxy<ClientProxyLobby>
+{
+public:
+	void Say()
+	{
+		std::cout << "ServerProxyLobby :: Say" << std::endl;
 	};
 };
 
-struct ScopeStage : public ScopedServer
+struct ServerProxyStage : ServerProxy<ClientProxyStage>
 {
 public:
-	void A()
+	void Say()
 	{
-		std::cout << "ScopeStage B" << std::endl;
+		std::cout << "ServerProxyStage :: Say" << std::endl;
 	};
 };
 
-struct ScopePvp : public ScopedServer
+struct ServerProxyPvp : ServerProxy<ClientProxyPvp>
 {
 public:
-	void A()
+	void Say()
 	{
-		std::cout << "ScopePvp C" << std::endl;
+		std::cout << "ServerProxyPvp :: Say" << std::endl;
 	};
 };
