@@ -12,3 +12,5 @@ namespace Lunia {
 		};
 	}
 }
+
+inline GameServer<ServerProxyLobby>* g_gameServer = new GameServer<ServerProxyLobby>("127.0.0.1", 15550);

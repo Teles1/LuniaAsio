@@ -44,12 +44,12 @@ int main(int argc, char* argv[])
 
 static utils::InitFunction init([]()
 {
-	GameServer<ServerProxyLobby>* g_gameServer = new GameServer<ServerProxyLobby>();
-
+	/*
 	g_gameServer->OnAcceptorCreated.Connect([]()
 	{
 		std::cout << "Acceptor Created" << std::endl;
 	});
+	*/
 
 	g_gameServer->Proxy->Say();
 
@@ -59,7 +59,7 @@ static utils::InitFunction init([]()
 	});
 
 	/*
-	g_gameServer->PacketListener.Connect([]()
+	g_gameServer->Proxy->PacketListener.Connect([]()
 	{
 
 	});
