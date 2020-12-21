@@ -1,7 +1,6 @@
 #pragma once
 #include "Network/Tcp/Server.h"
 #include "UserRegistry.h"
-#include "../Core/GameServer.h"
 #include <Core/Utils/ConfigReader.h>
 namespace Lunia {
 	namespace Lobby {
@@ -12,5 +11,8 @@ namespace Lunia {
 		};
 	}
 }
+
+#include <Core/GameServer/GameServer.h>
+#include <Core/GameServer/ServerProxy/ServerProxyLobby.h>
 
 inline GameServer<ServerProxyLobby>* g_gameServer = new GameServer<ServerProxyLobby>("127.0.0.1", 15550);

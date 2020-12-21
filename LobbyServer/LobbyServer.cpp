@@ -2,6 +2,9 @@
 #include "LobbyServer.h"
 #include "Network/Api/Api.h"
 
+#include <Core/Utils/InitFunction.h>
+#include <Core/GameServer/GameServer.h>
+
 namespace Lunia {
 	namespace Lobby {
 		LobbyServer::LobbyServer(const char* ip, uint16 port) : ServerTcp(ip, port)
@@ -35,12 +38,13 @@ int main(int argc, char* argv[])
 	Lunia::Config::GetInstance("Config.json");
 	Lunia::Net::UserRegistry::GetInstance(Lunia::Config::GetInstance().m_PingTimeout);
 	//Load Config
-	Lunia::Lobby::LobbyServer lobbyServer(Lunia::Config::GetInstance().m_ServerAddress.ServerIp.c_str(), Lunia::Config::GetInstance().m_ServerAddress.ServerPort);
-	lobbyServer.Run();
+	// Lunia::Lobby::LobbyServer lobbyServer(Lunia::Config::GetInstance().m_ServerAddress.ServerIp.c_str(), Lunia::Config::GetInstance().m_ServerAddress.ServerPort);
+	//lobbyServer.Run();
+
+	g_gameServer->RunNetworkIOService(); /* WARN Will lock the thread for as long as it runs */
+
 	return 0;
 }
-
-#include <Core/GameServer.h>
 
 static utils::InitFunction init([]()
 {
