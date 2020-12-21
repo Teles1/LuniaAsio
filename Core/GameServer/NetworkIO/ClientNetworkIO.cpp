@@ -46,7 +46,7 @@ void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t siz
 				{
 					unsigned short lengthNoHeader = *length - PACKET_HEADER_SIZE;
 
-					if (lengthNoHeader > size)
+					if (lengthNoHeader > size - PACKET_HEADER_SIZE)
 					{
 						/* Dunno, packet is fucked */
 					}
