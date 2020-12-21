@@ -104,6 +104,7 @@
     <ClInclude Include="CriticalSection.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="Resource\BinaryLoader.h" />
+    <ClInclude Include="ErrorDefinition.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -163,14 +163,16 @@
     <ClCompile Include="PacketHandler.cpp" />
     <ClCompile Include="StageServer.cpp" />
     <ClCompile Include="StageServerProtocol\StageServerProtocol.cpp" />
-    <ClCompile Include="User.cpp" />
+    <ClCompile Include="User\User.cpp" />
+    <ClCompile Include="User\UserRegistry.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common.h" />
     <ClInclude Include="fwPacketListener.h" />
     <ClInclude Include="StageServer.h" />
     <ClInclude Include="StageServerProtocol\StageServerProtocol.h" />
-    <ClInclude Include="User.h" />
+    <ClInclude Include="Service.h" />
+    <ClInclude Include="User\User.h" />
+    <ClInclude Include="User\UserRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config_Stage.json">

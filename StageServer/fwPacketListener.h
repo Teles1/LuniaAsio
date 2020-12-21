@@ -1,5 +1,5 @@
 #pragma once
-#include "User.h"
+#include <StageServer/User/User.h>
 #include "Network/NetStream.h"
 
 namespace Lunia {
@@ -63,7 +63,7 @@ namespace Lunia {
 
                     f(user, packet.value);
                 };
-
+                Logger::GetInstance().Info("TypeHash {0:#04x}", packet.value.TypeHash);
                 m_callbacks[packet.value.TypeHash] = lambda;
             }
 

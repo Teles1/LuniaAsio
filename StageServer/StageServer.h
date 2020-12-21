@@ -1,7 +1,7 @@
 #pragma once
 #include "Network/Tcp/Server.h"
 #include <Core/Utils/ConfigReader.h>
-#include <StageServer/User.h>
+#include <StageServer/User/User.h>
 namespace Lunia {
 	namespace StageServer {
 		struct StageServer : public Net::ServerTcp<User> {

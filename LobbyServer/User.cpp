@@ -1,3 +1,4 @@
+#include "..\StageServer\User\User.h"
 #include "User.h"
 #include "fwPacketListener.h"
 #include "Network/NetStream.h"

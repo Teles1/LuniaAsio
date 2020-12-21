@@ -14,13 +14,16 @@
     <ClCompile Include="StageServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="User.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StageServerProtocol\StageServerProtocol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PacketHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\UserRegistry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\User.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,16 +35,19 @@
     <ClInclude Include="StageServer.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="User.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="StageServerProtocol\StageServerProtocol.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="fwPacketListener.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Common.h">
+    <ClInclude Include="User\UserRegistry.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\User.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Service.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
