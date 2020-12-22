@@ -172,8 +172,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
-    <ClInclude Include="GameServer\ClientProxy\ClientProxyLobby.h" />
-    <ClInclude Include="GameServer\Client.h" />
+    <ClInclude Include="GameServer\Proxy\ClientProxy.h" />
     <ClInclude Include="GameServer\NetworkIO.h" />
     <ClInclude Include="GameServer\NetworkIO\ClientNetworkIO.h" />
     <ClInclude Include="GameServer\ClientRegistry.h" />
@@ -225,8 +224,7 @@
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader2.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamWriter2.h" />
-    <ClInclude Include="GameServer\ServerProxy.h" />
-    <ClInclude Include="GameServer\ServerProxy\ServerProxyLobby.h" />
+    <ClInclude Include="GameServer\Proxy\ServerProxy.h" />
     <ClInclude Include="ServiceHelper\LobbyService.h" />
     <ClInclude Include="Utils\ConfigReader.h" />
     <ClInclude Include="Utils\Math\Color.h" />
@@ -259,8 +257,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
-    <ClCompile Include="GameServer\ClientProxy\ClientProxyLobby.cpp" />
-    <ClCompile Include="GameServer\Client.cpp" />
+    <ClCompile Include="GameServer\Proxy\ClientProxy.cpp" />
     <ClCompile Include="GameServer\NetworkIO\ClientNetworkIO.cpp" />
     <ClCompile Include="GameServer\ClientRegistry.cpp" />
     <ClCompile Include="FileIO\Directory.cpp" />
@@ -278,8 +275,7 @@
     <ClCompile Include="Serializer\Binary\XmlSerializer.cpp" />
     <ClCompile Include="Serializer\Binary\XmlStream.cpp" />
     <ClCompile Include="Serializer\Serializer.cpp" />
-    <ClCompile Include="GameServer\ServerProxy.cpp" />
-    <ClCompile Include="GameServer\ServerProxy\ServerProxyLobby.cpp" />
+    <ClCompile Include="GameServer\Proxy\ServerProxy.cpp" />
     <ClCompile Include="ServiceHelper\LobbyService.cpp" />
     <ClCompile Include="Utils\ConfigReader.cpp" />
     <ClCompile Include="Utils\Math\Color.cpp" />

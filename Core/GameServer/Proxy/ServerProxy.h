@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ClientRegistry.h"
+#include "../ClientRegistry.h"
 
 #include <LobbyServer/fwPacketListener.h>
 

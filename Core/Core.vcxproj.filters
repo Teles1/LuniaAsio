@@ -29,10 +29,8 @@
     <ClCompile Include="GameServer\NetworkIO\GameServerNetworkIO.cpp" />
     <ClCompile Include="GameServer\NetworkIO\ClientNetworkIO.cpp" />
     <ClCompile Include="GameServer\ClientRegistry.cpp" />
-    <ClCompile Include="GameServer\Client.cpp" />
-    <ClCompile Include="GameServer\ClientProxy\ClientProxyLobby.cpp" />
-    <ClCompile Include="GameServer\ServerProxy.cpp" />
-    <ClCompile Include="GameServer\ServerProxy\ServerProxyLobby.cpp" />
+    <ClCompile Include="GameServer\Proxy\ServerProxy.cpp" />
+    <ClCompile Include="GameServer\Proxy\ClientProxy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -115,11 +113,9 @@
     <ClInclude Include="GameServer\NetworkIO\GameServerNetworkIO.h" />
     <ClInclude Include="GameServer\NetworkIO\ClientNetworkIO.h" />
     <ClInclude Include="GameServer\ClientRegistry.h" />
-    <ClInclude Include="GameServer\Client.h" />
-    <ClInclude Include="GameServer\ClientProxy\ClientProxyLobby.h" />
-    <ClInclude Include="GameServer\ServerProxy.h" />
-    <ClInclude Include="GameServer\ServerProxy\ServerProxyLobby.h" />
     <ClInclude Include="GameServer\NetworkIO.h" />
+    <ClInclude Include="GameServer\Proxy\ServerProxy.h" />
+    <ClInclude Include="GameServer\Proxy\ClientProxy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

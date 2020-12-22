@@ -13,6 +13,6 @@ namespace Lunia {
 }
 
 #include <Core/GameServer/GameServer.h>
-#include <Core/GameServer/ServerProxy/ServerProxyLobby.h>
+#include "GameServer/ServerProxy/ServerProxyLobby.h"
 
 inline GameServer<ServerProxyLobby>* g_gameServer = new GameServer<ServerProxyLobby>("127.0.0.1", 15550);
