@@ -23,7 +23,7 @@ public:
 			{
 				Lunia::Net::StreamReader streamReader(buffer);
 					
-				unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[0]);
+				unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[4]);
 
 				PacketHandler->Invoke(client, (uint16_t) *packetNameHashed, streamReader);
 			});

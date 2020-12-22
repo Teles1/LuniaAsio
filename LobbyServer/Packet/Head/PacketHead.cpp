@@ -21,8 +21,5 @@ static utils::InitFunction InitFunction([]()
 	g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, PacketHeadFromClient& packet)
 	{
 		std::cout << "Handling `Head` packet, from client" << std::endl;
-
-		// std::cout << client << std::endl;
-		// std::cout << packet.ProtocolVersion << std::endl;
 	});
 });

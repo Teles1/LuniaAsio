@@ -125,6 +125,7 @@ namespace Lunia {
                 working += (size * sizeof(typename T::value_type));
             }
 
+        public:
             const void* buffer;
             char* working;
             const void* endOfBuffer;

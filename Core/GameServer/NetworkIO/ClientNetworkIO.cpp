@@ -44,7 +44,7 @@ void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t siz
 
 				if (isNetStream)
 				{
-					unsigned short lengthNoHeader = *length - PACKET_HEADER_SIZE;
+					unsigned short lengthNoHeader = *length /* - PACKET_HEADER_SIZE */;
 
 					if (lengthNoHeader > size /* - PACKET_HEADER_SIZE */)
 					{
@@ -52,7 +52,7 @@ void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t siz
 					}
 					else
 					{
-						char * bufferNoHeader = &m_buffer[bytesRead + PACKET_HEADER_SIZE];
+						char * bufferNoHeader = &m_buffer[bytesRead /* + PACKET_HEADER_SIZE */];
 
 						if (m_hasEncryptionKey)
 							m_decryptor.Translate(bufferNoHeader, lengthNoHeader);

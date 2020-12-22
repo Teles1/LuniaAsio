@@ -59,25 +59,21 @@ public:
         auto lambda = [f](TClientProxySharedPtr& client, Lunia::Net::StreamReader& streamReader)
         {
             /*
-            streamReader.working += 2; // FIXME! Adds 2 bytes so we can send packetNameHashed to fucknowhere 
-
-            for (int i = 0; i < streamReader.size; i++)
-            {
-                printf("%02hhX ", ((unsigned char*)streamReader.buffer)[i]);
-
-                if (i != 0 && i % 6 == 0)
-                   std::cout << std::endl;
-            }
-            std::cout << std::endl;
+                FIXME! These streamReader members shouldnt be exposed!
             */
+            streamReader.working = (char*)streamReader.buffer; 
+            streamReader.working += 4;
 
             PacketFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
 
-            // packet.value.Deserialize(streamReader);
+            packet.value.Deserialize(streamReader);
 
             f(client, packet.value);
         };
 
+        /*
+            FIXME! We should need to create a new packet here, we should instead use type::asHash, as its static.
+        */
         m_callbacks[packet.value.asHash] = lambda;
     }
 
