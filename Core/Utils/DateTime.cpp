@@ -426,6 +426,10 @@ namespace Lunia {
 		Logger::GetInstance().Error(" The number of numeric strings is invalid.");
 		return false;
 	}
+	bool DateTime::Parse(const std::string& timeString)
+	{
+		return Parse(StringUtil::ToUnicode(timeString));
+	}
 	std::wstring DateTime::ToString(Format::type format) const
 	{
 		std::wstring data = L"";

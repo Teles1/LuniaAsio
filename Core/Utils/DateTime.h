@@ -161,6 +161,7 @@ namespace Lunia {
 		DateTime(const Time& rhs);
 		DateTime(const Date& lhs, const Time& rhs);
 		bool Parse(const String& timeString);
+		bool Parse(const std::string& timeString);
 
 		std::wstring ToString(Format::type format = Format::Default) const;
 		uint16 Get(const Unit::type& unit, bool checkValid = true) const;

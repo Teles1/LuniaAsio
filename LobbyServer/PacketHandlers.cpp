@@ -79,7 +79,7 @@ namespace Lunia {
 								
 								{
 									if(!result.resultObject["characters"].is_null())
-										for (auto y : result.resultObject["characters"]) {
+										for (auto& y : result.resultObject["characters"]) {
 											user->m_Characters.push_back(XRated::LobbyPlayerInfo());
 											XRated::LobbyPlayerInfo& info = user->m_Characters.back();
 											info.CharacterName = StringUtil::ToUnicode(y["characterName"].get<std::string>());
@@ -96,11 +96,11 @@ namespace Lunia {
 											info.RebirthCount = y["characterRebirth"]["rebirthCount"].get<uint16>();
 											info.StoredLevel = y["characterRebirth"]["storedLevel"].get<uint16>();
 
-											for (auto y : y["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
+											for (auto& y : y["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
 												info.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
 											}
 
-											for (auto y : y["items"].get<json>()) {
+											for (auto& y : y["items"].get<json>()) {
 												XRated::ItemSlot slot;
 												slot.Position.Bag = y["bagNumber"].get<uint8>(); // equipment slots at
 												slot.Position.Position = y["positionNumber"].get<uint8>();
@@ -251,11 +251,11 @@ namespace Lunia {
 						sendPacket.CharacterInfo.RebirthCount = result.resultObject["characterRebirth"]["rebirthCount"].get<uint16>();
 						sendPacket.CharacterInfo.StoredLevel = result.resultObject["characterRebirth"]["storedLevel"].get<uint16>();
 						
-						for (auto y : result.resultObject["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
+						for (auto& y : result.resultObject["characterLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
 							sendPacket.CharacterInfo.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
 						}
 
-						for (auto y : result.resultObject["items"].get<json>()) {
+						for (auto& y : result.resultObject["items"].get<json>()) {
 							XRated::ItemSlot slot;
 							slot.Position.Bag = y["bagNumber"].get<uint8>(); // equipment slots at
 							slot.Position.Position = y["positionNumber"].get<uint8>();
