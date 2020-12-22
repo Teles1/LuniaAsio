@@ -2,11 +2,15 @@
 
 #include "../NetworkIO/ClientNetworkIO.h"
 
+#include "../../Serializer/Serializer.h"
+
 struct ClientProxy : public ClientNetworkIO //, TODO? std::enable_shared_from_this<Client>
 {
 	ClientProxy(asio::ip::tcp::socket&& socket);
 
 	~ClientProxy() { };
+
+	void MakeSocketAsyncWriteSerializable(Lunia::Serializer::ISerializable& packet);
 
 	uint32_t GetId() const
 	{
@@ -38,7 +42,7 @@ public:
 
 private:
 
-	uint32_t m_id;
+	uint32_t m_id = 0;
 
 	bool m_waitingOnAlivePing = false;
 

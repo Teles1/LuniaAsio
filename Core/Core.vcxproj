@@ -172,6 +172,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
+    <ClInclude Include="GameServer\fwPacketHandler.h" />
     <ClInclude Include="GameServer\Proxy\ClientProxy.h" />
     <ClInclude Include="GameServer\NetworkIO.h" />
     <ClInclude Include="GameServer\NetworkIO\ClientNetworkIO.h" />

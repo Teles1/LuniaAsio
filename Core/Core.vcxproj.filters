@@ -116,6 +116,7 @@
     <ClInclude Include="GameServer\NetworkIO.h" />
     <ClInclude Include="GameServer\Proxy\ServerProxy.h" />
     <ClInclude Include="GameServer\Proxy\ClientProxy.h" />
+    <ClInclude Include="GameServer\fwPacketHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

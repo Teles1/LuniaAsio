@@ -46,7 +46,7 @@ void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t siz
 				{
 					unsigned short lengthNoHeader = *length - PACKET_HEADER_SIZE;
 
-					if (lengthNoHeader > size - PACKET_HEADER_SIZE)
+					if (lengthNoHeader > size /* - PACKET_HEADER_SIZE */)
 					{
 						/* Dunno, packet is fucked */
 					}
@@ -57,15 +57,26 @@ void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t siz
 						if (m_hasEncryptionKey)
 							m_decryptor.Translate(bufferNoHeader, lengthNoHeader);
 
-						// unsigned short * packetNameHashed = reinterpret_cast<unsigned short*>(bufferNoHeader);
-
-						// std::cout << "packetNameHashed " << *packetNameHashed << std::endl;
-
 						/*
 							WARN packetNameHashed might be +1 for some reason ?! 
 						*/
 
 						bytesRead += *length;
+
+						/*
+							for (int i = 0; i < lengthNoHeader; i++)
+							{
+								//std::cout << bufferNoHeader[i] << std::endl;
+
+								printf("%02hhX ", bufferNoHeader[i]);
+
+								if (i != 0 && i % 6 == 0)
+									std::cout << std::endl;
+							}
+
+							std::cout << " " << std::endl;
+							std::cout << lengthNoHeader << std::endl;
+						*/
 
 						OnSocketReadPacket(bufferNoHeader, lengthNoHeader); 
 					}
@@ -89,7 +100,13 @@ void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t siz
 	}
 };
 
-void ClientNetworkIO::SocketAsyncWriteSome()
+void ClientNetworkIO::MakeSocketAsyncWriteSome(char * buffer, size_t size)
+{
+	this->m_socket.async_send(asio::buffer(buffer, size),
+		std::bind(&ClientNetworkIO::SocketAsyncWriteSome, this/* shared_from_this() */, std::placeholders::_1, std::placeholders::_2));
+};
+
+void ClientNetworkIO::SocketAsyncWriteSome(const asio::error_code& ec, size_t size)
 {
 
 };

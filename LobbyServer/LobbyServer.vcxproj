@@ -179,6 +179,8 @@
     <ClCompile Include="GameServer\ClientProxy\ClientProxyLobby.cpp" />
     <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp" />
     <ClCompile Include="LobbyServer.cpp" />
+    <ClCompile Include="Packet\Head\PacketHead.cpp" />
+    <ClCompile Include="Packet\PacketBase.cpp" />
     <ClCompile Include="PacketHandlers.cpp" />
     <ClCompile Include="GameServer\ServerProxy\ServerProxyLobby.cpp" />
     <ClCompile Include="User.cpp" />
@@ -198,6 +200,8 @@
     <ClInclude Include="LobbyServer.h" />
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h" />
     <ClInclude Include="GameServer\ServerProxy\ServerProxyLobby.h" />
+    <ClInclude Include="Packet\Head\PacketHead.h" />
+    <ClInclude Include="Packet\PacketBase.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>

@@ -2,27 +2,30 @@
 
 #include "../ClientRegistry.h"
 
-#include <LobbyServer/fwPacketListener.h>
+#include <Core/GameServer/fwPacketHandler.h>
 
 #include <iostream>
 
-template<typename TClientScope>
+template<typename TClientProxy>
 struct ServerProxy // : TODO? std::enable_shared_from_this<ServerProxy>
 {
+
+	typedef std::shared_ptr<TClientProxy> TClientProxySharedPtr;
+
 public:
 	ServerProxy()
 	{
-		m_clientRegistry.OnClientCreated.Connect([& /* TODO Pass PacketListener ref */ ](std::shared_ptr<TClientScope>& client)
+		std::cout << "ServerProxy created" << std::endl;
+
+		m_clientRegistry.OnClientCreated.Connect([PacketHandler = &PacketHandler](TClientProxySharedPtr& client)
 		{
-			client->OnSocketReadPacket.Connect([client /* TODO Pass PacketListener ref */ ](char* buffer, unsigned short& len)
+			client->OnSocketReadPacket.Connect([&client /* TODO <- Thats wrong */, &PacketHandler](char* buffer, unsigned short& len)
 			{
-				/*
-				Net::StreamReader streamReader(buffer);
+				Lunia::Net::StreamReader streamReader(buffer);
+					
+				unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[0]);
 
-				PacketListener.Invoke(0, streamReader.GetSerializedTypeHash(), streamReader);
-
-				HandleRead();
-				*/
+				PacketHandler->Invoke(client, (uint16_t) *packetNameHashed, streamReader);
 			});
 		});
 	}
@@ -30,7 +33,7 @@ public:
 	~ServerProxy() { };
 
 public:
-	ClientRegistry<TClientScope>& GetClientRegistry()
+	ClientRegistry<TClientProxy>& GetClientRegistry()
 	{
 		// lock
 		return m_clientRegistry;
@@ -38,10 +41,10 @@ public:
 	}
 
 public:
-	Lunia::fwPacketListener PacketListener;
+	fwPacketHandler<TClientProxySharedPtr> PacketHandler;
 
 private:
-	ClientRegistry<TClientScope> m_clientRegistry;
+	ClientRegistry<TClientProxy> m_clientRegistry;
 
 };
 

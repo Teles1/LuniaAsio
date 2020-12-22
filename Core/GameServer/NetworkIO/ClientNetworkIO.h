@@ -19,9 +19,11 @@ private:
 
 	void SocketAsyncReadSome(const asio::error_code& ec, size_t size);
 
-	void SocketAsyncWriteSome();
+	void SocketAsyncWriteSome(const asio::error_code& ec, size_t size);
 
 public:
+	void MakeSocketAsyncWriteSome(char* buffer, size_t size);
+
 	void Drop() { };
 
 	void SetEncryptionKey(uint32_t& key) { };

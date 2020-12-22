@@ -48,6 +48,12 @@
     <ClCompile Include="GameServer\ClientProxy\ClientProxyLobby.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Packet\Head\PacketHead.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Packet\PacketBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h">
@@ -66,6 +72,12 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GameServer\ClientProxy\ClientProxyLobby.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet\Head\PacketHead.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet\PacketBase.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

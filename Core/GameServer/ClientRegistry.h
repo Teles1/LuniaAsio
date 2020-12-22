@@ -20,6 +20,8 @@ public:
 	{
 		ClientSharedPtr client = std::make_shared<TClientScope>(std::move(socket)); /* WARN socket is moved a shit ton of times here */
 
+		client->SetId(1);
+
 		OnClientCreated(client);
 
 		m_clients.push_back(client);
