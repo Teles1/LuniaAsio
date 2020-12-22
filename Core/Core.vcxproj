@@ -197,6 +197,7 @@
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="IReferenceCounted.h" />
     <ClInclude Include="IStream.h" />
+    <ClInclude Include="Packet\PacketBase.h" />
     <ClInclude Include="ReferenceCounted.h" />
     <ClInclude Include="Resource\BinaryLoader.h" />
     <ClInclude Include="Resource\Xml\Xml.h" />
@@ -268,6 +269,7 @@
     <ClCompile Include="GameServer\GameServer.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="GameConstants.cpp" />
+    <ClCompile Include="Packet\PacketBase.cpp" />
     <ClCompile Include="Resource\BinaryLoader.cpp" />
     <ClCompile Include="Resource\Xml\XmlHelper.cpp" />
     <ClCompile Include="Resource\Xml\XmlParser.cpp" />

@@ -1,7 +1,5 @@
 #pragma once
 
-// #include "../fwPacketListener.h"
-
 #include <Core/Serializer/Serializer.h>
 #include <Core/Utils/InitFunction.h>
 
@@ -11,12 +9,11 @@
 
 struct PacketBase
 {
-
 	PacketBase() { };
 
 	~PacketBase() { };
 
-	virtual void Serialize  (Lunia::Serializer::IStreamWriter& out) = 0;
+	virtual void Serialize(Lunia::Serializer::IStreamWriter& out) = 0;
 	virtual void Deserialize(Lunia::Serializer::IStreamReader& out) = 0;
 };
 

@@ -31,6 +31,7 @@
     <ClCompile Include="GameServer\ClientRegistry.cpp" />
     <ClCompile Include="GameServer\Proxy\ServerProxy.cpp" />
     <ClCompile Include="GameServer\Proxy\ClientProxy.cpp" />
+    <ClCompile Include="Packet\PacketBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -117,6 +118,7 @@
     <ClInclude Include="GameServer\Proxy\ServerProxy.h" />
     <ClInclude Include="GameServer\Proxy\ClientProxy.h" />
     <ClInclude Include="GameServer\fwPacketHandler.h" />
+    <ClInclude Include="Packet\PacketBase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

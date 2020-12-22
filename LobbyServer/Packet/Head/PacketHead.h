@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../PacketBase.h"
+#include <Core/Packet/PacketBase.h>
 
 #include <Core/Utils/DateTime.h>
 
