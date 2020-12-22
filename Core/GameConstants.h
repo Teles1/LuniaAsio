@@ -1968,7 +1968,7 @@ namespace Lunia {
 			uint32               PetItemHash;
 			XRated::GlobalSerial PetItemSerial;
 			uint64               PetItemInstance;
-			uint8				 PetItemCount;
+			uint16				 PetItemCount;
 			float                ExpFactor; // ������ Factor�� ���ϱ�
 			DateTime       Start;
 			DateTime       End;
@@ -2002,10 +2002,10 @@ namespace Lunia {
 				Invaild
 			};
 
-			PositionType Type;			//< Area�� enum������ �ִ´�.
+			PositionType Type;
 			uint8 Position;
 			uint32 ItemHash;
-			uint16 Stacked;			// 3.1 by Robotex
+			uint16 Stacked;
 			InstanceEx instanceEx;
 
 			PetItemSlot();

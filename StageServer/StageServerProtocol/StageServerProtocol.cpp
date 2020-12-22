@@ -188,6 +188,20 @@ namespace Lunia {
             void Join::Deserialize(Serializer::IStreamReader& in) { 
                 in.Begin(TypeName); 
             }
+
+            const wchar_t* PetsCaredBySchool::TypeName = L"PetsCaredBySchool";
+            const HashType PetsCaredBySchool::TypeHash = StringUtil::Hash(PetsCaredBySchool::TypeName);
+            void PetsCaredBySchool::Serialize(Serializer::IStreamWriter& out) const {
+                out.Begin(TypeName);
+                out.Write(L"OwnerSerial", OwnerSerial);
+                out.Write(L"CaredPets", CaredPets);
+            }
+
+            void PetsCaredBySchool::Deserialize(Serializer::IStreamReader& in) {
+                in.Begin(TypeName);
+                in.Read(L"OwnerSerial", OwnerSerial);
+                in.Read(L"CaredPets", CaredPets);
+            }
 		}
 	}
 }

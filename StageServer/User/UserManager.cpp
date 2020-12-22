@@ -181,10 +181,51 @@ namespace Lunia {
 				user->m_QuickSlot.UpdateOriginData(); // What is this ugly shit?!
 				user->Send(sendPacket);
 			}
-			//Pet
+			//Pets
 			{
+				Protocol::PetInfo sendPacket;
+				for (auto& x : data["pets"]) {
+					XRated::PetDataWithItemPos petDataWithPos;
+					petDataWithPos.Pet.PetSerial = x["id"].get<int64>();
+					petDataWithPos.Pet.PetName = StringUtil::ToUnicode(x["petName"].get<std::string>());
+					petDataWithPos.Pet.Level = x["petLevel"].get<uint16>();
+					petDataWithPos.Pet.Exp = x["petExp"].get<uint32>();
+					petDataWithPos.Pet.Full = x["fullValue"].get<float>();
+					petDataWithPos.Pet.PrevFull = petDataWithPos.Pet.Full;
+					petDataWithPos.Pet.IsRarePet = x["isRare"].get<bool>();
+					petDataWithPos.Pet.RareProbability = x["rareProbability"].get<float>();
+					petDataWithPos.Pet.FullSum = x["fullRateSum"].get<float>();
+					petDataWithPos.Pet.LevelUpPeriod = x["dtSum"].get<float>();
+					petDataWithPos.Pet.PetHash = x["petHash"].get<uint32>();
+					petDataWithPos.Pet.Appear = false;
 
+					//XRated::ItemPosition itemPosition = items.FindPetItem(petDataWithPos.Pet.PetSerial);
+					petDataWithPos.PetItemPosition = XRated::ItemPosition();//itemPosition;
+					//packet
+					sendPacket.PetDataWithPos.push_back(petDataWithPos);
+				}
+				user->Send(sendPacket);
 			}
+			//PetTraining
+			{
+				Protocol::PetsCaredBySchool sendPacket;
+				sendPacket.OwnerSerial = 0;
+				for (auto& x : data["petTraining"]) {
+					XRated::PetCaredBySchool petTraining;
+					petTraining.PetItemSerial = x["petId"].get<int64>();
+					petTraining.PetItemHash = x["itemHash"].get<uint32>();
+					petTraining.PetItemCount = x["stackedCount"].get<uint16>();
+					petTraining.PetItemInstance = x["instance"].get<int64>();
+					petTraining.ExpFactor = x["expFactor"].get<float>();
+					petTraining.Start.Parse(x["startTime"].get<std::string>());
+					petTraining.End.Parse(x["endTime"].get<std::string>());
+
+					sendPacket.CaredPets.push_back(petTraining);
+				}
+
+				user->Send(sendPacket);
+			}
+
 		}
 	}
 }

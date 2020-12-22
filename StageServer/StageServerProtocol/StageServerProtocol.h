@@ -128,6 +128,14 @@ namespace Lunia {
 			{
 				NET_SERIALIZABLE;
 			};
+
+			struct PetsCaredBySchool : public IPacketSerializable
+			{
+				XRated::Serial                        OwnerSerial;
+				std::vector<XRated::PetCaredBySchool> CaredPets;
+
+				NET_SERIALIZABLE;
+			};
 		}
 	}
 }
