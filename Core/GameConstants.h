@@ -1029,7 +1029,6 @@ namespace Lunia {
 			void Deserialize(Serializer::IStreamReader& in);
 		};
 
-		// Robotex
 		struct InstanceEx : public Serializer::ISerializable
 		{
 			static const DateTime NoExpiration;
@@ -1411,14 +1410,14 @@ namespace Lunia {
 			QuickSlot()
 				: Id(0)
 				, IsSkill(false)
-				, instanceEx(0)
+				, InstanceEx(0)
 			{
 			} // default constructor
 			QuickSlot(const QuickSlot& q)
 				: Id(q.Id)
 				, IsSkill(q.IsSkill)
 				, Pos(q.Pos)
-				, instanceEx(q.instanceEx)
+				, InstanceEx(q.InstanceEx)
 			{
 			} // copy constuctor
 			void operator =(const QuickSlot& q)
@@ -1426,7 +1425,7 @@ namespace Lunia {
 				Id = q.Id;
 				IsSkill = q.IsSkill;
 				Pos = q.Pos;
-				instanceEx = q.instanceEx;
+				InstanceEx = q.InstanceEx;
 			}
 			void swap(QuickSlot& q)
 			{
@@ -1437,7 +1436,7 @@ namespace Lunia {
 			uint32 Id;
 			bool IsSkill;
 			uint8 Pos;
-			InstanceEx instanceEx;
+			InstanceEx InstanceEx;
 
 			void Serialize(Serializer::IStreamWriter& out) const;
 			void Deserialize(Serializer::IStreamReader& in);
@@ -1968,9 +1967,9 @@ namespace Lunia {
 		{
 			uint32               PetItemHash;
 			XRated::GlobalSerial PetItemSerial;
-			uint64               PetItemInstance;
-			uint8				 PetItemCount;
-			float                ExpFactor; // ������ Factor�� ���ϱ�
+			uint64               PetItemInstanceEx;
+			uint16				 PetItemCount;
+			float                ExpFactor; 
 			DateTime       Start;
 			DateTime       End;
 
@@ -2003,10 +2002,10 @@ namespace Lunia {
 				Invaild
 			};
 
-			PositionType Type;			//< Area�� enum������ �ִ´�.
+			PositionType Type;
 			uint8 Position;
 			uint32 ItemHash;
-			uint16 Stacked;			// 3.1 by Robotex
+			uint16 Stacked;
 			InstanceEx instanceEx;
 
 			PetItemSlot();

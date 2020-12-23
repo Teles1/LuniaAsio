@@ -71,6 +71,24 @@
     <ClInclude Include="Info\Actions\CompressedActionsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\StageInfo\StageInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StageInfo\StageInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\ItemStageInfo\ItemStageInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StageGroup\IndexedStageGroupInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StageGroup\StageGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StageGroup\StageGroupManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -125,6 +143,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\Actions\CompressedActionsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StageInfo\StageInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StageInfo\StageInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\ItemStageInfo\ItemStageInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StageGroup\IndexedStageGroupInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StageGroup\StageGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StageGroup\StageGroupManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

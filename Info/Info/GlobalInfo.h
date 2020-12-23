@@ -4,6 +4,23 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
+				struct DifficultyInfo : public Serializer::ISerializable
+				{
+					std::wstring Name;
+					uint8 Life;
+					float HpFactor;
+					float XpFactor;
+					float IntFactor;
+					float DropFactor;
+					float DmgFactor;
+					float AtkFactor;
+					float UpdateTick;
+					float UpdateFightTick;
+
+				public:/* lSerializable implements */
+					virtual void Serialize(Serializer::IStreamWriter& out) const;
+					virtual void Deserialize(Serializer::IStreamReader& in);
+				};
 				struct StateInfo
 				{
 					enum Sort {

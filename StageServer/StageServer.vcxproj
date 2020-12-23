@@ -161,17 +161,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="PacketHandler.cpp" />
+    <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="StageServer.cpp" />
     <ClCompile Include="StageServerProtocol\StageServerProtocol.cpp" />
+    <ClCompile Include="User\UserManager.cpp" />
     <ClCompile Include="User\User.cpp" />
     <ClCompile Include="User\UserRegistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fwPacketListener.h" />
+    <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="StageServer.h" />
     <ClInclude Include="StageServerProtocol\StageServerProtocol.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="PacketHandler.h" />
+    <ClInclude Include="User\UserManager.h" />
     <ClInclude Include="User\User.h" />
     <ClInclude Include="User\UserRegistry.h" />
   </ItemGroup>

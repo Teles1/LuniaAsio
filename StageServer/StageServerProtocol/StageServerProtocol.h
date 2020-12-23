@@ -51,6 +51,97 @@ namespace Lunia {
 
 				NET_SERIALIZABLE;
 			};
+
+			struct Granted : public IPacketSerializable
+			{
+				std::wstring charactername;
+				XRated::StageLicense targetStage;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct CharacterInfo : public IPacketSerializable
+			{
+				XRated::Constants::ClassType classtype;
+				unsigned short level;
+				unsigned int xp;
+				unsigned short pvpLevel;
+				unsigned int pvpXp;
+				unsigned short warLevel;
+				unsigned int warXp;
+				unsigned short storedLevel;
+				unsigned short rebirthCount;
+				unsigned int money;
+				unsigned int bankMoney;
+				unsigned short life;
+				unsigned short skillpoint;
+				unsigned short addedSkillPointPlus;
+				unsigned short storedSkillPoint;
+				unsigned short extrabag;
+				unsigned short extrabank;
+				uint32 ladderPoint;
+				uint16 ladderMatchCount;
+				uint32 ladderWinCount;
+				uint32 ladderLoseCount;
+				uint32 achievementScore;
+				bool IsSpectator;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct ListSkillLicenses : public IPacketSerializable
+			{
+				std::vector< uint32 > listSkillLicenses;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct ListSkill : public IPacketSerializable
+			{
+				std::vector< XRated::Skill > listskill;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct ListQuickSlot : public IPacketSerializable
+			{
+				std::vector<XRated::QuickSlot> quickslotlist;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct ListItem : public IPacketSerializable
+			{
+				std::vector< XRated::ItemSlot >	listitem;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct PetInfo : public IPacketSerializable
+			{
+				std::vector<XRated::PetDataWithItemPos> PetDataWithPos;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct Join : public IPacketSerializable
+			{
+				NET_SERIALIZABLE;
+			};
+
+			struct PetsCaredBySchool : public IPacketSerializable
+			{
+				XRated::Serial                        OwnerSerial;
+				std::vector<XRated::PetCaredBySchool> CaredPets;
+
+				NET_SERIALIZABLE;
+			};
+			struct LoadEnd : public IPacketSerializable
+			{
+				std::wstring charName;
+				float progress; // 100% = 1.0f
+				NET_SERIALIZABLE;
+			};
 		}
 	}
 }

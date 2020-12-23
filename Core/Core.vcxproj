@@ -192,6 +192,8 @@
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="IReferenceCounted.h" />
     <ClInclude Include="IStream.h" />
+    <ClInclude Include="Logic\Logic.h" />
+    <ClInclude Include="Logic\Sector\Sector.h" />
     <ClInclude Include="ReferenceCounted.h" />
     <ClInclude Include="Resource\BinaryLoader.h" />
     <ClInclude Include="Resource\Xml\Xml.h" />
@@ -257,6 +259,8 @@
     <ClCompile Include="FileIO\FileHelper.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="GameConstants.cpp" />
+    <ClCompile Include="Logic\Logic.cpp" />
+    <ClCompile Include="Logic\Sector\Sector.cpp" />
     <ClCompile Include="Resource\BinaryLoader.cpp" />
     <ClCompile Include="Resource\Xml\XmlHelper.cpp" />
     <ClCompile Include="Resource\Xml\XmlParser.cpp" />

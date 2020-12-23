@@ -50,6 +50,8 @@ namespace Lunia {
         bool m_ShowPacket = false;
         uint16 m_Capacity = 250;
         struct ServerAddress m_AchievementAddress;
+        bool m_PreloadScripts;
+        bool m_PreloadMovemap;
 
         std::vector<Square> m_SquareList;
         struct Locale {

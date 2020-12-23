@@ -3,6 +3,8 @@
 #include <StageServer/StageServerProtocol/StageServerProtocol.h>
 #include <Core/GameConstants.h>
 #include <StageServer/Service.h>
+#include <Core/Logic/Logic.h>
+#include <StageServer/QuickSlot.h>
 
 namespace Lunia {
 	namespace StageServer {
@@ -43,23 +45,34 @@ namespace Lunia {
 
 			uint32 Parse(uint8* buffer, size_t size);
 		public:
-			std::mutex 				mtx;
+			std::mutex 									mtx;
 		private:
-			bool					m_IsAuthenticated = false;
-			uint32					m_userId;
-			String					m_CharacterName;
+			bool										m_IsAuthenticated = false;
+			uint32										m_userId;
+			String										m_CharacterName;
 		public: //Auth_Publisher
-			std::wstring			m_SecuKey;
-			std::wstring 			m_UsingLocale;
-			std::wstring			m_Name;
-			std::string				m_RoomPass;
-			int						m_RoomIndex;
-			int						m_TeamNumber;
-			int64					m_RoomActivateSerial;
-			uint32					m_RoomFullCount;
-			StageStates				m_StageStateFlags;
-			XRated::StageLicense	m_LastStage;
-			XRated::StageLicense	m_CurrentStage;
+			std::wstring								m_SecuKey;
+			std::wstring 								m_UsingLocale;
+			std::wstring								m_Name;
+			std::string									m_RoomPass;
+			int											m_RoomIndex;
+			int											m_TeamNumber;
+			int64										m_RoomActivateSerial;
+			uint32										m_RoomFullCount;
+			StageStates									m_StageStateFlags;
+			XRated::StageLicense						m_LastStage;
+			XRated::StageLicense						m_CurrentStage;
+		public: //Auth
+			XRated::Logic::ILogic::PlayerInitialData	m_PlayerData;
+			uint32										m_CurrentStageHash;
+			XRated::CharacterStateFlags					m_CharacterStateFlags;
+			DateTime									m_CreateDate;
+			DateTime									m_LastLoggedDate;
+			uint16										m_AddedSkillPoint;
+			std::vector<int>							m_CharacterLicenses;
+			std::vector<XRated::StageLicense>			m_StageLicenses;
+			std::vector<uint32>							m_SkillLicenses;
+			QuickSlot									m_QuickSlot;
 		};
 		typedef std::shared_ptr<User> UserSharedPtr;
 		typedef std::weak_ptr<User> UserWeakPtr;

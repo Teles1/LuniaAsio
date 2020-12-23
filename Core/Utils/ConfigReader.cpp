@@ -55,6 +55,9 @@ namespace Lunia {
                 m_ShowPacket = square["ShowPacket"].get<bool>();
                 m_Capacity = square["Capacity"].get<uint16>();
                 m_AchievementAddress = square["AchievementAddress"].get<ServerAddress>();
+                m_PreloadScripts = square["Database"]["PreloadScripts"].get<bool>();
+                m_PreloadMovemap = square["Database"]["PreloadMovemap"].get<bool>();
+
                 if (!square["SquareList"].is_null())
                     for (auto& x : square["SquareList"]) {
                         m_SquareList.push_back(x.get<Square>());

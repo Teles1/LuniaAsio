@@ -176,6 +176,7 @@
     <ClInclude Include="Info\Database.h" />
     <ClInclude Include="Info\GlobalInfo.h" />
     <ClInclude Include="Info\IndexedInfoManager.h" />
+    <ClInclude Include="Info\ItemStageInfo\ItemStageInfo.h" />
     <ClInclude Include="Info\Items\CompressedItemInfoManager.h" />
     <ClInclude Include="Info\Items\IndexedItemInfoManager.h" />
     <ClInclude Include="Info\Items\Item.h" />
@@ -184,6 +185,11 @@
     <ClInclude Include="Info\NPCs\IndexedNPCInfo.h" />
     <ClInclude Include="Info\NPCs\NPC.h" />
     <ClInclude Include="Info\NPCs\NPCManager.h" />
+    <ClInclude Include="Info\StageGroup\IndexedStageGroupInfo.h" />
+    <ClInclude Include="Info\StageGroup\StageGroup.h" />
+    <ClInclude Include="Info\StageGroup\StageGroupManager.h" />
+    <ClInclude Include="Info\StageInfo\StageInfo.h" />
+    <ClInclude Include="Info\StageInfo\StageInfoManager.h" />
     <ClInclude Include="Info\StateBundles\IndexedStateBundles.h" />
     <ClInclude Include="Info\StateBundles\StateBundles.h" />
     <ClInclude Include="Info\StateBundles\StateBundlesManager.h" />
@@ -197,6 +203,7 @@
     <ClCompile Include="Info\CompressedLoader.cpp" />
     <ClCompile Include="Info\GlobalInfo.cpp" />
     <ClCompile Include="Info\IndexedInfoManager.cpp" />
+    <ClCompile Include="Info\ItemStageInfo\ItemStageInfo.cpp" />
     <ClCompile Include="Info\Items\CompressedItemInfoManager.cpp" />
     <ClCompile Include="Info\Items\IndexedItemInfoManager.cpp" />
     <ClCompile Include="Info\Items\Item.cpp" />
@@ -204,6 +211,11 @@
     <ClCompile Include="Info\NPCs\IndexedNPCInfo.cpp" />
     <ClCompile Include="Info\NPCs\NPC.cpp" />
     <ClCompile Include="Info\NPCs\NPCManager.cpp" />
+    <ClCompile Include="Info\StageGroup\IndexedStageGroupInfo.cpp" />
+    <ClCompile Include="Info\StageGroup\StageGroup.cpp" />
+    <ClCompile Include="Info\StageGroup\StageGroupManager.cpp" />
+    <ClCompile Include="Info\StageInfo\StageInfo.cpp" />
+    <ClCompile Include="Info\StageInfo\StageInfoManager.cpp" />
     <ClCompile Include="Info\StateBundles\IndexedStateBundles.cpp" />
     <ClCompile Include="Info\StateBundles\StateBundles.cpp" />
     <ClCompile Include="Info\StateBundles\StateBundlesManager.cpp" />
