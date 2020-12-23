@@ -136,6 +136,12 @@ namespace Lunia {
 
 				NET_SERIALIZABLE;
 			};
+			struct LoadEnd : public IPacketSerializable
+			{
+				std::wstring charName;
+				float progress; // 100% = 1.0f
+				NET_SERIALIZABLE;
+			};
 		}
 	}
 }

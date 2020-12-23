@@ -202,6 +202,19 @@ namespace Lunia {
                 in.Read(L"OwnerSerial", OwnerSerial);
                 in.Read(L"CaredPets", CaredPets);
             }
+            const wchar_t* LoadEnd::TypeName = L"LoadEnd";
+            const HashType LoadEnd::TypeHash = StringUtil::Hash(LoadEnd::TypeName);
+            void LoadEnd::Serialize(Serializer::IStreamWriter& out) const {
+                out.Begin(TypeName);
+                out.Write(L"charName", charName);
+                out.Write(L"progress", progress);
+            };
+
+            void LoadEnd::Deserialize(Serializer::IStreamReader& in) {
+                in.Begin(TypeName);
+                in.Read(L"charName", charName);
+                in.Read(L"progress", progress);
+            }
 		}
 	}
 }

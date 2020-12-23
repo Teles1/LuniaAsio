@@ -181,6 +181,25 @@ namespace Lunia {
 				user->m_QuickSlot.UpdateOriginData(); // What is this ugly shit?!
 				user->Send(sendPacket);
 			}
+			//PetTraining
+			{
+				Protocol::PetsCaredBySchool sendPacket;
+				sendPacket.OwnerSerial = 0;
+				for (auto& x : data["petTraining"]) {
+					XRated::PetCaredBySchool petTraining;
+					petTraining.PetItemSerial = x["petId"].get<int64>();
+					petTraining.PetItemHash = x["itemHash"].get<uint32>();
+					petTraining.PetItemCount = x["stackedCount"].get<uint16>();
+					petTraining.PetItemInstanceEx = x["instance"].get<int64>();
+					petTraining.ExpFactor = x["expFactor"].get<float>();
+					petTraining.Start.Parse(x["startTime"].get<std::string>());
+					petTraining.End.Parse(x["endTime"].get<std::string>());
+
+					sendPacket.CaredPets.push_back(petTraining);
+				}
+
+				user->Send(sendPacket);
+			}
 			//Pets
 			{
 				Protocol::PetInfo sendPacket;
@@ -206,26 +225,6 @@ namespace Lunia {
 				}
 				user->Send(sendPacket);
 			}
-			//PetTraining
-			{
-				Protocol::PetsCaredBySchool sendPacket;
-				sendPacket.OwnerSerial = 0;
-				for (auto& x : data["petTraining"]) {
-					XRated::PetCaredBySchool petTraining;
-					petTraining.PetItemSerial = x["petId"].get<int64>();
-					petTraining.PetItemHash = x["itemHash"].get<uint32>();
-					petTraining.PetItemCount = x["stackedCount"].get<uint16>();
-					petTraining.PetItemInstance = x["instance"].get<int64>();
-					petTraining.ExpFactor = x["expFactor"].get<float>();
-					petTraining.Start.Parse(x["startTime"].get<std::string>());
-					petTraining.End.Parse(x["endTime"].get<std::string>());
-
-					sendPacket.CaredPets.push_back(petTraining);
-				}
-
-				user->Send(sendPacket);
-			}
-
 		}
 	}
 }

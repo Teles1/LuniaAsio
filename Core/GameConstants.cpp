@@ -3350,7 +3350,7 @@ namespace Lunia {
 			out.Begin(L"PetCaredBySchool");
 			out.Write(L"PetItemHash", PetItemHash);
 			out.Write(L"PetItemSerial", PetItemSerial);
-			out.Write(L"PetItemInstance", PetItemInstance);
+			out.Write(L"PetItemInstanceEx", PetItemInstanceEx);
 			out.Write(L"PetItemCount", PetItemCount);
 			out.Write(L"ExpFactor", ExpFactor);
 			out.Write(L"Start", Start);
@@ -3362,7 +3362,7 @@ namespace Lunia {
 			in.Begin(L"PetCaredBySchool");
 			in.Read(L"PetItemHash", PetItemHash);
 			in.Read(L"PetItemSerial", PetItemSerial);
-			in.Read(L"PetItemInstance", PetItemInstance);
+			in.Read(L"PetItemInstanceEx", PetItemInstanceEx);
 			in.Read(L"PetItemCount", PetItemCount);
 			in.Read(L"ExpFactor", ExpFactor);
 			in.Read(L"Start", Start);

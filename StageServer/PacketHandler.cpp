@@ -73,6 +73,17 @@ namespace Lunia {
 					}
 
 				});
+			fwPacketListener::GetInstance().Connect(
+				[](StageServer::UserSharedPtr& user, StageServer::Protocol::ListItem& packet)
+				{
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListItem", user->GetId());
+				});
+			fwPacketListener::GetInstance().Connect(
+				[](StageServer::UserSharedPtr& user, StageServer::Protocol::Join& packet)
+				{
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Join", user->GetId());
+
+				});
 		}
 	}
 }

@@ -1967,9 +1967,9 @@ namespace Lunia {
 		{
 			uint32               PetItemHash;
 			XRated::GlobalSerial PetItemSerial;
-			uint64               PetItemInstance;
+			uint64               PetItemInstanceEx;
 			uint16				 PetItemCount;
-			float                ExpFactor; // ������ Factor�� ���ϱ�
+			float                ExpFactor; 
 			DateTime       Start;
 			DateTime       End;
 
