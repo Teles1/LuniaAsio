@@ -150,7 +150,35 @@ namespace Lunia {
 			}
 			//Items
 			{
-				//Tobinhas
+				//Bags
+				{
+					//Check the reason why we have two tables doing the same damn thing.
+					Protocol::BagStates sendPacket;
+					//Bags Character
+					for (auto& x : data["bags"])
+						if (!x["isBank"].get<bool>())
+							sendPacket.Bags.push_back(XRated::BagState(x["bagNumber"].get<int>(), x["expireDate"].get<std::string>()));
+					//Bags Bank
+					for (auto& x : data["bankBags"])
+						sendPacket.BankBags.push_back(XRated::BagState(x["bagNumber"].get<int>(), x["expireDate"].get<std::string>()));
+
+					user->Send(sendPacket);
+				}
+				//Items
+				{
+					//We should check weather the position where the item is at is valid.
+					Protocol::ListItem sendPacket;
+					for (auto& x : data["items"])
+						sendPacket.listitem.push_back(
+							XRated::ItemSlot(
+								x["itemHash"].get<uint32>(),
+								x["stackedCount"].get<uint16>(),
+								XRated::InstanceEx(
+									x["instance"].get<int64>(),
+									x["itemExpire"].get<std::string>())
+							));
+					user->Send(sendPacket);
+				}
 			}
 			//Skills // The ones that the user has levelup and has license basedon the class it's
 			{
@@ -181,27 +209,44 @@ namespace Lunia {
 				user->m_QuickSlot.UpdateOriginData(); // What is this ugly shit?!
 				user->Send(sendPacket);
 			}
-			//PetTraining
-			{
-				Protocol::PetsCaredBySchool sendPacket;
-				sendPacket.OwnerSerial = 0;
-				for (auto& x : data["petTraining"]) {
-					XRated::PetCaredBySchool petTraining;
-					petTraining.PetItemSerial = x["petId"].get<int64>();
-					petTraining.PetItemHash = x["itemHash"].get<uint32>();
-					petTraining.PetItemCount = x["stackedCount"].get<uint16>();
-					petTraining.PetItemInstanceEx = x["instance"].get<int64>();
-					petTraining.ExpFactor = x["expFactor"].get<float>();
-					petTraining.Start.Parse(x["startTime"].get<std::string>());
-					petTraining.End.Parse(x["endTime"].get<std::string>());
-
-					sendPacket.CaredPets.push_back(petTraining);
-				}
-
-				user->Send(sendPacket);
-			}
 			//Pets
 			{
+				//PetItems
+				{
+					//We should check weather the position where the item is at is valid.
+					Protocol::ListPetItem sendPacket;
+					for (auto& x : data["petItems"])
+						sendPacket.PetsItems[x["petId"].get<int64>()].push_back(XRated::PetItemSlot(
+							static_cast<XRated::PetItemSlot::PositionType>(x["bagNumber"].get<int>()),
+							x["positionNumber"].get<uint8>(),
+							x["itemHash"].get<uint32>(),
+							XRated::InstanceEx(
+								x["instance"].get<int64>(),
+								x["itemExpire"].get<std::string>()
+							),
+							x["stackedCount"].get<uint16>()
+						));
+					user->Send(sendPacket);
+				}
+				//PetTraining
+				{
+					Protocol::PetsCaredBySchool sendPacket;
+					sendPacket.OwnerSerial = 0;
+					for (auto& x : data["petTraining"]) {
+						XRated::PetCaredBySchool petTraining;
+						petTraining.PetItemSerial = x["petId"].get<int64>();
+						petTraining.PetItemHash = x["itemHash"].get<uint32>();
+						petTraining.PetItemCount = x["stackedCount"].get<uint16>();
+						petTraining.PetItemInstanceEx = x["instance"].get<int64>();
+						petTraining.ExpFactor = x["expFactor"].get<float>();
+						petTraining.Start.Parse(x["startTime"].get<std::string>());
+						petTraining.End.Parse(x["endTime"].get<std::string>());
+
+						sendPacket.CaredPets.push_back(petTraining);
+					}
+
+					user->Send(sendPacket);
+				}
 				Protocol::PetInfo sendPacket;
 				for (auto& x : data["pets"]) {
 					XRated::PetDataWithItemPos petDataWithPos;

@@ -166,6 +166,18 @@ namespace Lunia {
                 in.Begin(TypeName);
             }
 
+            const wchar_t* ListPetItem::TypeName = L"ListPetItem";
+            const HashType ListPetItem::TypeHash = StringUtil::Hash(ListPetItem::TypeName);
+            void ListPetItem::Serialize(Serializer::IStreamWriter& out) const {
+                out.Begin(TypeName);
+                out.Write(L"PetsItems", PetsItems);
+            }
+
+            void ListPetItem::Deserialize(Serializer::IStreamReader& in) {
+                in.Begin(TypeName);
+                in.Read(L"PetsItems", PetsItems);
+            }
+
             const wchar_t* PetInfo::TypeName = L"PetInfo";
             const HashType PetInfo::TypeHash =
                 StringUtil::Hash(PetInfo::TypeName);
@@ -202,6 +214,7 @@ namespace Lunia {
                 in.Read(L"OwnerSerial", OwnerSerial);
                 in.Read(L"CaredPets", CaredPets);
             }
+
             const wchar_t* LoadEnd::TypeName = L"LoadEnd";
             const HashType LoadEnd::TypeHash = StringUtil::Hash(LoadEnd::TypeName);
             void LoadEnd::Serialize(Serializer::IStreamWriter& out) const {
@@ -214,6 +227,20 @@ namespace Lunia {
                 in.Begin(TypeName);
                 in.Read(L"charName", charName);
                 in.Read(L"progress", progress);
+            }
+
+            const wchar_t* BagStates::TypeName = L"BagStates";
+            const HashType BagStates::TypeHash = StringUtil::Hash(BagStates::TypeName);
+            void BagStates::Serialize(Serializer::IStreamWriter& out) const {
+                out.Begin(TypeName);
+                out.Write(L"Bags", Bags);
+                out.Write(L"BankBags", BankBags);
+            }
+
+            void BagStates::Deserialize(Serializer::IStreamReader& in) {
+                in.Begin(TypeName);
+                in.Read(L"Bags", Bags);
+                in.Read(L"BankBags", BankBags);
             }
 		}
 	}

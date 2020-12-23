@@ -117,6 +117,13 @@ namespace Lunia {
 				NET_SERIALIZABLE;
 			};
 
+			struct ListPetItem : public IPacketSerializable
+			{
+				std::map< XRated::GlobalSerial, std::vector< XRated::PetItemSlot > >	PetsItems;
+
+				NET_SERIALIZABLE;
+			};
+
 			struct PetInfo : public IPacketSerializable
 			{
 				std::vector<XRated::PetDataWithItemPos> PetDataWithPos;
@@ -136,10 +143,18 @@ namespace Lunia {
 
 				NET_SERIALIZABLE;
 			};
+
 			struct LoadEnd : public IPacketSerializable
 			{
 				std::wstring charName;
 				float progress; // 100% = 1.0f
+				NET_SERIALIZABLE;
+			};
+
+			struct BagStates : public IPacketSerializable
+			{
+				std::vector<XRated::BagState> Bags;
+				std::vector<XRated::BagState> BankBags;
 				NET_SERIALIZABLE;
 			};
 		}

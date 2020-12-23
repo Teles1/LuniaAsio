@@ -1053,6 +1053,16 @@ namespace Lunia {
 					ExpireDate = dateTime;
 			}
 
+			InstanceEx(const int64& instance, const DateTime& dateTime) {
+				Instance = instance;
+				ExpireDate = dateTime;
+			}
+
+			InstanceEx(const int64& instance, const std::string& dateTime) {
+				Instance = instance;
+				ExpireDate.Parse(dateTime);
+			}
+
 			void Serialize(Serializer::IStreamWriter& out) const;
 			void Deserialize(Serializer::IStreamReader& in);
 
@@ -1135,16 +1145,21 @@ namespace Lunia {
 			uint32 Id;
 			ItemPosition Position;
 			//int64& Instance;
-			InstanceEx instanceEx;
+			InstanceEx InstanceEx;
 			uint16 Stacked;
 
 			ItemSlot()
 				: Id(0)
 				, Stacked(1)
-				, instanceEx(0)
+				, InstanceEx(0)
 			{
 			}
 
+			ItemSlot(const uint32& id, const uint16& stacked, const XRated::InstanceEx& instanceEx) {
+				Id = id;
+				Stacked = stacked;
+				InstanceEx = instanceEx;
+			}
 			void Serialize(Serializer::IStreamWriter& out) const;
 			void Deserialize(Serializer::IStreamReader& in);
 
@@ -1152,13 +1167,13 @@ namespace Lunia {
 			{
 				Id = rhs.Id;
 				Position = rhs.Position;
-				instanceEx = rhs.instanceEx;
+				InstanceEx = rhs.InstanceEx;
 				Stacked = rhs.Stacked;
 			}
 
 			bool operator==(const ItemSlot& rhs) const
 			{
-				return (Id == rhs.Id) && (Position == rhs.Position) && (instanceEx == rhs.instanceEx) && (Stacked == rhs.Stacked);
+				return (Id == rhs.Id) && (Position == rhs.Position) && (InstanceEx == rhs.InstanceEx) && (Stacked == rhs.Stacked);
 			}
 
 			bool operator!=(const ItemSlot& rhs) const
@@ -1363,6 +1378,17 @@ namespace Lunia {
 		struct BagState
 			: public Serializer::ISerializable
 		{
+			BagState() : BagNumber(0), ExpireDate(DateTime::Infinite), Expired(false){}
+			BagState(const int& bagNumber, const DateTime& expireDate) {
+				BagNumber = bagNumber;
+				ExpireDate = expireDate;
+				Expired = ExpireDate > DateTime::Now() ? false : true;
+			}
+			BagState(const int& bagNumber, const std::string& expireDate) {
+				BagNumber = bagNumber;
+				ExpireDate.Parse(expireDate);
+				Expired = ExpireDate > DateTime::Now() ? false : true;
+			}
 			int BagNumber;
 			DateTime ExpireDate;
 			bool	 Expired;
@@ -1967,11 +1993,11 @@ namespace Lunia {
 		{
 			uint32               PetItemHash;
 			XRated::GlobalSerial PetItemSerial;
-			uint64               PetItemInstanceEx;
+			InstanceEx           PetItemInstanceEx;
 			uint16				 PetItemCount;
 			float                ExpFactor; 
-			DateTime       Start;
-			DateTime       End;
+			DateTime			 Start;
+			DateTime			 End;
 
 			PetCaredBySchool();
 
@@ -2006,10 +2032,10 @@ namespace Lunia {
 			uint8 Position;
 			uint32 ItemHash;
 			uint16 Stacked;
-			InstanceEx instanceEx;
+			InstanceEx InstanceEx;
 
 			PetItemSlot();
-			PetItemSlot(PositionType type, uint8 position, uint32 itemHash, int64 instance, uint16 stacked = 0);
+			PetItemSlot(const PositionType& Type, const uint8& position, const uint32& itemHash, const XRated::InstanceEx& instance, const uint16& stacked);
 		public:
 			void Serialize(Serializer::IStreamWriter& out) const;
 			void Deserialize(Serializer::IStreamReader& in);

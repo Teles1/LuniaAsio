@@ -77,6 +77,8 @@ namespace Lunia {
 				[](StageServer::UserSharedPtr& user, StageServer::Protocol::ListItem& packet)
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListItem", user->GetId());
+					Protocol::ListItem sendPacket;
+					user->Send(sendPacket);
 				});
 			fwPacketListener::GetInstance().Connect(
 				[](StageServer::UserSharedPtr& user, StageServer::Protocol::Join& packet)

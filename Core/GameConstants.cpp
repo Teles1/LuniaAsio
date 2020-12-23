@@ -1123,7 +1123,7 @@ namespace Lunia {
 			out.Write(L"Id", Id);
 			out.Write(L"Position", Position);
 			out.Write(L"Stacked", Stacked);
-			out.Write(L"instanceEx", instanceEx);
+			out.Write(L"instanceEx", InstanceEx);
 		}
 
 		void ItemSlot::Deserialize(Serializer::IStreamReader& in)
@@ -1132,7 +1132,7 @@ namespace Lunia {
 			in.Read(L"Id", Id);
 			in.Read(L"Position", Position);
 			in.Read(L"Stacked", Stacked);
-			in.Read(L"instanceEx", instanceEx);
+			in.Read(L"instanceEx", InstanceEx);
 		}
 
 		void InvalidEquippedItem::Serialize(Serializer::IStreamWriter& out) const
@@ -1293,7 +1293,7 @@ namespace Lunia {
 		{
 			out.Begin(L"XRated::TeamMember");
 			out.Write(L"CharacterName", CharacterName);
-			out.Write(L"CharacterSerial", CharacterSerial); // 3.1 by Robotex
+			out.Write(L"CharacterSerial", CharacterSerial);
 			out.Write(L"VirtualIdCode", VirtualIdCode);
 			out.Write(L"ClassType", static_cast<int>(ClassType));
 			out.Write(L"Level", Level);
@@ -1318,7 +1318,7 @@ namespace Lunia {
 		{
 			in.Begin(L"XRated::TeamMember");
 			in.Read(L"CharacterName", CharacterName);
-			in.Read(L"CharacterSerial", CharacterSerial); // 3.1 by Robotex
+			in.Read(L"CharacterSerial", CharacterSerial);
 			in.Read(L"VirtualIdCode", VirtualIdCode);
 			in.Read(L"ClassType", reinterpret_cast<int&>(ClassType));
 			in.Read(L"Level", Level);
@@ -1798,7 +1798,7 @@ namespace Lunia {
 			out.Write(L"CharacterInfo", Instance);
 			out.Write(L"LastLogin", LastLogin);
 			out.Write(L"Contributed", Contributed);
-			out.Write(L"PrivateMessage", PrivateMessage); // 3.1 by Robotex
+			out.Write(L"PrivateMessage", PrivateMessage);
 		}
 
 		void AllMGuildUserInfo::Deserialize(Serializer::IStreamReader& in)
@@ -1811,7 +1811,7 @@ namespace Lunia {
 			CharacterInfo = Instance;
 			in.Read(L"LastLogin", LastLogin);
 			in.Read(L"Contributed", Contributed);
-			in.Read(L"PrivateMessage", PrivateMessage); // 3.1 by Robotex
+			in.Read(L"PrivateMessage", PrivateMessage);
 		}
 
 		void Mail::HeaderInfo::Serialize(Serializer::IStreamWriter& out) const
@@ -1844,7 +1844,7 @@ namespace Lunia {
 			out.Write(L"AttachedMoney", AttachedMoney);
 			out.Write(L"AttachedItems", AttachedItems);
 			out.Write(L"StampItemHash", StampItemHash);
-			out.Write(L"IsSystemMail", IsSystemMail); // 3.1 by Robotex
+			out.Write(L"IsSystemMail", IsSystemMail);
 		}
 
 		void Mail::ContentsInfo::Deserialize(Serializer::IStreamReader& in)
@@ -1855,7 +1855,7 @@ namespace Lunia {
 			in.Read(L"AttachedMoney", AttachedMoney);
 			in.Read(L"AttachedItems", AttachedItems);
 			in.Read(L"StampItemHash", StampItemHash);
-			in.Read(L"IsSystemMail", IsSystemMail); // 3.1 by Robotex
+			in.Read(L"IsSystemMail", IsSystemMail);
 		}
 
 		void Fishing::FishingInfo::Serialize(Serializer::IStreamWriter& out) const
@@ -3377,7 +3377,7 @@ namespace Lunia {
 			out.Write(L"Level", Level);
 			out.Write(L"Exp", Exp);
 			out.Write(L"RareProbability", RareProbability);
-			out.Write(L"EnchantSerial", EnchantSerial); // 3.1 by Robotex
+			out.Write(L"EnchantSerial", EnchantSerial);
 		}
 		void PetToolTipInfo::Deserialize(Serializer::IStreamReader& in)
 		{
@@ -3387,7 +3387,7 @@ namespace Lunia {
 			in.Read(L"Level", Level);
 			in.Read(L"Exp", Exp);
 			in.Read(L"RareProbability", RareProbability);
-			in.Read(L"EnchantSerial", EnchantSerial); // 3.1 by Robotex
+			in.Read(L"EnchantSerial", EnchantSerial);
 		}
 
 
@@ -3397,7 +3397,7 @@ namespace Lunia {
 			EffectStateDelayTime(0.0f), EffectStateDelayTimeForDisplay(0.0f), EmotionDelay(0.0f),
 			RareProbability(0.0f), FullSum(0.0f), LevelUpPeriod(0.0f),
 			NextLevelExp(0), IsRarePet(false), Equipments(Constants::Equipment::MaxPetEquipCnt)
-			, EnchantSerial(0)  // 3.1 by Robotex
+			, EnchantSerial(0) 
 		{
 			Equipments.reserve(3);
 			PetName.reserve(50);
@@ -3422,7 +3422,7 @@ namespace Lunia {
 			out.Write(L"RareProbability", RareProbability);
 			out.Write(L"FullSum", FullSum);
 			out.Write(L"LevelUpPeriod", LevelUpPeriod);
-			out.Write(L"EnchantSerial", EnchantSerial); // 3.1 by Robotex
+			out.Write(L"EnchantSerial", EnchantSerial);
 		}
 
 		void Pet::Deserialize(Serializer::IStreamReader& in)
@@ -3445,7 +3445,7 @@ namespace Lunia {
 			in.Read(L"RareProbability", RareProbability);
 			in.Read(L"FullSum", FullSum);
 			in.Read(L"LevelUpPeriod", LevelUpPeriod);
-			in.Read(L"EnchantSerial", EnchantSerial); // 3.1 by Robotex
+			in.Read(L"EnchantSerial", EnchantSerial);
 		}
 
 		void Pet::Equipment(uint32 itemHash, int64 instance, Constants::Equipment position)
@@ -3734,12 +3734,12 @@ namespace Lunia {
 		}
 
 		PetItemSlot::PetItemSlot()
-			: Position(0), ItemHash(0), instanceEx(0), Type(PositionType::Invaild), Stacked(0)
+			: Position(0), ItemHash(0), InstanceEx(0), Type(PositionType::Invaild), Stacked(0)
 		{
 		}
 
-		PetItemSlot::PetItemSlot(PositionType Type, uint8 position, uint32 itemHash, int64 instance, uint16 stacked)
-			: Position(position), ItemHash(itemHash), instanceEx(instance), Type(Type), Stacked(stacked)
+		PetItemSlot::PetItemSlot(const PositionType& Type, const uint8& position, const uint32& itemHash, const XRated::InstanceEx& instance, const uint16& stacked)
+			: Position(position), ItemHash(itemHash), InstanceEx(instance), Type(Type), Stacked(stacked)
 		{
 		}
 
@@ -3751,7 +3751,7 @@ namespace Lunia {
 			out.Write(L"ItemHash", ItemHash);
 			out.Write(L"Stacked", Stacked);
 
-			out.Write(L"instanceEx", instanceEx);
+			out.Write(L"instanceEx", InstanceEx);
 		}
 
 		void PetItemSlot::Deserialize(Serializer::IStreamReader& in)
@@ -3762,7 +3762,7 @@ namespace Lunia {
 			in.Read(L"ItemHash", ItemHash);
 			in.Read(L"Stacked", Stacked);
 
-			in.Read(L"instanceEx", instanceEx);
+			in.Read(L"instanceEx", InstanceEx);
 		}
 
 		void PetDataWithItemPos::Serialize(Serializer::IStreamWriter& out) const
@@ -3807,9 +3807,9 @@ namespace Lunia {
 			out.Write(L"hash", hash);
 			out.Write(L"instanceEx", instanceEx);
 			out.Write(L"count", count);
-			out.Write(L"isPetItem", isPetItem); // 3.1 by Robotex
+			out.Write(L"isPetItem", isPetItem);
 			if (isPetItem)
-				out.Write(L"pet", pet); // 3.1 by Robotex
+				out.Write(L"pet", pet);
 		}
 
 		void ConfirmTradeInfo::TradeItem::Deserialize(Serializer::IStreamReader& in)
@@ -3818,9 +3818,9 @@ namespace Lunia {
 			in.Read(L"hash", hash);
 			in.Read(L"instanceEx", instanceEx);
 			in.Read(L"count", count);
-			in.Read(L"isPetItem", isPetItem); // 3.1 by Robotex
+			in.Read(L"isPetItem", isPetItem);
 			if (isPetItem)
-				in.Read(L"pet", pet); // 3.1 by Robotex
+				in.Read(L"pet", pet);
 		}
 
 		void ConfirmTradeInfo::Serialize(Serializer::IStreamWriter& out) const

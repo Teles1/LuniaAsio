@@ -25,13 +25,13 @@ namespace Lunia{
 
 					stageGroupPriority.clear();
 					std::vector< uint32 >::const_iterator it = HighPriorityStageGroups.begin();
-					for (int count = HighPriorityStageGroups.size(); it != HighPriorityStageGroups.end(); ++it, --count)
+					for (auto count = HighPriorityStageGroups.size(); it != HighPriorityStageGroups.end(); ++it, --count)
 					{
 						stageGroupPriority[*it] = count;
 					}
 
 					it = LowPriorityStageGroups.begin();
-					for (int count = -1; it != LowPriorityStageGroups.end(); ++it, --count)
+					for (auto count = -1; it != LowPriorityStageGroups.end(); ++it, --count)
 					{
 						stageGroupPriority[*it] = count;
 					}
