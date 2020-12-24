@@ -6,7 +6,11 @@ struct ClientProxyLobby : public ClientProxy
 {
 	ClientProxyLobby(asio::ip::tcp::socket&& socket); /* WARN socket is moved a shit ton of times here */
 
+	void SetAsAuthenticated();
+
 	bool IsAuthenticated() const;
+
+	void SetHasSecondPasswordAuthentication();
 
 	bool HasSecondPasswordAuthentication() const;
 

@@ -35,8 +35,6 @@ namespace Lunia {
 
 			auto userPtr = UserRegistry().GetUserByUserId(this->GetId());
 
-			fwPacketListener::GetInstance().Invoke(userPtr, sReader.GetSerializedTypeHash(), sReader);
-
 			HandleRead();
 			return (uint32)size;
 		}

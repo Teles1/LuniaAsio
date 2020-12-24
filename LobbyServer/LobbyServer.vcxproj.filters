@@ -48,6 +48,9 @@
     <ClCompile Include="Packet\Head\PacketHead.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h">
@@ -71,9 +74,11 @@
     <ClInclude Include="Packet\Head\PacketHead.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="UserRegistry.h" />
     <ClInclude Include="Common.h">
       <Filter>Header</Filter>
     </ClInclude>

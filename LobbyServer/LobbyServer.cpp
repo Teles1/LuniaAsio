@@ -29,25 +29,6 @@ namespace Lunia {
 			Lobby::UserRegistry().MakeUser(socket)->HandleRead();
 			Logger::GetInstance().Info("Connection handled by Lobby");
 		}
-
-		static utils::InitFunction initFunction([]()
-			{
-				UserRegistry().OnUserConnected.Connect([](const UserSharedPtr& user)
-					{
-						Logger::GetInstance().Info("UserRegistry :: OnUserConnected :: userId@{0}", user->GetId());
-					});
-
-				UserRegistry().OnUserDisconnected.Connect([](const UserSharedPtr& user)
-					{
-						Logger::GetInstance().Info("UserRegistry :: OnUserDisconnected :: userId@{0}", user->GetId());
-
-					});
-
-				UserRegistry().OnUserAuthenticated.Connect([](const UserSharedPtr& user, const uint32& oldUserId)
-					{
-						Logger::GetInstance().Info("UserRegistry :: OnUserAuthenticated :: userId@{0} oldUserId@{1}", user->GetId(), oldUserId);
-					});
-			});
 	}
 }
 
@@ -75,7 +56,7 @@ static utils::InitFunction init([]()
 	});
 	*/
 
-	g_gameServer->Proxy->GetClientRegistry().ForAllClients([]()
+	g_gameServer->Proxy->ClientRegistry.ForAllClients([]()
 	{
 		std::cout << "Every player got that" << std::endl;
 	});

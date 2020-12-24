@@ -1,7 +1,7 @@
 #include "ClientNetworkIO.h"
 
-ClientNetworkIO::ClientNetworkIO(asio::ip::tcp::socket&& socket) :
-	m_socket(std::move(socket)) /* WARN socket is moved a shit ton of times here */
+ClientNetworkIO::ClientNetworkIO(asio::ip::tcp::socket&& socket) 
+	: m_socket(std::move(socket)) /* WARN socket is moved a shit ton of times here */
 	, m_decryptor(false)
 {
 	MakeSocketAsyncReadSome();
@@ -10,7 +10,7 @@ ClientNetworkIO::ClientNetworkIO(asio::ip::tcp::socket&& socket) :
 void ClientNetworkIO::MakeSocketAsyncReadSome()
 {
 	m_socket.async_read_some(asio::buffer(m_buffer, READ_BUFFER_LENGTH),
-		std::bind(&ClientNetworkIO::SocketAsyncReadSome, this/* shared_from_this() */, std::placeholders::_1, std::placeholders::_2));
+		std::bind(&ClientNetworkIO::SocketAsyncReadSome, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t size)
@@ -100,13 +100,19 @@ void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t siz
 	}
 };
 
-void ClientNetworkIO::MakeSocketAsyncWriteSome(char * buffer, size_t size)
+void ClientNetworkIO::MakeSocketAsyncWriteSome(uint8_t * buffer, size_t size)
 {
-	this->m_socket.async_send(asio::buffer(buffer, size),
-		std::bind(&ClientNetworkIO::SocketAsyncWriteSome, this/* shared_from_this() */, std::placeholders::_1, std::placeholders::_2));
+	m_socket.async_send(asio::buffer(buffer, size),
+		std::bind(&ClientNetworkIO::SocketAsyncWriteSome, this, std::placeholders::_1, std::placeholders::_2));
 };
 
 void ClientNetworkIO::SocketAsyncWriteSome(const asio::error_code& ec, size_t size)
 {
 
+};
+
+void ClientNetworkIO::Drop() 
+{
+	m_socket.close();
+	m_socket.release();
 };

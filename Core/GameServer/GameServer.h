@@ -16,7 +16,7 @@ public:
 
 			std::cout << "Socket Connection Created " << std::endl;
 
-			Proxy->GetClientRegistry().MakeClient(std::move(socket)); /* WARN socket is moved a shit ton of times here */
+			Proxy->ClientRegistry.MakeClient(std::move(socket)); /* WARN socket is moved a shit ton of times here */
 		});
 	};
 

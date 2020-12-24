@@ -7,6 +7,26 @@ ClientProxyLobby::ClientProxyLobby(asio::ip::tcp::socket&& socket) : ClientProxy
 
 }; /* WARN socket is moved a shit ton of times here */
 
+void ClientProxyLobby::SetAsAuthenticated()
+{
+	this->m_isAuthenticated = true;
+}
+
+bool ClientProxyLobby::IsAuthenticated() const
+{
+	return this->m_isAuthenticated;
+}
+
+void ClientProxyLobby::SetHasSecondPasswordAuthentication()
+{
+	this->m_hasSecondPasswordAuthentication = true;
+}
+
+bool ClientProxyLobby::HasSecondPasswordAuthentication() const
+{
+	return this->m_hasSecondPasswordAuthentication;
+}
+
 bool ClientProxyLobby::Ping()
 {
 	Lunia::Lobby::Protocol::Alive packet;

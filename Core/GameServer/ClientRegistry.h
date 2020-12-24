@@ -84,15 +84,34 @@ public:
 		return ptr;
 	}
 
-	void AddAuthenticatedClient(ClientSharedPtr& client)
+	void AuthenticateClient(ClientSharedPtr& client)
 	{
+		client->SetAsAuthenticated();
+
 		std::scoped_lock<std::mutex> slock(m_authenticatedClientsMutex);
 
-		if (m_authenticatedClients.find(client->GetId()) == m_authenticatedClients.end())
+		bool canInsert = true;
+
+		auto copyClientId = client->GetId();
+
+		for (auto & clientWeak : m_authenticatedClients)
+		{
+			if (auto clientLocked = clientWeak.lock())
+			{
+				if (clientLocked->GetId() == copyClientId)
+				{
+					canInsert = false;
+
+					break;
+				}
+			}
+		}
+
+		if (canInsert)
 		{
 			ClientWeakPtr clientWeak = client;
 
-			m_authenticatedClients.push(clientWeak);
+			m_authenticatedClients.push_back(clientWeak);
 		}
 	}
 

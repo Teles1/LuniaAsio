@@ -4,9 +4,6 @@
 #include <Core/Utils/ConfigReader.h>
 #include <LobbyServer/User.h>
 
-#include <Core/GameServer/GameServer.h>
-#include "GameServer/ServerProxy/ServerProxyLobby.h"
-
 namespace Lunia {
 	namespace Lobby {
 		struct LobbyServer : public Net::ServerTcp<User> {
@@ -17,4 +14,4 @@ namespace Lunia {
 	}
 }
 
-inline GameServer<ServerProxyLobby>* g_gameServer = new GameServer<ServerProxyLobby>("127.0.0.1", 15550);
+#include "Main.h" /* TODO! Remove me */

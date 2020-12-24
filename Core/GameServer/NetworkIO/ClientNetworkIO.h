@@ -12,7 +12,7 @@ struct ClientNetworkIO : std::enable_shared_from_this<ClientNetworkIO> /* TODO I
 
 	ClientNetworkIO(asio::ip::tcp::socket&& socket);
 
-	~ClientNetworkIO() { };
+	~ClientNetworkIO() { std::cout << "~ClientNetworkIO" << std::endl; };
 
 private:
 	void MakeSocketAsyncReadSome();
@@ -22,9 +22,9 @@ private:
 	void SocketAsyncWriteSome(const asio::error_code& ec, size_t size);
 
 public:
-	void MakeSocketAsyncWriteSome(char* buffer, size_t size);
+	void MakeSocketAsyncWriteSome(uint8_t * buffer, size_t size);
 
-	void Drop() { };
+	void Drop();
 
 	void SetEncryptionKey(uint32_t& key) { };
 
@@ -35,7 +35,7 @@ public:
 
 	std::string GetPeerAddress() const
 	{
-		return m_socket.remote_endpoint().address().to_string();
+		return "127.0.0.1"; // m_socket.remote_endpoint().address().to_string();
 	};
 
 public:

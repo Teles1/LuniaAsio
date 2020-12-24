@@ -180,6 +180,7 @@
     <ClCompile Include="GameServer\ClientProxy\ClientProxyLobby.cpp" />
     <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp" />
     <ClCompile Include="LobbyServer.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Packet\Head\PacketHead.cpp" />
     <ClCompile Include="PacketHandlers.cpp" />
     <ClCompile Include="GameServer\ServerProxy\ServerProxyLobby.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="LobbyServer.h" />
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h" />
     <ClInclude Include="GameServer\ServerProxy\ServerProxyLobby.h" />
+    <ClInclude Include="Main.h" />
     <ClInclude Include="Packet\Head\PacketHead.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
@@ -222,7 +224,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Config_1json__JsonSchema="" />
+      <UserProperties />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
