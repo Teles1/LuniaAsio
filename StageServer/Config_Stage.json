@@ -18,10 +18,6 @@
         "ServerIp": "127.0.0.1",
         "ServerPort": 15000
       },
-      "Database": {
-        "PreloadScripts": true,
-        "PreloadMovemap": true
-      },
       "SquareList": [
         {
           "Name": "01 Square",

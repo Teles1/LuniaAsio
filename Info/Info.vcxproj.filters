@@ -166,5 +166,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Config_Infos.json" />
   </ItemGroup>
 </Project>
