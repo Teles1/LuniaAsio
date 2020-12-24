@@ -13,15 +13,49 @@ void ClientProxy::MakeSocketAsyncWriteSerializable(Lunia::Serializer::ISerializa
 
 	Lunia::Net::StreamWriter streamWriter(buffer);
 
+	// unsigned short * packetNameHashed = (char*)streamWriter.buffer.GetData();
+
 	try
 	{
 		streamWriter.Write(packet);
+
+		// std::cout << "server -> Client@" << this->GetId() << " 0x" << packetNameHashed << std::endl;
 	}
 	catch (Lunia::Exception& e)
 	{
-		Logger::GetInstance().Error("User@{0} Unable to Parse packet", this->GetId());
+		Logger::GetInstance().Error("MakeSocketAsyncWriteSerializable:: Client@{0} couldn't parse packet", this->GetId());
 		return;
 	}
 
 	this->MakeSocketAsyncWriteSome(buffer.GetData(), buffer.GetLength());
+}
+
+uint32_t ClientProxy::GetId() const
+{
+	return this->m_id;
+}
+
+void ClientProxy::SetId(const uint32_t& id)
+{
+	this->m_id = id;
+}
+
+void ClientProxy::SetLocale(const std::wstring& locale)
+{
+	this->m_locale = locale;
+}
+
+void ClientProxy::SetActiveAccountName(const std::wstring& accountName)
+{
+	this->m_activeAccountName = accountName;
+}
+
+std::wstring ClientProxy::GetActiveAccountName() const
+{
+	return this->m_activeAccountName;
+}
+
+bool ClientProxy::IsWaitingOnPing() const
+{
+	return this->m_isWaitingOnPing;
 }

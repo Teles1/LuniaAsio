@@ -10,6 +10,8 @@ struct ClientProxyLobby : public ClientProxy
 
 	bool HasSecondPasswordAuthentication() const;
 
+	bool Ping();
+
 private:
 
 	bool m_isAuthenticated = false;

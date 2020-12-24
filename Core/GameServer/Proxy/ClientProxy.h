@@ -12,27 +12,21 @@ struct ClientProxy : public ClientNetworkIO //, TODO? std::enable_shared_from_th
 
 	void MakeSocketAsyncWriteSerializable(Lunia::Serializer::ISerializable& packet);
 
-	uint32_t GetId() const
-	{
-		return this->m_id;
-	}
+	uint32_t GetId() const;
 
-	void SetId(const uint32_t& id)
-	{
-		this->m_id = id;
-	}
+	void SetId(const uint32_t& id);
 
-	void SetLocale(const std::wstring& inLocale);
+	void SetLocale(const std::wstring& locale);
 
-	void SetActiveAccountName(const std::wstring& inAccountName);
+	void SetActiveAccountName(const std::wstring& accountName);
 
 	std::wstring GetActiveAccountName() const;
 
 	/* Old Name: QueryAliveAuth */
-	bool SatisfyAlivePingWait();
+	virtual bool Ping() = 0;
 
 	/* Old Name: CheckAliveAuth */
-	bool IsWaitingOnAlivePing() const;
+	bool IsWaitingOnPing() const;
 
 	/* Old Name: UpdateAliveAuth */
 	// void SetAliveAsLastTickAlivePing(const Alive::AliveData& answer);
@@ -40,13 +34,18 @@ struct ClientProxy : public ClientNetworkIO //, TODO? std::enable_shared_from_th
 public:
 	fwEvent<> OnDropped;
 
+
+	bool m_isWaitingOnPing = false;
+
+	uint16_t m_numNonACKPings = 0;
+
 private:
 
 	uint32_t m_id = 0;
 
-	bool m_waitingOnAlivePing = false;
+	bool m_isAuthenticated = false;
 
 	std::wstring m_locale;
 
-	std::wstring m_accountName;
+	std::wstring m_activeAccountName;
 };

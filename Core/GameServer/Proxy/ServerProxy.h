@@ -26,6 +26,8 @@ public:
 				unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[4]);
 
 				PacketHandler->Invoke(client, (uint16_t) *packetNameHashed, streamReader);
+
+				// std::cout << "Client@" << client->GetId() << " -> server :: " << *packetNameHashed << std::endl;
 			});
 		});
 	}

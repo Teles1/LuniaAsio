@@ -4,6 +4,8 @@
 
 #include "../fwEvent.h"
 
+#include <algorithm> // std::find
+
 template<typename TClientScope>
 struct ClientRegistry
 {
@@ -12,7 +14,18 @@ private:
 	typedef std::weak_ptr  <TClientScope> ClientWeakPtr;
 
 public:
-	ClientRegistry() { };
+	ClientRegistry() 
+	{
+		m_pingThread = std::thread([this]
+		{
+			while (true)
+			{
+				this->PingClients();
+
+				std::this_thread::sleep_for(std::chrono::seconds(3));
+			}
+		});
+	};
 
 	~ClientRegistry() { };
 
@@ -36,16 +49,14 @@ public:
 	{
 		m_clientIdToClientWeak.erase(client->GetId());
 
-		std::scoped_lock<std::mutex> slock(m_clientsMutex);
-		for (auto it = m_clients.begin(); it < m_clients.end(); it++)
 		{
-			if ((*it)->GetId() == client->GetId())
+			std::scoped_lock<std::mutex> slock(m_clientsMutex);
+
+			auto it = std::find(m_clients.begin(), m_clients.end(), client);
+
+			if (it != m_clients.end())
 			{
-				(*it)->Drop();
-
 				m_clients.erase(it);
-
-				break;
 			}
 		}
 
@@ -73,6 +84,64 @@ public:
 		return ptr;
 	}
 
+	void AddAuthenticatedClient(ClientSharedPtr& client)
+	{
+		std::scoped_lock<std::mutex> slock(m_authenticatedClientsMutex);
+
+		if (m_authenticatedClients.find(client->GetId()) == m_authenticatedClients.end())
+		{
+			ClientWeakPtr clientWeak = client;
+
+			m_authenticatedClients.push(clientWeak);
+		}
+	}
+
+	void PingClients() /* TODO! Does it need to be authenticated only? */
+	{
+		// Logger::GetInstance().Info("Ping!");
+
+		std::vector<ClientWeakPtr> nonACKWeakClients;
+
+		{
+			std::scoped_lock<std::mutex> slock(m_clientsMutex);
+
+			for (auto& client : m_clients)
+			{
+				if (client->IsWaitingOnPing())
+				{
+					client->Ping();
+
+					client->m_numNonACKPings = 0;
+				}
+				else
+				{
+					if (client->m_numNonACKPings == 5)
+					{
+						ClientWeakPtr clientWeak = client;
+
+						nonACKWeakClients.push_back(clientWeak);
+
+						Logger::GetInstance().Info("Client@{0} didn't acknowledge 5 alive pings", client->GetId());
+					}
+					else
+					{
+						client->m_numNonACKPings++;
+					}
+				}
+			}
+		}
+
+		for (auto& clientWeak : nonACKWeakClients)
+		{
+			if (!clientWeak.expired())
+			{
+				auto client = clientWeak.lock();
+
+				this->DropClient(client);
+			}
+		}
+	}
+
 public:
 	fwEvent<ClientSharedPtr&> OnClientCreated;
 
@@ -93,6 +162,7 @@ public:
 	}
 
 private:
+	std::thread m_pingThread;
 
 	uint32_t m_curId = 0;
 
