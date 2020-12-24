@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props" Condition="Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -22,32 +21,32 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e559ad97-6832-455e-9a44-c91244f7ca56}</ProjectGuid>
-    <RootNamespace>Info</RootNamespace>
+    <ProjectGuid>{c97ccdc8-88a4-4962-a009-4138cbfd9809}</ProjectGuid>
+    <RootNamespace>TestExec</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -87,14 +86,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>
-      </SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -104,14 +100,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>
-      </SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -121,31 +114,17 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <Optimization>MaxSpeed</Optimization>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>
-      </SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;$(OutDir)Info.lib;$(OutDir)Lzma.lib;$(OutDir)StageServer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <Lib>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutDir)Core.lib;$(OutDir)LzmaCon.lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
-    <ProjectReference>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -153,90 +132,40 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>
-      </SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Info\Actions\CompressedActionsManager.h" />
-    <ClInclude Include="Info.h" />
-    <ClInclude Include="Info\Actions\Actions.h" />
-    <ClInclude Include="Info\Actions\ActionsManager.h" />
-    <ClInclude Include="Info\Actions\IndexedActionsInfo.h" />
-    <ClInclude Include="Info\CompressedLoader.h" />
-    <ClInclude Include="Info\Database.h" />
-    <ClInclude Include="Info\GlobalInfo.h" />
-    <ClInclude Include="Info\IndexedInfoManager.h" />
-    <ClInclude Include="Info\ItemStageInfo\ItemStageInfo.h" />
-    <ClInclude Include="Info\Items\CompressedItemInfoManager.h" />
-    <ClInclude Include="Info\Items\IndexedItemInfoManager.h" />
-    <ClInclude Include="Info\Items\Item.h" />
-    <ClInclude Include="Info\Items\ItemManager.h" />
-    <ClInclude Include="Info\Less.h" />
-    <ClInclude Include="Info\NPCs\IndexedNPCInfo.h" />
-    <ClInclude Include="Info\NPCs\NPC.h" />
-    <ClInclude Include="Info\NPCs\NPCManager.h" />
-    <ClInclude Include="Info\StageGroup\IndexedStageGroupInfo.h" />
-    <ClInclude Include="Info\StageGroup\StageGroup.h" />
-    <ClInclude Include="Info\StageGroup\StageGroupManager.h" />
-    <ClInclude Include="Info\StageInfo\StageInfo.h" />
-    <ClInclude Include="Info\StageInfo\StageInfoManager.h" />
-    <ClInclude Include="Info\StateBundles\IndexedStateBundles.h" />
-    <ClInclude Include="Info\StateBundles\StateBundles.h" />
-    <ClInclude Include="Info\StateBundles\StateBundlesManager.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Info\Actions\CompressedActionsManager.cpp" />
-    <ClCompile Include="Info.cpp" />
-    <ClCompile Include="Info\Actions\Actions.cpp" />
-    <ClCompile Include="Info\Actions\ActionsManager.cpp" />
-    <ClCompile Include="Info\Actions\IndexedActionsInfo.cpp" />
-    <ClCompile Include="Info\CompressedLoader.cpp" />
-    <ClCompile Include="Info\GlobalInfo.cpp" />
-    <ClCompile Include="Info\IndexedInfoManager.cpp" />
-    <ClCompile Include="Info\ItemStageInfo\ItemStageInfo.cpp" />
-    <ClCompile Include="Info\Items\CompressedItemInfoManager.cpp" />
-    <ClCompile Include="Info\Items\IndexedItemInfoManager.cpp" />
-    <ClCompile Include="Info\Items\Item.cpp" />
-    <ClCompile Include="Info\Items\ItemManager.cpp" />
-    <ClCompile Include="Info\NPCs\IndexedNPCInfo.cpp" />
-    <ClCompile Include="Info\NPCs\NPC.cpp" />
-    <ClCompile Include="Info\NPCs\NPCManager.cpp" />
-    <ClCompile Include="Info\StageGroup\IndexedStageGroupInfo.cpp" />
-    <ClCompile Include="Info\StageGroup\StageGroup.cpp" />
-    <ClCompile Include="Info\StageGroup\StageGroupManager.cpp" />
-    <ClCompile Include="Info\StageInfo\StageInfo.cpp" />
-    <ClCompile Include="Info\StageInfo\StageInfoManager.cpp" />
-    <ClCompile Include="Info\StateBundles\IndexedStateBundles.cpp" />
-    <ClCompile Include="Info\StateBundles\StateBundles.cpp" />
-    <ClCompile Include="Info\StateBundles\StateBundlesManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
       <Project>{dd113a77-1c14-40e5-ae12-e50feecb28a4}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Info\Info.vcxproj">
+      <Project>{e559ad97-6832-455e-9a44-c91244f7ca56}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\LzmaLib\LzmaLib.vcxproj">
+      <Project>{c3e4f721-0d5e-43d3-903a-de230ea2ed09}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Network\Network.vcxproj">
+      <Project>{a90c00e8-c1ba-48f1-987d-5017300d2f75}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\StageServer\StageServer.vcxproj">
+      <Project>{4a53dd4d-913e-4a17-9112-0e45e7093777}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="Main.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets" Condition="Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets')" />
   </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props'))" />
-    <Error Condition="!Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets'))" />
-  </Target>
 </Project>

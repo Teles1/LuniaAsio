@@ -152,7 +152,6 @@ namespace Lunia {
 
             void ListQuickSlot::Deserialize(Serializer::IStreamReader& in) {
                 in.Begin(TypeName);
-                in.Read(L"quickslotlist", quickslotlist);
             }
 
             const wchar_t* ListItem::TypeName = L"ListItem";
@@ -164,6 +163,18 @@ namespace Lunia {
 
             void ListItem::Deserialize(Serializer::IStreamReader& in) {
                 in.Begin(TypeName);
+            }
+
+            const wchar_t* ListPetItem::TypeName = L"ListPetItem";
+            const HashType ListPetItem::TypeHash = StringUtil::Hash(ListPetItem::TypeName);
+            void ListPetItem::Serialize(Serializer::IStreamWriter& out) const {
+                out.Begin(TypeName);
+                out.Write(L"PetsItems", PetsItems);
+            }
+
+            void ListPetItem::Deserialize(Serializer::IStreamReader& in) {
+                in.Begin(TypeName);
+                in.Read(L"PetsItems", PetsItems);
             }
 
             const wchar_t* PetInfo::TypeName = L"PetInfo";
@@ -202,6 +213,7 @@ namespace Lunia {
                 in.Read(L"OwnerSerial", OwnerSerial);
                 in.Read(L"CaredPets", CaredPets);
             }
+
             const wchar_t* LoadEnd::TypeName = L"LoadEnd";
             const HashType LoadEnd::TypeHash = StringUtil::Hash(LoadEnd::TypeName);
             void LoadEnd::Serialize(Serializer::IStreamWriter& out) const {
@@ -214,6 +226,131 @@ namespace Lunia {
                 in.Begin(TypeName);
                 in.Read(L"charName", charName);
                 in.Read(L"progress", progress);
+            }
+
+            const wchar_t* BagStates::TypeName = L"BagStates";
+            const HashType BagStates::TypeHash = StringUtil::Hash(BagStates::TypeName);
+            void BagStates::Serialize(Serializer::IStreamWriter& out) const {
+                out.Begin(TypeName);
+                out.Write(L"Bags", Bags);
+                out.Write(L"BankBags", BankBags);
+            }
+
+            void BagStates::Deserialize(Serializer::IStreamReader& in) {
+                in.Begin(TypeName);
+                in.Read(L"Bags", Bags);
+                in.Read(L"BankBags", BankBags);
+            }
+
+            void CreatePlayer::Equipment::Serialize(Serializer::IStreamWriter& out) const {
+                out.Begin(L"CreatePlayer::Equipment");
+                out.Write(L"Position", Position);
+                out.Write(L"ItemHash", ItemHash);
+                out.Write(L"instanceEx", instanceEx);
+            }
+
+            void CreatePlayer::Equipment::Deserialize(Serializer::IStreamReader& in) {
+                in.Begin(L"CreatePlayer::Equipment");
+                in.Read(L"Position", Position);
+                in.Read(L"ItemHash", ItemHash);
+                in.Read(L"instanceEx", instanceEx);
+            }
+
+            const wchar_t* CreatePlayer::TypeName = L"CreatePlayer";
+            const HashType CreatePlayer::TypeHash = StringUtil::Hash(CreatePlayer::TypeName);
+            void CreatePlayer::Serialize(Serializer::IStreamWriter& out) const {
+                out.Begin(TypeName);
+                out.Write(L"playerserial", playerserial);
+                out.WriteEnum(L"classtype", classtype);
+                out.Write(L"charactername", charactername);
+                out.Write(L"level", level);
+                out.Write(L"pvpLevel", pvpLevel);
+                out.Write(L"warLevel", warLevel);
+                out.Write(L"storedLevel", storedLevel);
+                out.Write(L"rebirthCount", rebirthCount);
+                out.Write(L"ladderPoint", ladderPoint);
+                out.Write(L"ladderMatchCount", ladderMatchCount);
+                out.Write(L"ladderWinCount", ladderWinCount);
+                out.Write(L"ladderLoseCount", ladderLoseCount);
+                out.Write(L"achievementScore", achievementScore);
+                out.Write(L"addedSkillPointByRebirth", addedSkillPointByRebirth);
+                out.Write(L"position", position);
+                out.Write(L"direction", direction);
+                out.Write(L"hp", hp);
+                out.Write(L"team", team);
+                out.Write(L"Equipments", Equipments);
+                out.Write(L"PassiveItems", PassiveItems);
+                out.Write(L"stateflags", stateflags);
+                out.Write(L"shopping", shopping);
+                out.Write(L"stageLicenses", stageLicenses);
+                out.Write(L"lives", lives);
+                out.Write(L"bonusLife", bonusLife);
+                out.Write(L"CharacterStateFlags", static_cast<int>(CharacterStateFlags));
+                out.Write(L"lastRebirthDateTime", lastRebirthDateTime);
+                out.Write(L"partyChannelName", partyChannelName);
+                out.Write(L"eventExpFactor", eventExpFactor);
+            }
+
+            void CreatePlayer::Deserialize(Serializer::IStreamReader& in) {
+                in.Begin(TypeName);
+                in.Read(L"playerserial", playerserial);
+                in.ReadEnum(L"classtype", classtype);
+                in.Read(L"charactername", charactername);
+                in.Read(L"level", level);
+                in.Read(L"pvpLevel", pvpLevel);
+                in.Read(L"warLevel", warLevel);
+                in.Read(L"storedLevel", storedLevel);
+                in.Read(L"rebirthCount", rebirthCount);
+                in.Read(L"ladderPoint", ladderPoint);
+                in.Read(L"ladderMatchCount", ladderMatchCount);
+                in.Read(L"ladderWinCount", ladderWinCount);
+                in.Read(L"ladderLoseCount", ladderLoseCount);
+                in.Read(L"achievementScore", achievementScore);
+                in.Read(L"addedSkillPointByRebirth", addedSkillPointByRebirth);
+                in.Read(L"position", position);
+                in.Read(L"direction", direction);
+                in.Read(L"hp", hp);
+                in.Read(L"team", team);
+                in.Read(L"Equipments", Equipments);
+                in.Read(L"PassiveItems", PassiveItems);
+                in.Read(L"stateflags", stateflags);
+                in.Read(L"shopping", shopping);
+                in.Read(L"stageLicenses", stageLicenses);
+                in.Read(L"lives", lives);
+                in.Read(L"bonusLife", bonusLife);
+                in.Read(L"CharacterStateFlags",
+                    reinterpret_cast<int&>(CharacterStateFlags));
+                in.Read(L"lastRebirthDateTime", lastRebirthDateTime);
+                in.Read(L"partyChannelName", partyChannelName);
+                in.Read(L"eventExpFactor", eventExpFactor);
+            }
+
+            const wchar_t* Quest::WorkingList::TypeName = L"Quest::WorkingList";
+            const HashType Quest::WorkingList::TypeHash = StringUtil::Hash(Quest::WorkingList::TypeName);
+            void Quest::WorkingList::Serialize(Serializer::IStreamWriter& out) const {
+                out.Begin(TypeName);
+                out.Write(L"Quests", Quests);
+            };
+
+            void Quest::WorkingList::Deserialize(Serializer::IStreamReader& in) {
+                in.Begin(TypeName);
+                in.Read(L"Quests", Quests);
+            }
+
+            const wchar_t* Family::Info::TypeName = L"Family::Info";
+            const HashType Family::Info::TypeHash = StringUtil::Hash(Family::Info::TypeName);
+            void Family::Info::Serialize(Serializer::IStreamWriter& out) const {
+                out.Begin(TypeName);
+                out.Write(L"FamilyInfo", FamilyInfo);
+                out.Write(L"Condition", Condition);
+                out.Write(L"Members", Members);
+            }
+
+            void Family::Info::Deserialize(Serializer::IStreamReader& in) {
+                in.Begin(TypeName);
+                in.Read(L"FamilyInfo", FamilyInfo);
+                in.Read(L"Condition", Condition);
+                in.Read(L"Members", Members);
             }
 		}
 	}

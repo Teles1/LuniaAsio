@@ -106,8 +106,8 @@ namespace Lunia {
 												slot.Position.Position = y["positionNumber"].get<uint8>();
 												slot.Stacked = 1; // equipments cannot be stacked
 												slot.Id = y["itemHash"].get<uint32>();
-												slot.instanceEx.Instance = y["instance"].get<int64>();
-												slot.instanceEx.ExpireDate.Parse(StringUtil::ToUnicode(y["itemExpire"].get<std::string>()));
+												slot.InstanceEx.Instance = y["instance"].get<int64>();
+												slot.InstanceEx.ExpireDate.Parse(StringUtil::ToUnicode(y["itemExpire"].get<std::string>()));
 												info.Equipments.push_back(slot);
 											}
 										}
@@ -261,8 +261,8 @@ namespace Lunia {
 							slot.Position.Position = y["positionNumber"].get<uint8>();
 							slot.Stacked = 1; // equipments cannot be stacked
 							slot.Id = y["itemHash"].get<uint32>();
-							slot.instanceEx.Instance = y["instance"].get<int64>();
-							slot.instanceEx.ExpireDate.Parse(y["itemExpire"].get<std::wstring>());
+							slot.InstanceEx.Instance = y["instance"].get<int64>();
+							slot.InstanceEx.ExpireDate.Parse(y["itemExpire"].get<std::wstring>());
 							sendPacket.CharacterInfo.Equipments.push_back(slot);
 						}
 						user->m_Characters.push_back(sendPacket.CharacterInfo);

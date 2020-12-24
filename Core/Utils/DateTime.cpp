@@ -19,9 +19,9 @@ namespace Lunia {
 		SetDay(static_cast<uint8>(timeinfo.tm_mday));
 	}
 	DateTime::Date::Date(uint16 year, uint8 month, uint8 day) {
-		this->dateValue.Year = 0;
-		this->dateValue.Month = 0;
-		this->dateValue.Day = 0;
+		this->dateValue.Year = year;
+		this->dateValue.Month = month;
+		this->dateValue.Day = day;
 	}
 	DateTime::Date::Date(time_t time)
 	{
@@ -33,6 +33,11 @@ namespace Lunia {
 		SetMonth(static_cast<uint8>(timeinfo.tm_mon + 1));
 		SetDay(static_cast<uint8>(timeinfo.tm_mday));
 	}
+
+	bool DateTime::Date::Parse(const std::string& timeString) {
+		return Parse(StringUtil::ToUnicode(timeString));
+	}
+
 	bool DateTime::Date::Parse(const std::wstring& timeString) {
 		std::vector< std::wstring > extracted;
 		std::wstring temp;
@@ -351,10 +356,6 @@ namespace Lunia {
 		std::vector< std::wstring > extracted;
 		std::wstring temp;
 
-
-		uint16 year, second, milliSec;
-		uint8 month, day, hour, minute;
-
 		for (size_t i = 0; i < timeString.size(); ++i)
 		{
 			if (timeString.at(i) >= L'0' && timeString.at(i) <= L'9')
@@ -398,23 +399,27 @@ namespace Lunia {
 		}
 		else if (extracted.size() >= 4)
 		{
-			year = static_cast<uint16>(StringUtil::ToInt(extracted.at(0)));
-			month = static_cast<uint8>(StringUtil::ToInt(extracted.at(1)));
-			day = static_cast<uint8>(StringUtil::ToInt(extracted.at(2)));
-			hour = static_cast<uint8>(StringUtil::ToInt(extracted.at(3)));
+
+			uint16 second, milliSec;
+			uint8 minute;
+
+			uint16 year = (uint16)std::stoi(extracted.at(0));
+			uint8 month = (uint8)std::stoi(extracted.at(1));
+			uint8 day = (uint8)std::stoi(extracted.at(2));
+			uint8 hour = (uint8)std::stoi(extracted.at(3));
 
 			if (extracted.size() >= 5)
-				minute = static_cast<uint8>(StringUtil::ToInt(extracted.at(4)));
+				minute = (uint8)std::stoi(extracted.at(4));
 			else
 				minute = 0;
 
 			if (extracted.size() >= 6)
-				second = static_cast<uint16>(StringUtil::ToInt(extracted.at(5)));
+				second = (uint16)std::stoi(extracted.at(5));
 			else
 				second = 0;
 
 			if (extracted.size() >= 7)
-				milliSec = static_cast<uint16>(StringUtil::ToInt(extracted.at(6)));
+				milliSec = (uint16)std::stoi(extracted.at(6));
 			else
 				milliSec = 0;
 

@@ -4,6 +4,8 @@
 #include <StageServer/User/UserRegistry.h>
 #include <Network/Api/Api.h>
 #include <StageServer/User/UserManager.h>
+#include <timeapi.h>
+#pragma comment(lib, "winmm.lib")
 
 namespace Lunia {
 	namespace StageServer {
@@ -54,7 +56,10 @@ namespace Lunia {
 											[&](const Net::Answer& result) {
 												if (result.errorCode == 0) {
 													if (!result.resultObject.is_null()) {
-														UserManager().Auth(user, result.resultObject);
+														if (UserManager().Auth(user, result.resultObject))
+														{
+
+														}
 													}
 													else
 														Logger::GetInstance().Warn(L"Api responded succefuly but the data was empty Auth user = {0}", user->GetId());
@@ -74,15 +79,40 @@ namespace Lunia {
 
 				});
 			fwPacketListener::GetInstance().Connect(
-				[](StageServer::UserSharedPtr& user, StageServer::Protocol::ListItem& packet)
-				{
-					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListItem", user->GetId());
-				});
-			fwPacketListener::GetInstance().Connect(
 				[](StageServer::UserSharedPtr& user, StageServer::Protocol::Join& packet)
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Join", user->GetId());
+					//Check if the user is fully authenticated and loaded if not send a big crashadao.
+					/*
+					if( !IsLoadedStage(currentStage) )
+					{
+						Net::Protocol::Stage::FromServer::Error error;
+						error.errorcode   = Errors::InvalidStageCode;
+						DirectSend( error );
+						return;
+					}
+					*/
+				});
+			fwPacketListener::GetInstance().Connect(
+				[](StageServer::UserSharedPtr& user, StageServer::Protocol::Alive& packet)
+				{
+					AutoLock _l(user->mtx);
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Alive", user->GetId());
+					user->m_AliveTime = timeGetTime();
+					user->Send(packet);
+				});
 
+			fwPacketListener::GetInstance().Connect(
+				[](StageServer::UserSharedPtr& user, StageServer::Protocol::ListItem& packet)
+				{
+					//this does literally nothing but i'm handling it so it doesnt bother me.
+					//Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListItem", user->GetId());
+				});
+			fwPacketListener::GetInstance().Connect(
+				[](StageServer::UserSharedPtr& user, StageServer::Protocol::ListQuickSlot& packet)
+				{
+					//this does literally nothing but i'm handling it so it doesnt bother me.
+					//Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListQuickSlot", user->GetId());
 				});
 		}
 	}

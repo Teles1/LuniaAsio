@@ -1,8 +1,6 @@
 #include "NetStream.h"
 namespace Lunia {
 	namespace Net {
-        static const wchar_t* NetStreamId = L"NetStream";
-        static const HashType NetStreamHash = Hash(NetStreamId);
 		HashType Hash(const wchar_t* str) {
 			unsigned int baseHash = StringUtil::Hash(str);
 			return (HashType)baseHash;
@@ -193,7 +191,7 @@ namespace Lunia {
             working += sizeof(LengthType);  // skip length information of NetStream
 
             // check hash
-            assert(reinterpret_cast<HashType&>(*working) == NetStreamHash);
+            assert(*(HashType*)working == NetStreamHash);
             working += sizeof(HashType);
 
             value.Deserialize(*this);

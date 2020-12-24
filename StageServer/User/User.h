@@ -73,6 +73,8 @@ namespace Lunia {
 			std::vector<XRated::StageLicense>			m_StageLicenses;
 			std::vector<uint32>							m_SkillLicenses;
 			QuickSlot									m_QuickSlot;
+		public: //Alive
+			DWORD										m_AliveTime;
 		};
 		typedef std::shared_ptr<User> UserSharedPtr;
 		typedef std::weak_ptr<User> UserWeakPtr;
