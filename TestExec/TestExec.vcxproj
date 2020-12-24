@@ -123,7 +123,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;$(OutDir)Info.lib;$(OutDir)Lzma.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;$(OutDir)Info.lib;$(OutDir)Lzma.lib;$(OutDir)StageServer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -154,6 +154,9 @@
     </ProjectReference>
     <ProjectReference Include="..\Network\Network.vcxproj">
       <Project>{a90c00e8-c1ba-48f1-987d-5017300d2f75}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\StageServer\StageServer.vcxproj">
+      <Project>{4a53dd4d-913e-4a17-9112-0e45e7093777}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

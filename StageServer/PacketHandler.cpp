@@ -4,6 +4,8 @@
 #include <StageServer/User/UserRegistry.h>
 #include <Network/Api/Api.h>
 #include <StageServer/User/UserManager.h>
+#include <timeapi.h>
+#pragma comment(lib, "winmm.lib")
 
 namespace Lunia {
 	namespace StageServer {
@@ -90,6 +92,14 @@ namespace Lunia {
 						return;
 					}
 					*/
+				});
+			fwPacketListener::GetInstance().Connect(
+				[](StageServer::UserSharedPtr& user, StageServer::Protocol::Alive& packet)
+				{
+					AutoLock _l(user->mtx);
+					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Alive", user->GetId());
+					user->m_AliveTime = timeGetTime();
+					user->Send(packet);
 				});
 
 			fwPacketListener::GetInstance().Connect(

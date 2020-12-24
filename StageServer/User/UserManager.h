@@ -12,7 +12,7 @@ namespace Lunia {
 			~UserManager();
 
 		public:
-			void Auth(UserSharedPtr& user, const json& data);
+			bool Auth(UserSharedPtr& user, const json& data);
 		};
 
 		UserManager& UserManagerInstance();

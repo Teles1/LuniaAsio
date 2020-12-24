@@ -1,6 +1,8 @@
 #include <StageServer/User/UserManager.h>
 #include <Info/Info.h>
 #include <Info/Info/StageGroup/StageGroup.h>
+#include <Network/Api/Api.h>
+
 namespace Lunia {
 	namespace StageServer
 	{
@@ -15,28 +17,28 @@ namespace Lunia {
 		UserManager::~UserManager() {
 
 		}
-		void UserManager::Auth(UserSharedPtr& user, const json& data) {
+		bool UserManager::Auth(UserSharedPtr& user, const json& data) {
+			/*
+				tempId,characterName
+				classNumber,stageLevel,stageExp,pvpLevel,pvpExp,warLevel,warExp,gameMoney,bankMoney,skillPoint,instantStateFlags,createDate
+				addedSkillPoint
+				rebirthCount,storedLevel,storedSkillPoint,lastRebirthDate
+				achievementPoint
+				characterLicenses(subseparated: classNumber)
+				StageLicense(subseparated: stageGroupHash,accessLevel)
+				skilllicenses(subseparated: skillGroupHash)
+				Items(subseparated: itemHash,bagNumber,positionNumber,stackedCount,itemSerial,instance,itemExpire)
+				skills(subseparated: skillGroupHash,skillLevel)
+				quickslots(subseparated: hash,position,isSkill,instance,itemExpire)
+				bags(subseparated: bagNumber,isBank,expireDate)
+				bankBags(subseparated: bagNumber,expireDate)
+				pets(subseparated: petSerial,petName,petLevel,petExp,fullValue,isRare,rareProbability,fullRateSum,dtSum,petHash,enchantSerial)
+				petItems(subseparated: petSerial,bagNumber,positionNumber,itemHash,stackedCount,itemSerial,instance,itemExpire)
+				petTraining(subseparated: petSerial,itemHash,stackedCount,instance,itemExpire,expFactor,startTime,endTime)
+
+			*/
 			// CharacterInfos
 			{
-				/*
-					tempId,characterName
-					classNumber,stageLevel,stageExp,pvpLevel,pvpExp,warLevel,warExp,gameMoney,bankMoney,skillPoint,instantStateFlags,createDate
-					addedSkillPoint
-					rebirthCount,storedLevel,storedSkillPoint,lastRebirthDate
-					achievementPoint
-					characterLicenses(subseparated: classNumber)
-					StageLicense(subseparated: stageGroupHash,accessLevel)
-					skilllicenses(subseparated: skillGroupHash)
-					Items(subseparated: itemHash,bagNumber,positionNumber,stackedCount,itemSerial,instance,itemExpire)
-					skills(subseparated: skillGroupHash,skillLevel)
-					quickslots(subseparated: hash,position,isSkill,instance,itemExpire)
-					bags(subseparated: bagNumber,isBank,expireDate)
-					bankBags(subseparated: bagNumber,expireDate)
-					pets(subseparated: petSerial,petName,petLevel,petExp,fullValue,isRare,rareProbability,fullRateSum,dtSum,petHash,enchantSerial)
-					petItems(subseparated: petSerial,bagNumber,positionNumber,itemHash,stackedCount,itemSerial,instance,itemExpire)
-					petTraining(subseparated: petSerial,itemHash,stackedCount,instance,itemExpire,expFactor,startTime,endTime)
-
-				*/
 				user->m_PlayerData.team = user->m_TeamNumber;
 				user->m_PlayerData.name = user->GetCharacterName();
 				//Character
@@ -270,6 +272,107 @@ namespace Lunia {
 				}
 				user->Send(sendPacket);
 			}
+			//After this is all done and good we have to send this user to the "Room" responsible for the stage it'll be joining. but for now since we dont have any room
+			//anything really i'll just "fake it"
+			//Load
+			{
+				Protocol::LoadEnd sendPacket; 
+				sendPacket.charName = user->GetCharacterName();
+				sendPacket.progress = 0;
+				user->Send(sendPacket);
+			}
+			//RoomJoined
+			{
+				//Stage
+				{
+					Protocol::Stage sendPacket;
+					sendPacket.charactername = user->GetCharacterName();
+					sendPacket.targetStage = user->m_CurrentStage;
+					user->Send(sendPacket);
+				}
+				//QuestManager
+				{
+					Net::Api api("Quest/WorkingList");
+					api << user->GetCharacterName();
+					api.GetAsync(
+						[&](const Net::Answer& result) {
+							if (result.errorCode == 0) {
+
+								Protocol::Quest::WorkingList sendPacket; // even with no quests it has to be sent.
+								for (auto& x : result.resultObject) {
+									XRated::Quest quest;
+									quest.Id = x["questHash"].get<uint32>();
+									quest.ExpiredDate.Parse(x["expiredDate"].get<std::string>());
+									quest.CurrentState = x["currentState"].get<uint8>();
+									quest.Params.push_back(x["param1"].get<uint32>());
+									quest.Params.push_back(x["param2"].get<uint32>());
+									quest.Params.push_back(x["param3"].get<uint32>());
+								}
+								user->Send(sendPacket);
+							}
+							else
+								Logger::GetInstance().Error(L"Could not parse WorkingQuests for the user@{0}", user->GetCharacterName());
+						});
+				}
+				//FamilyManager // Im ignoring this for now. Let's do it later.
+				if(1==0){
+					Net::Api api("Family/JoinedInfo");
+					api << user->GetCharacterName();
+					api.GetAsync(
+						[&](const Net::Answer& result) {
+							if (result.errorCode == 0) {
+
+								Protocol::Family::Info sendPacket;
+								for (auto& x : result.resultObject) {
+								}
+								user->Send(sendPacket);
+							}
+							else
+								Logger::GetInstance().Error(L"Could not parse FamilyInfo for the user@{0}", user->GetCharacterName());
+						});
+				}
+				//Load
+				{
+					Protocol::LoadEnd sendPacket;
+					sendPacket.charName = user->GetCharacterName();
+					sendPacket.progress = 1;
+					user->Send(sendPacket);
+				}
+			}
+			//EndOfRoomJoined
+			{
+				Protocol::CreatePlayer createplayer;
+				createplayer.playerserial = user->GetId() +1000;
+				createplayer.classtype = user->m_PlayerData.type;
+				createplayer.charactername = user->GetCharacterName();//pPlayerData->BaseCharacter.BaseObject.Name;
+				createplayer.level = user->m_PlayerData.level;//pPlayerData->BaseCharacter.Level;
+				createplayer.pvpLevel = user->m_PlayerData.pvpLevel;//pPlayerData->PvpLevel;
+				createplayer.warLevel = user->m_PlayerData.warLevel;//pPlayerData->WarLevel;
+				createplayer.storedLevel = user->m_PlayerData.storedLevel;//pPlayerData->StoredLevel;
+				createplayer.rebirthCount = user->m_PlayerData.rebirthCount;//pPlayerData->RebirthCount;
+				createplayer.ladderPoint = user->m_PlayerData.ladderPoint;//pPlayerData->LadderPoint;
+				createplayer.ladderMatchCount = user->m_PlayerData.ladderMatchCount;//pPlayerData->LadderMatchCount;
+				createplayer.ladderWinCount = user->m_PlayerData.ladderWinCount;//pPlayerData->LadderWinCount;
+				createplayer.ladderLoseCount = user->m_PlayerData.ladderLoseCount;//pPlayerData->LadderLoseCount;
+				createplayer.achievementScore = user->m_PlayerData.achievementScore;//pPlayerData->achievementScore; // 3.1 by Robotex
+				createplayer.addedSkillPointByRebirth = user->m_PlayerData.storedSkillPoint;//pPlayerData->StoredSkillPoint;
+				createplayer.position = float3(1200, 0, 610);//pPlayerData->BaseCharacter.BaseObject.Position;
+				createplayer.direction = float3(0, 0, -1);//pPlayerData->BaseCharacter.BaseObject.Direction;
+				createplayer.hp = 1000;//pPlayerData->BaseCharacter.Hp;
+				createplayer.team = 1;//pPlayerData->BaseCharacter.Team;
+
+				createplayer.shopping = true;
+				createplayer.stageLicenses = user->m_StageLicenses;
+
+				createplayer.lives = static_cast<uint8>(user->m_PlayerData.life);
+				createplayer.bonusLife = static_cast<uint8>(user->m_PlayerData.bonusLife);
+				//createplayer.stateflags = pPlayerData->BaseCharacter.States;
+				createplayer.lastRebirthDateTime = user->m_PlayerData.lastRebirthDateTime;//pPlayerData->LastRebirthDateTime;
+				createplayer.partyChannelName = L"";//partyChannelName;
+				createplayer.eventExpFactor = 1.0;
+				user->Send(createplayer);
+			}
+			return true;
 		}
 	}
 }
