@@ -115,13 +115,11 @@ public:
 				}
 				else
 				{
-					if (client->m_numNonACKPings == 5)
+					if (client->m_numNonACKPings >= 5)
 					{
 						ClientWeakPtr clientWeak = client;
 
 						nonACKWeakClients.push_back(clientWeak);
-
-						Logger::GetInstance().Info("Client@{0} didn't acknowledge 5 alive pings", client->GetId());
 					}
 					else
 					{
@@ -136,6 +134,8 @@ public:
 			if (!clientWeak.expired())
 			{
 				auto client = clientWeak.lock();
+
+				Logger::GetInstance().Info("Client@{0} didn't acknowledge 5 pings! Dropping him/her.", client->GetId());
 
 				this->DropClient(client);
 			}
