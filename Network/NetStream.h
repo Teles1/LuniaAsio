@@ -5,6 +5,8 @@
 namespace Lunia {
 	namespace Net {
         HashType Hash(const wchar_t* str);
+        static const wchar_t* NetStreamId = L"NetStream";
+        static const HashType NetStreamHash = Hash(NetStreamId);
         class StreamWriter : public Serializer::IStreamWriter {
         public:
             StreamWriter(void* buffer, int size);

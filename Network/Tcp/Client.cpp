@@ -1,4 +1,5 @@
 #include "Client.h"
+#include <Network/NetStream.h>
 using namespace Lunia;
 using namespace Net;
 
@@ -42,17 +43,15 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 						if (m_isEncryptKey) {
 							uint32 keyBackup = GetCryptoKey();
 							//INFO_LOG("Work[{0}]", StringUtil::GetString(work, Serializer::HeaderSize));
-							memcpy(work, m_buffer + total, Constants::HeaderSize);
+							memcpy(work, &m_buffer[total], Constants::HeaderSize);
 							//INFO_LOG("Work[{0}]", StringUtil::GetString(work, Serializer::HeaderSize));
 							m_decryptor.Translate(work, Constants::HeaderSize); // translate the header only
 
-							LengthType* work_length = reinterpret_cast<LengthType*>(work);
-							LengthType pSize = *work_length;
+							LengthType pSize = *(LengthType*)work;
+							HashType header = *(HashType*)(work + 2);
 
-							HashType* header_length = reinterpret_cast<HashType*>(work + 2);
-							HashType header = *header_length;
 							//printf("Psize[%.2X], Hash[%.2X]\n", pSize, header);
-							if (header == Constants::NetStreamHash) {
+							if (header == NetStreamHash) {
 								//Translate only the bytes related to the packet
 								if (size_t(pSize) - size_t(Constants::HeaderSize) > size) {
 									//Back up the packet for the next iteration. There is not enough bytes to parse this data, or, the client is trolling?
@@ -62,9 +61,9 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 									//Packet can be deserialized safely.
 									//Packet can be fully read because lenght > pSize
 									m_decryptor.Translate(&m_buffer[size_t(total) + size_t(Constants::HeaderSize)], pSize - Constants::HeaderSize); // Decryption done
-									//Putting back the header into the m_buffer
-									memcpy(m_buffer, &pSize, sizeof(LengthType));
-									memmove(m_buffer + sizeof(LengthType), &header, sizeof(LengthType));
+									//Putting work into the m_buffer
+									memmove(&m_buffer[total], work, Constants::HeaderSize);
+									
 									total += Parse(&m_buffer[size_t(total)], pSize);
 									//if not then something went wrong lol
 								}
@@ -77,13 +76,11 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 							}
 						}
 						else { // If there is no cryptography we keep on adding 1 to the buffer until we find a NetStream
-							LengthType* work_length = reinterpret_cast<LengthType*>(m_buffer + total);
-							LengthType pSize = *work_length;
+							LengthType pSize = *(LengthType*)(m_buffer + total);
+							HashType header = *(HashType*)(m_buffer + total + 2);
 
-							HashType* header_length = reinterpret_cast<HashType*>(m_buffer + total + 2);
-							HashType header = *header_length;
 							//printf("size[%.2X] Psize[%.2X], Hash[%.2X]\n", size, pSize, header);
-							if (header == Constants::NetStreamHash && pSize <= size) {
+							if (header == NetStreamHash && pSize <= size) {
 								/*for (int i = 0; i < pSize; i++) {
 									printf("%.2X", m_buffer[i]);
 								}
@@ -115,7 +112,6 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 						break;
 				} while (true);
 				//Cleaning up my pointer.
-				assert(work != nullptr);
 				delete[] work;
 			//}
 			//catch (...) {

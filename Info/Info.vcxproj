@@ -224,9 +224,6 @@
     <ProjectReference Include="..\Core\Core.vcxproj">
       <Project>{dd113a77-1c14-40e5-ae12-e50feecb28a4}</Project>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\henri\Desktop\lzma\C\Util\Lzma\LzmaUtil.vcxproj">
-      <Project>{db04fc8b-5cee-4751-a53f-d33c58f0b15f}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
