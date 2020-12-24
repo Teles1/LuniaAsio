@@ -33,6 +33,11 @@ namespace Lunia {
 		SetMonth(static_cast<uint8>(timeinfo.tm_mon + 1));
 		SetDay(static_cast<uint8>(timeinfo.tm_mday));
 	}
+
+	bool DateTime::Date::Parse(const std::string& timeString) {
+		return Parse(StringUtil::ToUnicode(timeString));
+	}
+
 	bool DateTime::Date::Parse(const std::wstring& timeString) {
 		std::vector< std::wstring > extracted;
 		std::wstring temp;

@@ -68,6 +68,7 @@ namespace Lunia {
 			Date(uint16 year, uint8 month, uint8 day);
 			Date(time_t time);
 
+			bool Parse(const std::string& timeString);
 			bool Parse(const std::wstring& timeString);
 			std::wstring ToString(Format::type format = Format::Default) const;
 
