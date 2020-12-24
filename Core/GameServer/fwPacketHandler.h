@@ -61,12 +61,16 @@ public:
             /*
                 FIXME! These streamReader members shouldnt be exposed!
             */
-            streamReader.working = (char*)streamReader.buffer; 
-            streamReader.working += 4;
-
             PacketFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
 
-            packet.value.Deserialize(streamReader);
+            /*
+                streamReader.working = (char*)streamReader.buffer; 
+                streamReader.working += 4;
+
+                packet.value.Deserialize(streamReader);
+            */
+
+            streamReader.Read(packet.value);
 
             f(client, packet.value);
         };
@@ -74,7 +78,8 @@ public:
         /*
             FIXME! We should need to create a new packet here, we should instead use type::asHash, as its static.
         */
-        m_callbacks[packet.value.asHash] = lambda;
+        // m_callbacks[packet.value.asHash] = lambda;
+        m_callbacks[packet.value.TypeHash] = lambda;
     }
 
     bool /* operator() */ Invoke(TClientProxySharedPtr& client, const uint16_t& packetHeaderHash, Lunia::Net::StreamReader streamReader)

@@ -1,38 +1,40 @@
 #pragma once
 
-#include <Core/Packet/PacketBase.h>
+	#include <Core/Packet/PacketBase.h>
 
-#include <Core/Utils/DateTime.h>
+/*
+	#include <Core/Utils/DateTime.h>
 
-uint16_t asHash = 0xAA41;
+	uint16_t asHash = 0xAA41;
 
-struct PacketHeadFromClient : public PacketBase
-{
-	uint16_t ProtocolVersion;
-	std::vector<std::string> Checksums;
-
-	enum Results
+	struct PacketHeadFromClient : public PacketBase
 	{
-		Ok = 0,
-		VersionMismatched,
-		NoResponse = 0xff,
-	} Result;
+		uint16_t ProtocolVersion;
+		std::vector<std::string> Checksums;
 
-	Lunia::DateTime ServerTime;
-	std::string UserIP;
-	uint32_t EncryptKey;
+		enum Results
+		{
+			Ok = 0,
+			VersionMismatched,
+			NoResponse = 0xff,
+		} Result;
 
-	int Hashcode;
+		Lunia::DateTime ServerTime;
+		std::string UserIP;
+		uint32_t EncryptKey;
 
-public:
-	inline static uint16_t asHash = asHash;
+		int Hashcode;
 
-	void Serialize(Lunia::Serializer::IStreamWriter& out);
-	void Deserialize(Lunia::Serializer::IStreamReader& out);
-};
+	public:
+		inline static uint16_t asHash = asHash;
 
-struct PacketHeadToClient : public PacketBase
-{
-	inline static uint16_t asHash = asHash;
+		void Serialize(Lunia::Serializer::IStreamWriter& out);
+		void Deserialize(Lunia::Serializer::IStreamReader& out);
+	};
 
-};
+	struct PacketHeadToClient : public PacketBase
+	{
+		inline static uint16_t asHash = asHash;
+
+	};
+*/
