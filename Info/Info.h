@@ -8,6 +8,7 @@
 #include "Info/StateBundles/StateBundlesManager.h"
 #include "Info/Items/CompressedItemInfoManager.h"
 #include "Info/StageGroup/StageGroupManager.h"
+#include "Info/StageInfo/StageInfoManager.h"
 
 namespace Lunia {
 	namespace XRated {
@@ -18,14 +19,14 @@ namespace Lunia {
 					void Init();
 
 					struct Collection {
-						Info::StageGroupManager StageGroups;
+						//Info::StageGroupManager stageGroups;
+						Info::StageInfoManager stageInfos;
 						//Info::ActionInfoManager actions;
 						//Info::NPCInfoManager npcs;
 						//Info::StateBundleInfoManager stateBundles;
 						//Info::CompressedItemInfoManager itemInfos;
 					} InfoCollections;
 			};
-
 			LuniaDatabase& DatabaseInstance();
 		}
 	}

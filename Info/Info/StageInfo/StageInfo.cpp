@@ -141,26 +141,22 @@ namespace Lunia {
 					out.Write(L"BGM", BGM);
 					out.Write(L"PreloadModels", PreloadModels);
 					out.Write(L"PreloadEffects", PreloadEffects);
-
 					out.Write(L"ProprietyLevel", ProprietyLevel);
-
 					out.Write(L"GoalKillCount", GoalKillCount);
 					out.Write(L"LimitPlayTime", LimitPlayTime);
-
 					out.Write(L"bUpdateScript", bUpdateScript);
-
 					out.Write(L"IsEventStage", isEventStage);
 					out.Write(L"IsOpened", isOpened);
 					out.Write(L"RebirthCountEquipLimit", RebirthCountEquipLimit);
-
 					out.Write(L"isSkillAvailable", isSkillAvailable);
 					out.Write(L"isReviveAvailable", isReviveAvailable);
 					out.Write(L"ReviveLimitCount", ReviveLimitCount); // 3.1 by ycr4zy 14-11-2019
-
 					out.Write(L"lowGuildRank", lowGuildRank);
 					out.Write(L"highGuildRank", highGuildRank);
 					out.Write(L"RaidStageDifficulty", RaidStageDifficulty);
 					out.Write(L"QuitPlayerAfterLockRoom", QuitPlayerAfterLockRoom);
+					out.Write(L"tokenUsed", tokenUsed);
+					out.Write(L"tokenBackSizeByRebirthCount", tokenBackSizeByRebirthCount);
 					out.Write(L"MinimumPlayerCount", MinimumPlayerCount);
 				}
 
@@ -198,27 +194,22 @@ namespace Lunia {
 					in.Read(L"BGM", BGM, std::wstring());
 					in.Read(L"PreloadModels", PreloadModels, std::vector<std::wstring>());
 					in.Read(L"PreloadEffects", PreloadEffects, std::vector<std::wstring>());
-
 					in.Read(L"ProprietyLevel", ProprietyLevel, 0);
-
 					in.Read(L"GoalKillCount", GoalKillCount, static_cast<uint8>(0));
 					in.Read(L"LimitPlayTime", LimitPlayTime, static_cast<float>(-1.0f));
-
 					in.Read(L"bUpdateScript", bUpdateScript, true);
-
 					in.Read(L"IsEventStage", isEventStage, false);
 					in.Read(L"IsOpened", isOpened, true);
-
 					in.Read(L"RebirthCountEquipLimit", RebirthCountEquipLimit, static_cast<uint16>(0));
-
 					in.Read(L"isSkillAvailable", isSkillAvailable, true);
 					in.Read(L"isReviveAvailable", isReviveAvailable, true);
 					in.Read(L"ReviveLimitCount", ReviveLimitCount, static_cast<uint32>(0)); // 3.1 by ycr4zy 14-11-2019
-
 					in.Read(L"lowGuildRank", lowGuildRank, 0);
 					in.Read(L"highGuildRank", highGuildRank, 0);
 					in.Read(L"RaidStageDifficulty", RaidStageDifficulty, static_cast<uint8>(0));
 					in.Read(L"QuitPlayerAfterLockRoom", QuitPlayerAfterLockRoom, false);
+					in.Read(L"tokenUsed", tokenUsed, uint32(0));
+					in.Read(L"tokenBackSizeByRebirthCount", tokenBackSizeByRebirthCount, uint32(0));
 					in.Read(L"MinimumPlayerCount", MinimumPlayerCount, uint32(1)); // 3.1 by ycr4zy 14-11-2019
 				}
 			}

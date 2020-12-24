@@ -123,6 +123,8 @@ namespace Lunia {
 					int	 highGuildRank;
 					uint8	RaidStageDifficulty;
 					bool	QuitPlayerAfterLockRoom;
+					uint32  tokenUsed;
+					uint32  tokenBackSizeByRebirthCount;
 				public:
 					MoveMap* MoveMapInfo;
 

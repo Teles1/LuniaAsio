@@ -1,0 +1,8 @@
+{
+  "Config": {
+    "Database": {
+      "PreloadScripts": false,
+      "PreloadMovemap": false
+    }
+  }
+}

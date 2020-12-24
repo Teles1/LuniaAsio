@@ -1,4 +1,5 @@
 #include "Info.h"
+#include <Core/Utils/ConfigReader.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -9,6 +10,7 @@ namespace Lunia {
 				return m_Instance;
 			};
 			void LuniaDatabase::Init() {
+				InfoCollections.stageInfos.Init(false);
 				//InfoCollections.actions.Init(false);
 				//InfoCollections.npcs.Init(false);
 				//InfoCollections.stateBundles.Init(false);
@@ -16,6 +18,8 @@ namespace Lunia {
 			}
 
 			LuniaDatabase& DatabaseInstance() {
+				Logger::GetInstance("Database");
+				Lunia::Config::GetInstance("Config_Infos.json");
 				LuniaDatabase& luniaDatabase = GetInstance();
 				luniaDatabase.Init();
 				return luniaDatabase;

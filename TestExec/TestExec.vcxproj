@@ -119,11 +119,12 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;$(OutDir)Info.lib;$(OutDir)Lzma.lib;$(OutDir)StageServer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;$(OutDir)Info.lib;$(OutDir)Lzma.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

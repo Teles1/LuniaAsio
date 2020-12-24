@@ -216,7 +216,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Config_1json__JsonSchema="" />
+      <UserProperties />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

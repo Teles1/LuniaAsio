@@ -44,6 +44,12 @@ namespace Lunia {
                 m_AchievementAddress = stage["AchievementAddress"].get<ServerAddress>();
 
             }
+            else if (!j_config["Database"].is_null()) {
+                auto& database = j_config["Database"];
+
+                m_PreloadScripts = database["PreloadScripts"].get<bool>();
+                m_PreloadMovemap = database["PreloadMovemap"].get<bool>();
+            }
             else if (!j_config["SquareServer"].is_null()) {
                 Logger::GetInstance().Info("Instance loaded as SquareServer");
                 auto& square = j_config["SquareServer"];
@@ -55,8 +61,6 @@ namespace Lunia {
                 m_ShowPacket = square["ShowPacket"].get<bool>();
                 m_Capacity = square["Capacity"].get<uint16>();
                 m_AchievementAddress = square["AchievementAddress"].get<ServerAddress>();
-                m_PreloadScripts = square["Database"]["PreloadScripts"].get<bool>();
-                m_PreloadMovemap = square["Database"]["PreloadMovemap"].get<bool>();
 
                 if (!square["SquareList"].is_null())
                     for (auto& x : square["SquareList"]) {
