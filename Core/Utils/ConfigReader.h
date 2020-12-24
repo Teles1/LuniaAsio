@@ -10,7 +10,16 @@ namespace Lunia {
         uint16 ServerPort = 15550;
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ServerAddress, ServerIp, ServerPort)
-    
+
+    struct Square {
+    public:
+        std::string Name;
+        uint32 StageGroupHash = 53518598;
+        uint16 AccessLevel = 0;
+        uint8 OrderNumber;
+        uint16 Capacity = 70;
+    };
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Square, Name, StageGroupHash, AccessLevel, Capacity, OrderNumber)
     /*
         Can be accessed from anywhere using Config::GetInstance()
         Not copiable, not clonable. One instance per run. MUST be unique.
@@ -41,6 +50,8 @@ namespace Lunia {
         bool m_ShowPacket = false;
         uint16 m_Capacity = 250;
         struct ServerAddress m_AchievementAddress;
+
+        std::vector<Square> m_SquareList;
         struct Locale {
         public:
             std::vector<std::string> m_FobbidenNames;

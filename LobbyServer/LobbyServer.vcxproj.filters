@@ -36,9 +36,6 @@
     <ClCompile Include="User.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="UserRegistry.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="PacketHandlers.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -77,9 +74,12 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="UserRegistry.h" />
+    <ClInclude Include="Common.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Config.json" />
+    <None Include="Config_Lobby.json" />
   </ItemGroup>
 </Project>

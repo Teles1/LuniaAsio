@@ -14,11 +14,11 @@ namespace Lunia {
         struct Answer {
         public:
             Answer(const std::string& errorMessage, const uint16& errorCode, const json& jsonAnswer = json())
-                : errorMessage(errorMessage), errorCode(errorCode), resultObjet(jsonAnswer){}
+                : errorMessage(errorMessage), errorCode(errorCode), resultObject(jsonAnswer){}
             Answer() = delete;
             std::string errorMessage;
-            uint16 errorCode;
-            json resultObjet;
+            int16 errorCode;
+            json resultObject;
         };
         struct Api {
             static std::string ApiUrl;
@@ -28,15 +28,66 @@ namespace Lunia {
             template <typename T> inline void Append(const T& param) { Append(StringUtil::ToASCII(param)); }
             template <> inline void Append(const std::string& param) { m_Url.push_back(param); }
 
-            template<typename T> inline Api& operator<< (const T& param)
+            template<typename T> 
+            inline Api& operator<< (const T& param)
             {
                 Append(param);
                 return *this;
             }
 
             Answer RequestApi() const;
-            Answer RequestPost(json value) const;
+            Answer RequestPost(const json& value) const;
             std::string BuildUrl() const;
+
+            template<typename F>
+            inline void GetAsync(const F& callback)
+            {
+                auto cb = cpr::GetCallback(
+                    [callback](const cpr::Response& r){
+                        Logger::GetInstance().Info("Api::GetAsync => status_code = {0}, text = {1}", r.status_code, r.text);
+
+                        Answer answ("Whoops!", -1);
+
+                        if (r.status_code == 200)
+                            try 
+                            {
+                                json result = json::parse(r.text);
+                                if (result != NULL && result.is_object())
+                                    answ = Answer( result["errorMessage"].get<std::string>(), result["errorCode"].get<int16>(), result["data"].get<json>() );
+                            }
+                            catch (...) {
+                                Logger::GetInstance().Error("Could not parse json!");
+                            }
+
+                        callback(answ);
+
+                    }, cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ 1000 });
+            }
+            template<typename F>
+            inline void PostAsync(const F& callback, const json& value)
+            {
+                auto cb = cpr::PostCallback(
+                    [callback](const cpr::Response& r) {
+                        Logger::GetInstance().Info("Api::PostAsync => status_code = {0}, text = {1}", r.status_code, r.text);
+
+                        Answer answ("Whoops!", -1);
+
+                        if (r.status_code == 200)
+                            try
+                        {
+                            json result = json::parse(r.text);
+                            if (result != NULL && result.is_object())
+                                answ = Answer(result["errorMessage"].get<std::string>(), result["errorCode"].get<int16>(), result["data"].get<json>());
+                        }
+                        catch (...) {
+                            Logger::GetInstance().Error("Could not parse json!");
+                        }
+
+                        callback(answ);
+
+                    }, cpr::Url(BuildUrl()), cpr::Body{value.dump()}, m_Header, cpr::Timeout{ 1000 });
+            }
+
             ~Api() {}
             void AddHeaders();
         private:

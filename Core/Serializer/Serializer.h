@@ -1,3 +1,5 @@
+#ifndef Serializer_H_Guard
+#define Serializer_H_Guard
 #pragma once
 #include <string>
 #include <map>
@@ -902,3 +904,4 @@ namespace Lunia {
     virtual void Deserialize(Serializer::IStreamReader &in);      \
     inline const wchar_t *GetTypeName() { return TypeName; }
 #endif
+#endif // ! Serializer_H_Guard

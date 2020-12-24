@@ -1,7 +1,7 @@
 #pragma once
-#include "Core/Serializer/Serializer.h"
-#include "Core/Utils/DateTime.h"
 #include <Core/GameConstants.h>
+#include <Network/CommonProtocol/Protocol.h>
+
 namespace Lunia {
 	namespace Lobby {
 		namespace Protocol {
@@ -265,7 +265,35 @@ namespace Lunia {
 				String SelectedCharacter;
 				XRated::CharacterStateFlags CharacterStates;
 
-				String CharacterName; //client request
+				//client request dasopikosidpajdsjiaosdaiojsdajiodsaoji321oi309213211!!!!!!!!
+				String CharacterName; 
+				NET_SERIALIZABLE;
+			};
+
+			struct AchievementServerAssigned : public Serializer::ISerializable {
+				struct Result
+				{
+					enum Type
+					{
+						Ok = 0,
+						Unknown = 1,
+						InvalidPacket = 999
+					};
+				};
+				Result::Type Result;
+				std::wstring ServerName;
+				Lunia::Protocol::Address serverAddress;
+				NET_SERIALIZABLE;
+			};
+
+			struct DeselectCharacter : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					NoResponse = 0xff,
+				} Result;
+
 				NET_SERIALIZABLE;
 			};
 
@@ -278,6 +306,37 @@ namespace Lunia {
 				} Result;
 
 				std::vector<XRated::SquareInfo> SuqareList;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct JoinSquare : public Serializer::ISerializable
+			{
+				String SquareName;
+
+				NET_SERIALIZABLE;
+			};
+
+			struct Join : public Serializer::ISerializable
+			{
+				enum Results
+				{
+					Ok = 0,
+					NoResponse = 0xff,
+					UserAlreadyInGame = 1,
+					AlreadyExistingStage = 2,
+					WrongStageName = 3,
+					StageNotFound = 4,
+					StageIsLocked = 5,
+					StageIsFull = 6,
+					UnableToAutodetect = 7,
+					ServerNotFound = 8,
+					ServerTooBusy = 13
+				} Result;
+
+				std::string ServerIp;
+				uint16 Port;
+				std::string KeyCode;
 
 				NET_SERIALIZABLE;
 			};

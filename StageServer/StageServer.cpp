@@ -1,19 +1,46 @@
-﻿#include <Core/Resource/Resource.h>
-#include <Core/FileIO/Directory.h>
-#include <Core/FileIO/FileStream.h>
-#include <Info/Info.h>
-#include <Info/Info/Actions/CompressedActionsManager.h>
-#include <Info/Info/Items/CompressedItemInfoManager.h>
+﻿#pragma once
+#include "Network/Api/Api.h"
+#include "StageServer.h"
+#include <StageServer/User/UserRegistry.h>
+#include <StageServer/PacketHandler.h>
 
-int main()
+namespace Lunia {
+	namespace StageServer {
+		StageServer::StageServer(const char* ip, uint16 port) : ServerTcp(ip, port)
+		{
+			Net::Api::ApiUrl = Config::GetInstance().m_ApiBase;
+			Net::Api api("AddServer");
+			api << Config::GetInstance().m_ServerAddress.ServerPort;
+			while (true) {
+				auto result = api.RequestPost(Config::GetInstance().m_SquareList);
+				if (result.errorCode == 0) {
+					Logger::GetInstance().Info("{0} Initialized on port {1}", Config::GetInstance().m_ServerName, Config::GetInstance().m_ServerAddress.ServerPort);
+					break;
+				}
+				else
+					Logger::GetInstance().Error("Could not initiaze server using the API supplied!! {0}", result.errorMessage);
+				Sleep(3000);
+			}
+		}
+		void StageServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
+		{
+			auto user = UserRegistry::GetInstance().MakeUser(socket);
+			user->HandleRead();
+			user->Init();
+			Logger::GetInstance().Info("Connection handled by StageServer");
+		}
+	}
+}
+
+int main(int argc, char* argv[])
 {
-	Lunia::Resource::ResourceSystemInstance().AddPath(L"C:\\Users\\WINDOWS\\Desktop\\Lunia\\x64\\Debug");
-	Logger::GetInstance().Info(L"startup directory is '{0}'", Lunia::Resource::ResourceSystemInstance().GetPrimaryDataPath());
-	Lunia::XRated::Database::DatabaseInstance();
-	Lunia::XRated::Database::Info::CompressedActionInfoManager a;
-	//a.LoadBinaryData();
-	//a.Retrieve(0); // yeah, this works fine
-	a.Retrieve(0); // yeah, this works fine
-	//a.Retrieve(0x3bec);
+	//setting log name to be used on the console.
+	Logger::GetInstance("StageServer");
+	Lunia::Config::GetInstance("Config_Stage.json");
+	Lunia::StageServer::UserRegistry::GetInstance(Lunia::Config::GetInstance().m_PingTimeout);
+	Lunia::StageServer::InitHandlers();
+	//Load Config
+	Lunia::StageServer::StageServer stageServer(Lunia::Config::GetInstance().m_ServerAddress.ServerIp.c_str(), Lunia::Config::GetInstance().m_ServerAddress.ServerPort);
+	stageServer.Run();
 	return 0;
 }

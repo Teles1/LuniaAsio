@@ -119,6 +119,7 @@
     <ClInclude Include="GameServer\Proxy\ClientProxy.h" />
     <ClInclude Include="GameServer\fwPacketHandler.h" />
     <ClInclude Include="Packet\PacketBase.h" />
+    <ClInclude Include="ErrorDefinition.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

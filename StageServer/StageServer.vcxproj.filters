@@ -14,13 +14,44 @@
     <ClCompile Include="StageServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StageServerProtocol\StageServerProtocol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\UserRegistry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\User.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header.h">
+    <None Include="packages.config" />
+    <None Include="Config_Stage.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StageServer.h">
       <Filter>Headers</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Config.json" />
+    <ClInclude Include="StageServerProtocol\StageServerProtocol.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="fwPacketListener.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\UserRegistry.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\User.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Service.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketHandler.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -32,12 +32,35 @@ namespace Lunia {
                 m_AchievementAddress = lobby["AchievementAddress"].get<ServerAddress>();
             }
             else if (!j_config["StageServer"].is_null()) {
-                Logger::GetInstance().Info("StageServer");
+                Logger::GetInstance().Info("Instance loaded as StageServer");
+                auto& stage = j_config["StageServer"];
+
+                m_ApiBase = stage["ApiBase"].get<std::string>();
+                m_ServerAddress = stage["ServerAddress"].get<ServerAddress>();
+                m_ServerName = stage["ServerName"].get<std::string>();
+                m_PingTimeout = stage["PingTimeout"].get<uint32>();
+                m_ShowPacket = stage["ShowPacket"].get<bool>();
+                m_Capacity = stage["Capacity"].get<uint16>();
+                m_AchievementAddress = stage["AchievementAddress"].get<ServerAddress>();
 
             }
             else if (!j_config["SquareServer"].is_null()) {
-                Logger::GetInstance().Info("SquareServer");
+                Logger::GetInstance().Info("Instance loaded as SquareServer");
+                auto& square = j_config["SquareServer"];
 
+                m_ApiBase = square["ApiBase"].get<std::string>();
+                m_ServerAddress = square["ServerAddress"].get<ServerAddress>();
+                m_ServerName = square["ServerName"].get<std::string>();
+                m_PingTimeout = square["PingTimeout"].get<uint32>();
+                m_ShowPacket = square["ShowPacket"].get<bool>();
+                m_Capacity = square["Capacity"].get<uint16>();
+                m_AchievementAddress = square["AchievementAddress"].get<ServerAddress>();
+                if (!square["SquareList"].is_null())
+                    for (auto& x : square["SquareList"]) {
+                        m_SquareList.push_back(x.get<Square>());
+                    }
+                else
+                    Logger::GetInstance().Exception("Cannot initialize SquareServer without any Square Listed on the config.");
             }
             else
                 Logger::GetInstance().Exception("Instance for this server was not reconized.");

@@ -1,7 +1,10 @@
 #pragma once
-#include "Network/Tcp/Server.h"
-#include "UserRegistry.h"
+// #include "UserRegistry.h"
+#include <Network/Tcp/Server.h>
+#include <Core/GameServer.h>
 #include <Core/Utils/ConfigReader.h>
+#include <LobbyServer/User.h>
+
 namespace Lunia {
 	namespace Lobby {
 		struct LobbyServer : public Net::ServerTcp<User> {

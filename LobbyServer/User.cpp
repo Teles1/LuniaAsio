@@ -1,7 +1,9 @@
+#include "..\StageServer\User\User.h"
 #include "User.h"
 #include "fwPacketListener.h"
-#include "UserRegistry.h"
 #include "Network/NetStream.h"
+#include "./Network/Api/Api.h"
+#include <LobbyServer/Common.h>
 namespace Lunia {
 	namespace Lobby
 	{
@@ -31,7 +33,7 @@ namespace Lunia {
 
 			Net::StreamReader sReader(buffer);
 
-			auto userPtr = Net::UserRegistry::GetInstance().GetUserByUserId(this->GetId());
+			auto userPtr = UserRegistry().GetUserByUserId(this->GetId());
 
 			fwPacketListener::GetInstance().Invoke(userPtr, sReader.GetSerializedTypeHash(), sReader);
 
@@ -119,6 +121,63 @@ namespace Lunia {
 					return true;
 				}
 			return false;
+		}
+
+		const String& User::GetCharacterName() const
+		{
+			return m_selectedCharacter.CharacterName;
+		}
+
+		bool User::SetSelectedCharacter(String& characterName)
+		{
+			AutoLock _l(mtx);
+			for (auto& x : m_Characters)
+				if (x.CharacterName == characterName) {
+					m_selectedCharacter = x;
+					return true;
+				}
+			return false;
+		}
+
+		void User::SetCharacterStateFlags(const XRated::CharacterStateFlags& flag)
+		{
+			if (IsCharacterSelected()) {
+				AutoLock _l(mtx);
+				m_CharacterStateFlags = m_selectedCharacter.StateFlags.EquipmentSet;
+				m_CharacterStateFlags = flag;
+				Net::Api api("UpdateCharacterStateFlags");
+				api << GetAccountName() << GetCharacterName() << (int)m_CharacterStateFlags;
+				if (api.RequestApi().errorCode != 0)
+					Logger::GetInstance().Warn(L"Could not update StateFlags for user = {0}, character = {1}", GetAccountName(), GetCharacterName());
+			}else
+				Logger::GetInstance().Warn(L"Account ={0} doesn't have a selected character and there is a call to update flags.", GetAccountName());
+		}
+
+		bool User::IsCharacterSelected() const
+		{
+			return m_selectedCharacter.CharacterSerial != -1;
+		}
+
+		void User::Error(ErrorLevel error, const String& message)
+		{
+			switch (error)
+			{
+			case ErrorLevel::Pvp:
+			case ErrorLevel::Curious:
+				break;
+			case ErrorLevel::Critical:
+			case ErrorLevel::Unexpected:
+			{
+				std::string operation(error == ErrorLevel::Critical ? "critical" : "unexpected");
+				std::string characterName;
+				if (m_selectedCharacter.CharacterSerial != -1)
+					characterName = StringUtil::ToASCII(m_selectedCharacter.CharacterName);
+
+				/* LOGGING */
+			}
+			break;
+			}
+			//Some sort of disconnecting process going in here. 
 		}
 
 		uint32 User::GetId() const {
