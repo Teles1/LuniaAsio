@@ -18,8 +18,6 @@ namespace Lunia {
 			}
 
 			LuniaDatabase& DatabaseInstance() {
-				Logger::GetInstance("Database");
-				Lunia::Config::GetInstance("Config_Infos.json");
 				LuniaDatabase& luniaDatabase = GetInstance();
 				luniaDatabase.Init();
 				return luniaDatabase;
