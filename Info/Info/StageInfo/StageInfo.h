@@ -24,7 +24,7 @@ namespace Lunia {
 					uint16 Episode; // episode number
 					bool isSkillAvailable; 
 					bool isReviveAvailable;
-					uint32 ReviveLimitCount;  // 3.1 by ycr4zy 14-11-2019
+					int32 ReviveLimitCount;  // 3.1 by ycr4zy 14-11-2019
 
 					std::vector<Rectangle> Locations;
 					std::vector<float3> LocationPositions;
