@@ -43,6 +43,14 @@ namespace Lunia{
 					reader->Read(L"StageGroupManager", *this);
 				}
 
+				void StageGroupManager::SaveXml() {
+					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateSerializerXmlStreamWriter(L"Database/StageGroups.xml");
+					writer->Write(L"HighPriorityStageGroups", stageGroupPriority);
+					writer->Write(L"AfkCheckDisabledStageGroups", AfkCheckDisabledStageGroups);
+					writer->Write(L"StageGroups", StageGroups);
+					std::wcout << L"StageGroup Done...\n";
+				}
+
 				StageGroup* StageGroupManager::Retrieve(uint32 hash)
 				{
 					StageGroupMap::iterator i = StageGroups.find(hash);

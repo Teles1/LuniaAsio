@@ -17,6 +17,7 @@ namespace Lunia {
 				public:
 					void Init(bool bForceXml);
 					void LoadXmlData();
+					void SaveXml();
 					virtual void LoadBinaryData();
 
 					void SetStageInfo(StageInfoManager* stages);

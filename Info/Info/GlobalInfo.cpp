@@ -4,6 +4,37 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
+
+				void DifficultyInfo::Serialize(Serializer::IStreamWriter& out) const
+				{
+					out.Begin(L"AllM::XRated::Database::Info::DifficultyInfo");
+					out.Write(L"Name", Name);
+					out.Write(L"Life", Life);
+					out.Write(L"HpFactor", HpFactor);
+					out.Write(L"XpFactor", XpFactor);
+					out.Write(L"DropFactor", DropFactor);
+					out.Write(L"IntFactor", IntFactor);
+					out.Write(L"DmgFactor", DmgFactor);
+					out.Write(L"AtkFactor", AtkFactor);
+					out.Write(L"UpdateTick", UpdateTick);
+					out.Write(L"UpdateFightTick", UpdateFightTick);
+				}
+
+				void DifficultyInfo::Deserialize(Serializer::IStreamReader& in)
+				{
+					in.Begin(L"AllM::XRated::Database::Info::DifficultyInfo");
+					in.Read(L"Name", Name);
+					in.Read(L"Life", Life);
+					in.Read(L"HpFactor", HpFactor);
+					in.Read(L"XpFactor", XpFactor);
+					in.Read(L"DropFactor", DropFactor);
+					in.Read(L"IntFactor", IntFactor);
+					in.Read(L"DmgFactor", DmgFactor);
+					in.Read(L"AtkFactor", AtkFactor);
+					in.Read(L"UpdateTick", UpdateTick);
+					in.Read(L"UpdateFightTick", UpdateFightTick);
+				}
+
 				StateInfo::Type StateInfo::StringToType(const wchar_t* str)
 				{
 					static std::map<std::wstring, Type > string_type;

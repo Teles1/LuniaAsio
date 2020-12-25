@@ -34,6 +34,11 @@ namespace Lunia {
 
 					bool GuildStage; 
 
+					bool DirectDie;
+					float UpdateTick;
+					float UpdateFightTick;
+					int MaxNPCCnt;
+
 					uint32 GetDropCount(uint8 difficulty, float randomFloat);
 
 				public:/* lSerializable implements */

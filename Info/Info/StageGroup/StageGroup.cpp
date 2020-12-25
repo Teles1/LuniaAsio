@@ -25,7 +25,10 @@ namespace Lunia {
 					out.Write(L"EpisodeInterval", EpisodeInterval);
 					out.Write(L"AquireNextStageLicense", AquireNextStageLicense);
 					out.Write(L"GuildStage", GuildStage);
-
+					out.Write(L"DirectDie", DirectDie);
+					out.Write(L"UpdateTick", UpdateTick);
+					out.Write(L"UpdateFightTick", UpdateFightTick);
+					out.Write(L"MaxNPCCnt", MaxNPCCnt);
 				}
 
 				void StageGroup::Deserialize(Serializer::IStreamReader& in)
@@ -52,6 +55,10 @@ namespace Lunia {
 					in.Read(L"EpisodeInterval", EpisodeInterval, 0);
 					in.Read(L"AquireNextStageLicense", AquireNextStageLicense, true);
 					in.Read(L"GuildStage", GuildStage, false);
+					in.Read(L"DirectDie", DirectDie, false);
+					in.Read(L"UpdateTick", UpdateTick);
+					in.Read(L"UpdateFightTick", UpdateFightTick);
+					in.Read(L"MaxNPCCnt", MaxNPCCnt);
 
 					/* internals */
 					Hash = StringUtil::Hash(Name.c_str());
