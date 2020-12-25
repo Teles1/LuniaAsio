@@ -159,25 +159,25 @@ namespace Lunia {
 
 		template <> std::wstring To(float2 value) {
 			wchar_t wszBuffer[100 * 3];
-			swprintf_s(wszBuffer, sizeof(wszBuffer), L"(%f, %f)", value.x, value.y);
+			swprintf_s(wszBuffer, L"(%f, %f)", value.x, value.y);
 			return std::wstring(wszBuffer);
 		}
 
 		template <> std::wstring To(float3 value) {
 			wchar_t wszBuffer[100 * 4];
-			swprintf_s(wszBuffer, sizeof(wszBuffer), L"(%f, %f, %f)", value.x, value.y, value.z);
+			swprintf_s(wszBuffer,  L"(%f, %f, %f)", value.x, value.y, value.z);
 			return std::wstring(wszBuffer);
 		}
 
 		template <> std::string To(float3 value) {
 			char szBuffer[100 * 4];
-			sprintf_s(szBuffer, sizeof(szBuffer),"(%f, %f, %f)", value.x, value.y, value.z);
+			sprintf_s(szBuffer, "(%f, %f, %f)", value.x, value.y, value.z);
 			return std::string(szBuffer);
 		}
 
 		template <> std::wstring To(float4 value) {
 			wchar_t wszBuffer[100 * 5];
-			swprintf_s(wszBuffer, sizeof(wszBuffer), L"(%f, %f, %f, %f)", value.x, value.y, value.z, value.w);
+			swprintf_s(wszBuffer, L"(%f, %f, %f, %f)", value.x, value.y, value.z, value.w);
 			return std::wstring(wszBuffer);
 		}
 
