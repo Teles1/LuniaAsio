@@ -22,21 +22,21 @@
         {
           "Name": "01 Square",
           "StageGroupHash": 53518598,
-          "AccessLevel": 12,
+          "AccessLevel": 0,
           "OrderNumber": 1,
           "Capacity": 70
         },
         {
           "Name": "02 Square",
           "StageGroupHash": 53518598,
-          "AccessLevel": 12,
+          "AccessLevel": 0,
           "OrderNumber": 2,
           "Capacity": 70
         },
         {
           "Name": "03 Square",
           "StageGroupHash": 53518598,
-          "AccessLevel": 12,
+          "AccessLevel": 0,
           "OrderNumber": 3,
           "Capacity": 70
         }
