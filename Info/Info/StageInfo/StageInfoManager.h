@@ -75,6 +75,7 @@ namespace Lunia {
 
 					void Init(bool bForceXml);
 					void LoadXmlData();
+					void SaveXml();
 					void LoadBinaryData();
 
 					void GetStageList(std::vector<std::wstring>& l);

@@ -203,7 +203,7 @@ namespace Lunia {
 					in.Read(L"RebirthCountEquipLimit", RebirthCountEquipLimit, static_cast<uint16>(0));
 					in.Read(L"isSkillAvailable", isSkillAvailable, true);
 					in.Read(L"isReviveAvailable", isReviveAvailable, true);
-					in.Read(L"ReviveLimitCount", ReviveLimitCount, static_cast<uint32>(0)); // 3.1 by ycr4zy 14-11-2019
+					in.Read(L"ReviveLimitCount", ReviveLimitCount, static_cast<int32>(0)); // 3.1 by ycr4zy 14-11-2019
 					in.Read(L"lowGuildRank", lowGuildRank, 0);
 					in.Read(L"highGuildRank", highGuildRank, 0);
 					in.Read(L"RaidStageDifficulty", RaidStageDifficulty, static_cast<uint8>(0));

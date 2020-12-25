@@ -47,7 +47,7 @@ namespace Lunia {
 
 			Lunia::IStreamWriter* stream;
 
-			com_ptr<IRefCountedStreamWriter> refcountedStream;
+			com_ptr<Lunia::IRefCountedStreamWriter> refcountedStream;
 
 			struct Element {
 				std::wstring type; 
@@ -60,8 +60,6 @@ namespace Lunia {
 			};
 
 			std::deque<Element> tree;
-
-
 
 			void inline pushStack(const wchar_t* name) {
 				tree.push_back( Element(name, L"unknown"));

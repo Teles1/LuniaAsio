@@ -226,9 +226,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Config_Infos.json">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

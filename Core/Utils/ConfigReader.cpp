@@ -44,12 +44,6 @@ namespace Lunia {
                 m_AchievementAddress = stage["AchievementAddress"].get<ServerAddress>();
 
             }
-            else if (!j_config["Database"].is_null()) {
-                auto& database = j_config["Database"];
-
-                m_PreloadScripts = database["PreloadScripts"].get<bool>();
-                m_PreloadMovemap = database["PreloadMovemap"].get<bool>();
-            }
             else if (!j_config["SquareServer"].is_null()) {
                 Logger::GetInstance().Info("Instance loaded as SquareServer");
                 auto& square = j_config["SquareServer"];
@@ -73,8 +67,13 @@ namespace Lunia {
                 Logger::GetInstance().Exception("Instance for this server was not reconized.");
             //Here we are already sure that the config exists and the file is valid. lets keep on extracting.
             {
-                if (j_config["Locale"].is_null())
+                if (j_config["Locale"].is_null()) {
                     Logger::GetInstance().Warn("There is no Locale to be loaded into this Server");
+                } else if (j_config["Database"].is_null()) {
+                    auto& database = j_config["Database"];
+                    m_PreloadScripts = database["PreloadScripts"].get<bool>();
+                    m_PreloadMovemap = database["PreloadMovemap"].get<bool>();
+                }
                 else
                 {
                     auto& locale = j_config["Locale"];
