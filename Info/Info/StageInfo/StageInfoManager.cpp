@@ -81,6 +81,37 @@ namespace Lunia {
 					}
 				}
 
+				void StageInfoManager::SaveXml() {
+					StageInfoMap::iterator i = stages.begin();
+					int index;
+					for (; i != stages.end(); ++i) {
+						StageInfo& info = (*i).second;
+						String tempChar = info.MoveMapName;
+						// Removing /Move from name folder
+						std::wstring substring = L"/Move";
+						std::size_t pos = tempChar.find(substring); 
+						if (pos != std::string::npos) {
+							tempChar.erase(pos, substring.length());
+						}
+
+						// Changing .move to .xml and Move with uppercase what???
+						std::wstring StringMove = L".move";
+						std::size_t position = tempChar.find(StringMove);
+						if (position < 100) {
+							tempChar.replace(position, StringMove.length(), L".xml");
+						}
+						else {
+							std::wstring StringMove = L".Move";
+							std::size_t position = tempChar.find(StringMove);
+							tempChar.replace(position, StringMove.length(), L".xml");
+						}
+
+						Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateSerializerXmlStreamWriter(tempChar.c_str());
+						writer->Write(L"Stage", info);
+						std::wcout << L"Stage Done...\n";
+					}
+				}
+
 				void StageInfoManager::LoadPvpItemStageInfo()
 				{
 					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/Stages/PVP/PvpItemStageInfo.xml");
