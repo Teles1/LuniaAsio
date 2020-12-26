@@ -4072,7 +4072,42 @@ namespace Lunia {
 		}
 
 		const DateTime InstanceEx::NoExpiration(L"2050-12-31 00:00:00");
+		bool InstanceEx::IsExpired(const DateTime& now) const
+		{
+			if (ExpireDate == NoExpiration)
+				return false;
+			if (ExpireDate.GetDate().GetYear(0) == 0)
+				return false;
+			if (ExpireDate > now)
+				return false;
+			return true;
+		}
+		void InstanceEx::ForceExpiration()
+		{
+			DateTime newExpireDate(DateTime::Now());
+			newExpireDate.GetDate().SetYear(newExpireDate.GetDate().GetYear() - 1);
+			ExpireDate = newExpireDate;
+		}
 
+		void InstanceEx::MakeUnlimitedPeriod()
+		{
+			ExpireDate = NoExpiration;
+		}
+		DateTime InstanceEx::GetExpiredDate() const
+		{
+			return ExpireDate;
+		}
+		DateTime InstanceEx::ExtensionExpiredDay(uint32 day)
+		{
+			if (*this == NoExpiration)
+				return DateTime::Infinite;
+
+			DateTime nowExpiredDate = DateTime::Now(); //NormalBitfields::GetExpiredDate();
+
+			nowExpiredDate = nowExpiredDate.Add(DateTime::Unit::Day, day);
+
+			return nowExpiredDate;
+		}
 		void InstanceEx::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"InstanceEx");
