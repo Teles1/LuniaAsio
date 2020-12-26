@@ -59,6 +59,13 @@ namespace Lunia {
 		@return an integer value between half-closed interval of [0...MAX_LONG)
 		*/
 		unsigned long Random();
+		/**
+		Calculates a new random number using Mersenne Twister
+
+		@param m a maximum value that will be returned
+		@return an integer value between half-closed interval of [min..max)
+		*/
+		unsigned long Random(unsigned long min, unsigned long max);
 
 		/**
 		Calculates a new random number using Mersenne Twister

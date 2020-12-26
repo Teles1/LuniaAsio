@@ -194,6 +194,12 @@
     <ClInclude Include="Info\NPCs\CompressedNPCManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\PvPRankRewardItemInfos\PvPRankRewardItemTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\PvPRankRewardItemInfos\PvPRankRewardInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -362,6 +368,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\NPCs\CompressedNPCManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\PvPRankRewardItemInfos\PvPRankRewardInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\PvPRankRewardItemInfos\PvPRankRewardItemTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

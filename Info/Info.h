@@ -13,6 +13,7 @@
 #include <Info/Info/EquipSet/EquipSetManager.h>
 #include <Info/Info/Pets/PetsManager.h>
 #include <Info/Info/PvpRewardItemInfos/PvPRewardItemInfosManager.h>
+#include <Info/Info/PvPRankRewardItemInfos/PvPRankRewardItemTable.h>
 #include <Info/Info/Event/EventInfoManager.h>
 #include <Info/Info/StylePoints/StylePointInfoManager.h>
 #include <Info/Info/GeneralInfos/GeneralInfoManager.h>
@@ -48,6 +49,7 @@ namespace Lunia {
 						Info::IndexedStatusInfoManager Statuses;
 						Info::StagePlayTimeInfoManager StagePlayTimes;
 						Info::PvPRewardItemTable PvPRewardItemInfos;
+						Info::PvPRankRewardItemTable PvPRankRewardItemInfos;
 						Info::EventInfoManager EventInfoManager;
 						Info::StylePointInfoManager StylePoints;
 						Info::GeneralInfoManager GeneralInfos;

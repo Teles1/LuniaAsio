@@ -18,7 +18,13 @@ namespace Lunia {
 
 		unsigned long Random()
 		{
+			AutoLock lock(Private::cs);
 			return Private::randomInt.Next();
+		}
+		unsigned long Random(unsigned long min, unsigned long max)
+		{
+			AutoLock lock(Private::cs);
+			return Private::randomInt.Next(min, max);
 		}
 		double RandomHalfClosed(double m)
 		{

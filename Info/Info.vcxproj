@@ -209,6 +209,8 @@
     <ClInclude Include="Info\Pets\PetsManager.h" />
     <ClInclude Include="Info\Projectiles\IndexedProjectileInfoManager.h" />
     <ClInclude Include="Info\Projectiles\Projectile.h" />
+    <ClInclude Include="Info\PvPRankRewardItemInfos\PvPRankRewardInfo.h" />
+    <ClInclude Include="Info\PvPRankRewardItemInfos\PvPRankRewardItemTable.h" />
     <ClInclude Include="Info\PvPRewardItemInfos\PvPRewardInfo.h" />
     <ClInclude Include="Info\PvPRewardItemInfos\PvPRewardItemInfosManager.h" />
     <ClInclude Include="Info\Skills\SkillInfoManager.h" />
@@ -269,6 +271,8 @@
     <ClCompile Include="Info\Projectiles\IndexedProjectileInfoManager.cpp" />
     <ClCompile Include="Info\Projectiles\Projectile.cpp" />
     <ClCompile Include="Info\Projectiles\ProjectileInfoManager.cpp" />
+    <ClCompile Include="Info\PvPRankRewardItemInfos\PvPRankRewardInfo.cpp" />
+    <ClCompile Include="Info\PvPRankRewardItemInfos\PvPRankRewardItemTable.cpp" />
     <ClCompile Include="Info\PvPRewardItemInfos\PvPRewardInfo.cpp" />
     <ClCompile Include="Info\PvPRewardItemInfos\PvPRewardItemInfosManager.cpp" />
     <ClCompile Include="Info\Skills\SkillInfoManager.cpp" />
