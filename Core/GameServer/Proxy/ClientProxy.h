@@ -18,7 +18,7 @@ struct ClientProxy : public ClientNetworkIO //, TODO? std::enable_shared_from_th
 {
 	ClientProxy(asio::ip::tcp::socket&& socket);
 
-	~ClientProxy() { std::cout << "CLientPROXY Dctor" << std::endl; };
+	~ClientProxy() { };
 
 	void MakeSocketAsyncWriteSerializable(Lunia::Serializer::ISerializable& packet);
 

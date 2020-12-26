@@ -6,24 +6,21 @@
 
 ClientProxy::ClientProxy(asio::ip::tcp::socket&& socket) : ClientNetworkIO(std::move(socket)) /* WARN socket is moved a shit ton of times here */
 {
-	std::cout << "ClientProxy : constructor called" << std::endl;
+
 };
 
 void ClientProxy::MakeSocketAsyncWriteSerializable(Lunia::Serializer::ISerializable& packet)
 {
 	Lunia::StaticBuffer<2 << 12> buffer;
 
-
-	// unsigned short * packetNameHashed = (char*)streamWriter.buffer.GetData();
-
 	try
 	{
-
 		Lunia::Net::StreamWriter streamWriter(buffer);
 
 		streamWriter.Write(packet);
 
-		// std::cout << "server -> Client@" << this->GetId() << " 0x" << packetNameHashed << std::endl;
+		// unsigned short * packetNameHashed = (char*)streamWriter.buffer.GetData();
+		// std::cout << "server -> Client@" << this->GetId() << " 0x" << decltype(packet)::value::TypeHash << std::endl;
 	}
 	catch (Lunia::Exception& e)
 	{

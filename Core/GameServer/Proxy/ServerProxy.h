@@ -16,8 +16,6 @@ struct ServerProxy // : TODO? std::enable_shared_from_this<ServerProxy>
 public:
 	inline ServerProxy()
 	{
-		std::cout << "ServerProxy created" << std::endl;
-
 		ClientRegistry.OnClientCreated.Connect([PacketHandler = &PacketHandler, ClientRegistry = &ClientRegistry](TClientProxySharedPtr& client)
 		{
 			/*
@@ -56,8 +54,6 @@ public:
 					unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[4]);
 
 					PacketHandler->Invoke(clientLocked, (uint16_t)*packetNameHashed, streamReader);
-
-					std::cout << "Incoming packet :: 0x" << (uint16_t)*packetNameHashed << " :: Client:" << clientLocked->GetId() << std::endl;
 				}
 			});
 		});

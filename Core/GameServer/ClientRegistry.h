@@ -6,6 +6,8 @@
 
 #include <algorithm> // std::find
 
+#include <iostream>
+
 template<typename TClientScope>
 struct ClientRegistry
 {
@@ -45,7 +47,7 @@ public:
 		OnClientCreated(client);
 	}
 
-	void DropClient(ClientSharedPtr& client)
+	void DropClient(ClientSharedPtr& client, std::string reason = "")
 	{
 		m_clientIdToClientWeak.erase(client->GetId());
 
@@ -59,6 +61,8 @@ public:
 				m_clients.erase(it);
 			}
 		}
+
+		std::cout << "Client:" << client->GetId() << " was disconnected! reason: " << reason << std::endl;
 
 		client->OnDropped();
 
@@ -156,9 +160,7 @@ public:
 			{
 				auto client = clientWeak.lock();
 
-				Logger::GetInstance().Info("Client@{0} didn't acknowledge 5 pings! Dropping him/her.", client->GetId());
-
-				this->DropClient(client);
+				this->DropClient(client, "didn't acknowledge 5 pings!");
 			}
 		}
 	}
