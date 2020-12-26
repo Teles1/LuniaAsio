@@ -15,6 +15,14 @@
 #include <Info/Info/PvpRewardItemInfos/PvPRewardItemInfosManager.h>
 #include <Info/Info/Event/EventInfoManager.h>
 #include <Info/Info/StylePoints/StylePointInfoManager.h>
+#include <Info/Info/GeneralInfos/GeneralInfoManager.h>
+#include <Info/Info/NonPlayerModifier/NonPlayerModifierManager.h>
+#include <Info/Info/StatusInfo/IndexedStatusInfoManager.h>
+#include <Info/Info/Projectiles/IndexedProjectileInfoManager.h>
+#include <Info/Info/MISCS/IndexedMISCSManager.h>
+#include <Info/Info/Skills/SkillInfoManager.h>
+#include <Info/Info/EventNonPlayerItemList/EventNonPlayerItemListManager.h>
+#include <Info/Info/StagePlayTime/StagePlayTimeManager.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -25,18 +33,26 @@ namespace Lunia {
 					void Init();
 
 					struct Collection {
-						Info::StageGroupManager StageGroups;
-						Info::NPCInfoManager Npcs;
-						Enchant::EnchantTableManager EnchantTables;
+						Info::SkillInfoManager Skills;
 						Info::StateBundleInfoManager StateBundles;
+						Enchant::EnchantTableManager EnchantTables;
 						Info::CompressedItemInfoManager Items;
 						Info::EquipSetManager EquipSet;
 						Info::PetManager Pets;
-						Info::StageInfoManager StageInfos;
 						Info::ActionInfoManager Actions;
+						Info::NPCInfoManager Npcs;
+						Info::StageInfoManager Stages;
+						Info::EventNonPlayerItemList EventNonPlayerItemList;
+						Info::StageGroupManager StageGroups;
+						Info::IndexedStatusInfoManager Statuses;
+						Info::StagePlayTimeInfoManager StagePlayTimes;
 						Info::PvPRewardItemTable PvPRewardItemInfos;
 						Info::EventInfoManager EventInfoManager;
 						Info::StylePointInfoManager StylePoints;
+						Info::GeneralInfoManager GeneralInfos;
+						Info::NonPlayerModifierTable NonPlayerModifierInfos;
+						Info::IndexedProjectileInfoManager Projectiles;
+						Info::IndexedMISCInfoManager Miscs;
 					} InfoCollections;
 			};
 			LuniaDatabase& DatabaseInstance();

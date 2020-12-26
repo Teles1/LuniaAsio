@@ -184,6 +184,8 @@
     <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.h" />
     <ClInclude Include="Info\Event\EventInfo.h" />
     <ClInclude Include="Info\Event\EventInfoManager.h" />
+    <ClInclude Include="Info\GeneralInfos\GeneralInfo.h" />
+    <ClInclude Include="Info\GeneralInfos\GeneralInfoManager.h" />
     <ClInclude Include="Info\GlobalInfo.h" />
     <ClInclude Include="Info\IndexedInfoManager.h" />
     <ClInclude Include="Info\InfoHelper.h" />
@@ -193,11 +195,18 @@
     <ClInclude Include="Info\Items\Item.h" />
     <ClInclude Include="Info\Items\ItemManager.h" />
     <ClInclude Include="Info\Less.h" />
+    <ClInclude Include="Info\MISCS\IndexedMISCSManager.h" />
+    <ClInclude Include="Info\MISCS\MISCS.h" />
+    <ClInclude Include="Info\MISCS\MISCSManager.h" />
+    <ClInclude Include="Info\NonPlayerModifier\NonPlayerModifier.h" />
+    <ClInclude Include="Info\NonPlayerModifier\NonPlayerModifierManager.h" />
     <ClInclude Include="Info\NPCs\IndexedNPCInfo.h" />
     <ClInclude Include="Info\NPCs\NPC.h" />
     <ClInclude Include="Info\NPCs\NPCManager.h" />
     <ClInclude Include="Info\Pets\Pets.h" />
     <ClInclude Include="Info\Pets\PetsManager.h" />
+    <ClInclude Include="Info\Projectiles\IndexedProjectileInfoManager.h" />
+    <ClInclude Include="Info\Projectiles\Projectile.h" />
     <ClInclude Include="Info\PvPRewardItemInfos\PvPRewardInfo.h" />
     <ClInclude Include="Info\PvPRewardItemInfos\PvPRewardItemInfosManager.h" />
     <ClInclude Include="Info\Skills\SkillInfoManager.h" />
@@ -235,6 +244,8 @@
     <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.cpp" />
     <ClCompile Include="Info\Event\EventInfo.cpp" />
     <ClCompile Include="Info\Event\EventInfoManager.cpp" />
+    <ClCompile Include="Info\GeneralInfos\GeneralInfo.cpp" />
+    <ClCompile Include="Info\GeneralInfos\GeneralInfoManager.cpp" />
     <ClCompile Include="Info\GlobalInfo.cpp" />
     <ClCompile Include="Info\IndexedInfoManager.cpp" />
     <ClCompile Include="Info\ItemStageInfo\ItemStageInfo.cpp" />
@@ -242,11 +253,19 @@
     <ClCompile Include="Info\Items\IndexedItemInfoManager.cpp" />
     <ClCompile Include="Info\Items\Item.cpp" />
     <ClCompile Include="Info\Items\ItemManager.cpp" />
+    <ClCompile Include="Info\MISCS\IndexedMISCSManager.cpp" />
+    <ClCompile Include="Info\MISCS\MISCS.cpp" />
+    <ClCompile Include="Info\MISCS\MISCSManager.cpp" />
+    <ClCompile Include="Info\NonPlayerModifier\NonPlayerModifierManager.cpp" />
+    <ClCompile Include="Info\NonPlayerModifier\NonPlayerModifier.cpp" />
     <ClCompile Include="Info\NPCs\IndexedNPCInfo.cpp" />
     <ClCompile Include="Info\NPCs\NPC.cpp" />
     <ClCompile Include="Info\NPCs\NPCManager.cpp" />
     <ClCompile Include="Info\Pets\Pets.cpp" />
     <ClCompile Include="Info\Pets\PetsManager.cpp" />
+    <ClCompile Include="Info\Projectiles\IndexedProjectileInfoManager.cpp" />
+    <ClCompile Include="Info\Projectiles\Projectile.cpp" />
+    <ClCompile Include="Info\Projectiles\ProjectileInfoManager.cpp" />
     <ClCompile Include="Info\PvPRewardItemInfos\PvPRewardInfo.cpp" />
     <ClCompile Include="Info\PvPRewardItemInfos\PvPRewardItemInfosManager.cpp" />
     <ClCompile Include="Info\Skills\SkillInfoManager.cpp" />
@@ -272,6 +291,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Info\Projectiles\ProjectileInfoManager.h" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

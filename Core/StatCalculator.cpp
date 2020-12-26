@@ -1,5 +1,4 @@
 #include "StatCalculator.h"
-#include <Logic/Object/StatCalculateScript.h>
 #include <Info/Info.h>
 
 namespace Lunia
