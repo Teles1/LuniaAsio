@@ -224,6 +224,7 @@
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader2.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamWriter2.h" />
     <ClInclude Include="ServiceHelper\LobbyService.h" />
+    <ClInclude Include="StatCalculator.h" />
     <ClInclude Include="Utils\ConfigReader.h" />
     <ClInclude Include="Utils\Math\Color.h" />
     <ClInclude Include="Utils\Math\euler.h" />
@@ -273,6 +274,7 @@
     <ClCompile Include="Serializer\Binary\XmlStream.cpp" />
     <ClCompile Include="Serializer\Serializer.cpp" />
     <ClCompile Include="ServiceHelper\LobbyService.cpp" />
+    <ClCompile Include="StatCalculator.cpp" />
     <ClCompile Include="Utils\ConfigReader.cpp" />
     <ClCompile Include="Utils\Math\Color.cpp" />
     <ClCompile Include="Utils\StringUtil\General.cpp">
