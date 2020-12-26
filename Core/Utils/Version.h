@@ -1,5 +1,6 @@
 #pragma once
 #include "../Exceptions/Expcetion.h"
+#include <Core/Utils/Logger.h>
 #include <set>
 
 struct Version {
