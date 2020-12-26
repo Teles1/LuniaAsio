@@ -28,7 +28,6 @@
     <ClCompile Include="Logic\Logic.cpp" />
     <ClCompile Include="Logic\Sector\Sector.cpp" />
     <ClCompile Include="DeltaTimer.cpp" />
-    <ClCompile Include="StatCalculator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -113,7 +112,7 @@
     <ClInclude Include="Logic\Sector\Sector.h" />
     <ClInclude Include="DeltaTimer.h" />
     <ClInclude Include="Utils\Math\MinMax.h" />
-    <ClInclude Include="StatCalculator.h" />
+    <ClInclude Include="Runnable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
