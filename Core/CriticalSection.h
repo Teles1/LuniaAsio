@@ -35,4 +35,15 @@ namespace Lunia
 		inline CriticalSectionLock(CriticalSection& locker) : l(locker) { l.Lock(); }
 		inline ~CriticalSectionLock() { l.Unlock(); }
 	};
+
+	class AutoLockCS
+	{
+	private:
+		ILockable& l;
+		void operator=(const AutoLockCS&) {}
+
+	public:
+		AutoLockCS(ILockable& locker) : l(locker) { l.Lock(); }
+		~AutoLockCS() { l.Unlock(); }
+	};
 } // namespace AllM
