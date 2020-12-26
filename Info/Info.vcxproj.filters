@@ -134,6 +134,12 @@
     <ClInclude Include="Info\StatusInfo\StatusInfoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\StagePlayTime\StagePlayTimeManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StagePlayTime\StagePlayTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -245,6 +251,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\StatusInfo\StatusInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StagePlayTime\StagePlayTimeManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StagePlayTime\StagePlayTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

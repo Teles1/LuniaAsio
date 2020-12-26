@@ -203,6 +203,8 @@
     <ClInclude Include="Info\StageGroup\StageGroupManager.h" />
     <ClInclude Include="Info\StageInfo\StageInfo.h" />
     <ClInclude Include="Info\StageInfo\StageInfoManager.h" />
+    <ClInclude Include="Info\StagePlayTime\StagePlayTime.h" />
+    <ClInclude Include="Info\StagePlayTime\StagePlayTimeManager.h" />
     <ClInclude Include="Info\StateBundles\IndexedStateBundles.h" />
     <ClInclude Include="Info\StateBundles\StateBundles.h" />
     <ClInclude Include="Info\StateBundles\StateBundlesManager.h" />
@@ -243,6 +245,8 @@
     <ClCompile Include="Info\StageGroup\StageGroupManager.cpp" />
     <ClCompile Include="Info\StageInfo\StageInfo.cpp" />
     <ClCompile Include="Info\StageInfo\StageInfoManager.cpp" />
+    <ClCompile Include="Info\StagePlayTime\StagePlayTime.cpp" />
+    <ClCompile Include="Info\StagePlayTime\StagePlayTimeManager.cpp" />
     <ClCompile Include="Info\StateBundles\IndexedStateBundles.cpp" />
     <ClCompile Include="Info\StateBundles\StateBundles.cpp" />
     <ClCompile Include="Info\StateBundles\StateBundlesManager.cpp" />
