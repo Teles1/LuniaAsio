@@ -147,8 +147,8 @@ namespace Lunia {
 					case StateInfo::Type::ATTACKSPEED:
 						returnValue = L"ATTACKSPEED";
 						break;
-					case StateInfo::Type::UNKNOWN:
-						returnValue = L"UNKNOWN";
+					case StateInfo::Type::BOUNDEDMOVESPEED:
+						returnValue = L"BOUNDEDMOVESPEED";
 						break;
 					case StateInfo::Type::SELFHEAL:
 						returnValue = L"SELFHEAL";
@@ -258,17 +258,17 @@ namespace Lunia {
 					case StateInfo::Type::DESTROYENEMY:
 						returnValue = L"DESTROYENEMY";
 						break;
-					case StateInfo::Type::UNKNOWN_2:
-						returnValue = L"UNKNOWN_2";
+					case StateInfo::Type::CREATENPC:
+						returnValue = L"CREATENPC";
 						break;
-					case StateInfo::Type::UNKNOWN_3:
-						returnValue = L"UNKNOWN_3";
+					case StateInfo::Type::CREATEOBJECT:
+						returnValue = L"CREATEOBJECT";
 						break;
-					case StateInfo::Type::UNKNOWN_4:
-						returnValue = L"UNKNOWN_4";
+					case StateInfo::Type::CREATEPROJECTILE:
+						returnValue = L"CREATEPROJECTILE";
 						break;
-					case StateInfo::Type::UNKNOWN_5:
-						returnValue = L"UNKNOWN_5";
+					case StateInfo::Type::SPREADHATE:
+						returnValue = L"SPREADHATE";
 						break;
 					case StateInfo::Type::INCLIFE:
 						returnValue = L"INCLIFE";
