@@ -1,3 +1,5 @@
+#ifndef PvPRankRewardItemTable_H
+#define PvPRankRewardItemTable_H
 #pragma once
 #include "PvPRankRewardInfo.h"
 #include <map>
@@ -19,3 +21,4 @@ namespace Lunia {
 		}
 	}
 }
+#endif // PvPRankRewardItemTable_H
