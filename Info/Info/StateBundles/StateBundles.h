@@ -52,6 +52,7 @@ namespace Lunia {
 					uint8 sort;
 					float duration;
 					float buffRate;
+					float buffRate2;
 					float debuffRate;
 					Constants::AllianceType allianceType;
 					StateList states;
