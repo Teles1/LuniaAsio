@@ -170,6 +170,7 @@ namespace Lunia{
 					/* Loop in Block Size Left */
 					std::vector<uint8> completeBuff;
 					size_t completeSize = 0;
+					uint32 blocksReaded = 0;
 					while (reader->GetSizeLeft() > 0)
 					{
 						/* Reading and setting a first block data in ReplayBuffer*/
@@ -192,6 +193,7 @@ namespace Lunia{
 						SRes res = LzmaUncompress(&outBuf[0], &dstLen, &inBuf[LZMA_PROPS_SIZE], &srcLen, &inBuf[0], LZMA_PROPS_SIZE);
 
 						//if do you want save all outbuf in a vector uncomment this and good luck <3
+						//outBuf.erase(outBuf.begin(), outBuf.begin() + 4);
 						std::move(outBuf.begin(), outBuf.end(), std::back_inserter(completeBuff));
 						completeSize += dstLen;
 					}
