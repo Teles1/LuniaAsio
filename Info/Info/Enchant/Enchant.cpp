@@ -12,18 +12,18 @@ namespace Lunia {
 					switch (pos)
 					{
 					case 0:
-						return std::pair<uint8, uint8>(Option1, Level1);
+						return std::pair<uint8, uint8>((uint8)Option1, (uint8)Level1);
 					case 1:
-						return std::pair<uint8, uint8>(Option2, Level2);
+						return std::pair<uint8, uint8>((uint8)Option2, (uint8)Level2);
 					case 2:
-						return std::pair<uint8, uint8>(Option3, Level3);
+						return std::pair<uint8, uint8>((uint8)Option3, (uint8)Level3);
 					}
 					return std::pair<uint8, uint8>(0, 0);
 				}
 
 				std::pair<uint16 /*first*/, uint16 /*second*/> EnchantBitfields::GetMagicalAttach() const
 				{
-					return std::pair<uint16, uint16>(Magic1, Magic2);
+					return std::pair<uint16, uint16>((uint16)Magic1, (uint16)Magic2);
 				}
 
 				/* bool NormalBitfields::IsExpired(const DateTime &now) const

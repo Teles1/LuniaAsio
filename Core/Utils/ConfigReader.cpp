@@ -43,7 +43,7 @@ namespace Lunia {
                 m_ShowPacket = stage["ShowPacket"].get<bool>();
                 m_Capacity = stage["Capacity"].get<uint16>();
                 m_AchievementAddress = stage["AchievementAddress"].get<ServerAddress>();
-
+                m_UsableBonusLifeInStage = stage["UsableBonusLifeInStage"].get<uint16>();
             }
             else if (!j_config["SquareServer"].is_null()) {
                 Logger::GetInstance().Info("Instance loaded as SquareServer");

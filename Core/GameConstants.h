@@ -1253,7 +1253,7 @@ namespace Lunia {
 			: public Serializer::ISerializable
 		{
 			uint32	itemHash;
-			InstanceEx	instanceEx;
+			InstanceEx	InstanceEx;
 			Constants::Equipment	where;
 
 		public:
@@ -1265,7 +1265,7 @@ namespace Lunia {
 		{
 			uint32 ItemHash;
 			uint16 StackedCount;
-			InstanceEx instanceEx;
+			InstanceEx InstanceEx;
 			uint32 SellPrice;
 
 			bool operator==(const StoreSlot& rhs) const;
@@ -1279,17 +1279,18 @@ namespace Lunia {
 			uint32 ItemHash;
 			uint64 ItemSerial;
 			uint16 StackCount;
-			InstanceEx instanceEx;
+			InstanceEx InstanceEx;
 
 			ItemBasicInfo()
 				: ItemHash(0)
-				, instanceEx(0)
+				, InstanceEx(0)
 				, StackCount(0)
+				, ItemSerial(0)
 			{
 			}
 			ItemBasicInfo(uint32 id, int64 inst, GlobalSerial serial, uint16 count)
 				: ItemHash(id)
-				, instanceEx(inst)
+				, InstanceEx(inst)
 				, ItemSerial(serial)
 				, StackCount(count)
 			{
@@ -1922,8 +1923,8 @@ namespace Lunia {
 
 			std::wstring OwnerId;
 			uint16 StackCount;
-			bool  PrivateItem;	//�������� �������� ������
-			int64 Instance;
+			bool  PrivateItem;
+			InstanceEx InstanceEx;
 
 			ItemData(ObjectData& obj);
 			void operator= (const ItemData&);
@@ -2257,7 +2258,6 @@ namespace Lunia {
 			Pet	PetData;
 
 			bool operator==(const StoreSlot& rhs) const;
-			//�� Finder�� ���� �Ҷ��� ������ PetSerial�� 0�� �ƴҶ� ���� �ؾ� �Ѵ�.
 			struct Finder
 			{
 			private:

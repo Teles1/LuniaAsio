@@ -1153,7 +1153,7 @@ namespace Lunia {
 		{
 			out.Begin(L"InvalidEquippedItem");
 			out.Write(L"itemHash", itemHash);
-			out.Write(L"instanceEx", instanceEx);
+			out.Write(L"instanceEx", InstanceEx);
 			out.WriteEnum(L"Where", where);
 		}
 
@@ -1161,7 +1161,7 @@ namespace Lunia {
 		{
 			in.Begin(L"InvalidEquippedItem");
 			in.Read(L"itemHash", itemHash);
-			in.Read(L"instanceEx", instanceEx);
+			in.Read(L"instanceEx", InstanceEx);
 			in.ReadEnum(L"Where", where);
 		}
 
@@ -1170,7 +1170,7 @@ namespace Lunia {
 			out.Begin(L"StoreSlot");
 			out.Write(L"ItemHash", ItemHash);
 			out.Write(L"StackedCount", StackedCount);
-			out.Write(L"instanceEx", instanceEx);
+			out.Write(L"instanceEx", InstanceEx);
 			out.Write(L"SellPrice", SellPrice);
 		}
 
@@ -1179,20 +1179,20 @@ namespace Lunia {
 			in.Begin(L"StoreSlot");
 			in.Read(L"ItemHash", ItemHash);
 			in.Read(L"StackedCount", StackedCount);
-			in.Read(L"instanceEx", instanceEx);
+			in.Read(L"instanceEx", InstanceEx);
 			in.Read(L"SellPrice", SellPrice);
 		}
 
 		bool StoreSlot::operator ==(const StoreSlot& rhs) const
 		{
-			return (ItemHash == rhs.ItemHash && StackedCount == rhs.StackedCount && instanceEx == rhs.instanceEx && SellPrice == rhs.SellPrice);
+			return (ItemHash == rhs.ItemHash && StackedCount == rhs.StackedCount && this->InstanceEx == rhs.InstanceEx && SellPrice == rhs.SellPrice);
 		}
 
 		void ItemBasicInfo::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"ItemInfo");
 			out.Write(L"ItemHash", ItemHash);
-			out.Write(L"instanceEx", instanceEx);
+			out.Write(L"instanceEx", this->InstanceEx);
 			out.Write(L"StackCount", StackCount);
 		}
 
@@ -1200,7 +1200,7 @@ namespace Lunia {
 		{
 			in.Begin(L"ItemInfo");
 			in.Read(L"ItemHash", ItemHash);
-			in.Read(L"instanceEx", instanceEx);
+			in.Read(L"instanceEx", this->InstanceEx);
 			in.Read(L"StackCount", StackCount);
 		}
 
@@ -1521,7 +1521,7 @@ namespace Lunia {
 			OwnerId = item.OwnerId;
 			StackCount = item.StackCount;
 			PrivateItem = item.PrivateItem;
-			Instance = item.Instance;
+			this->InstanceEx = item.InstanceEx;
 		}
 
 		void CharacterData::operator =(const CharacterData& ch)
@@ -3780,14 +3780,17 @@ namespace Lunia {
 		}
 		bool StoreSlotForPet::operator ==(const StoreSlot& rhs) const
 		{
-			return (ItemHash == rhs.ItemHash && StackedCount == rhs.StackedCount && instanceEx == rhs.instanceEx && SellPrice == rhs.SellPrice);
+			return (ItemHash == rhs.ItemHash 
+				&& StackedCount == rhs.StackedCount 
+				&& this->InstanceEx== rhs.InstanceEx 
+				&& SellPrice == rhs.SellPrice);
 		}
 		void StoreSlotForPet::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"XRated::StoreSlotForPet");
 			out.Write(L"ItemHash", ItemHash);
 			out.Write(L"StackedCount", StackedCount);
-			out.Write(L"instanceEx", instanceEx);
+			out.Write(L"instanceEx", InstanceEx);
 			out.Write(L"SellPrice", SellPrice);
 			out.Write(L"PetData", PetData);
 		}
@@ -3796,7 +3799,7 @@ namespace Lunia {
 			in.Begin(L"XRated::StoreSlotForPet");
 			in.Read(L"ItemHash", ItemHash);
 			in.Read(L"StackedCount", StackedCount);
-			in.Read(L"instanceEx", instanceEx);
+			in.Read(L"instanceEx", InstanceEx);
 			in.Read(L"SellPrice", SellPrice);
 			in.Read(L"PetData", PetData);
 		}

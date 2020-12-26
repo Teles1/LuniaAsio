@@ -67,5 +67,7 @@ namespace Lunia {
         ServerType m_ServerType;
         void ReadConfigFile(const char* filename);
         ServerType GetType();
+    public: // Logic
+        uint16 m_UsableBonusLifeInStage;
     };
 }

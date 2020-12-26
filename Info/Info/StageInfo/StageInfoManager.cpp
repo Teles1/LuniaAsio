@@ -83,7 +83,7 @@ namespace Lunia {
 				
 				void StageInfoManager::SaveXml() {
 					StageInfoMap::iterator i = stages.begin();
-					int index;
+					int index = 0;
 					for (; i != stages.end(); ++i) {
 						StageInfo& info = (*i).second;
 						String tempChar = info.MoveMapName;
