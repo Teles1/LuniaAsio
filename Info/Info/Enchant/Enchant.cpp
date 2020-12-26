@@ -4,7 +4,7 @@
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
-			namespace Info {
+			namespace Enchant {
 				Enchant::EnchantTableManager database;
 
 				std::pair<uint8, uint8> EnchantBitfields::GetIdentifyFields(int pos) const
