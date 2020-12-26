@@ -1053,6 +1053,14 @@ namespace Lunia {
 			{
 				ExpireDate.Parse(expireDate.c_str());
 			}
+			InstanceEx(const int64& instance, const DateTime& dateTime) {
+				Instance = instance;
+				ExpireDate = dateTime;
+			}
+			InstanceEx(const int64& instance, const std::string& dateTime) {
+				Instance = instance;
+				ExpireDate.Parse(dateTime);
+			}
 			bool IsExpired(const DateTime& now = DateTime::Now()) const;
 			void ForceExpiration();
 			void MakeUnlimitedPeriod();
