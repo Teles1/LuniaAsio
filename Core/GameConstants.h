@@ -29,8 +29,6 @@ namespace Lunia {
 				};
 			};
 
-			// ĳ���� �̸��� CreateCharacterNameAsciiMinSize, CreateCharacterNameAsciiMaxSize�� ���� �ʴ� ���̸� ������ �ִ� ĳ���Ͱ� ������ �� �ִ�.
-			// ������ ���� �������� �ϸ鼭 ĳ���� �̸��� Ư������ ���� �־��ְų� �߱� �����̴�.			
 			const static uint32 CreateCharacterNameAsciiMinLength = 4;		///< ĳ���� ������ ĳ���� �̸��� ascii�ڵ� ������ �ּ� ����(*���� : �ش� �������� ĳ���� �����ÿ��� �����ȴ�).
 			const static uint32 CreateCharacterNameAsciiMaxLength = 16;		///< ĳ���� ������ ĳ���� �̸��� ascii�ڵ� ������ �ִ� ����(*���� : �ش� �������� ĳ���� �����ÿ��� �����ȴ�).
 			const static uint16 PlayerMaxLevel = 99;			///< �Ϲ� �÷��̾� ĳ������ level�� limit.

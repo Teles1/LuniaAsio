@@ -229,6 +229,7 @@
     <ClInclude Include="Utils\Math\euler.h" />
     <ClInclude Include="Utils\Math\Math.h" />
     <ClInclude Include="Utils\Math\matrix4x4.h" />
+    <ClInclude Include="Utils\Math\MinMax.h" />
     <ClInclude Include="Utils\Math\plane.h" />
     <ClInclude Include="Utils\Math\quaternion.h" />
     <ClInclude Include="Types.h" />

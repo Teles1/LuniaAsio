@@ -111,6 +111,7 @@
     <ClInclude Include="Logic\Logic.h" />
     <ClInclude Include="Logic\Sector\Sector.h" />
     <ClInclude Include="DeltaTimer.h" />
+    <ClInclude Include="Utils\Math\MinMax.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
