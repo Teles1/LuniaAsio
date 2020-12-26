@@ -334,7 +334,39 @@ namespace Lunia {
 						throw StateTypeNotFoundException(type);
 					}
 				}
+				void BasicStatInfo::Stat::Serialize(Serializer::IStreamWriter& out) const
+				{
+					out.Begin(L"AllM::XRated::Database::Info::BasicStatInfo::Stat");
+					out.Write(L"Str", Str);
+					out.Write(L"Dex", Dex);
+					out.Write(L"Vit", Vit);
+					out.Write(L"Int", Int);
+				}
 
+				void BasicStatInfo::Stat::Deserialize(Serializer::IStreamReader& in)
+				{
+					in.Begin(L"AllM::XRated::Database::Info::BasicStatInfo::Stat");
+					in.Read(L"Str", Str);
+					in.Read(L"Dex", Dex);
+					in.Read(L"Vit", Vit);
+					in.Read(L"Int", Int);
+				}
+
+				void BasicStatInfo::Serialize(Serializer::IStreamWriter& out) const
+				{
+					out.Begin(L"AllM::XRated::Database::Info::BasicStatInfo");
+					out.Write(L"Name", name);
+					out.Write(L"Stats", stats);
+					out.WriteEnum(L"MajorStat", majorStat);
+				}
+
+				void BasicStatInfo::Deserialize(Serializer::IStreamReader& in)
+				{
+					in.Begin(L"AllM::XRated::Database::Info::BasicStatInfo");
+					in.Read(L"Name", name);
+					in.Read(L"Stats", stats);
+					in.ReadEnum(L"MajorStat", majorStat, Constants::CharacterMajorStatType::NoMajorStat);
+				}
 			}
 		}
 	}

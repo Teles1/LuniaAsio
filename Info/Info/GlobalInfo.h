@@ -1,6 +1,5 @@
 #pragma once
 #include "./Database.h"
-#include <Info/Info/Items/Item.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -152,35 +151,32 @@ namespace Lunia {
 						std::wstring typeStr;
 					};
 				};
+				struct BasicStatInfo : public Serializer::ISerializable {
+					//const static int SIZE=6;
+					struct Stat : public Serializer::ISerializable {
+						int Str;
+						int Dex;
+						int Vit;
+						int Int;
 
-				class FindReviveState : public ItemInfo::IFindCondition {
-					StateInfo::Type type;
+					public:
+						Stat() {}
+						Stat(int s, int d, int v, int i) : Str(s), Dex(d), Vit(v), Int(i) { }
+						void Set(int s, int d, int v, int i) { Str = s; Dex = d; Vit = v; Int = i; }
+
+						virtual void Serialize(Serializer::IStreamWriter& out) const;
+						virtual void Deserialize(Serializer::IStreamReader& in);
+					};
+					std::wstring name;
+					std::vector<Stat> stats;
+					Constants::CharacterMajorStatType majorStat;
+					//Stat stats[SIZE];
+
 				public:
-					inline FindReviveState(StateInfo::Type t) : type(t) {}
-					inline bool operator()(const ItemInfo& rhs) const {
-						for (auto& i : rhs.States)
-							if (i.type == type) 
-								return true;
-						return false;
-					}
+					BasicStatInfo() {}
 
-				};
-
-				class FindHash : public ItemInfo::IFindCondition
-				{
-					uint32 Hash;
-				public:
-					inline FindHash(uint32 hash)
-						: Hash(hash)
-					{}
-
-					inline bool operator() (const ItemInfo& rhs) const
-					{
-						if (this->Hash == rhs.Hash)
-							return true;
-						else
-							return false;
-					}
+					virtual void Serialize(Serializer::IStreamWriter& out) const;
+					virtual void Deserialize(Serializer::IStreamReader& in);
 				};
 			}
 		}
