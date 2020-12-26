@@ -8,6 +8,9 @@ int main(int argc, char* argv[]) {
 	XRated::Database::DatabaseInstance().Init();
 	//XRated::Database::DatabaseInstance().InfoCollections.Stages.SaveXml();
 	//XRated::Database::DatabaseInstance().InfoCollections.Skills.Init(false);
-	XRated::Database::DatabaseInstance().InfoCollections.StateBundles.Init(false);
+	//XRated::Database::DatabaseInstance().InfoCollections.EnchantTables.Init(false);
+	//XRated::Database::DatabaseInstance().InfoCollections.Items.Init(false);
+	//XRated::Database::DatabaseInstance().InfoCollections.EquipSet.Init(false);
+	XRated::Database::DatabaseInstance().InfoCollections.Pets.Init(false);
 	return 0;
 }

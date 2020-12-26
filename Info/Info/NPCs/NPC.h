@@ -84,6 +84,7 @@ namespace Lunia {
 					std::wstring DisplayName;
 					std::wstring AnimationPath;
 					std::wstring EffectCategory;
+					std::wstring SpecialDead;
 					struct Jewel : public Serializer::ISerializable {
 						uint8 Type;
 						uint16 Cnt;

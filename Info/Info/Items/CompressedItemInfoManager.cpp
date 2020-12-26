@@ -26,7 +26,7 @@ namespace Lunia {
 					 if (fullLoading == L"1")
 						 ItemInfoManager::LoadBinaryData();
 					 else */
-					 //LoadCompressedBinary();
+						LoadCompressedBinary();
 						cbfreader = Lunia::Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/ItemInfos.cbf");
 						cbfreader->SetReadCursor(0, Lunia::IStream::Begin);
 						Read(L"ItemInfos", Items);
@@ -36,10 +36,8 @@ namespace Lunia {
 
 				void CompressedItemInfoManager::LoadCompressedBinary()
 				{
-					Resource::SerializerStreamReader reader =
-						Lunia::Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/CompressedItemInfos.b");
-
-					reader->Begin(L"Lunia::XRated::Database::Info::ItemInfoManager");
+					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/CompressedItemInfos.b");
+					reader->Begin(L"AllM::XRated::Database::Info::ItemInfoManager");
 					reader->Read(L"compressedItems", CompressedItems);
 					reader->Read(L"compressedUnidentifiedItems", UnidentifiedItemInfoCompressed); // name doens't match with variable to keep allm's standart ;-; i dont lub it
 					reader->Read(L"CategoryList", CategoryList);
@@ -49,9 +47,8 @@ namespace Lunia {
 				}
 
 				void CompressedItemInfoManager::SaveCompressedXml() {
-					Resource::SerializerStreamWriter writer =
-						Lunia::Resource::ResourceSystemInstance().CreateSerializerXmlStreamWriter(L"./Database/CompressedItemInfos.xml");
-					writer->Begin(L"Lunia::XRated::Database::Info::ItemInfoManager");
+					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateSerializerXmlStreamWriter(L"./Database/CompressedItemInfos.xml");
+					writer->Begin(L"AllM::XRated::Database::Info::ItemInfoManager");
 					writer->Write(L"compressedItems", CompressedItems);
 					writer->Write(L"compressedUnidentifiedItems", UnidentifiedItemInfoCompressed);
 					writer->Write(L"CategoryList", CategoryList);
@@ -62,9 +59,8 @@ namespace Lunia {
 
 				void CompressedItemInfoManager::SaveCompressedB() {
 
-					Resource::SerializerStreamWriter writer =
-						Lunia::Resource::ResourceSystemInstance().CreateDefaultSerializer(L"./Database/CompressedItemInfos.b");
-					writer->Begin(L"Lunia::XRated::Database::Info::ItemInfoManager");
+					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateDefaultSerializer(L"./Database/CompressedItemInfos.b");
+					writer->Begin(L"AllM::XRated::Database::Info::ItemInfoManager");
 					writer->Write(L"compressedItems", CompressedItems);
 					writer->Write(L"compressedUnidentifiedItems", UnidentifiedItemInfoCompressed);
 					writer->Write(L"CategoryList", CategoryList);

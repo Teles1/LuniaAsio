@@ -306,7 +306,7 @@ namespace Lunia {
 
 						if (genus == NULL)
 						{
-							Logger::GetInstance().Warn(L"{0} - Not Linked Genus", itr->second.Id.c_str());
+							std::wcout << fmt::format(L"{0} - Not Linked Genus", itr->second.Id) << std::endl;
 							continue;
 						}
 
@@ -314,7 +314,8 @@ namespace Lunia {
 
 						if (npcData == NULL)
 						{
-							Logger::GetInstance().Error(L"{0} - Not Exist Default Pet NPC ID", genus->DefaultNPCId.c_str());
+							std::wcout << fmt::format(L"{0} - Not Exist Default Pet NPC ID", genus->DefaultNPCId) << std::endl;
+							//Logger::GetInstance().Warn(L"{0} - Not Exist Default Pet NPC ID", &);
 							continue;
 						}
 

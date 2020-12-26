@@ -43,7 +43,7 @@ namespace Lunia {
 						Info::ActionInfoManager Actions;
 						Info::NPCInfoManager Npcs;
 						Info::StageInfoManager Stages;
-						Info::EventNonPlayerItemList EventNonPlayerItemList;
+						Info::EventNonPlayerItemList EventNonPlayerItemLists;
 						Info::StageGroupManager StageGroups;
 						Info::IndexedStatusInfoManager Statuses;
 						Info::StagePlayTimeInfoManager StagePlayTimes;

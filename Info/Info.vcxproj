@@ -201,6 +201,7 @@
     <ClInclude Include="Info\MISCS\MISCSManager.h" />
     <ClInclude Include="Info\NonPlayerModifier\NonPlayerModifier.h" />
     <ClInclude Include="Info\NonPlayerModifier\NonPlayerModifierManager.h" />
+    <ClInclude Include="Info\NPCs\CompressedNPCManager.h" />
     <ClInclude Include="Info\NPCs\IndexedNPCInfo.h" />
     <ClInclude Include="Info\NPCs\NPC.h" />
     <ClInclude Include="Info\NPCs\NPCManager.h" />
@@ -259,6 +260,7 @@
     <ClCompile Include="Info\MISCS\MISCSManager.cpp" />
     <ClCompile Include="Info\NonPlayerModifier\NonPlayerModifierManager.cpp" />
     <ClCompile Include="Info\NonPlayerModifier\NonPlayerModifier.cpp" />
+    <ClCompile Include="Info\NPCs\CompressedNPCManager.cpp" />
     <ClCompile Include="Info\NPCs\IndexedNPCInfo.cpp" />
     <ClCompile Include="Info\NPCs\NPC.cpp" />
     <ClCompile Include="Info\NPCs\NPCManager.cpp" />

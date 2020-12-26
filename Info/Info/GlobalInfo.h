@@ -60,14 +60,14 @@ namespace Lunia {
 						INCDMG,
 						INCHEALAMOUNT,
 						ATTACKSPEED,
-						BOUNDEDMOVESPEED,
+						BOUNDEDMOVESPEED, // missing logic
 						SELFHEAL,
 						AREAHEAL,
 						CLEAR,
 						REGENHP,
 						REGENMP,
-						BOUNDEDREGENHP,
-						BOUNDEDREGENMP,
+						BOUNDEDREGENHP, // missing logic
+						BOUNDEDREGENMP, // missing logic
 						RESURRECTION,
 						WEAKEN,
 						ROOT,
@@ -90,12 +90,12 @@ namespace Lunia {
 						REFLECTION,
 						DEVINESHD,
 						DEFENCE,
-						ADDDEFENCE,
-						ENABLEADDDEFENCE,
+						ADDDEFENCE, // missing logic
+						ENABLEADDDEFENCE, // missing logic
 						CAMPFIRE,
 						IGNORESTUN,
 						IGNORECRITICALHIT,
-						IGNOREFREEZE,
+						IGNOREFREEZE, // missing logic
 						DESTROYENEMY,
 						CREATENPC,
 						CREATEOBJECT,
@@ -115,14 +115,14 @@ namespace Lunia {
 						IGNORESTATE,
 						RESETSKILLGROUPCOOLDOWN,
 						DECREASESKILLCOOLDOWN,
-						INCREASESKILLDAMAGE,
+						INCREASESKILLDAMAGE, // missing logic
 						//CONVERTDMGTOHPMP,
 						ABSORBTOHPMP,
 						DMGTOHPMP,
 						GOLDGAIN,
 						IFHIT,
 						IFHITBY,
-						IFDAMAGED,
+						IFDAMAGED, // missing logic
 						IFHEAL,
 						IFCRIATK,
 						IFCRIMAGIC,

@@ -36,8 +36,6 @@ namespace Lunia {
 					reader->Read(L"compressedActionMap", compressedActionMap);
 				}
 
-
-
 				ActionInfoManager::Actions& CompressedActionInfoManager::Retrieve(const wchar_t* templateName)
 				{
 					return actionMap[templateName];

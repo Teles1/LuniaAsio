@@ -1,6 +1,7 @@
 #pragma once
 #include "StructuredBinaryStream.h"
 #include <stack>
+#include <iostream>
 
 namespace Lunia {
 	namespace Serializer {
@@ -30,7 +31,7 @@ namespace Lunia {
 		class StructuredBinaryStreamReader2 : public ReferenceCountedImpl<IRefCountedStreamReader> {
 		private:
 			Lunia::IStreamReader* stream;
-			com_ptr<IRefCountedStreamReader> refcountedStream;
+			com_ptr<Lunia::IRefCountedStreamReader> refcountedStream;
 			std::stack<uint32> sizeIndex;
 			std::stack<uint32> levelStartPosition;
 
@@ -111,7 +112,7 @@ namespace Lunia {
 			}
 
 
-			virtual void inline Begin(const wchar_t* type, int* majorVersionOut, int* minorVersionOut)
+			virtual void Begin(const wchar_t* type, int* majorVersionOut, int* minorVersionOut)
 			{
 				//ALLM_INFO((L"type = %s", type));
 				unsigned int nameHash = StringUtil::Hash(type);
@@ -119,23 +120,25 @@ namespace Lunia {
 				uint32 nameHashFromFile = 0;
 				stream->Read(reinterpret_cast<uint8*>(&nameHashFromFile), sizeof(uint32));
 				if (nameHashFromFile != nameHash) {
-					throw Exception(L"class type name is not same in the file, type={0}", type);
+					Logger::GetInstance().Warn(L"reading nameHashFromFile={0}", nameHashFromFile);
+					std::wcout << L"validate' command needs addtional parameter!!\n";
+					Logger::GetInstance().Exception(L"class type name is not same in the file, type={0}", type);
 				}
 
 				int32 majorVersionFromFile = 0;
 
 				stream->Read(reinterpret_cast<uint8*>(&majorVersionFromFile), sizeof(int32));
-				//				ALLM_INFO((L"reading majorVersion=%d", majorVersionFromFile));
+				//                ALLM_INFO((L"reading majorVersion=%d", majorVersionFromFile));
 				int32 minorVersionFromFile = 0;
 				//ALLM_INFO((L"reading minorVersion"));
 				stream->Read(reinterpret_cast<uint8*>(&minorVersionFromFile), sizeof(int32));
-				//				ALLM_INFO((L"reading minorVersion=%d", minorVersionFromFile));
+				//                ALLM_INFO((L"reading minorVersion=%d", minorVersionFromFile));
 
 				if (majorVersionOut) *majorVersionOut = majorVersionFromFile;
 				if (minorVersionOut) *minorVersionOut = minorVersionFromFile;
 
 				/*if (majorVersionFromFile != majorVersion) {
-				   throw Exception(ALLM_EXCEPTION((L"a class %s version mismatch, serialized version=(%d,%d), required version=(%d,%d)", type, majorVersionFromFile, minorVersionFromFile, majorVersion, minorVersion)));
+				   throw AllM::Exception(ALLM_EXCEPTION((L"a class %s version mismatch, serialized version=(%d,%d), required version=(%d,%d)", type, majorVersionFromFile, minorVersionFromFile, majorVersion, minorVersion)));
 				}
 
 				if (minorVersionFromFile != minorVersion) {
