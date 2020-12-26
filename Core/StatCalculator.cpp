@@ -49,7 +49,7 @@ namespace Lunia
 			void StaticStatCalculator::CalculateSecondStat(const XRated::Constants::ClassType classType, const BasicStat& basicStat, SecondStat& secondStat, const XRated::Constants::GameTypes gameType) const
 			{
 				std::wstring classStr = XRated::Constants::GetClassStr(classType);
-				XRated::Constants::CharacterMajorStatType majorStat = Database::DatabaseInstance().InfoCollections.statuses.GetMajorStatType(classStr);
+				XRated::Constants::CharacterMajorStatType majorStat = Database::DatabaseInstance().InfoCollections.Statuses.GetMajorStatType(classStr);
 
 				switch (majorStat)
 				{
@@ -134,7 +134,7 @@ namespace Lunia
 			float StaticStatCalculator::GetHitIgnoreValue(const XRated::Constants::ClassType classType, int Dex, int Vit, int Int) const
 			{
 				std::wstring classStr = XRated::Constants::GetClassStr(classType);
-				XRated::Constants::CharacterMajorStatType majorStat = XRated::Database::DatabaseInstance().InfoCollections.statuses.GetMajorStatType(classStr);
+				XRated::Constants::CharacterMajorStatType majorStat = XRated::Database::DatabaseInstance().InfoCollections.Statuses.GetMajorStatType(classStr);
 
 				switch (majorStat)
 				{
