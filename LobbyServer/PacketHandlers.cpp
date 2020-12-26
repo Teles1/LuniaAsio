@@ -13,7 +13,7 @@ namespace Lunia {
 		{
 			// typedef std::shared_ptr<ClientProxyLobby> ClientProxyLobbySharedPtr;
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::Head& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::Head& packet)
 			{
 				Lobby::Protocol::Head sendPacket;
 
@@ -35,7 +35,7 @@ namespace Lunia {
 				client->Ping(); /* TODO Implement ClientProxyLobby ping */
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::Auth& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::Auth& packet)
 			{
 				client->SetLocale(packet.Locale);
 
@@ -77,7 +77,7 @@ namespace Lunia {
 						if (result.resultObject["secondPassword"].get<bool>())
 							client->SetHasSecondPasswordAuthentication();
 						else
-							g_gameServer->Proxy->ClientRegistry.AuthenticateClient(client);
+							g_gameServer->Proxy.ClientRegistry.AuthenticateClient(client);
 
 						{
 							Lobby::Protocol::CharacterSlots sendPacketCharacterSlots;
@@ -150,14 +150,14 @@ namespace Lunia {
 					break;
 				}
 				default:
-					//g_gameServer->Proxy->ClientRegistry.DropClient(user);
+					//g_gameServer->Proxy.ClientRegistry.DropClient(user);
 					break;
 				}
 
 				client->MakeSocketAsyncWriteSerializable(sendPacket);
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::CheckSecondPassword& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::CheckSecondPassword& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@CheckSecondPassword", client->GetId());
 
@@ -176,7 +176,7 @@ namespace Lunia {
 					Lobby::Protocol::SecondPasswordChecked sendPacket;
 
 					if (result.errorCode == 0)
-						g_gameServer->Proxy->ClientRegistry.AuthenticateClient(client);
+						g_gameServer->Proxy.ClientRegistry.AuthenticateClient(client);
 
 					sendPacket.PasswordInUse = (uint8)result.errorCode;
 					sendPacket.FailCount = result.resultObject["failCount"].get<uint32>();
@@ -188,7 +188,7 @@ namespace Lunia {
 				}
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::CreateSecondPassword& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::CreateSecondPassword& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@CreateSecondPassword", client->GetId());
 
@@ -208,7 +208,7 @@ namespace Lunia {
 				}
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::DeleteSecondPassword& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::DeleteSecondPassword& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@DeleteSecondPassword", client->GetId());
 				
@@ -228,7 +228,7 @@ namespace Lunia {
 				}
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::ModifySecondPassword& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::ModifySecondPassword& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ModifySecondPassword", client->GetId());
 
@@ -249,7 +249,7 @@ namespace Lunia {
 					
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::SignInSecondPassword& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::SignInSecondPassword& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SignInSecondPassword", client->GetId());
 
@@ -267,7 +267,7 @@ namespace Lunia {
 
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::Terminate& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::Terminate& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Terminate", client->GetId());
 				//Gotta safely disconect the user. 
@@ -283,10 +283,10 @@ namespace Lunia {
 
 				client->MakeSocketAsyncWriteSerializable(sendPacket);
 
-				g_gameServer->Proxy->ClientRegistry.DropClient(client);
+				g_gameServer->Proxy.ClientRegistry.DropClient(client);
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::CreateCharacter& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::CreateCharacter& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@CreateCharacter", client->GetId());
 					
@@ -343,7 +343,7 @@ namespace Lunia {
 				client->MakeSocketAsyncWriteSerializable(sendPacket);
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::DeleteCharacter& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::DeleteCharacter& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@DeleteCharacter", client->GetId());
 
@@ -351,7 +351,7 @@ namespace Lunia {
 				{
 					Logger::GetInstance().Error(L"Non authorized user trying to delete a AccountName: {0}, characterName: {1}", client->GetAccountName(), packet.Name);
 					
-					g_gameServer->Proxy->ClientRegistry.DropClient(client);
+					g_gameServer->Proxy.ClientRegistry.DropClient(client);
 					return;
 				}
 
@@ -359,7 +359,7 @@ namespace Lunia {
 				{
 					Logger::GetInstance().Error(L"User is trying to delete a characterName that does not exist. AccountName: {0}, characterName: {1}", client->GetAccountName(), packet.Name);
 					
-					g_gameServer->Proxy->ClientRegistry.DropClient(client);
+					g_gameServer->Proxy.ClientRegistry.DropClient(client);
 					return;
 				}
 
@@ -379,14 +379,14 @@ namespace Lunia {
 					{
 						Logger::GetInstance().Error(L"Could not Delete the specified characterName AccountName: {0}, characterName: {1}", client->GetAccountName(), packet.Name);
 						
-						g_gameServer->Proxy->ClientRegistry.DropClient(client);
+						g_gameServer->Proxy.ClientRegistry.DropClient(client);
 					}
 				}
 
 				client->MakeSocketAsyncWriteSerializable(sendPacket);
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::SaveKeySetting& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::SaveKeySetting& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SaveKeySetting", client->GetId());
 
@@ -402,7 +402,7 @@ namespace Lunia {
 				}
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::Alive& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::Alive& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Alive", client->GetId());
 
@@ -412,7 +412,7 @@ namespace Lunia {
 				// client->SetAliveAsLastTickAlivePing(answer);
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::SelectCharacter& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::SelectCharacter& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@SelectCharacter", client->GetId());
 
@@ -471,7 +471,7 @@ namespace Lunia {
 				//send terminate in case this fails. Either users doesnt have the character or the api returned an error.
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::DeselectCharacter& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::DeselectCharacter& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@DeselectCharacter", client->GetId());
 
@@ -497,7 +497,7 @@ namespace Lunia {
 				client->MakeSocketAsyncWriteSerializable(sendPacket);
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::ListSquareStatus& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::ListSquareStatus& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListSquareStatus", client->GetId());
 				if (client->HasSelectedACharacter()) 
@@ -554,7 +554,7 @@ namespace Lunia {
 				}
 			});
 
-			g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::JoinSquare& packet)
+			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::JoinSquare& packet)
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@JoinSquare", client->GetId());
 				if (client->IsAuthenticated() && client->HasSelectedACharacter()) 

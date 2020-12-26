@@ -12,7 +12,10 @@ struct ClientNetworkIO : std::enable_shared_from_this<ClientNetworkIO> /* TODO I
 
 	ClientNetworkIO(asio::ip::tcp::socket&& socket);
 
-	~ClientNetworkIO() { std::cout << "~ClientNetworkIO" << std::endl; };
+	~ClientNetworkIO()
+	{
+
+	};
 
 private:
 	void MakeSocketAsyncReadSome();
@@ -26,17 +29,11 @@ public:
 
 	void Drop();
 
-	void SetEncryptionKey(uint32_t& key) { };
+	void SetEncryptionKey(uint32_t& key);
 
-	bool HasEncryptionKey() const
-	{
-		return m_hasEncryptionKey;
-	};
+	bool HasEncryptionKey() const;
 
-	std::string GetPeerAddress() const
-	{
-		return "127.0.0.1"; // m_socket.remote_endpoint().address().to_string();
-	};
+	std::string GetPeerAddress() const;
 
 public:
 	fwEvent<char*, unsigned short&> OnSocketReadPacket;

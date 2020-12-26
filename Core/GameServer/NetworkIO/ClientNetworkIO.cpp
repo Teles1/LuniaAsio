@@ -96,7 +96,7 @@ void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t siz
 	}
 	else
 	{
-		std::cout << "ErroCode " << ec << std::endl;
+		// std::cout << "ClientNetworkIO " << ec << std::endl;
 	}
 };
 
@@ -115,4 +115,21 @@ void ClientNetworkIO::Drop()
 {
 	m_socket.close();
 	m_socket.release();
+};
+
+void ClientNetworkIO::SetEncryptionKey(uint32_t& key)
+{
+	this->m_decryptor.SetKey(key);
+};
+
+bool ClientNetworkIO::HasEncryptionKey() const
+{
+	return this->m_hasEncryptionKey;
+};
+
+
+std::string ClientNetworkIO::GetPeerAddress() const
+{
+	// return "127.0.0.1"; 
+	return this->m_socket.remote_endpoint().address().to_string();
 };

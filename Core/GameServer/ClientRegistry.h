@@ -63,6 +63,8 @@ public:
 		client->OnDropped();
 
 		OnClientDropped(client);
+
+		client->Drop();
 	}
 
 	std::vector<ClientSharedPtr&> GetClients()
@@ -70,7 +72,7 @@ public:
 		return m_clients;
 	}
 
-	ClientSharedPtr& GetClientById(const uint32_t id)
+	ClientSharedPtr& GetClientById(const uint32_t & id)
 	{
 		std::scoped_lock<std::mutex> slock(m_clientIdToClientWeakMutex);
 

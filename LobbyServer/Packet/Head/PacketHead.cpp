@@ -20,7 +20,7 @@
 
 static utils::InitFunction InitFunction([]()
 {
-	g_gameServer->Proxy->PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lunia::Lobby::Protocol::Head& packet)
+	g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lunia::Lobby::Protocol::Head& packet)
 	{
 		std::cout << "Handling `Head` packet, from client" << std::endl;
 	});

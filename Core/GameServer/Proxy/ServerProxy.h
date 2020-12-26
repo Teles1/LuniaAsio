@@ -11,23 +11,54 @@ struct ServerProxy // : TODO? std::enable_shared_from_this<ServerProxy>
 {
 
 	typedef std::shared_ptr<TClientProxy> TClientProxySharedPtr;
+	typedef std::weak_ptr<TClientProxy> TClientProxyWeakPtr;
 
 public:
 	inline ServerProxy()
 	{
 		std::cout << "ServerProxy created" << std::endl;
 
-		ClientRegistry.OnClientCreated.Connect([PacketHandler = &PacketHandler](TClientProxySharedPtr& client)
+		ClientRegistry.OnClientCreated.Connect([PacketHandler = &PacketHandler, ClientRegistry = &ClientRegistry](TClientProxySharedPtr& client)
 		{
-			client->OnSocketReadPacket.Connect([&client /* TODO <- Thats wrong */, &PacketHandler](char* buffer, unsigned short& len)
+			/*
+				// It actually should be handled as below!
+				// but we would have to change the packetHandler to take const clients
+				// and that would need us to make sure every packet handler uses a member function
+				// instead of modifying a member variable directly
+
+				client->OnSocketReadPacket.Connect([clientLocked = client, &PacketHandler, &ClientRegistry](char* buffer, unsigned short& len)
+				{
+					Lunia::Net::StreamReader streamReader(buffer);
+
+					if (clientLocked)
+					{
+						unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[4]);
+
+						PacketHandler->Invoke(clientLocked, (uint16_t)*packetNameHashed, streamReader);
+
+						std::cout << "Client@" << clientLocked->GetId() << " -> server :: " << (uint16_t)*packetNameHashed << std::endl;
+					}
+				});
+			*/
+
+			std::cout << "Incoming Connection :: Client:" << client->GetId() << "@" << client->GetPeerAddress() << std::endl;
+
+			client->OnSocketReadPacket.Connect([clientId = client->GetId(), &PacketHandler, &ClientRegistry](char* buffer, unsigned short& len)
 			{
 				Lunia::Net::StreamReader streamReader(buffer);
 
-				unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[4]);
+				TClientProxyWeakPtr clientWeak = ClientRegistry->GetClientById(clientId);
 
-				PacketHandler->Invoke(client, (uint16_t)*packetNameHashed, streamReader);
+				auto clientLocked = clientWeak.lock();
 
-				// std::cout << "Client@" << client->GetId() << " -> server :: " << *packetNameHashed << std::endl;
+				if (clientLocked)
+				{
+					unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[4]);
+
+					PacketHandler->Invoke(clientLocked, (uint16_t)*packetNameHashed, streamReader);
+
+					std::cout << "Incoming packet :: 0x" << (uint16_t)*packetNameHashed << " :: Client:" << clientLocked->GetId() << std::endl;
+				}
 			});
 		});
 	}
