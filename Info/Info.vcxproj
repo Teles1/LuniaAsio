@@ -168,6 +168,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Info\ETC\Balance.h" />
     <ClInclude Include="Info\Actions\CompressedActionsManager.h" />
     <ClInclude Include="Info.h" />
     <ClInclude Include="Info\Actions\Actions.h" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Info\StateBundles\StateBundlesManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Info\ETC\Balance.cpp" />
     <ClCompile Include="Info\Actions\CompressedActionsManager.cpp" />
     <ClCompile Include="Info.cpp" />
     <ClCompile Include="Info\Actions\Actions.cpp" />

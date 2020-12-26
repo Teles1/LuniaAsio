@@ -1013,7 +1013,7 @@ namespace Lunia {
 		struct ItemPack : public Serializer::ISerializable
 		{
 			ItemPosition Position;
-			uint16 Count; // 3.1 by Robotex
+			uint16 Count; 
 			uint64 ExtendInfo; // ex) 0:none used, others:PetSerial
 
 			ItemPack()
@@ -1276,10 +1276,10 @@ namespace Lunia {
 
 		struct ItemBasicInfo : public Serializer::ISerializable
 		{
-			uint32	ItemHash;
-			InstanceEx	instanceEx; // 3.1 by Robotex
-			uint64	ItemSerial;
-			uint16	StackCount; // 3.1 by Robotex
+			uint32 ItemHash;
+			uint64 ItemSerial;
+			uint16 StackCount;
+			InstanceEx instanceEx;
 
 			ItemBasicInfo()
 				: ItemHash(0)
@@ -1302,18 +1302,18 @@ namespace Lunia {
 		struct RewardItem : public Serializer::ISerializable
 		{
 			uint32	ItemHash;
-			InstanceEx	instanceEx;
-			uint16	StackCount; // 3.1 by Robotex
+			InstanceEx	InstanceEx;
+			uint16	StackCount;
 
 			RewardItem()
 				: ItemHash(0)
-				, instanceEx(0)
+				, InstanceEx(0)
 				, StackCount(0)
 			{
 			}
 			RewardItem(uint32 id, int64 inst, uint8	count)
 				: ItemHash(id)
-				, instanceEx(inst)
+				, InstanceEx(inst)
 				, StackCount(count)
 			{
 			}
@@ -1329,8 +1329,8 @@ namespace Lunia {
 			{
 				enum Type
 				{
-					Fixed,	// ������ ��¥�� �Ǹ� ������ ���� �Ⱓ ����
-					Dynamic,// �������� ���� �� ������ ���� �Ⱓ�� ���Ѵ�
+					Fixed,
+					Dynamic,
 				};
 			};
 
@@ -2171,7 +2171,7 @@ namespace Lunia {
 			float          RareProbability; // RarePet�� �Ǵ� Ȯ��
 			float          FullSum;         // �������� ���� ���ϰ� �ֽ�
 			float          LevelUpPeriod;   // Level Up���� �ɸ��� �ð�
-			uint32 EnchantSerial; // 3.1 by Robotex
+			uint32 EnchantSerial; 
 
 			// Equipment�Լ��� �ִ� ������ equipment position�� Equipments vector�� index�� 1:1 ��ġ�� �ƴϱ� ����.
 			void Equipment(uint32 itemHash, int64 instance, Constants::Equipment position);
@@ -2580,7 +2580,7 @@ namespace Lunia {
 			uint16 StoredLevel;
 			uint16 RebirthCount;
 			uint32 Contributed;		///< ���� �⿩��.
-			std::wstring PrivateMessage; // 3.1 by Robotex
+			std::wstring PrivateMessage; 
 
 
 		public:
@@ -2753,7 +2753,7 @@ namespace Lunia {
 					AttachedItems;
 
 				uint32			StampItemHash;
-				bool IsSystemMail; // 3.1 by Robotex
+				bool IsSystemMail; 
 			public:
 				void Init()
 				{
@@ -3264,7 +3264,7 @@ namespace Lunia {
 
 			bool	IsRarePet;
 			float	RareProbability; // RarePet�� �Ǵ� Ȯ��
-			uint32	EnchantSerial; // 3.1 by Robotex
+			uint32	EnchantSerial; 
 
 			PetToolTipInfo()
 				: PetName(L"")
@@ -3295,8 +3295,8 @@ namespace Lunia {
 				uint32 hash;
 				InstanceEx instanceEx;
 				uint16 count;
-				bool isPetItem; // 3.1 by Robotex
-				PetToolTipInfo pet; // 3.1 by Robotex
+				bool isPetItem; 
+				PetToolTipInfo pet; 
 				virtual void Serialize(Serializer::IStreamWriter& out) const;
 				virtual void Deserialize(Serializer::IStreamReader& in);
 			};
@@ -3489,8 +3489,8 @@ namespace Lunia {
 				std::wstring ExpireDate;
 				uint16 CashEnchant1Index;
 				uint16 CashEnchant2Index;
-				uint16 CashEnchant3Index; // 3.1 by Robotex
-				uint16 CashEnchant4Index; // 3.1 by Robotex
+				uint16 CashEnchant3Index; 
+				uint16 CashEnchant4Index; 
 
 				/* in case of enchantable item */
 				InstanceEx instanceEx;
