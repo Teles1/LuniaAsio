@@ -1208,7 +1208,7 @@ namespace Lunia {
 		{
 			out.Begin(L"RewardItem");
 			out.Write(L"ItemHash", ItemHash);
-			out.Write(L"instanceEx", instanceEx);
+			out.Write(L"instanceEx", InstanceEx);
 			out.Write(L"StackCount", StackCount);
 		}
 
@@ -1216,7 +1216,7 @@ namespace Lunia {
 		{
 			in.Begin(L"RewardItem");
 			in.Read(L"ItemHash", ItemHash);
-			in.Read(L"instanceEx", instanceEx);
+			in.Read(L"instanceEx", InstanceEx);
 			in.Read(L"StackCount", StackCount);
 		}
 

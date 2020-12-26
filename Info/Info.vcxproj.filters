@@ -140,6 +140,27 @@
     <ClInclude Include="Info\StagePlayTime\StagePlayTime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\StagePlayTime\PvPRewardItemTableManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\PvPRewardItemInfos\PvPRewardItemInfosManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\PvPRewardItemInfos\PvPRewardInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Event\EventInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Event\EventInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StylePoints\StylePointInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StylePoints\StylePoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -257,6 +278,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\StagePlayTime\StagePlayTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\PvPRewardItemInfos\PvPRewardItemInfosManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\PvPRewardItemInfos\PvPRewardInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Event\EventInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Event\EventInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StylePoints\StylePointInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StylePoints\StylePoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

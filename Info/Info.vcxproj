@@ -182,6 +182,8 @@
     <ClInclude Include="Info\EquipSet\EquipSetManager.h" />
     <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.h" />
     <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.h" />
+    <ClInclude Include="Info\Event\EventInfo.h" />
+    <ClInclude Include="Info\Event\EventInfoManager.h" />
     <ClInclude Include="Info\GlobalInfo.h" />
     <ClInclude Include="Info\IndexedInfoManager.h" />
     <ClInclude Include="Info\InfoHelper.h" />
@@ -196,6 +198,8 @@
     <ClInclude Include="Info\NPCs\NPCManager.h" />
     <ClInclude Include="Info\Pets\Pets.h" />
     <ClInclude Include="Info\Pets\PetsManager.h" />
+    <ClInclude Include="Info\PvPRewardItemInfos\PvPRewardInfo.h" />
+    <ClInclude Include="Info\PvPRewardItemInfos\PvPRewardItemInfosManager.h" />
     <ClInclude Include="Info\Skills\SkillInfoManager.h" />
     <ClInclude Include="Info\Skills\Skills.h" />
     <ClInclude Include="Info\StageGroup\IndexedStageGroupInfo.h" />
@@ -203,6 +207,7 @@
     <ClInclude Include="Info\StageGroup\StageGroupManager.h" />
     <ClInclude Include="Info\StageInfo\StageInfo.h" />
     <ClInclude Include="Info\StageInfo\StageInfoManager.h" />
+    <ClInclude Include="Info\StagePlayTime\PvPRewardItemTableManager.h" />
     <ClInclude Include="Info\StagePlayTime\StagePlayTime.h" />
     <ClInclude Include="Info\StagePlayTime\StagePlayTimeManager.h" />
     <ClInclude Include="Info\StateBundles\IndexedStateBundles.h" />
@@ -211,6 +216,8 @@
     <ClInclude Include="Info\StatusInfo\IndexedStatusInfoManager.h" />
     <ClInclude Include="Info\StatusInfo\StatusInfo.h" />
     <ClInclude Include="Info\StatusInfo\StatusInfoManager.h" />
+    <ClInclude Include="Info\StylePoints\StylePoint.h" />
+    <ClInclude Include="Info\StylePoints\StylePointInfoManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info\ETC\Balance.cpp" />
@@ -226,6 +233,8 @@
     <ClCompile Include="Info\EquipSet\EquipSetManager.cpp" />
     <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.cpp" />
     <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.cpp" />
+    <ClCompile Include="Info\Event\EventInfo.cpp" />
+    <ClCompile Include="Info\Event\EventInfoManager.cpp" />
     <ClCompile Include="Info\GlobalInfo.cpp" />
     <ClCompile Include="Info\IndexedInfoManager.cpp" />
     <ClCompile Include="Info\ItemStageInfo\ItemStageInfo.cpp" />
@@ -238,6 +247,8 @@
     <ClCompile Include="Info\NPCs\NPCManager.cpp" />
     <ClCompile Include="Info\Pets\Pets.cpp" />
     <ClCompile Include="Info\Pets\PetsManager.cpp" />
+    <ClCompile Include="Info\PvPRewardItemInfos\PvPRewardInfo.cpp" />
+    <ClCompile Include="Info\PvPRewardItemInfos\PvPRewardItemInfosManager.cpp" />
     <ClCompile Include="Info\Skills\SkillInfoManager.cpp" />
     <ClCompile Include="Info\Skills\Skills.cpp" />
     <ClCompile Include="Info\StageGroup\IndexedStageGroupInfo.cpp" />
@@ -252,6 +263,8 @@
     <ClCompile Include="Info\StateBundles\StateBundlesManager.cpp" />
     <ClCompile Include="Info\StatusInfo\IndexedStatusInfoManager.cpp" />
     <ClCompile Include="Info\StatusInfo\StatusInfoManager.cpp" />
+    <ClCompile Include="Info\StylePoints\StylePoint.cpp" />
+    <ClCompile Include="Info\StylePoints\StylePointInfoManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
