@@ -45,6 +45,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -174,6 +175,12 @@
     <ClInclude Include="Info\Actions\IndexedActionsInfo.h" />
     <ClInclude Include="Info\CompressedLoader.h" />
     <ClInclude Include="Info\Database.h" />
+    <ClInclude Include="Info\Enchant\Enchant.h" />
+    <ClInclude Include="Info\Enchant\EnchantTable.h" />
+    <ClInclude Include="Info\EquipSet\EquipSet.h" />
+    <ClInclude Include="Info\EquipSet\EquipSetManager.h" />
+    <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.h" />
+    <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.h" />
     <ClInclude Include="Info\GlobalInfo.h" />
     <ClInclude Include="Info\IndexedInfoManager.h" />
     <ClInclude Include="Info\ItemStageInfo\ItemStageInfo.h" />
@@ -185,6 +192,10 @@
     <ClInclude Include="Info\NPCs\IndexedNPCInfo.h" />
     <ClInclude Include="Info\NPCs\NPC.h" />
     <ClInclude Include="Info\NPCs\NPCManager.h" />
+    <ClInclude Include="Info\Pets\Pets.h" />
+    <ClInclude Include="Info\Pets\PetsManager.h" />
+    <ClInclude Include="Info\Skills\SkillInfoManager.h" />
+    <ClInclude Include="Info\Skills\Skills.h" />
     <ClInclude Include="Info\StageGroup\IndexedStageGroupInfo.h" />
     <ClInclude Include="Info\StageGroup\StageGroup.h" />
     <ClInclude Include="Info\StageGroup\StageGroupManager.h" />
@@ -201,6 +212,12 @@
     <ClCompile Include="Info\Actions\ActionsManager.cpp" />
     <ClCompile Include="Info\Actions\IndexedActionsInfo.cpp" />
     <ClCompile Include="Info\CompressedLoader.cpp" />
+    <ClCompile Include="Info\Enchant\Enchant.cpp" />
+    <ClCompile Include="Info\Enchant\EnchantTable.cpp" />
+    <ClCompile Include="Info\EquipSet\EquipSet.cpp" />
+    <ClCompile Include="Info\EquipSet\EquipSetManager.cpp" />
+    <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.cpp" />
+    <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.cpp" />
     <ClCompile Include="Info\GlobalInfo.cpp" />
     <ClCompile Include="Info\IndexedInfoManager.cpp" />
     <ClCompile Include="Info\ItemStageInfo\ItemStageInfo.cpp" />
@@ -211,6 +228,10 @@
     <ClCompile Include="Info\NPCs\IndexedNPCInfo.cpp" />
     <ClCompile Include="Info\NPCs\NPC.cpp" />
     <ClCompile Include="Info\NPCs\NPCManager.cpp" />
+    <ClCompile Include="Info\Pets\Pets.cpp" />
+    <ClCompile Include="Info\Pets\PetsManager.cpp" />
+    <ClCompile Include="Info\Skills\SkillInfoManager.cpp" />
+    <ClCompile Include="Info\Skills\Skills.cpp" />
     <ClCompile Include="Info\StageGroup\IndexedStageGroupInfo.cpp" />
     <ClCompile Include="Info\StageGroup\StageGroup.cpp" />
     <ClCompile Include="Info\StageGroup\StageGroupManager.cpp" />

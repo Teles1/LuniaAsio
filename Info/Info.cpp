@@ -10,7 +10,8 @@ namespace Lunia {
 				return m_Instance;
 			};
 			void LuniaDatabase::Init() {
-				InfoCollections.stageInfos.Init(false);
+				InfoCollections.npcs.Init(false);
+				//InfoCollections.stageInfos.Init(false);
 				//InfoCollections.actions.Init(false);
 				//InfoCollections.npcs.Init(false);
 				//InfoCollections.stateBundles.Init(false);

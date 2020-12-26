@@ -9,6 +9,7 @@
 #include "Info/Items/CompressedItemInfoManager.h"
 #include "Info/StageGroup/StageGroupManager.h"
 #include "Info/StageInfo/StageInfoManager.h"
+#include <Info/Info/Enchant/EnchantTable.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -19,10 +20,11 @@ namespace Lunia {
 					void Init();
 
 					struct Collection {
-						//Info::StageGroupManager stageGroups;
-						Info::StageInfoManager stageInfos;
+						Info::StageGroupManager stageGroups;
+						Info::NPCInfoManager npcs;
+						Info::Enchant::EnchantTableManager enchantManager;
+						//Info::StageInfoManager stageInfos;
 						//Info::ActionInfoManager actions;
-						//Info::NPCInfoManager npcs;
 						//Info::StateBundleInfoManager stateBundles;
 						//Info::CompressedItemInfoManager itemInfos;
 					} InfoCollections;

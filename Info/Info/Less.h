@@ -108,8 +108,7 @@ namespace Lunia {
 
 						if (NoticeLevel > Leveler::Nothing && _Left == _Right)
 						{
-							Logger::GetInstance().Warn(L"Database Loading....Same Key Found! [{0}]", _Left);
-							if (NoticeLevel == Leveler::Throw) throw Exception(L"{0}", _Left);
+							if (NoticeLevel == Leveler::Throw) throw _Left;
 							return false;
 						}
 						return (_Left < _Right);

@@ -6,6 +6,7 @@ int main(int argc, char* argv[]) {
 	Lunia::Config::GetInstance("Config_Stage.json");
 	Lunia::Resource::ResourceSystemInstance().AddPath(L"C:\\Users\\WINDOWS\\Desktop\\Lunia\\x64\\Debug");
 	XRated::Database::DatabaseInstance().Init();
-	XRated::Database::DatabaseInstance().InfoCollections.stageInfos.SaveXml();
+	//XRated::Database::DatabaseInstance().InfoCollections.stageInfos.SaveXml();
+	XRated::Database::DatabaseInstance().InfoCollections.stageGroups.SaveXml();
 	return 0;
 }

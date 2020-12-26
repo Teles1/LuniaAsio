@@ -87,7 +87,7 @@ namespace Lunia {
 					for (; i != stages.end(); ++i) {
 						StageInfo& info = (*i).second;
 						String tempChar = info.ScriptName;
-						// Changing .move to .xml
+						// Changing .as to .xml
 						std::wstring StringMove = L".as";
 						std::size_t position = tempChar.find(StringMove);
 						if (position < 100) {

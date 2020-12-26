@@ -89,6 +89,36 @@
     <ClInclude Include="Info\StageGroup\StageGroupManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\Skills\SkillInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Skills\Skills.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Enchant\Enchant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Enchant\EnchantTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\EquipSet\EquipSetManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\EquipSet\EquipSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Pets\PetsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Pets\Pets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -161,6 +191,36 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\StageGroup\StageGroupManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Skills\SkillInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Skills\Skills.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Enchant\Enchant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Enchant\EnchantTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\EquipSet\EquipSetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\EquipSet\EquipSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Pets\PetsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Pets\Pets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
