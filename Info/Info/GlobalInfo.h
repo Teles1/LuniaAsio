@@ -1,5 +1,7 @@
 #pragma once
 #include "./Database.h"
+#include <Info/Info/Items/Item.h>
+
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -149,6 +151,36 @@ namespace Lunia {
 						Type type;
 						std::wstring typeStr;
 					};
+				};
+
+				class FindReviveState : public ItemInfo::IFindCondition {
+					StateInfo::Type type;
+				public:
+					inline FindReviveState(StateInfo::Type t) : type(t) {}
+					inline bool operator()(const ItemInfo& rhs) const {
+						for (auto& i : rhs.States)
+							if (i.type == type) 
+								return true;
+						return false;
+					}
+
+				};
+
+				class FindHash : public ItemInfo::IFindCondition
+				{
+					uint32 Hash;
+				public:
+					inline FindHash(uint32 hash)
+						: Hash(hash)
+					{}
+
+					inline bool operator() (const ItemInfo& rhs) const
+					{
+						if (this->Hash == rhs.Hash)
+							return true;
+						else
+							return false;
+					}
 				};
 			}
 		}
