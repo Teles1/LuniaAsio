@@ -184,6 +184,7 @@
     <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.h" />
     <ClInclude Include="Info\GlobalInfo.h" />
     <ClInclude Include="Info\IndexedInfoManager.h" />
+    <ClInclude Include="Info\InfoHelper.h" />
     <ClInclude Include="Info\ItemStageInfo\ItemStageInfo.h" />
     <ClInclude Include="Info\Items\CompressedItemInfoManager.h" />
     <ClInclude Include="Info\Items\IndexedItemInfoManager.h" />
@@ -205,6 +206,9 @@
     <ClInclude Include="Info\StateBundles\IndexedStateBundles.h" />
     <ClInclude Include="Info\StateBundles\StateBundles.h" />
     <ClInclude Include="Info\StateBundles\StateBundlesManager.h" />
+    <ClInclude Include="Info\StatusInfo\IndexedStatusInfoManager.h" />
+    <ClInclude Include="Info\StatusInfo\StatusInfo.h" />
+    <ClInclude Include="Info\StatusInfo\StatusInfoManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info\ETC\Balance.cpp" />
@@ -242,6 +246,8 @@
     <ClCompile Include="Info\StateBundles\IndexedStateBundles.cpp" />
     <ClCompile Include="Info\StateBundles\StateBundles.cpp" />
     <ClCompile Include="Info\StateBundles\StateBundlesManager.cpp" />
+    <ClCompile Include="Info\StatusInfo\IndexedStatusInfoManager.cpp" />
+    <ClCompile Include="Info\StatusInfo\StatusInfoManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">

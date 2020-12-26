@@ -122,6 +122,18 @@
     <ClInclude Include="Info\ETC\Balance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\InfoHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StatusInfo\IndexedStatusInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StatusInfo\StatusInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\StatusInfo\StatusInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -227,6 +239,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\ETC\Balance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StatusInfo\IndexedStatusInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StatusInfo\StatusInfoManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
