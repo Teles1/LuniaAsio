@@ -1,5 +1,6 @@
 #pragma once
-
+#include <Core/Serializer/Serializer.h>
+#include <Info/Info/GlobalInfo.h>
 #include <Core/GameConstants.h>
 
 namespace Lunia {

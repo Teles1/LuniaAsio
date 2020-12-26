@@ -1,10 +1,5 @@
 #pragma once
-
 #include "Balance.h"
-#include <Core/Resource/Resource.h>
-#include <Core/Serializer/Serializer.h>
-
-
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
