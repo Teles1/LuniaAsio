@@ -3,6 +3,7 @@
 #include <Info/Info/GlobalInfo.h>
 #include <Core/GameConstants.h>
 #include <Info/Info/Actions/Actions.h>
+#include <Info/Info/NPCs/NPCManager.h>
 
 namespace Lunia {
 	namespace XRated {

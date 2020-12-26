@@ -5,6 +5,8 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
+				NPCInfoManager database;
+
 				void PetManager::Serialize(Serializer::IStreamWriter& out) const
 				{
 					out.Begin(L"XRated::Database::Info::PetManager");
@@ -308,7 +310,7 @@ namespace Lunia {
 							continue;
 						}
 
-						NonPlayerInfo* npcData = DatabaseInstance().InfoCollections.npcs.Retrieve(genus->DefaultNPCId.c_str());
+						NonPlayerInfo* npcData = database.Retrieve(genus->DefaultNPCId.c_str());
 
 						if (npcData == NULL)
 						{
@@ -322,8 +324,8 @@ namespace Lunia {
 						petNpcData.HashcodeName = StringUtil::Hash(petNpcData.Name.c_str());
 						petNpcData.DefaultMeshs = itr->second.DefaultMeshs;
 
-						if (DatabaseInstance().InfoCollections.npcs.Retrieve(petNpcData.Name.c_str()) == NULL)
-							DatabaseInstance().InfoCollections.npcs.Add(petNpcData);
+						if (database.Retrieve(petNpcData.Name.c_str()) == NULL)
+							database.Add(petNpcData);
 						else
 							Logger::GetInstance().Error(L"{0} - Already Exist Pet NPC ID", petNpcData.Name.c_str());
 
