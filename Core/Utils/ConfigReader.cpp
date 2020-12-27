@@ -75,12 +75,7 @@ namespace Lunia {
             {
                 if (j_config["Locale"].is_null()) {
                     Logger::GetInstance().Warn("There is no Locale to be loaded into this Server");
-                } else if (j_config["Database"].is_null()) {
-                    auto& database = j_config["Database"];
-                    m_PreloadScripts = database["PreloadScripts"].get<bool>();
-                    m_PreloadMovemap = database["PreloadMovemap"].get<bool>();
-                }
-                else
+                } else
                 {
                     auto& locale = j_config["Locale"];
                     if (!locale["FobbidenNames"].is_null())
@@ -88,6 +83,14 @@ namespace Lunia {
                     if (!locale["FobbidenStrings"].is_null())
                         m_Locale.m_FobbidenStrings = locale["FobbidenStrings"].get_to(m_Locale.m_FobbidenStrings);
                     Logger::GetInstance().Info("Locales loaded");
+                }
+            }
+
+            {
+                if (!j_config["Database"].is_null()) {
+                    auto& database = j_config["Database"];
+                    m_PreloadScripts = database["PreloadScripts"].get<bool>();
+                    m_PreloadMovemap = database["PreloadMovemap"].get<bool>();
                 }
             }
         }
