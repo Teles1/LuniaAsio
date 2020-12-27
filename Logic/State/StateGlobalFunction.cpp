@@ -217,11 +217,10 @@ namespace Lunia { namespace XRated {	namespace Logic { namespace Stat {
 					effectType = StatConstants::AttackEffectType::DOWN;
 				else if (param == L"PHOENIXDOWN")
 					effectType = StatConstants::AttackEffectType::PHOENIXDOWN;
-				else if (param == L"PHOENIXDOWN2") { //@ORACLE 01JAN2020 13:35 EST
+				else if (param == L"PHOENIXDOWN2")  //@ORACLE 01JAN2020 13:35 EST
 					effectType = StatConstants::AttackEffectType::PHOENIXDOWN2;
-				} else if (param == L"CENTERMOVE") { //@ORACLE 01JAN2020 19:50 EST
+				 else if (param == L"CENTERMOVE")  //@ORACLE 01JAN2020 19:50 EST
 					effectType = StatConstants::AttackEffectType::CENTERMOVE;
-				}
 				else if (param == L"STUN")
 					effectType = StatConstants::AttackEffectType::STUN;
 				else if (param == L"STEPBACK")
@@ -230,9 +229,9 @@ namespace Lunia { namespace XRated {	namespace Logic { namespace Stat {
 					effectType = StatConstants::AttackEffectType::STANDFAINT;
 				else if (param == L"NOSTUN")
 					effectType = StatConstants::AttackEffectType::NOSTUN;
-				else {
+				else 
 					Logger::GetInstance().Info(L"[Stat::CreateState] Unknown Attack state type [{0}] in ATTACK.", param.c_str());
-				}
+				
 
 				std::wstring strAttackDir = (*params)[L"attackDirection"];
 				if (strAttackDir == L"L")
@@ -288,11 +287,11 @@ namespace Lunia { namespace XRated {	namespace Logic { namespace Stat {
 				float3 startPos(To<float>((*params)[L"x"]), 0, To<float>((*params)[L"z"]));
 
 				int targetType;
-				if ( (*params).find(L"targetType") == (*params).end() ) {
-					targetType = 6;//�⺻�� ���ִ� �༮�� ���߿� ���ִ³༮���� �����Ҽ� �ִ�.
-				} else {
+				if ( (*params).find(L"targetType") == (*params).end() ) 
+					targetType = 6;
+				 else 
 					targetType = To<int>((*params)[L"targetType"]);
-				}
+				
 
 				float heightMax = 15.0f;
 				if ( (*params).find(L"heightMax") != (*params).end() )
