@@ -1,6 +1,12 @@
-#pragma once
+#ifndef Main_H
+#define Main_H
 
+#pragma once
 #include <Core/GameServer/GameServer.h>
 #include "GameServer/ServerProxy/ServerProxyLobby.h"
 
-inline GameServer<ServerProxyLobby>* g_gameServer = new GameServer<ServerProxyLobby>("127.0.0.1", 15550);
+namespace Lunia {
+	inline GameServer<ServerProxyLobby>* g_gameServer;
+}
+
+#endif // !Main_H

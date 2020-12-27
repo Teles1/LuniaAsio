@@ -62,6 +62,9 @@
     <ClInclude Include="Main.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="PacketHandlers.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">

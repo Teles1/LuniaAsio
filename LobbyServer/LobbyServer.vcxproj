@@ -81,7 +81,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)Includes;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -198,6 +198,7 @@
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h" />
     <ClInclude Include="GameServer\ServerProxy\ServerProxyLobby.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="PacketHandlers.h" />
     <ClInclude Include="Packet\Head\PacketHead.h" />
   </ItemGroup>
   <ItemGroup>

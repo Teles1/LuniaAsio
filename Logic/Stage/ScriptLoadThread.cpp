@@ -36,21 +36,22 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 	ScriptLoader::ScriptLoader() : Runnable(L"ScriptLoader")
 	{
-		if (Config::GetInstance().m_ServerType == ServerType::Square) {
+		if (Config::GetInstance().GetKind() == ServerKind::SquareKind) {
 			Database::Info::StageGroup* stageGroup = Lunia::XRated::Database::DatabaseInstance().InfoCollections.StageGroups.Retrieve(53518598);
 			for ( std::vector<Database::Info::StageInfo*>::iterator i = stageGroup->Stages.begin() ; i != stageGroup->Stages.end() ; ++i) {
 				ASPool[StringUtil::ToASCII((*i)->Id)];
 			}
 		} else {
 			std::map<std::wstring, int> stagePool;
-			Resource::SerializerStreamReader reader = Lunia::Resource::ResourceSystemInstance().CreateDefaultDeserializer(Config::GetInstance().m_PoolInfoPath.c_str());
+			Resource::SerializerStreamReader reader = Lunia::Resource::ResourceSystemInstance().CreateDefaultDeserializer(
+				StringUtil::ToUnicode(Config::GetInstance().Get<std::string>("PoolInfoPath")).c_str() );
 			reader->Read(L"Pools", stagePool);
 			std::map<std::wstring, int>::const_iterator i = stagePool.begin();
 			while( i != stagePool.end() ) {
 				std::string stageCode = StringUtil::ToASCII((*i).first);
 				ASList& aslist = ASPool[ stageCode ];
 
-				if (Config::GetInstance().m_IgnorePoolInfo == false ) {
+				if (Config::GetInstance().Get<bool>("IgnorePoolInfoPath") == false ) {
 					for ( int z=0 ; z < (*i).second ; ++z)
 						aslist.push_back( CreateASModule(stageCode) );
 				}

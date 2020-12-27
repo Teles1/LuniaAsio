@@ -38,16 +38,7 @@ private:
         T value;
     };
 public:
-    fwPacketHandler(const fwPacketHandler&) = delete; //anti creation  of a copy
-    fwPacketHandler& operator= (const fwPacketHandler&) = delete; // anti copy
-    ~fwPacketHandler() { }
-    inline static fwPacketHandler& GetInstance() {
-        static fwPacketHandler m_instance;
-        return m_instance;
-    }
-
-public:
-    fwPacketHandler() {};
+    fwPacketHandler() {}
 
     template<typename F>
     void Connect(F f)
@@ -79,7 +70,7 @@ public:
             FIXME! We should need to create a new packet here, we should instead use type::asHash, as its static.
         */
         // m_callbacks[packet.value.asHash] = lambda;
-        m_callbacks[packet.value.TypeHash] = lambda;
+        m_callbacks[(uint16_t)packet.value.TypeHash] = lambda;
     }
 
     bool /* operator() */ Invoke(TClientProxySharedPtr& client, const uint16_t& packetHeaderHash, Lunia::Net::StreamReader streamReader)

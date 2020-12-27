@@ -6,15 +6,22 @@
 
 namespace Lunia {
 	namespace StageServer {
-		StageServer::StageServer(const char* ip, uint16 port) : ServerTcp(ip, port)
+		StageServer::StageServer(const ServerAddress& address) : ServerTcp(address.ServerIp, address.ServerPort)
 		{
-			Net::Api::ApiUrl = Config::GetInstance().m_ApiBase;
+			Net::Api::ApiUrl = Config::GetInstance().Settings.ApiUrl;
 			Net::Api api("AddServer");
-			api << Config::GetInstance().m_ServerAddress.ServerPort;
+			api << Config::GetInstance().Settings.ServerName;
 			while (true) {
-				auto result = api.RequestPost(Config::GetInstance().m_SquareList);
+				Net::Answer result("", -1);
+				if (Config::GetInstance().GetKind() == SquareKind)
+					result = api.RequestPost(Config::GetInstance().Get<std::vector<SquareStruct>>("SquareList"));
+				else if (Config::GetInstance().GetKind() == StageKind)
+					result = api.RequestApi();
+				else
+					Logger::GetInstance().Exception("Not valid StageServer Kind found in the config file"); //it shouldn't get to here 
+
 				if (result.errorCode == 0) {
-					Logger::GetInstance().Info("{0} Initialized on port {1}", Config::GetInstance().m_ServerName, Config::GetInstance().m_ServerAddress.ServerPort);
+					Logger::GetInstance().Info("{0} Initialized on port {1}", Config::GetInstance().Settings.ServerName, Config::GetInstance().Settings.ServerAddress.ServerPort);
 					break;
 				}
 				else
@@ -37,10 +44,10 @@ int main(int argc, char* argv[])
 	//setting log name to be used on the console.
 	Logger::GetInstance("StageServer");
 	Lunia::Config::GetInstance("Config_Stage.json");
-	Lunia::StageServer::UserRegistry::GetInstance(Lunia::Config::GetInstance().m_PingTimeout);
+	Lunia::StageServer::UserRegistry::GetInstance(Lunia::Config::GetInstance().Get<Lunia::uint32>("PingTimeout"));
 	Lunia::StageServer::InitHandlers();
 	//Load Config
-	Lunia::StageServer::StageServer stageServer(Lunia::Config::GetInstance().m_ServerAddress.ServerIp.c_str(), Lunia::Config::GetInstance().m_ServerAddress.ServerPort);
+	Lunia::StageServer::StageServer stageServer( Lunia::Config::GetInstance().Settings.ServerAddress );
 	stageServer.Run();
 	return 0;
 }

@@ -130,17 +130,17 @@ namespace Lunia
 					impl->CalculateSecondStat( classType, basicStat, secondStatEx, gameType );					
 				}
 
-				inline float StatCalculator::GetMaxHpByStat( const XRated::Constants::ClassType classType, const uint32 vitality, const XRated::Constants::GameTypes gameType ) const
+				inline float GetMaxHpByStat( const XRated::Constants::ClassType classType, const uint32 vitality, const XRated::Constants::GameTypes gameType ) const
 				{
 					return impl->GetMaxHpByStat( classType, vitality, gameType );
 				}
 
-				inline float StatCalculator::GetMaxMpByStat( const XRated::Constants::ClassType classType, const uint32 intelligence, const XRated::Constants::GameTypes gameType ) const
+				inline float GetMaxMpByStat( const XRated::Constants::ClassType classType, const uint32 intelligence, const XRated::Constants::GameTypes gameType ) const
 				{
 					return impl->GetMaxMpByStat( classType, intelligence, gameType );
 				}
 
-				inline float StatCalculator::GetHitIgnoreValue( const XRated::Constants::ClassType classType, int Dex, int Vit, int Int ) const
+				inline float GetHitIgnoreValue( const XRated::Constants::ClassType classType, int Dex, int Vit, int Int ) const
 				{
 					return impl->GetHitIgnoreValue( classType, Dex, Vit, Int );
 				}

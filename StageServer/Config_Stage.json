@@ -5,11 +5,11 @@
       "LoggingLevel": 0
     },
     "SquareServer": {
-      "ApiBase": "http://localhost:51542/Square",
       "ServerAddress": {
         "ServerIp": "127.0.0.1",
         "ServerPort": 15551
       },
+      "ApiUrl": "http://localhost:51542/Square",
       "ServerName": "SquareStageDev",
       "PingTimeout": 30,
       "ShowPacket": true,
@@ -44,12 +44,16 @@
       ]
     },
     "Locale": {
-      "FobbidenNames": [ "\u00E9", "Teles", "key_value" ],
-      "FobbidenStrings": []
+      "FobbidenNames": [
+        "\u00E9",
+        "Teles",
+        "key_value"
+      ],
+      "FobbidenStrings": [
+
+      ]
     },
-    "Database": {
-      "PreloadScripts": false,
-      "PreloadMovemap": false
-    }
+    "PreloadMovemap": false,
+    "PreloadScripts": false
   }
 }

@@ -32,6 +32,12 @@
     <ClCompile Include="QuickSlot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Room\Room.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Room\RoomManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -63,6 +69,12 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="QuickSlot.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\Room.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\RoomManager.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

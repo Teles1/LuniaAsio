@@ -9,7 +9,7 @@ namespace Lunia {
 				class CompressedItemInfoManager : public Lunia::XRated::Database::Info::ItemInfoManager, CompressedLoader
 				{
 				public:
-					typedef PositionData<std::map<uint32, uint32> > PositionDat;
+					typedef PositionData<std::map<uint32, uint32>> PositionDat;
 					typedef UnidentifiedItemInfoMap::iterator UnidentifiedItemInfoMapIt;
 
 					PositionDat UnidentifiedItemInfoCompressed;

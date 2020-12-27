@@ -31,7 +31,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		bigSector.Init( MaxMapSize_X, MaxMapSize_Z, 240, 240 );
 		smallSector.Init( MaxMapSize_X, MaxMapSize_Z, 40, 40 );
 
-		bSquare = Config::GetInstance().GetType() == ServerType::Square ? true : false;
+		bSquare = Config::GetInstance().GetKind() == ServerKind::SquareKind ? true : false;
 
 		tickCnt = 0;
 		totalReviveCount = 0;

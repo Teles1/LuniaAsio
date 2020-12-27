@@ -5,7 +5,7 @@
       "LoggingLevel": 0
     },
     "LobbyServer": {
-      "ApiBase": "http://localhost:51542/Lobby",
+      "ApiUrl": "http://localhost:51542/Lobby",
       "ServerAddress": {
         "ServerIp": "127.0.0.1",
         "ServerPort": 15550

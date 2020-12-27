@@ -22,7 +22,7 @@ void ClientProxy::MakeSocketAsyncWriteSerializable(Lunia::Serializer::ISerializa
 		// unsigned short * packetNameHashed = (char*)streamWriter.buffer.GetData();
 		// std::cout << "server -> Client@" << this->GetId() << " 0x" << decltype(packet)::value::TypeHash << std::endl;
 	}
-	catch (Lunia::Exception& e)
+	catch (Lunia::Exception&)
 	{
 		Logger::GetInstance().Error("MakeSocketAsyncWriteSerializable:: Client@{0} couldn't parse packet", this->GetId());
 		return;
