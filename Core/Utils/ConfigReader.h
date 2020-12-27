@@ -69,5 +69,7 @@ namespace Lunia {
         ServerType GetType();
     public: // Logic
         uint16 m_UsableBonusLifeInStage;
+        std::wstring m_PoolInfoPath = L"Database/DefaultPoolInfo.xml";
+        bool m_IgnorePoolInfo = false;
     };
 }

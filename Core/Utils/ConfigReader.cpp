@@ -44,6 +44,10 @@ namespace Lunia {
                 m_Capacity = stage["Capacity"].get<uint16>();
                 m_AchievementAddress = stage["AchievementAddress"].get<ServerAddress>();
                 m_UsableBonusLifeInStage = stage["UsableBonusLifeInStage"].get<uint16>();
+                if(!stage["PoolInfoPath"].is_null())
+                    m_PoolInfoPath = StringUtil::ToUnicode(stage["PoolInfoPath"].get<std::string>());
+                if(!stage["IgnorePoolInfo"].is_null())
+                    m_IgnorePoolInfo = stage["IgnorePoolInfo"].get<bool>();
             }
             else if (!j_config["SquareServer"].is_null()) {
                 Logger::GetInstance().Info("Instance loaded as SquareServer");
