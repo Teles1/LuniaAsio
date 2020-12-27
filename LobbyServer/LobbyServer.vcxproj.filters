@@ -30,12 +30,6 @@
     <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="LobbyServer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="User.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="PacketHandlers.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -54,15 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="LobbyServer.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="User.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="fwPacketListener.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GameServer\ServerProxy\ServerProxyLobby.h">

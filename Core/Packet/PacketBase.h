@@ -3,10 +3,6 @@
 #include <Core/Serializer/Serializer.h>
 #include <Core/Utils/InitFunction.h>
 
-#include <LobbyServer/fwPacketListener.h>
-
-#include <LobbyServer/LobbyServer.h>
-
 struct PacketBase
 {
 	PacketBase() { };

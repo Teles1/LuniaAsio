@@ -1,10 +1,11 @@
-#include "fwPacketListener.h"
 #include "../Core/Utils/InitFunction.h"
 #include <Core/Utils/Math/Random.h>
 #include "./Network/Api/Api.h"
 #include <LobbyServer/Common.h>
 #include <Core/Utils/ThreadPool.h>
 #include <Core/Utils/ConfigReader.h>
+
+#include "LobbyProtocol/LobbyProtocol.h"
 
 #include "Main.h"
 
@@ -276,7 +277,7 @@ namespace Lunia {
 
 				client->MakeSocketAsyncWriteSerializable(sendPacket);
 
-				g_gameServer->Proxy.ClientRegistry.DropClient(client);
+				g_gameServer->Proxy.ClientRegistry.DropClient(client, "Terminate");
 			});
 
 			g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::CreateCharacter& packet)
@@ -343,7 +344,7 @@ namespace Lunia {
 				{
 					Logger::GetInstance().Error(L"Non authorized user trying to delete a AccountName: {0}, characterName: {1}", client->GetAccountName(), packet.Name);
 					
-					g_gameServer->Proxy.ClientRegistry.DropClient(client);
+					g_gameServer->Proxy.ClientRegistry.DropClient(client, "Non authorized user trying to delete a AccountName");
 					return;
 				}
 
@@ -351,7 +352,7 @@ namespace Lunia {
 				{
 					Logger::GetInstance().Error(L"User is trying to delete a characterName that does not exist. AccountName: {0}, characterName: {1}", client->GetAccountName(), packet.Name);
 					
-					g_gameServer->Proxy.ClientRegistry.DropClient(client);
+					g_gameServer->Proxy.ClientRegistry.DropClient(client, "User is trying to delete a characterName that does not exist");
 					return;
 				}
 
@@ -371,7 +372,7 @@ namespace Lunia {
 					{
 						Logger::GetInstance().Error(L"Could not Delete the specified characterName AccountName: {0}, characterName: {1}", client->GetAccountName(), packet.Name);
 						
-						g_gameServer->Proxy.ClientRegistry.DropClient(client);
+						g_gameServer->Proxy.ClientRegistry.DropClient(client, "Could not Delete the specified characterName AccountName");
 					}
 				}
 
@@ -398,7 +399,7 @@ namespace Lunia {
 			{
 				Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Alive", client->GetId());
 
-				Lobby::Alive::AliveData answer(packet.Index,packet.Value1,packet.Value2,packet.Value3);
+				// Lobby::Alive::AliveData answer(packet.Index,packet.Value1,packet.Value2,packet.Value3);
 
 				client->m_isWaitingOnPing = true;
 				// client->SetAliveAsLastTickAlivePing(answer);
