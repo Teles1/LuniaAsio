@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="PacketHandler.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
+    <ClCompile Include="Room\Room.cpp" />
     <ClCompile Include="StageServer.cpp" />
     <ClCompile Include="StageServerProtocol\StageServerProtocol.cpp" />
     <ClCompile Include="User\UserManager.cpp" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="fwPacketListener.h" />
     <ClInclude Include="QuickSlot.h" />
+    <ClInclude Include="Room\Room.h" />
     <ClInclude Include="StageServer.h" />
     <ClInclude Include="StageServerProtocol\StageServerProtocol.h" />
     <ClInclude Include="Service.h" />
