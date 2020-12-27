@@ -6,14 +6,14 @@ namespace Lunia {
 			namespace Info {
 				void NonPlayerInfo::Jewel::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"XRated::Database::Info::NonPlayerInfo::Jewel");
+					out.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo::Jewel");
 					out.Write(L"Type", (uint16)Type);
 					out.Write(L"Cnt", Cnt);
 				}
 
 				void NonPlayerInfo::Jewel::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"XRated::Database::Info::NonPlayerInfo::Jewel");
+					in.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo::Jewel");
 					uint16 jewelType;
 					in.Read(L"Type", jewelType);
 					Type = (uint8)jewelType;
@@ -22,14 +22,14 @@ namespace Lunia {
 
 				void NonPlayerInfo::Item::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"XRated::Database::Info::NonPlayerInfo::Item");
+					out.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo::Item");
 					out.Write(L"Probability", Probability);
 					out.Write(L"Name", Name);
 				}
 
 				void NonPlayerInfo::Item::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"XRated::Database::Info::NonPlayerInfo::Item");
+					in.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo::Item");
 					in.Read(L"Probability", Probability);
 					in.Read(L"Name", Name);
 					Hash = StringUtil::Hash(Name.c_str());
@@ -37,14 +37,14 @@ namespace Lunia {
 
 				void NonPlayerInfo::OffensiveSkillList::SkillList::Skill::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"XRated::Database::Info::NonPlayerInfo::OffensiveSkillList::SkillList::Skill");
+					out.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo::OffensiveSkillList::SkillList::Skill");
 					out.Write(L"SkillName", SkillName);
 					out.Write(L"Probability", Probability);
 				}
 
 				void NonPlayerInfo::OffensiveSkillList::SkillList::Skill::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"XRated::Database::Info::NonPlayerInfo::OffensiveSkillList::SkillList::Skill");
+					in.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo::OffensiveSkillList::SkillList::Skill");
 					in.Read(L"SkillName", SkillName, std::wstring());
 					in.Read(L"Probability", Probability, 0.0f);
 					Hash = StringUtil::Hash(SkillName.c_str());
@@ -52,21 +52,21 @@ namespace Lunia {
 
 				void NonPlayerInfo::OffensiveSkillList::SkillList::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"XRated::Database::Info::NonPlayerInfo::OffensiveSkillList::SkillList");
+					out.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo::OffensiveSkillList::SkillList");
 					out.Write(L"Range", Range);
 					out.Write(L"Skills", Skills);
 				}
 
 				void NonPlayerInfo::OffensiveSkillList::SkillList::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"XRated::Database::Info::NonPlayerInfo::OffensiveSkillList::SkillList");
+					in.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo::OffensiveSkillList::SkillList");
 					in.Read(L"Range", Range, 0.0f);
 					in.Read(L"Skills", Skills, std::vector< Skill >());
 				}
 
 				void NonPlayerInfo::OffensiveSkillList::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"XRated::Database::Info::NonPlayerInfo::OffensiveSkillList");
+					out.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo::OffensiveSkillList");
 					out.Write(L"AggressiveMode", AggressiveMode);
 					out.Write(L"NormalSkills", NormalSkills);
 					out.Write(L"AggressiveSkills", AggressiveSkills);
@@ -74,7 +74,7 @@ namespace Lunia {
 
 				void NonPlayerInfo::OffensiveSkillList::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"XRated::Database::Info::NonPlayerInfo::OffensiveSkillList");
+					in.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo::OffensiveSkillList");
 					in.Read(L"AggressiveMode", AggressiveMode, 0.0f);
 					in.Read(L"NormalSkills", NormalSkills, std::vector< SkillList >());
 					in.Read(L"AggressiveSkills", AggressiveSkills, std::vector< SkillList >());
@@ -83,7 +83,7 @@ namespace Lunia {
 
 				void NonPlayerInfo::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"XRated::Database::Info::NonPlayerInfo");
+					out.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo");
 					out.Write(L"Name", Name);
 					out.Write(L"TemplateName", TemplateName);
 					out.Write(L"ActionListName", ActionListName);
@@ -175,11 +175,9 @@ namespace Lunia {
 					return -1;
 				}
 
-
-
 				void NonPlayerInfo::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"XRated::Database::Info::NonPlayerInfo");
+					in.Begin(L"AllM::XRated::Database::Info::NonPlayerInfo");
 					in.Read(L"Name", Name);
 					HashcodeName = StringUtil::Hash(Name.c_str());
 					in.Read(L"TemplateName", TemplateName);
@@ -220,6 +218,7 @@ namespace Lunia {
 
 					in.Read(L"AnimationPath", AnimationPath);
 					in.Read(L"EffectCategory", EffectCategory);
+					in.Read(L"SpecialDead", SpecialDead); // new missing logic
 					in.Read(L"Resists", Resists);
 					in.Read(L"States", States);
 					in.Read(L"Description", Description, std::wstring());
@@ -227,6 +226,7 @@ namespace Lunia {
 					in.Read(L"GlowColor", GlowColor, float4(1.0f, 1.0f, 1.0f, 1.0f));
 					in.Read(L"DefaultMeshs", DefaultMeshs, std::vector<std::wstring>());
 					in.Read(L"GiveItemToAllPlayer", GiveItemToAllPlayer, false);
+
 				}
 
 				bool NonPlayerInfo::CheckDropItemDuplication() const

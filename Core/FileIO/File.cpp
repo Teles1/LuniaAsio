@@ -1,4 +1,6 @@
 #include "FileHelper.h" // hided
+#include <filesystem>
+#include <iostream>
 
 namespace Lunia {
 	namespace FileIO {
@@ -127,9 +129,23 @@ namespace Lunia {
 			else if (mode & WriteMode) creationDisposition = CREATE_ALWAYS;
 			else if (mode & ReadMode) creationDisposition = OPEN_EXISTING;
 
-			HANDLE h;
+			HANDLE h;    
+
+			if (mode == WriteMode) {
+				String _path(StringUtil::Replace(filename, L"/", L"\\"));
+				if (_path.substr(_path.size() - 1) == L"\\") 
+					_path = _path.substr(0, _path.size() - 1);
+				_path.insert(0, L".\\");
+				std::wstring PrefixRemovingFileName = _path.substr(0, _path.find_last_of(L"\\"));
+				if (!std::filesystem::exists(PrefixRemovingFileName))
+				{
+					std::filesystem::create_directories(PrefixRemovingFileName);
+				}
+			}
+
 			h = ::CreateFileW(filename, desiredAccess, FILE_SHARE_READ, NULL /* SecurityAttributes */
 				, creationDisposition, FILE_ATTRIBUTE_NORMAL, NULL /* TemplateFile */);
+
 			if (::GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
 			{
 				h = ::CreateFileA(StringUtil::ToASCII(filename).c_str(), desiredAccess, FILE_SHARE_READ, NULL /* SecurityAttributes */
@@ -145,13 +161,11 @@ namespace Lunia {
 				h = ::CreateFileW(filename, desiredAccess, FILE_SHARE_READ, NULL /* SecurityAttributes */
 					, creationDisposition, FILE_ATTRIBUTE_NORMAL, NULL /* TemplateFile */);
 			}
-
 			if (h == INVALID_HANDLE_VALUE)
 				THROWFILEEXCEPTION(filename);
 
 			this->filename = filename;
 			this->handle = h;
-
 			if (mode & AppendMode)
 				Seek(0, End);
 

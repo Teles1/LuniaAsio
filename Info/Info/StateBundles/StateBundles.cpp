@@ -6,7 +6,7 @@ namespace Lunia {
 			namespace Info {
 				void StateBundleInfo::State::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"BinaryBufferXRated::Database::Info::StateBundleInfo::State");
+					out.Begin(L"AllM::XRated::Database::Info::StateBundleInfo::State");
 					std::wstring strType;
 					StateInfo::TypeToString(type, strType);
 					out.Write(L"type", strType);
@@ -15,7 +15,7 @@ namespace Lunia {
 
 				void StateBundleInfo::State::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"BinaryBufferXRated::Database::Info::StateBundleInfo::State");
+					in.Begin(L"AllM::XRated::Database::Info::StateBundleInfo::State");
 					std::wstring strType;
 					in.Read(L"type", strType);
 					type = StateInfo::StringToType(strType.c_str());
@@ -24,7 +24,7 @@ namespace Lunia {
 
 				void StateBundleInfo::Condition::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"BinaryBufferXRated::Database::Info::StateBundleInfo::Condition");
+					out.Begin(L"AllM::XRated::Database::Info::StateBundleInfo::Condition");
 					out.Write(L"startTime", startTime);
 					out.Write(L"name", name);
 					out.Write(L"rangeType", (int)rangeType);
@@ -35,7 +35,7 @@ namespace Lunia {
 
 				void StateBundleInfo::Condition::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"BinaryBufferXRated::Database::Info::StateBundleInfo::Condition");
+					in.Begin(L"AllM::XRated::Database::Info::StateBundleInfo::Condition");
 					in.Read(L"startTime", startTime);
 					in.Read(L"name", name);
 					hash = StringUtil::Hash(name.c_str());
@@ -47,7 +47,7 @@ namespace Lunia {
 
 				void StateBundleInfo::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"BinaryBufferXRated::Database::Info::StateBundleInfo");
+					out.Begin(L"AllM::XRated::Database::Info::StateBundleInfo");
 					out.Write(L"name", name);
 					out.Write(L"level", level);
 					out.Write(L"categoryName", categoryName);
@@ -56,6 +56,7 @@ namespace Lunia {
 					out.Write(L"duration", duration);
 					out.Write(L"allianceType", (int)allianceType);
 					out.Write(L"buffRate", buffRate);
+					out.Write(L"buffRate2", buffRate2);
 					out.Write(L"debuffRate", debuffRate);
 					out.Write(L"states", states);
 					out.Write(L"EffectPath", EffectPath);
@@ -64,7 +65,7 @@ namespace Lunia {
 
 				void StateBundleInfo::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"BinaryBufferXRated::Database::Info::StateBundleInfo");
+					in.Begin(L"AllM::XRated::Database::Info::StateBundleInfo");
 					in.Read(L"name", name);
 					in.Read(L"level", level);
 					in.Read(L"categoryName", categoryName);
@@ -73,6 +74,7 @@ namespace Lunia {
 					in.Read(L"duration", duration);
 					in.Read(L"allianceType", (int&)allianceType);
 					in.Read(L"buffRate", buffRate);
+					in.Read(L"buffRate2", buffRate2);
 					in.Read(L"debuffRate", debuffRate);
 					in.Read(L"states", states, StateList());
 					in.Read(L"EffectPath", EffectPath, Locator(L""));

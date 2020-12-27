@@ -1,4 +1,6 @@
 #pragma once
+#include <LzmaLib/LzmaLib.h>
+#include <Core/FileIO/FileStream.h>
 #include "NPCManager.h"
 
 namespace Lunia{
@@ -74,14 +76,7 @@ namespace Lunia{
 				void NPCInfoManager::Init(bool bForceXmlData)
 				{
 					Npcs.clear();
-
-					if (bForceXmlData) {//Xml loading
-						LoadXmlData();
-					}
-					else { //Binary loading
-						std::wstring fullLoading;
-						NPCInfoManager::LoadBinaryData();
-					}
+					LoadCompressedNpc();
 				}
 
 				void NPCInfoManager::Add(const NonPlayerInfo& info)
@@ -115,9 +110,8 @@ namespace Lunia{
 
 				NonPlayerInfo* NPCInfoManager::Retrieve(uint32 hash)
 				{
-					NPCInfoMap::iterator i = Npcs.find(hash);
-					if (i == Npcs.end()) return NULL;
-					return &i->second;
+					auto it = this->Npcs.find(hash);
+					return it == this->Npcs.end() ? NULL : &(it->second);
 				}
 
 				NonPlayerInfo* NPCInfoManager::Retrieve(const wchar_t* id)
@@ -152,6 +146,61 @@ namespace Lunia{
 					in.Begin(L"BinaryBufferXRated::Database::Info::NPCInfoManager");
 					in.Read(L"Npcs", Npcs);
 					in.Read(L"basicResist", basicResist);
+				}
+
+				void NPCInfoManager::LoadCompressedNpc()
+				{
+					Resource::StreamReader cbfreader = Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/NPCInfos.cbf");
+					cbfreader->SetReadCursor(0, Lunia::IStream::Begin);
+					/* CompressedBlockSizeInBytes */
+					//printf("Decimal: %d - ", cbfreader->GetReadCursor());
+					//std::cout << "Offset: " << std::hex << cbfreader->GetReadCursor();
+					uint8* Buffer = reinterpret_cast<uint8*>(new char[4]);
+					cbfreader->Read(Buffer, 4);
+					/* BlockLength */
+					size_t compSize = *(int*)Buffer;
+					//printf(" - Size : (Decimal: %d, Hex: 0%.2x) \n", compSize, compSize);
+					/* BlockRead */
+					uint8* Block = reinterpret_cast<uint8*>(new char[compSize]);
+					cbfreader->Read(Block, compSize);
+					/* Block Reader */
+					Resource::StreamReader reader = new FileIO::RefCountedMemoryStreamReader(Block, compSize);
+					uint32 count(0);
+					/* Loop in Block Size Left */
+					std::vector<uint8> completeBuff;
+					size_t completeSize = 0;
+					int32 blocksReaded = 0;
+					completeBuff.resize(4);
+					while (reader->GetSizeLeft() > 0)
+					{
+						/* Reading and setting a first block data in ReplayBuffer*/
+						reader->Read(Block, 4);
+						size_t srcSize = *(int*)Block + LZMA_PROPS_SIZE;
+						reader->Read(Block, 4);
+						uint32 UNCOMPRESSED_SIZE = *(int*)Block;
+						uint8* lReplayBuffer = reinterpret_cast<uint8*>(new char[srcSize]);
+						reader->Read(lReplayBuffer, srcSize);
+
+						/* Setting buffer input and output sizes*/
+						std::vector<uint8> inBuf(srcSize);
+						std::vector<uint8> outBuf;
+						outBuf.resize(UNCOMPRESSED_SIZE);
+						memcpy(&inBuf[0], lReplayBuffer, srcSize);
+
+						/*decoding and decrypting the binary owo*/
+						size_t dstLen = outBuf.size();
+						size_t srcLen = inBuf.size() - LZMA_PROPS_SIZE;
+						SRes res = LzmaUncompress(&outBuf[0], &dstLen, &inBuf[LZMA_PROPS_SIZE], &srcLen, &inBuf[0], LZMA_PROPS_SIZE);
+
+						//if do you want save all outbuf in a vector uncomment this and good luck <3
+						blocksReaded += *(int*)(&outBuf[0]);
+						outBuf.erase(outBuf.begin(), outBuf.begin() + 4);
+						std::move(outBuf.begin(), outBuf.end(), std::back_inserter(completeBuff));
+						completeSize += dstLen;
+					}
+					memmove(&completeBuff[0], &blocksReaded, sizeof(blocksReaded));
+					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&completeBuff[0], completeSize));
+					BlockDecrypted->Read(L"NPCInfoManager", *this);
 				}
 			}
 		}

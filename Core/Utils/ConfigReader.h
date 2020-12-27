@@ -4,6 +4,12 @@
 #include <sstream>
 using json = nlohmann::json;
 namespace Lunia {
+    enum ServerType {
+        Stage,
+        Square,
+        LobbyServer,
+        PVP
+    };
     struct ServerAddress {
     public:
         std::string ServerIp = "127.0.0.1";
@@ -11,7 +17,7 @@ namespace Lunia {
     };
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ServerAddress, ServerIp, ServerPort)
 
-    struct Square {
+    struct SquareStruct {
     public:
         std::string Name;
         uint32 StageGroupHash = 53518598;
@@ -19,7 +25,7 @@ namespace Lunia {
         uint8 OrderNumber;
         uint16 Capacity = 70;
     };
-    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Square, Name, StageGroupHash, AccessLevel, Capacity, OrderNumber)
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(SquareStruct, Name, StageGroupHash, AccessLevel, Capacity, OrderNumber)
     /*
         Can be accessed from anywhere using Config::GetInstance()
         Not copiable, not clonable. One instance per run. MUST be unique.
@@ -50,14 +56,20 @@ namespace Lunia {
         bool m_ShowPacket = false;
         uint16 m_Capacity = 250;
         struct ServerAddress m_AchievementAddress;
-
-        std::vector<Square> m_SquareList;
+        bool m_PreloadScripts;
+        bool m_PreloadMovemap;
+        std::vector<SquareStruct> m_SquareList;
         struct Locale {
         public:
             std::vector<std::string> m_FobbidenNames;
             std::vector<std::string> m_FobbidenStrings;
         }m_Locale;
-
+        ServerType m_ServerType;
         void ReadConfigFile(const char* filename);
+        ServerType GetType();
+    public: // Logic
+        uint16 m_UsableBonusLifeInStage;
+        std::wstring m_PoolInfoPath = L"Database/DefaultPoolInfo.xml";
+        bool m_IgnorePoolInfo = false;
     };
 }

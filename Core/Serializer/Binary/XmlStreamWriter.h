@@ -46,7 +46,6 @@ namespace Lunia {
 				stream->Write(std::wstring(level, L'\t') + fmt::format(L"<{0}{1}type=\"{2}\"{3}value=\"{4}\" />\r\n", name, std::wstring(tab1, ' ').c_str(), type, std::wstring(tab2, L' ').c_str(), value));
 			}
 
-			Lunia::IStreamWriter* stream;
 			com_ptr<Lunia::IRefCountedStreamWriter> refcountedStream;
 
 			struct Element {

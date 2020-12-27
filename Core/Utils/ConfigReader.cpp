@@ -22,7 +22,7 @@ namespace Lunia {
             if (!j_config["LobbyServer"].is_null()) {
                 Logger::GetInstance().Info("Instance loaded as LobbyServer");
                 auto& lobby = j_config["LobbyServer"];
-
+                m_ServerType = ServerType::LobbyServer;
                 m_ApiBase = lobby["ApiBase"].get<std::string>();
                 m_ServerAddress = lobby["ServerAddress"].get<ServerAddress>();
                 m_ServerName = lobby["ServerName"].get<std::string>();
@@ -34,6 +34,7 @@ namespace Lunia {
             else if (!j_config["StageServer"].is_null()) {
                 Logger::GetInstance().Info("Instance loaded as StageServer");
                 auto& stage = j_config["StageServer"];
+                m_ServerType = ServerType::Stage;
 
                 m_ApiBase = stage["ApiBase"].get<std::string>();
                 m_ServerAddress = stage["ServerAddress"].get<ServerAddress>();
@@ -42,11 +43,16 @@ namespace Lunia {
                 m_ShowPacket = stage["ShowPacket"].get<bool>();
                 m_Capacity = stage["Capacity"].get<uint16>();
                 m_AchievementAddress = stage["AchievementAddress"].get<ServerAddress>();
-
+                m_UsableBonusLifeInStage = stage["UsableBonusLifeInStage"].get<uint16>();
+                if(!stage["PoolInfoPath"].is_null())
+                    m_PoolInfoPath = StringUtil::ToUnicode(stage["PoolInfoPath"].get<std::string>());
+                if(!stage["IgnorePoolInfo"].is_null())
+                    m_IgnorePoolInfo = stage["IgnorePoolInfo"].get<bool>();
             }
             else if (!j_config["SquareServer"].is_null()) {
                 Logger::GetInstance().Info("Instance loaded as SquareServer");
                 auto& square = j_config["SquareServer"];
+                m_ServerType = ServerType::Square;
 
                 m_ApiBase = square["ApiBase"].get<std::string>();
                 m_ServerAddress = square["ServerAddress"].get<ServerAddress>();
@@ -55,9 +61,10 @@ namespace Lunia {
                 m_ShowPacket = square["ShowPacket"].get<bool>();
                 m_Capacity = square["Capacity"].get<uint16>();
                 m_AchievementAddress = square["AchievementAddress"].get<ServerAddress>();
+
                 if (!square["SquareList"].is_null())
                     for (auto& x : square["SquareList"]) {
-                        m_SquareList.push_back(x.get<Square>());
+                        m_SquareList.push_back(x.get<SquareStruct>());
                     }
                 else
                     Logger::GetInstance().Exception("Cannot initialize SquareServer without any Square Listed on the config.");
@@ -66,9 +73,9 @@ namespace Lunia {
                 Logger::GetInstance().Exception("Instance for this server was not reconized.");
             //Here we are already sure that the config exists and the file is valid. lets keep on extracting.
             {
-                if (j_config["Locale"].is_null())
+                if (j_config["Locale"].is_null()) {
                     Logger::GetInstance().Warn("There is no Locale to be loaded into this Server");
-                else
+                } else
                 {
                     auto& locale = j_config["Locale"];
                     if (!locale["FobbidenNames"].is_null())
@@ -78,9 +85,21 @@ namespace Lunia {
                     Logger::GetInstance().Info("Locales loaded");
                 }
             }
+
+            {
+                if (!j_config["Database"].is_null()) {
+                    auto& database = j_config["Database"];
+                    m_PreloadScripts = database["PreloadScripts"].get<bool>();
+                    m_PreloadMovemap = database["PreloadMovemap"].get<bool>();
+                }
+            }
         }
         else
             Logger::GetInstance().Exception("Cannot launch server without settings.");
         Logger::GetInstance().Info("Config loaded!");
+    }
+    ServerType Config::GetType()
+    {
+        return this->m_ServerType;
     }
 }

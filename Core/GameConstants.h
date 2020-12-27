@@ -29,8 +29,6 @@ namespace Lunia {
 				};
 			};
 
-			// ĳ���� �̸��� CreateCharacterNameAsciiMinSize, CreateCharacterNameAsciiMaxSize�� ���� �ʴ� ���̸� ������ �ִ� ĳ���Ͱ� ������ �� �ִ�.
-			// ������ ���� �������� �ϸ鼭 ĳ���� �̸��� Ư������ ���� �־��ְų� �߱� �����̴�.			
 			const static uint32 CreateCharacterNameAsciiMinLength = 4;		///< ĳ���� ������ ĳ���� �̸��� ascii�ڵ� ������ �ּ� ����(*���� : �ش� �������� ĳ���� �����ÿ��� �����ȴ�).
 			const static uint32 CreateCharacterNameAsciiMaxLength = 16;		///< ĳ���� ������ ĳ���� �̸��� ascii�ڵ� ������ �ִ� ����(*���� : �ش� �������� ĳ���� �����ÿ��� �����ȴ�).
 			const static uint16 PlayerMaxLevel = 99;			///< �Ϲ� �÷��̾� ĳ������ level�� limit.
@@ -1015,7 +1013,7 @@ namespace Lunia {
 		struct ItemPack : public Serializer::ISerializable
 		{
 			ItemPosition Position;
-			uint16 Count; // 3.1 by Robotex
+			uint16 Count; 
 			uint64 ExtendInfo; // ex) 0:none used, others:PetSerial
 
 			ItemPack()
@@ -1029,7 +1027,6 @@ namespace Lunia {
 			void Deserialize(Serializer::IStreamReader& in);
 		};
 
-		// Robotex
 		struct InstanceEx : public Serializer::ISerializable
 		{
 			static const DateTime NoExpiration;
@@ -1039,21 +1036,36 @@ namespace Lunia {
 
 			InstanceEx()
 				: Instance(0)
-				, ExpireDate()
+				, ExpireDate(NoExpiration)
 			{}
 
 			InstanceEx(int64 instance) // 2.6 Compatibility constructor
 				: Instance(instance)
-				, ExpireDate()
-			{
-				NormalBitfields normalInstance(instance);
-				DateTime dateTime = DateTime(normalInstance.ExpiredYear, normalInstance.ExpiredMonth, normalInstance.ExpiredDay, normalInstance.ExpiredHour, normalInstance.ExpiredMinute, 0);
-				if (normalInstance.ExpiredYear == 0 || !dateTime.IsValid())
-					ExpireDate = NoExpiration;
-				else
-					ExpireDate = dateTime;
-			}
+				, ExpireDate(NoExpiration)
+			{}
 
+			InstanceEx(int64 instance, DateTime expireDate)
+				: Instance(instance),
+				ExpireDate(expireDate)
+			{}
+			InstanceEx(int64 instance, String expireDate)
+				: Instance(instance)
+			{
+				ExpireDate.Parse(expireDate.c_str());
+			}
+			InstanceEx(const int64& instance, const DateTime& dateTime) {
+				Instance = instance;
+				ExpireDate = dateTime;
+			}
+			InstanceEx(const int64& instance, const std::string& dateTime) {
+				Instance = instance;
+				ExpireDate.Parse(dateTime);
+			}
+			bool IsExpired(const DateTime& now = DateTime::Now()) const;
+			void ForceExpiration();
+			void MakeUnlimitedPeriod();
+			DateTime GetExpiredDate() const;
+			DateTime ExtensionExpiredDay(uint32 day);
 			void Serialize(Serializer::IStreamWriter& out) const;
 			void Deserialize(Serializer::IStreamReader& in);
 
@@ -1061,25 +1073,51 @@ namespace Lunia {
 			{
 				return (Instance == rhs.Instance) && (ExpireDate == rhs.ExpireDate);
 			}
+			bool operator==(const DateTime& rhs) const
+			{
+				return (ExpireDate == rhs);
+			}
 			void operator=(const int64& b)
 			{
 				Instance = b;
-				NormalBitfields normalInstance(b);
-				DateTime dateTime = DateTime(normalInstance.ExpiredYear, normalInstance.ExpiredMonth, normalInstance.ExpiredDay, normalInstance.ExpiredHour, normalInstance.ExpiredMinute, 0);
-				if (normalInstance.ExpiredYear == 0 || !dateTime.IsValid())
-					ExpireDate = NoExpiration;
-				else
-					ExpireDate = dateTime;
 			}
-			operator int64 () const
-			{
+			void operator=(const DateTime& b) {
+				if (b.IsValid()) {
+					ExpireDate = b;
+				}
+
+			}
+			operator const int64& () {
 				return Instance;
 			}
-			/* operator XRated::Database::Enchant::NormalBitfields& (){
-				XRated::Database::Enchant::NormalBitfields normalinstance(Instance);
+			operator int64 () const {
+				return Instance;
+			}
+			operator DateTime() const {
+				return ExpireDate;
+			}
+			operator std::wstring() const {
+				return std::wstring(L"Instance " + StringUtil::ToUnicode(Instance) + L", ExpireDate " + ExpireDate.ToString());
+			}
+			operator std::string() {
+				return std::string(StringUtil::ToASCII(Instance) + "," + StringUtil::ToASCII(ExpireDate.ToString()));
+			}
+
+			/* operator AllM::XRated::Database::Enchant::NormalBitfields& (){
+				AllM::XRated::Database::Enchant::NormalBitfields normalinstance(Instance);
 				return normalinstance;
 			} */
 
+			/*
+				In a nutshell AllM said that the format for their DateTime in uint32 would follow the standart bellow
+				12 bits Year
+				4 bits month
+				5 bits day
+				5 bits hours
+				6 bit minutes
+
+				2050-12-31 00:00:00 -- > 02 C8 1F 00 (Little Endian)
+			*/
 			struct ExpireDateFormat {
 				uint32 Year : 12, Month : 4, Day : 5, Hour : 5, Minute : 6;
 			};
@@ -1093,7 +1131,8 @@ namespace Lunia {
 					ExpiredDay : 5,	/* 1-31 in 0 - 31 */
 					ExpiredHour : 5,	/* 0-23 in 0 - 31 */
 					ExpiredMinute : 6,	/* 0-59 in 0 - 64 */
-					Reserved : 32;
+					ExpiredSecond : 6,	/* 0-59 in 0 - 64 */
+					Reserved : 26;
 
 				operator int64 () const { return reinterpret_cast<const int64&>(*this); }
 				NormalBitfields& operator =(int64 rhs) { reinterpret_cast<int64&>(*this) = rhs; return *this; }
@@ -1136,16 +1175,21 @@ namespace Lunia {
 			uint32 Id;
 			ItemPosition Position;
 			//int64& Instance;
-			InstanceEx instanceEx;
+			InstanceEx InstanceEx;
 			uint16 Stacked;
 
 			ItemSlot()
 				: Id(0)
 				, Stacked(1)
-				, instanceEx(0)
+				, InstanceEx(0)
 			{
 			}
 
+			ItemSlot(const uint32& id, const uint16& stacked, const XRated::InstanceEx& instanceEx) {
+				Id = id;
+				Stacked = stacked;
+				InstanceEx = instanceEx;
+			}
 			void Serialize(Serializer::IStreamWriter& out) const;
 			void Deserialize(Serializer::IStreamReader& in);
 
@@ -1153,13 +1197,13 @@ namespace Lunia {
 			{
 				Id = rhs.Id;
 				Position = rhs.Position;
-				instanceEx = rhs.instanceEx;
+				InstanceEx = rhs.InstanceEx;
 				Stacked = rhs.Stacked;
 			}
 
 			bool operator==(const ItemSlot& rhs) const
 			{
-				return (Id == rhs.Id) && (Position == rhs.Position) && (instanceEx == rhs.instanceEx) && (Stacked == rhs.Stacked);
+				return (Id == rhs.Id) && (Position == rhs.Position) && (InstanceEx == rhs.InstanceEx) && (Stacked == rhs.Stacked);
 			}
 
 			bool operator!=(const ItemSlot& rhs) const
@@ -1209,7 +1253,7 @@ namespace Lunia {
 			: public Serializer::ISerializable
 		{
 			uint32	itemHash;
-			InstanceEx	instanceEx;
+			InstanceEx	InstanceEx;
 			Constants::Equipment	where;
 
 		public:
@@ -1221,7 +1265,7 @@ namespace Lunia {
 		{
 			uint32 ItemHash;
 			uint16 StackedCount;
-			InstanceEx instanceEx;
+			InstanceEx InstanceEx;
 			uint32 SellPrice;
 
 			bool operator==(const StoreSlot& rhs) const;
@@ -1232,20 +1276,21 @@ namespace Lunia {
 
 		struct ItemBasicInfo : public Serializer::ISerializable
 		{
-			uint32	ItemHash;
-			InstanceEx	instanceEx; // 3.1 by Robotex
-			uint64	ItemSerial;
-			uint16	StackCount; // 3.1 by Robotex
+			uint32 ItemHash;
+			uint64 ItemSerial;
+			uint16 StackCount;
+			InstanceEx InstanceEx;
 
 			ItemBasicInfo()
 				: ItemHash(0)
-				, instanceEx(0)
+				, InstanceEx(0)
 				, StackCount(0)
+				, ItemSerial(0)
 			{
 			}
 			ItemBasicInfo(uint32 id, int64 inst, GlobalSerial serial, uint16 count)
 				: ItemHash(id)
-				, instanceEx(inst)
+				, InstanceEx(inst)
 				, ItemSerial(serial)
 				, StackCount(count)
 			{
@@ -1258,18 +1303,18 @@ namespace Lunia {
 		struct RewardItem : public Serializer::ISerializable
 		{
 			uint32	ItemHash;
-			InstanceEx	instanceEx;
-			uint16	StackCount; // 3.1 by Robotex
+			InstanceEx	InstanceEx;
+			uint16	StackCount;
 
 			RewardItem()
 				: ItemHash(0)
-				, instanceEx(0)
+				, InstanceEx(0)
 				, StackCount(0)
 			{
 			}
 			RewardItem(uint32 id, int64 inst, uint8	count)
 				: ItemHash(id)
-				, instanceEx(inst)
+				, InstanceEx(inst)
 				, StackCount(count)
 			{
 			}
@@ -1285,8 +1330,8 @@ namespace Lunia {
 			{
 				enum Type
 				{
-					Fixed,	// ������ ��¥�� �Ǹ� ������ ���� �Ⱓ ����
-					Dynamic,// �������� ���� �� ������ ���� �Ⱓ�� ���Ѵ�
+					Fixed,
+					Dynamic,
 				};
 			};
 
@@ -1364,6 +1409,17 @@ namespace Lunia {
 		struct BagState
 			: public Serializer::ISerializable
 		{
+			BagState() : BagNumber(0), ExpireDate(DateTime::Infinite), Expired(false){}
+			BagState(const int& bagNumber, const DateTime& expireDate) {
+				BagNumber = bagNumber;
+				ExpireDate = expireDate;
+				Expired = ExpireDate > DateTime::Now() ? false : true;
+			}
+			BagState(const int& bagNumber, const std::string& expireDate) {
+				BagNumber = bagNumber;
+				ExpireDate.Parse(expireDate);
+				Expired = ExpireDate > DateTime::Now() ? false : true;
+			}
 			int BagNumber;
 			DateTime ExpireDate;
 			bool	 Expired;
@@ -1411,14 +1467,14 @@ namespace Lunia {
 			QuickSlot()
 				: Id(0)
 				, IsSkill(false)
-				, instanceEx(0)
+				, InstanceEx(0)
 			{
 			} // default constructor
 			QuickSlot(const QuickSlot& q)
 				: Id(q.Id)
 				, IsSkill(q.IsSkill)
 				, Pos(q.Pos)
-				, instanceEx(q.instanceEx)
+				, InstanceEx(q.InstanceEx)
 			{
 			} // copy constuctor
 			void operator =(const QuickSlot& q)
@@ -1426,7 +1482,7 @@ namespace Lunia {
 				Id = q.Id;
 				IsSkill = q.IsSkill;
 				Pos = q.Pos;
-				instanceEx = q.instanceEx;
+				InstanceEx = q.InstanceEx;
 			}
 			void swap(QuickSlot& q)
 			{
@@ -1437,7 +1493,7 @@ namespace Lunia {
 			uint32 Id;
 			bool IsSkill;
 			uint8 Pos;
-			InstanceEx instanceEx;
+			InstanceEx InstanceEx;
 
 			void Serialize(Serializer::IStreamWriter& out) const;
 			void Deserialize(Serializer::IStreamReader& in);
@@ -1867,8 +1923,8 @@ namespace Lunia {
 
 			std::wstring OwnerId;
 			uint16 StackCount;
-			bool  PrivateItem;	//�������� �������� ������
-			int64 Instance;
+			bool  PrivateItem;
+			InstanceEx InstanceEx;
 
 			ItemData(ObjectData& obj);
 			void operator= (const ItemData&);
@@ -1968,11 +2024,11 @@ namespace Lunia {
 		{
 			uint32               PetItemHash;
 			XRated::GlobalSerial PetItemSerial;
-			uint64               PetItemInstance;
-			uint8				 PetItemCount;
-			float                ExpFactor; // ������ Factor�� ���ϱ�
-			DateTime       Start;
-			DateTime       End;
+			InstanceEx           PetItemInstanceEx;
+			uint16				 PetItemCount;
+			float                ExpFactor; 
+			DateTime			 Start;
+			DateTime			 End;
 
 			PetCaredBySchool();
 
@@ -2003,14 +2059,14 @@ namespace Lunia {
 				Invaild
 			};
 
-			PositionType Type;			//< Area�� enum������ �ִ´�.
+			PositionType Type;
 			uint8 Position;
 			uint32 ItemHash;
-			uint16 Stacked;			// 3.1 by Robotex
-			InstanceEx instanceEx;
+			uint16 Stacked;
+			InstanceEx InstanceEx;
 
 			PetItemSlot();
-			PetItemSlot(PositionType type, uint8 position, uint32 itemHash, int64 instance, uint16 stacked = 0);
+			PetItemSlot(const PositionType& Type, const uint8& position, const uint32& itemHash, const XRated::InstanceEx& instance, const uint16& stacked);
 		public:
 			void Serialize(Serializer::IStreamWriter& out) const;
 			void Deserialize(Serializer::IStreamReader& in);
@@ -2116,7 +2172,7 @@ namespace Lunia {
 			float          RareProbability; // RarePet�� �Ǵ� Ȯ��
 			float          FullSum;         // �������� ���� ���ϰ� �ֽ�
 			float          LevelUpPeriod;   // Level Up���� �ɸ��� �ð�
-			uint32 EnchantSerial; // 3.1 by Robotex
+			uint32 EnchantSerial; 
 
 			// Equipment�Լ��� �ִ� ������ equipment position�� Equipments vector�� index�� 1:1 ��ġ�� �ƴϱ� ����.
 			void Equipment(uint32 itemHash, int64 instance, Constants::Equipment position);
@@ -2202,7 +2258,6 @@ namespace Lunia {
 			Pet	PetData;
 
 			bool operator==(const StoreSlot& rhs) const;
-			//�� Finder�� ���� �Ҷ��� ������ PetSerial�� 0�� �ƴҶ� ���� �ؾ� �Ѵ�.
 			struct Finder
 			{
 			private:
@@ -2525,7 +2580,7 @@ namespace Lunia {
 			uint16 StoredLevel;
 			uint16 RebirthCount;
 			uint32 Contributed;		///< ���� �⿩��.
-			std::wstring PrivateMessage; // 3.1 by Robotex
+			std::wstring PrivateMessage; 
 
 
 		public:
@@ -2698,7 +2753,7 @@ namespace Lunia {
 					AttachedItems;
 
 				uint32			StampItemHash;
-				bool IsSystemMail; // 3.1 by Robotex
+				bool IsSystemMail; 
 			public:
 				void Init()
 				{
@@ -3209,7 +3264,7 @@ namespace Lunia {
 
 			bool	IsRarePet;
 			float	RareProbability; // RarePet�� �Ǵ� Ȯ��
-			uint32	EnchantSerial; // 3.1 by Robotex
+			uint32	EnchantSerial; 
 
 			PetToolTipInfo()
 				: PetName(L"")
@@ -3240,8 +3295,8 @@ namespace Lunia {
 				uint32 hash;
 				InstanceEx instanceEx;
 				uint16 count;
-				bool isPetItem; // 3.1 by Robotex
-				PetToolTipInfo pet; // 3.1 by Robotex
+				bool isPetItem; 
+				PetToolTipInfo pet; 
 				virtual void Serialize(Serializer::IStreamWriter& out) const;
 				virtual void Deserialize(Serializer::IStreamReader& in);
 			};
@@ -3434,8 +3489,8 @@ namespace Lunia {
 				std::wstring ExpireDate;
 				uint16 CashEnchant1Index;
 				uint16 CashEnchant2Index;
-				uint16 CashEnchant3Index; // 3.1 by Robotex
-				uint16 CashEnchant4Index; // 3.1 by Robotex
+				uint16 CashEnchant3Index; 
+				uint16 CashEnchant4Index; 
 
 				/* in case of enchantable item */
 				InstanceEx instanceEx;

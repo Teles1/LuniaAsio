@@ -1,9 +1,27 @@
 #pragma once
 #include "./Database.h"
+
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
+				struct DifficultyInfo : public Serializer::ISerializable
+				{
+					std::wstring Name;
+					uint8 Life;
+					float HpFactor;
+					float XpFactor;
+					float IntFactor;
+					float DropFactor;
+					float DmgFactor;
+					float AtkFactor;
+					float UpdateTick;
+					float UpdateFightTick;
+
+				public:/* lSerializable implements */
+					virtual void Serialize(Serializer::IStreamWriter& out) const;
+					virtual void Deserialize(Serializer::IStreamReader& in);
+				};
 				struct StateInfo
 				{
 					enum Sort {
@@ -42,11 +60,14 @@ namespace Lunia {
 						INCDMG,
 						INCHEALAMOUNT,
 						ATTACKSPEED,
+						BOUNDEDMOVESPEED, // missing logic
 						SELFHEAL,
 						AREAHEAL,
 						CLEAR,
 						REGENHP,
 						REGENMP,
+						BOUNDEDREGENHP, // missing logic
+						BOUNDEDREGENMP, // missing logic
 						RESURRECTION,
 						WEAKEN,
 						ROOT,
@@ -69,9 +90,12 @@ namespace Lunia {
 						REFLECTION,
 						DEVINESHD,
 						DEFENCE,
+						ADDDEFENCE, // missing logic
+						ENABLEADDDEFENCE, // missing logic
 						CAMPFIRE,
 						IGNORESTUN,
 						IGNORECRITICALHIT,
+						IGNOREFREEZE, // missing logic
 						DESTROYENEMY,
 						CREATENPC,
 						CREATEOBJECT,
@@ -91,12 +115,14 @@ namespace Lunia {
 						IGNORESTATE,
 						RESETSKILLGROUPCOOLDOWN,
 						DECREASESKILLCOOLDOWN,
+						INCREASESKILLDAMAGE, // missing logic
 						//CONVERTDMGTOHPMP,
 						ABSORBTOHPMP,
 						DMGTOHPMP,
 						GOLDGAIN,
 						IFHIT,
 						IFHITBY,
+						IFDAMAGED, // missing logic
 						IFHEAL,
 						IFCRIATK,
 						IFCRIMAGIC,
@@ -132,6 +158,33 @@ namespace Lunia {
 						Type type;
 						std::wstring typeStr;
 					};
+				};
+				struct BasicStatInfo : public Serializer::ISerializable {
+					//const static int SIZE=6;
+					struct Stat : public Serializer::ISerializable {
+						int Str;
+						int Dex;
+						int Vit;
+						int Int;
+
+					public:
+						Stat() {}
+						Stat(int s, int d, int v, int i) : Str(s), Dex(d), Vit(v), Int(i) { }
+						void Set(int s, int d, int v, int i) { Str = s; Dex = d; Vit = v; Int = i; }
+
+						virtual void Serialize(Serializer::IStreamWriter& out) const;
+						virtual void Deserialize(Serializer::IStreamReader& in);
+					};
+					std::wstring name;
+					std::vector<Stat> stats;
+					Constants::CharacterMajorStatType majorStat;
+					//Stat stats[SIZE];
+
+				public:
+					BasicStatInfo() {}
+
+					virtual void Serialize(Serializer::IStreamWriter& out) const;
+					virtual void Deserialize(Serializer::IStreamReader& in);
 				};
 			}
 		}

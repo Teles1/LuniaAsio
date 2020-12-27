@@ -21,6 +21,7 @@ namespace Lunia {
 				return;
 			}
 
+			Logger::GetInstance().Info("Sending packet[{0:#04x}] to User@{1}", *((HashType*)buffer.GetData() + 2), this->GetId());
 			this->SendAsync(reinterpret_cast<uint8*>(buffer.GetData()), buffer.GetLength());
 		}
 		uint32 User::Parse(uint8* buffer, size_t size)

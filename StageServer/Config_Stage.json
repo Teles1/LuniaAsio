@@ -18,25 +18,26 @@
         "ServerIp": "127.0.0.1",
         "ServerPort": 15000
       },
+      "UsableBonusLifeInStage": 2,
       "SquareList": [
         {
           "Name": "01 Square",
           "StageGroupHash": 53518598,
-          "AccessLevel": 12,
+          "AccessLevel": 0,
           "OrderNumber": 1,
           "Capacity": 70
         },
         {
           "Name": "02 Square",
           "StageGroupHash": 53518598,
-          "AccessLevel": 12,
+          "AccessLevel": 0,
           "OrderNumber": 2,
           "Capacity": 70
         },
         {
           "Name": "03 Square",
           "StageGroupHash": 53518598,
-          "AccessLevel": 12,
+          "AccessLevel": 0,
           "OrderNumber": 3,
           "Capacity": 70
         }
@@ -45,6 +46,10 @@
     "Locale": {
       "FobbidenNames": [ "\u00E9", "Teles", "key_value" ],
       "FobbidenStrings": []
+    },
+    "Database": {
+      "PreloadScripts": false,
+      "PreloadMovemap": false
     }
   }
 }

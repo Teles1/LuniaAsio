@@ -32,6 +32,7 @@
     <ClCompile Include="GameServer\Proxy\ServerProxy.cpp" />
     <ClCompile Include="GameServer\Proxy\ClientProxy.cpp" />
     <ClCompile Include="Packet\PacketBase.cpp" />
+    <ClCompile Include="DeltaTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -120,6 +121,9 @@
     <ClInclude Include="GameServer\fwPacketHandler.h" />
     <ClInclude Include="Packet\PacketBase.h" />
     <ClInclude Include="ErrorDefinition.h" />
+    <ClInclude Include="DeltaTimer.h" />
+    <ClInclude Include="Utils\Math\MinMax.h" />
+    <ClInclude Include="Runnable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

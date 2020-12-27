@@ -44,9 +44,6 @@ namespace Lunia {
 						StateInfo::Type	type;
 						std::map<std::wstring, std::wstring> params;
 						std::vector<State> optionalStates;
-						//#ifdef ALLM_COMPILE_EDITOR
-						//				std::wstring stateTypeName;
-						//#endif
 					public:
 						virtual void Serialize(Serializer::IStreamWriter& out) const;
 						virtual void Deserialize(Serializer::IStreamReader& in);
@@ -83,14 +80,15 @@ namespace Lunia {
 					{
 						struct Input : public Serializer::ISerializable
 						{
-							float startTime;
-							float endTime;
+							float startTime = 0;
+							float endTime = 0;
 							unsigned int key; 
 							inline Input() : key(0) {}
 
 							virtual void Serialize(Serializer::IStreamWriter& out) const;
 							virtual void Deserialize(Serializer::IStreamReader& in);
-						} in;
+						};
+						Input in;
 						float changeTime;
 						std::wstring actionName;
 						uint32 hash;
@@ -136,7 +134,7 @@ namespace Lunia {
 						
 					}
 
-					inline const wchar_t* GetName() const { return actionName.c_str(); }
+					const wchar_t* GetName() const;
 
 					virtual void Serialize(Serializer::IStreamWriter& out) const;
 					virtual void Deserialize(Serializer::IStreamReader& in);

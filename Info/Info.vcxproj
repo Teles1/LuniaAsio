@@ -45,6 +45,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -130,7 +131,7 @@
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
@@ -167,6 +168,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Info\ETC\Balance.h" />
     <ClInclude Include="Info\Actions\CompressedActionsManager.h" />
     <ClInclude Include="Info.h" />
     <ClInclude Include="Info\Actions\Actions.h" />
@@ -174,49 +176,129 @@
     <ClInclude Include="Info\Actions\IndexedActionsInfo.h" />
     <ClInclude Include="Info\CompressedLoader.h" />
     <ClInclude Include="Info\Database.h" />
+    <ClInclude Include="Info\Enchant\Enchant.h" />
+    <ClInclude Include="Info\Enchant\EnchantTable.h" />
+    <ClInclude Include="Info\EquipSet\EquipSet.h" />
+    <ClInclude Include="Info\EquipSet\EquipSetManager.h" />
+    <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.h" />
+    <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.h" />
+    <ClInclude Include="Info\Event\EventInfo.h" />
+    <ClInclude Include="Info\Event\EventInfoManager.h" />
+    <ClInclude Include="Info\GeneralInfos\GeneralInfo.h" />
+    <ClInclude Include="Info\GeneralInfos\GeneralInfoManager.h" />
     <ClInclude Include="Info\GlobalInfo.h" />
+    <ClInclude Include="Info\HashTable.h" />
     <ClInclude Include="Info\IndexedInfoManager.h" />
+    <ClInclude Include="Info\InfoHelper.h" />
+    <ClInclude Include="Info\ItemStageInfo\ItemStageInfo.h" />
     <ClInclude Include="Info\Items\CompressedItemInfoManager.h" />
     <ClInclude Include="Info\Items\IndexedItemInfoManager.h" />
     <ClInclude Include="Info\Items\Item.h" />
     <ClInclude Include="Info\Items\ItemManager.h" />
     <ClInclude Include="Info\Less.h" />
+    <ClInclude Include="Info\MISCS\IndexedMISCSManager.h" />
+    <ClInclude Include="Info\MISCS\MISCS.h" />
+    <ClInclude Include="Info\MISCS\MISCSManager.h" />
+    <ClInclude Include="Info\NonPlayerModifier\NonPlayerModifier.h" />
+    <ClInclude Include="Info\NonPlayerModifier\NonPlayerModifierManager.h" />
+    <ClInclude Include="Info\NPCs\CompressedNPCManager.h" />
     <ClInclude Include="Info\NPCs\IndexedNPCInfo.h" />
     <ClInclude Include="Info\NPCs\NPC.h" />
     <ClInclude Include="Info\NPCs\NPCManager.h" />
+    <ClInclude Include="Info\Pets\Pets.h" />
+    <ClInclude Include="Info\Pets\PetsManager.h" />
+    <ClInclude Include="Info\Projectiles\IndexedProjectileInfoManager.h" />
+    <ClInclude Include="Info\Projectiles\Projectile.h" />
+    <ClInclude Include="Info\PvPRankRewardItemInfos\PvPRankRewardInfo.h" />
+    <ClInclude Include="Info\PvPRankRewardItemInfos\PvPRankRewardItemTable.h" />
+    <ClInclude Include="Info\PvPRewardItemInfos\PvPRewardInfo.h" />
+    <ClInclude Include="Info\PvPRewardItemInfos\PvPRewardItemInfosManager.h" />
+    <ClInclude Include="Info\Skills\SkillInfoManager.h" />
+    <ClInclude Include="Info\Skills\Skills.h" />
+    <ClInclude Include="Info\StageGroup\IndexedStageGroupInfo.h" />
+    <ClInclude Include="Info\StageGroup\StageGroup.h" />
+    <ClInclude Include="Info\StageGroup\StageGroupManager.h" />
+    <ClInclude Include="Info\StageInfo\StageInfo.h" />
+    <ClInclude Include="Info\StageInfo\StageInfoManager.h" />
+    <ClInclude Include="Info\StagePlayTime\PvPRewardItemTableManager.h" />
+    <ClInclude Include="Info\StagePlayTime\StagePlayTime.h" />
+    <ClInclude Include="Info\StagePlayTime\StagePlayTimeManager.h" />
     <ClInclude Include="Info\StateBundles\IndexedStateBundles.h" />
     <ClInclude Include="Info\StateBundles\StateBundles.h" />
     <ClInclude Include="Info\StateBundles\StateBundlesManager.h" />
+    <ClInclude Include="Info\StatusInfo\IndexedStatusInfoManager.h" />
+    <ClInclude Include="Info\StatusInfo\StatusInfo.h" />
+    <ClInclude Include="Info\StatusInfo\StatusInfoManager.h" />
+    <ClInclude Include="Info\StylePoints\StylePoint.h" />
+    <ClInclude Include="Info\StylePoints\StylePointInfoManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Info\ETC\Balance.cpp" />
     <ClCompile Include="Info\Actions\CompressedActionsManager.cpp" />
     <ClCompile Include="Info.cpp" />
     <ClCompile Include="Info\Actions\Actions.cpp" />
     <ClCompile Include="Info\Actions\ActionsManager.cpp" />
     <ClCompile Include="Info\Actions\IndexedActionsInfo.cpp" />
     <ClCompile Include="Info\CompressedLoader.cpp" />
+    <ClCompile Include="Info\Enchant\Enchant.cpp" />
+    <ClCompile Include="Info\Enchant\EnchantTable.cpp" />
+    <ClCompile Include="Info\EquipSet\EquipSet.cpp" />
+    <ClCompile Include="Info\EquipSet\EquipSetManager.cpp" />
+    <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.cpp" />
+    <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.cpp" />
+    <ClCompile Include="Info\Event\EventInfo.cpp" />
+    <ClCompile Include="Info\Event\EventInfoManager.cpp" />
+    <ClCompile Include="Info\GeneralInfos\GeneralInfo.cpp" />
+    <ClCompile Include="Info\GeneralInfos\GeneralInfoManager.cpp" />
     <ClCompile Include="Info\GlobalInfo.cpp" />
     <ClCompile Include="Info\IndexedInfoManager.cpp" />
+    <ClCompile Include="Info\ItemStageInfo\ItemStageInfo.cpp" />
     <ClCompile Include="Info\Items\CompressedItemInfoManager.cpp" />
     <ClCompile Include="Info\Items\IndexedItemInfoManager.cpp" />
     <ClCompile Include="Info\Items\Item.cpp" />
     <ClCompile Include="Info\Items\ItemManager.cpp" />
+    <ClCompile Include="Info\MISCS\IndexedMISCSManager.cpp" />
+    <ClCompile Include="Info\MISCS\MISCS.cpp" />
+    <ClCompile Include="Info\MISCS\MISCSManager.cpp" />
+    <ClCompile Include="Info\NonPlayerModifier\NonPlayerModifierManager.cpp" />
+    <ClCompile Include="Info\NonPlayerModifier\NonPlayerModifier.cpp" />
+    <ClCompile Include="Info\NPCs\CompressedNPCManager.cpp" />
     <ClCompile Include="Info\NPCs\IndexedNPCInfo.cpp" />
     <ClCompile Include="Info\NPCs\NPC.cpp" />
     <ClCompile Include="Info\NPCs\NPCManager.cpp" />
+    <ClCompile Include="Info\Pets\Pets.cpp" />
+    <ClCompile Include="Info\Pets\PetsManager.cpp" />
+    <ClCompile Include="Info\Projectiles\IndexedProjectileInfoManager.cpp" />
+    <ClCompile Include="Info\Projectiles\Projectile.cpp" />
+    <ClCompile Include="Info\Projectiles\ProjectileInfoManager.cpp" />
+    <ClCompile Include="Info\PvPRankRewardItemInfos\PvPRankRewardInfo.cpp" />
+    <ClCompile Include="Info\PvPRankRewardItemInfos\PvPRankRewardItemTable.cpp" />
+    <ClCompile Include="Info\PvPRewardItemInfos\PvPRewardInfo.cpp" />
+    <ClCompile Include="Info\PvPRewardItemInfos\PvPRewardItemInfosManager.cpp" />
+    <ClCompile Include="Info\Skills\SkillInfoManager.cpp" />
+    <ClCompile Include="Info\Skills\Skills.cpp" />
+    <ClCompile Include="Info\StageGroup\IndexedStageGroupInfo.cpp" />
+    <ClCompile Include="Info\StageGroup\StageGroup.cpp" />
+    <ClCompile Include="Info\StageGroup\StageGroupManager.cpp" />
+    <ClCompile Include="Info\StageInfo\StageInfo.cpp" />
+    <ClCompile Include="Info\StageInfo\StageInfoManager.cpp" />
+    <ClCompile Include="Info\StagePlayTime\StagePlayTime.cpp" />
+    <ClCompile Include="Info\StagePlayTime\StagePlayTimeManager.cpp" />
     <ClCompile Include="Info\StateBundles\IndexedStateBundles.cpp" />
     <ClCompile Include="Info\StateBundles\StateBundles.cpp" />
     <ClCompile Include="Info\StateBundles\StateBundlesManager.cpp" />
+    <ClCompile Include="Info\StatusInfo\IndexedStatusInfoManager.cpp" />
+    <ClCompile Include="Info\StatusInfo\StatusInfoManager.cpp" />
+    <ClCompile Include="Info\StylePoints\StylePoint.cpp" />
+    <ClCompile Include="Info\StylePoints\StylePointInfoManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
       <Project>{dd113a77-1c14-40e5-ae12-e50feecb28a4}</Project>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\henri\Desktop\lzma\C\Util\Lzma\LzmaUtil.vcxproj">
-      <Project>{db04fc8b-5cee-4751-a53f-d33c58f0b15f}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Info\Projectiles\ProjectileInfoManager.h" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

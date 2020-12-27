@@ -106,20 +106,20 @@ namespace Lunia {
 
 			String m_AccountName;
 
-			bool m_isAuthenticated;
+			bool									 m_isAuthenticated;
 
 		public:
-			bool m_isSecondPasswordProtected;
+			bool									 m_isSecondPasswordProtected;
 
-			uint8 m_NumberOfSlots;
+			uint8									m_NumberOfSlots;
 
-			uint32 m_AccountLicenses;
+			uint32									m_AccountLicenses;
 
-			std::vector<XRated::LobbyPlayerInfo> m_Characters;
+			std::vector<XRated::LobbyPlayerInfo>	m_Characters;
 
-			XRated::LobbyPlayerInfo m_selectedCharacter;
+			XRated::LobbyPlayerInfo					m_selectedCharacter;
 
-			XRated::CharacterStateFlags m_CharacterStateFlags;
+			XRated::CharacterStateFlags				m_CharacterStateFlags;
 		private:
 			std::mutex mtx;
 		};

@@ -139,7 +139,7 @@
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -181,6 +181,7 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="CriticalSection.h" />
+    <ClInclude Include="DeltaTimer.h" />
     <ClInclude Include="ErrorDefinition.h" />
     <ClInclude Include="FileIO\Directory.h" />
     <ClInclude Include="Exceptions\Expcetion.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Resource\ITextLoaderListener.h" />
     <ClInclude Include="Resource\Resource.h" />
     <ClInclude Include="Resource\TextLoader.h" />
+    <ClInclude Include="Runnable.h" />
     <ClInclude Include="Serializer\Binary\BinaryStream.h" />
     <ClInclude Include="Serializer\Binary\BinaryStreamReader.h" />
     <ClInclude Include="Serializer\Binary\BinaryStreamWriter.h" />
@@ -234,6 +236,7 @@
     <ClInclude Include="Utils\Math\euler.h" />
     <ClInclude Include="Utils\Math\Math.h" />
     <ClInclude Include="Utils\Math\matrix4x4.h" />
+    <ClInclude Include="Utils\Math\MinMax.h" />
     <ClInclude Include="Utils\Math\plane.h" />
     <ClInclude Include="Utils\Math\quaternion.h" />
     <ClInclude Include="Types.h" />
@@ -263,6 +266,7 @@
     <ClCompile Include="GameServer\Proxy\ClientProxy.cpp" />
     <ClCompile Include="GameServer\NetworkIO\ClientNetworkIO.cpp" />
     <ClCompile Include="GameServer\ClientRegistry.cpp" />
+    <ClCompile Include="DeltaTimer.cpp" />
     <ClCompile Include="FileIO\Directory.cpp" />
     <ClCompile Include="FileIO\File.cpp" />
     <ClCompile Include="FileIO\FileHelper.cpp" />

@@ -266,6 +266,10 @@ namespace Lunia {
 					i.Read(L"in", in);
 				}
 
+				const wchar_t* ActionInfo::GetName() const{
+					return actionName.c_str();
+				}
+
 				void ActionInfo::Serialize(Serializer::IStreamWriter& out) const
 				{
 					out.Begin(L"XRated::Database::Info::ActionInfo");

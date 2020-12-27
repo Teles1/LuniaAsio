@@ -129,6 +129,47 @@ namespace Lunia {
 										slot.instanceEx.ExpireDate.Parse(StringUtil::ToUnicode(y["itemExpire"].get<std::string>()));
 										info.Equipments.push_back(slot);
 									}
+
+									client->MakeSocketAsyncWriteSerializable(slots);
+								}
+								
+								{
+									if(!result.resultObject["characters"].is_null())
+										for (auto& y : result.resultObject["characters"]) {
+											user->m_Characters.push_back(XRated::LobbyPlayerInfo());
+											XRated::LobbyPlayerInfo& info = user->m_Characters.back();
+											info.CharacterName = StringUtil::ToUnicode(y["characterName"].get<std::string>());
+											info.CharacterSerial = y["id"].get<int64>();
+											info.VirtualIdCode = y["id"].get<uint32>();
+											info.ClassType = static_cast<XRated::Constants::ClassType>(y["classNumber"].get<int>());
+											info.Level = y["stageLevel"].get<uint16>();
+											info.Exp = y["stageExp"].get<uint32>();
+											info.PvpLevel = y["pvpLevel"].get<uint16>();
+											info.PvpExp = y["pvpExp"].get<uint32>();
+											info.WarLevel = y["warLevel"].get<uint16>();
+											info.WarExp = y["warExp"].get<uint32>();
+											info.StateFlags = static_cast<XRated::CharacterStateFlags>(y["instantStateFlag"].get<int>());
+											info.RebirthCount = y["characterRebirth"]["rebirthCount"].get<uint16>();
+											info.StoredLevel = y["characterRebirth"]["storedLevel"].get<uint16>();
+
+											for (auto& y : y["stageLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
+												info.Licenses.push_back(XRated::StageLicense(y["stageGroupHash"].get<uint32>(), y["accessLevel"].get<uint16>()));
+											}
+
+											for (auto& y : y["items"].get<json>()) {
+												XRated::ItemSlot slot;
+												slot.Position.Bag = y["bagNumber"].get<uint8>(); // equipment slots at
+												slot.Position.Position = y["positionNumber"].get<uint8>();
+												slot.Stacked = 1; // equipments cannot be stacked
+												slot.Id = y["itemHash"].get<uint32>();
+												slot.InstanceEx.Instance = y["instance"].get<int64>();
+												slot.InstanceEx.ExpireDate.Parse(StringUtil::ToUnicode(y["itemExpire"].get<std::string>()));
+												info.Equipments.push_back(slot);
+											}
+										}
+									Lobby::Protocol::ListCharacter sendPacket;
+									sendPacket.Characters = client->m_characters;
+									client->MakeSocketAsyncWriteSerializable(sendPacket);
 								}
 							}
 
@@ -319,21 +360,20 @@ namespace Lunia {
 					sendPacket.CharacterInfo.StateFlags = static_cast<XRated::CharacterStateFlags>(result.resultObject["instantStateFlag"].get<int>());
 					sendPacket.CharacterInfo.RebirthCount = result.resultObject["characterRebirth"]["rebirthCount"].get<uint16>();
 					sendPacket.CharacterInfo.StoredLevel = result.resultObject["characterRebirth"]["storedLevel"].get<uint16>();
-						
-					for (auto y : result.resultObject["characterLicenses"].get<json>()) // [{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
-					{ 
-						sendPacket.CharacterInfo.Licenses.push_back(XRated::StageLicense(y["stageHash"].get<uint32>(), y["accessLevel"].get<uint16>(), y["difficulty"].get<uint8>()));
+				
+
+					for (auto& y : result.resultObject["stageLicenses"].get<json>()) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
+						sendPacket.CharacterInfo.Licenses.push_back(XRated::StageLicense(y["stageGroupHash"].get<uint32>(), y["accessLevel"].get<uint16>()));
 					}
 
-					for (auto y : result.resultObject["items"].get<json>()) 
-					{
+					for (auto& y : result.resultObject["items"].get<json>()) {
 						XRated::ItemSlot slot;
 						slot.Position.Bag = y["bagNumber"].get<uint8>(); // equipment slots at
 						slot.Position.Position = y["positionNumber"].get<uint8>();
 						slot.Stacked = 1; // equipments cannot be stacked
 						slot.Id = y["itemHash"].get<uint32>();
-						slot.instanceEx.Instance = y["instance"].get<int64>();
-						slot.instanceEx.ExpireDate.Parse(y["itemExpire"].get<std::wstring>());
+						slot.InstanceEx.Instance = y["instance"].get<int64>();
+						slot.InstanceEx.ExpireDate.Parse(y["itemExpire"].get<std::wstring>());
 						sendPacket.CharacterInfo.Equipments.push_back(slot);
 					}
 

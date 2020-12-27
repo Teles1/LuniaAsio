@@ -26,6 +26,12 @@
     <ClCompile Include="User\User.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="User\UserManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QuickSlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -51,6 +57,12 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="PacketHandler.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\UserManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="QuickSlot.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

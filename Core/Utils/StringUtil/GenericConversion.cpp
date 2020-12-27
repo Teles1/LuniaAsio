@@ -165,7 +165,7 @@ namespace Lunia {
 
 		template <> std::wstring To(float3 value) {
 			wchar_t wszBuffer[100 * 4];
-			swprintf_s(wszBuffer, L"(%f, %f, %f)", value.x, value.y, value.z);
+			swprintf_s(wszBuffer,  L"(%f, %f, %f)", value.x, value.y, value.z);
 			return std::wstring(wszBuffer);
 		}
 
