@@ -3,7 +3,7 @@
 #include <StageServer/StageServerProtocol/StageServerProtocol.h>
 #include <Core/GameConstants.h>
 #include <StageServer/Service.h>
-#include <Core/Logic/Logic.h>
+#include <Logic/Logic.h>
 #include <StageServer/QuickSlot.h>
 
 namespace Lunia {

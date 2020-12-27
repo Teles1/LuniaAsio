@@ -31,32 +31,33 @@ namespace Lunia {
 		namespace Database {
 
 			class LuniaDatabase {
-				public:
-					void Init();
+			private:
+			public:
+				void Init();
 
-					struct Collection {
-						Info::SkillInfoManager Skills;
-						Info::StateBundleInfoManager StateBundles;
-						Enchant::EnchantTableManager EnchantTables;
-						Info::CompressedItemInfoManager Items;
-						Info::EquipSetManager EquipSet;
-						Info::PetManager Pets;
-						Info::ActionInfoManager Actions;
-						Info::NPCInfoManager Npcs;
-						Info::StageInfoManager Stages;
-						Info::EventNonPlayerItemList EventNonPlayerItemLists;
-						Info::StageGroupManager StageGroups;
-						Info::IndexedStatusInfoManager Statuses;
-						Info::StagePlayTimeInfoManager StagePlayTimes;
-						Info::PvPRewardItemTable PvPRewardItemInfos;
-						Info::PvPRankRewardItemTable PvPRankRewardItemInfos;
-						Info::EventInfoManager EventInfoManager;
-						Info::StylePointInfoManager StylePoints;
-						Info::GeneralInfoManager GeneralInfos;
-						Info::NonPlayerModifierTable NonPlayerModifierInfos;
-						Info::IndexedProjectileInfoManager Projectiles;
-						Info::IndexedMISCInfoManager Miscs;
-					} InfoCollections;
+				struct Collection {
+					Info::SkillInfoManager Skills;
+					Info::StateBundleInfoManager StateBundles;
+					Enchant::EnchantTableManager EnchantTables;
+					Info::CompressedItemInfoManager Items;
+					Info::EquipSetManager EquipSet;
+					Info::PetManager Pets;
+					Info::ActionInfoManager Actions;
+					Info::NPCInfoManager Npcs;
+					Info::StageInfoManager Stages;
+					Info::EventNonPlayerItemList EventNonPlayerItemLists;
+					Info::StageGroupManager StageGroups;
+					Info::IndexedStatusInfoManager Statuses;
+					Info::StagePlayTimeInfoManager StagePlayTimes;
+					Info::PvPRewardItemTable PvPRewardItemInfos;
+					Info::PvPRankRewardItemTable PvPRankRewardItemInfos;
+					Info::EventInfoManager EventInfoManager;
+					Info::StylePointInfoManager StylePoints;
+					Info::GeneralInfoManager GeneralInfos;
+					Info::NonPlayerModifierTable NonPlayerModifierInfos;
+					Info::IndexedProjectileInfoManager Projectiles;
+					Info::IndexedMISCInfoManager Miscs;
+				} InfoCollections;
 			};
 			LuniaDatabase& DatabaseInstance();
 		}

@@ -110,9 +110,8 @@ namespace Lunia{
 
 				NonPlayerInfo* NPCInfoManager::Retrieve(uint32 hash)
 				{
-					auto& i = Npcs.at(hash);
-					//NPCInfoMap::iterator i = Npcs.find(hash);
-					return &i;
+					auto it = this->Npcs.find(hash);
+					return it == this->Npcs.end() ? NULL : &(it->second);
 				}
 
 				NonPlayerInfo* NPCInfoManager::Retrieve(const wchar_t* id)
