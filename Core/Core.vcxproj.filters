@@ -25,8 +25,6 @@
     <ClCompile Include="Serializer\Binary\BinaryStream.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Resource\BinaryLoader.cpp" />
-    <ClCompile Include="Logic\Logic.cpp" />
-    <ClCompile Include="Logic\Sector\Sector.cpp" />
     <ClCompile Include="DeltaTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -108,8 +106,6 @@
     <ClInclude Include="Base.h" />
     <ClInclude Include="Resource\BinaryLoader.h" />
     <ClInclude Include="ErrorDefinition.h" />
-    <ClInclude Include="Logic\Logic.h" />
-    <ClInclude Include="Logic\Sector\Sector.h" />
     <ClInclude Include="DeltaTimer.h" />
     <ClInclude Include="Utils\Math\MinMax.h" />
     <ClInclude Include="Runnable.h" />
