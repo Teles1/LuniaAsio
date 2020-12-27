@@ -270,7 +270,7 @@ namespace Lunia {
         // Client crap
         void StreamReader::Read(const wchar_t* name, Serializer::ISerializable& value) {
             HashType hash = Hash(name);
-            Logger::GetInstance().Info("name[{0}] hash[{1}]", StringUtil::ToASCII(name), hash);
+            // Logger::GetInstance().Info("name[{0}] hash[{1}]", StringUtil::ToASCII(name), hash);
             HashType check = *(HashType*)working;
             if (hash != check) {
                 Logger::GetInstance().Exception("NetStream value mismatched name:{0}(hash {1}) is "

@@ -200,7 +200,6 @@
     <ClInclude Include="Tcp\Client.h" />
     <ClInclude Include="Tcp\Server.h" />
     <ClInclude Include="Tcp\Shared.h" />
-    <ClInclude Include="UserRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">

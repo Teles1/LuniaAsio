@@ -3,6 +3,7 @@
 #include <Core/Serializer/Serializer.h>
 #include <Core/com_ptr.h>
 #include <Core/ReferenceCounted.h>
+#include <iostream>
 
 namespace Lunia {
 	namespace Serializer {
@@ -66,6 +67,7 @@ namespace Lunia {
 			virtual void inline Read(const wchar_t* name, Locator& value) {
 				std::wstring path;
 				Read(name, path);
+				std::wcout << stream->GetName() << std::endl;
 				value = Locator(path.c_str(), stream->GetName());
 			}
 

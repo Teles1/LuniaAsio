@@ -5,49 +5,49 @@
 #include <Core/com_ptr.h>
 #include <Core/ReferenceCounted.h>
 #include <deque>
+#include <iostream>
 
 namespace Lunia {
 	namespace Serializer {
 		class XmlStreamWriter: public ReferenceCountedImpl<IRefCountedStreamWriter> {
-				static const int MajorVersion=0;
-				static const int MinorVersion=0;
-			
+			static const int MajorVersion=0;
+			static const int MinorVersion=0;
 
-				void inline writeStartDocument() {
-					int a=0xFEFF;
-					stream->Write(reinterpret_cast<const unsigned char*>(&a),2);
-					stream->Write(fmt::format(L"<allm version=\"({0},{1})\">\r\n",MajorVersion, MinorVersion));
+
+			void inline writeStartDocument() {
+				int a=0xFEFF;
+				stream->Write(reinterpret_cast<const unsigned char*>(&a),2);
+				stream->Write(fmt::format(L"<allm version=\"({0},{1})\">\r\n", MajorVersion, MinorVersion));
+			}
+
+			void inline writeEndDocument() {
+				stream->Write(L"</allm>");
+			}
+
+			void inline writeBeginning(int level, const wchar_t* type, const wchar_t* name, int major, int minor) {
+				if ((major == 0) && (minor == 0)) {
+					stream->Write(std::wstring(level, L'\t') + std::wstring(fmt::format(L"<{0} type=\"{1}\">\r\n", name, type)));
 				}
-
-				void inline writeEndDocument() {
-					stream->Write(L"</allm>");
+				else {
+					stream->Write(std::wstring(level, L'\t') + fmt::format(L"<{0} type=\"{1}\" version=\"({2},{3})\">\r\n", name, type, major, minor));
 				}
+			}
 
-				void inline writeBeginning(int level, const wchar_t* type, const wchar_t* name, int major, int minor) {
-					if ((major == 0) && (minor == 0)) {
-						stream->Write(std::wstring(level, L'\t') + fmt::format(L"<{0} type=\"{1}\">\r\n", name, type));
-					}
-					else {
-						stream->Write(std::wstring(level, L'\t') + fmt::format(L"<{0} type=\"{1}\" version=\"({2},{3})\">\r\n", name, type, major, minor));
-					}
-				}
+			void inline writeEnding(int level, const wchar_t* /*type*/, const wchar_t* name) {
+				stream->Write(std::wstring(level,L'\t') + fmt::format(L"</{0}>\r\n",name));
+			}
 
-				void inline writeEnding(int level, const wchar_t* /*type*/, const wchar_t* name) {
-					stream->Write(std::wstring(level,L'\t') + fmt::format(L"</{0}>\r\n",name));
-				}
+			void inline writePrimitive(int level, const wchar_t* type, const wchar_t* name, const wchar_t* value) {
+				int tab1 = 32 - int(wcslen(name));
+				int tab2 = 16 - int(wcslen(type));
 
-				void inline writePrimitive(int level, const wchar_t* type, const wchar_t* name, const wchar_t* value) {
-					int tab1 = 32 - int(wcslen(name));
-					int tab2 = 16 - int(wcslen(type));
-
-					if (tab1 < 1) tab1 = 1;
-					if (tab2 < 1) tab2 = 1;
-					stream->Write(std::wstring(level, L'\t') + fmt::format(L"<{0}{1}type=\"{2}\"{3}value=\"{4}\" />\r\n", name, std::wstring(tab1, ' ').c_str(), type, std::wstring(tab2, L' ').c_str(), value));
-				}
-
-			Lunia::IStreamWriter* stream;
+				if (tab1 < 1) tab1 = 1;
+				if (tab2 < 1) tab2 = 1;
+				stream->Write(std::wstring(level, L'\t') + fmt::format(L"<{0}{1}type=\"{2}\"{3}value=\"{4}\" />\r\n", name, std::wstring(tab1, ' ').c_str(), type, std::wstring(tab2, L' ').c_str(), value));
+			}
 
 			com_ptr<Lunia::IRefCountedStreamWriter> refcountedStream;
+			Lunia::IStreamWriter* stream;
 
 			struct Element {
 				std::wstring type; 

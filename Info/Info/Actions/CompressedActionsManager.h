@@ -1,6 +1,7 @@
 #pragma once
 #include "ActionsManager.h"
 #include "../CompressedLoader.h"
+#include <Core/FileIO/FileStream.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -19,9 +20,8 @@ namespace Lunia {
 						virtual void Serialize(Serializer::IStreamWriter& out) const;
 						virtual void Deserialize(Serializer::IStreamReader& in);
 					};
-
 					virtual void LoadBinaryData();
-					ActionInfoManager::Actions& Retrieve(const wchar_t* templateName);
+					ActionInfoManager::Actions& Retrieve(const int templateOffset);
 					inline void ClearCache() { actionMap.clear(); }
 				};
 			}

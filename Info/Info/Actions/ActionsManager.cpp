@@ -84,6 +84,11 @@ namespace Lunia {
 					}
 				}
 
+				void ActionInfoManager::SaveXmlData(ActionInfoManager::Actions a) {
+					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateSerializerXmlStreamWriter(L"XMLMaluco.xml");
+					writer->Write(L"Actions", a);
+				}
+
 				void ActionInfoManager::LoadXmlData()
 				{
 					std::map<std::wstring, std::wstring> actionsXml;
