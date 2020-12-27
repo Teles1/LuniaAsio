@@ -7,7 +7,7 @@ namespace Lunia {
     enum ServerType {
         Stage,
         Square,
-        Lobby,
+        LobbyServer,
         PVP
     };
     struct ServerAddress {

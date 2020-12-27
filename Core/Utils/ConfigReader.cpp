@@ -22,7 +22,7 @@ namespace Lunia {
             if (!j_config["LobbyServer"].is_null()) {
                 Logger::GetInstance().Info("Instance loaded as LobbyServer");
                 auto& lobby = j_config["LobbyServer"];
-                m_ServerType = ServerType::Lobby;
+                m_ServerType = ServerType::LobbyServer;
                 m_ApiBase = lobby["ApiBase"].get<std::string>();
                 m_ServerAddress = lobby["ServerAddress"].get<ServerAddress>();
                 m_ServerName = lobby["ServerName"].get<std::string>();
