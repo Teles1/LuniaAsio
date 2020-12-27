@@ -227,7 +227,6 @@ namespace Lunia {
 					in.Read(L"DefaultMeshs", DefaultMeshs, std::vector<std::wstring>());
 					in.Read(L"GiveItemToAllPlayer", GiveItemToAllPlayer, false);
 
-					std::wcout << Name << std::endl;
 				}
 
 				bool NonPlayerInfo::CheckDropItemDuplication() const

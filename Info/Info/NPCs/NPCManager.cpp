@@ -76,7 +76,7 @@ namespace Lunia{
 				void NPCInfoManager::Init(bool bForceXmlData)
 				{
 					Npcs.clear();
-					NPCInfoManager::LoadCompressedNpc();
+					LoadCompressedNpc();
 				}
 
 				void NPCInfoManager::Add(const NonPlayerInfo& info)
@@ -110,9 +110,9 @@ namespace Lunia{
 
 				NonPlayerInfo* NPCInfoManager::Retrieve(uint32 hash)
 				{
-					NPCInfoMap::iterator i = Npcs.find(hash);
-					if (i == Npcs.end()) return NULL;
-					return &i->second;
+					auto& i = Npcs.at(hash);
+					//NPCInfoMap::iterator i = Npcs.find(hash);
+					return &i;
 				}
 
 				NonPlayerInfo* NPCInfoManager::Retrieve(const wchar_t* id)
@@ -149,7 +149,7 @@ namespace Lunia{
 					in.Read(L"basicResist", basicResist);
 				}
 
-				NonPlayerInfo* NPCInfoManager::LoadCompressedNpc()
+				void NPCInfoManager::LoadCompressedNpc()
 				{
 					Resource::StreamReader cbfreader = Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/NPCInfos.cbf");
 					cbfreader->SetReadCursor(0, Lunia::IStream::Begin);
@@ -170,7 +170,8 @@ namespace Lunia{
 					/* Loop in Block Size Left */
 					std::vector<uint8> completeBuff;
 					size_t completeSize = 0;
-					uint32 blocksReaded = 0;
+					int32 blocksReaded = 0;
+					completeBuff.resize(4);
 					while (reader->GetSizeLeft() > 0)
 					{
 						/* Reading and setting a first block data in ReplayBuffer*/
@@ -193,10 +194,12 @@ namespace Lunia{
 						SRes res = LzmaUncompress(&outBuf[0], &dstLen, &inBuf[LZMA_PROPS_SIZE], &srcLen, &inBuf[0], LZMA_PROPS_SIZE);
 
 						//if do you want save all outbuf in a vector uncomment this and good luck <3
-						//outBuf.erase(outBuf.begin(), outBuf.begin() + 4);
+						blocksReaded += *(int*)(&outBuf[0]);
+						outBuf.erase(outBuf.begin(), outBuf.begin() + 4);
 						std::move(outBuf.begin(), outBuf.end(), std::back_inserter(completeBuff));
 						completeSize += dstLen;
 					}
+					memmove(&completeBuff[0], &blocksReaded, sizeof(blocksReaded));
 					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&completeBuff[0], completeSize));
 					BlockDecrypted->Read(L"NPCInfoManager", *this);
 				}

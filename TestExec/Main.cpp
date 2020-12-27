@@ -11,6 +11,6 @@ int main(int argc, char* argv[]) {
 	//XRated::Database::DatabaseInstance().InfoCollections.EnchantTables.Init(false);
 	//XRated::Database::DatabaseInstance().InfoCollections.Items.Init(false);
 	//XRated::Database::DatabaseInstance().InfoCollections.EquipSet.Init(false);
-	XRated::Database::DatabaseInstance().InfoCollections.Pets.Init(false);
+	//XRated::Database::DatabaseInstance().InfoCollections.Pets.Init(false);
 	return 0;
 }

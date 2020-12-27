@@ -1,11 +1,11 @@
 #pragma once
 #include "PetsManager.h"
+#include <Info/Info.h>
 
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
-				NPCInfoManager database;
 
 				void PetManager::Serialize(Serializer::IStreamWriter& out) const
 				{
@@ -310,7 +310,7 @@ namespace Lunia {
 							continue;
 						}
 
-						NonPlayerInfo* npcData = database.Retrieve(genus->DefaultNPCId.c_str());
+						NonPlayerInfo* npcData = DatabaseInstance().InfoCollections.Npcs.Retrieve(genus->DefaultNPCId.c_str());
 
 						if (npcData == NULL)
 						{
@@ -325,8 +325,10 @@ namespace Lunia {
 						petNpcData.HashcodeName = StringUtil::Hash(petNpcData.Name.c_str());
 						petNpcData.DefaultMeshs = itr->second.DefaultMeshs;
 
-						if (database.Retrieve(petNpcData.Name.c_str()) == NULL)
-							database.Add(petNpcData);
+						if (DatabaseInstance().InfoCollections.Npcs.Retrieve(petNpcData.Name.c_str()) == NULL) {
+							std::wcout << petNpcData.Name << std::endl;
+							DatabaseInstance().InfoCollections.Npcs.Add(petNpcData);
+						}
 						else
 							Logger::GetInstance().Error(L"{0} - Already Exist Pet NPC ID", petNpcData.Name.c_str());
 
@@ -403,7 +405,6 @@ namespace Lunia {
 				void PetManager::LoadBinary(const wchar_t* filename)
 				{
 					Clear();
-
 					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(filename);
 					reader->Read(L"PetManager", *this);
 				}

@@ -81,10 +81,10 @@ namespace Lunia {
 
 					void LoadXmlData();
 					virtual void LoadBinaryData();
+					void LoadCompressedNpc();
 
 					NonPlayerInfo* Retrieve(const wchar_t* id);
 					NonPlayerInfo* Retrieve(uint32 hash);
-					NonPlayerInfo* LoadCompressedNpc();
 					virtual BasicResist::Resist* Retrieve(Database::Info::NonPlayerInfo::Races race);
 					void GetNPCList(std::vector<std::wstring>& l) const;
 

@@ -11,6 +11,7 @@ namespace Lunia {
 			};
 			void LuniaDatabase::Init() {
 				InfoCollections.Npcs.Init(false);
+				InfoCollections.Pets.Init(false);
 				//InfoCollections.Stages.Init(false);
 				//InfoCollections.actions.Init(false);
 				//InfoCollections.npcs.Init(false);
