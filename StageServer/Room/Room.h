@@ -5,10 +5,10 @@
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer{
-			struct Room /*: public Lunia::XRated::Logic::ILogic::IEventListener*/ {
 
-			public: // IEventListener implementation Where we receive information from the Logic.
-				/*
+			struct Room : public Lunia::XRated::Logic::ILogic::IEventListener {
+
+			public: // IEventListener implementation which sends information from the Logic.
 				void Initialized(Database::Info::StageInfo* info, uint16 uniqueId);
 				ILockable& GetSyncRoom();
 				void NonPlayerCreated(Lunia::XRated::NonPlayerData& data);
@@ -148,7 +148,7 @@ namespace Lunia {
 				void ChangeWeatherToClear(const float fadeIntime);
 				void ChangeWeatherToRain(const float fadeIntime);
 				void ChangeWeatherToSnow(const float fadeIntime);
-				void ChangeWeatherToAqua(const float fadeIntime);*/
+				void ChangeWeatherToAqua(const float fadeIntime);
 			};
 		}
 	}

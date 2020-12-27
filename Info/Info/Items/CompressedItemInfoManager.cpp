@@ -87,6 +87,7 @@ namespace Lunia {
 					std::cout << "Compressing data" << std::endl;
 					//uint8* outBuf;
 					//lzmaCompress(inBuf, bufSize, outBuf);
+					delete[] inBuf;
 				}
 
 				Lunia::XRated::Database::Info::ItemInfo* CompressedItemInfoManager::Retrieve(uint32 hash)

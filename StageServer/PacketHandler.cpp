@@ -10,7 +10,7 @@
 namespace Lunia {
 	namespace StageServer {
 		void InitHandlers() {
-			g_gameServer->Proxy->PacketHandler.Connect(
+			fwPacketListener::GetInstance().Connect(
 				[](StageServer::UserSharedPtr& user, StageServer::Protocol::Stage& packet)
 				{
 					Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Stage", user->GetId());
