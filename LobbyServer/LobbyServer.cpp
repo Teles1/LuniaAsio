@@ -64,26 +64,3 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
-static utils::InitFunction init([]()
-{
-	/*
-	g_gameServer->OnAcceptorCreated.Connect([]()
-	{
-		std::cout << "Acceptor Created" << std::endl;
-	});
-	*/
-
-	g_gameServer->Proxy.ClientRegistry.ForAllClients([]()
-	{
-		std::cout << "Every player got that" << std::endl;
-	});
-
-	/*
-	g_gameServer->Proxy->PacketListener.Connect([]()
-	{
-
-	});
-	*/
-
-});

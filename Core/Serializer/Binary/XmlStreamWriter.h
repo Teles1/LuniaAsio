@@ -47,6 +47,7 @@ namespace Lunia {
 			}
 
 			com_ptr<Lunia::IRefCountedStreamWriter> refcountedStream;
+			Lunia::IStreamWriter* stream;
 
 			struct Element {
 				std::wstring type; 
