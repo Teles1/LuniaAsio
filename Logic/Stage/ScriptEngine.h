@@ -8,7 +8,7 @@ mailTo:webmaster@Lunia.co.kr
 #pragma once
 #include "IStageScript.h"
 #include "ScriptLoadThread.h"
-#include "AngelScript/stdstring.h"
+#include <AngelScript/stdstring.h>
 
 namespace Lunia 
 { 

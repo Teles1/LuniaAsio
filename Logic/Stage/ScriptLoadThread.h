@@ -2,7 +2,7 @@
 #include <Core/Runnable.h>
 #include <Core/CriticalSection.h>
 #pragma warning( disable : 4121 )
-#include "AngelScript/angelscript.h"
+#include <AngelScript/angelscript.h>
 #pragma warning( default : 4121 )
 
 #include "Preprocessor/Preprocess.h"
@@ -36,10 +36,10 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			IThreadListener* listener;
 			std::string module;
 			uint16 uniqueId;
-			Ticket(TicketType tp, IThreadListener* l, const std::string& stageName, uint16 id)
+			inline Ticket(TicketType tp, IThreadListener* l, const std::string& stageName, uint16 id)
 				: type(tp), listener(l), module(stageName), uniqueId(id) {}
 
-			Ticket& operator= (const Ticket& t) {
+			inline Ticket& operator= (const Ticket& t) {
 				type = t.type;
 				listener = t.listener;
 				module = t.module;
@@ -68,7 +68,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			asIScriptContext* context;
 			Output out;
 
-			ASModule() : bUsing(false), listener(0), engine(0), context(0) {}
+			inline ASModule() : bUsing(false), listener(0), engine(0), context(0) {}
 		private:
 			ASModule(const ASModule&); // prevent copy construct
 		};
@@ -108,8 +108,8 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		void ReleaseScriptEngine( const Ticket& ticket );
 
 	public : // Helper
-		int GetStageCnt() const { return (int)ASPool.size(); }
-		int GetPoolSize(const std::string& name) const { return (int)ASPool.find(name)->second.size(); }
+		inline int GetStageCnt() const { return (int)ASPool.size(); }
+		inline int GetPoolSize(const std::string& name) const { return (int)ASPool.find(name)->second.size(); }
 		int GetAvailablePool(const std::string& name) const;
 	public : // Lunia::Runnable implement
 		void Run();

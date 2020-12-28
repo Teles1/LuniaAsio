@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug NO ASM|Win32">
+      <Configuration>Debug NO ASM</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug with stats|Win32">
+      <Configuration>Debug with stats</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>AngelScript</ProjectName>
+    <ProjectGuid>{39E6AF97-6BA3-4A72-8C61-BCEBF214EBFD}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug with stats|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug NO ASM|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug with stats|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug NO ASM|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.30804.86</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug NO ASM|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)x64\$(Configuration)\</OutDir>
+    <IntDir>x64\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug with stats|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug NO ASM|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/opt:nowin98  %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>AS_MAX_PORTABILITY;AS_C_INTERFACE;AS_DEBUG;WIN32;_DEBUG;_LIB;ANGELSCRIPT_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <PrecompiledHeaderOutputFile>.\angelscript_lib___Win32_Debug_NO_ASM/angelscript.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\angelscript_lib___Win32_Debug_NO_ASM/</AssemblerListingLocation>
+      <ObjectFileName>.\angelscript_lib___Win32_Debug_NO_ASM/</ObjectFileName>
+      <ProgramDataBaseFileName>.\angelscript_lib___Win32_Debug_NO_ASM/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0416</Culture>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/opt:nowin98  %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0416</Culture>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/opt:nowin98  %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;ANGELSCRIPT_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <PrecompiledHeader />
+      <PrecompiledHeaderOutputFile>.\Release/angelscript.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0416</Culture>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug with stats|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/opt:nowin98  %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>AS_C_INTERFACE;AS_DEBUG;WIN32;_DEBUG;_LIB;ANGELSCRIPT_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <PrecompiledHeaderOutputFile>.\Debug_with_stats/angelscript.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug_with_stats/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug_with_stats/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug_with_stats/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0416</Culture>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\as_anyobject.cpp" />
+    <ClCompile Include="Source\as_arrayobject.cpp" />
+    <ClCompile Include="Source\as_builder.cpp" />
+    <ClCompile Include="Source\as_bytecode.cpp" />
+    <ClCompile Include="Source\as_c.cpp" />
+    <ClCompile Include="Source\as_callfunc.cpp" />
+    <ClCompile Include="Source\as_callfunc_sh4.cpp" />
+    <ClCompile Include="Source\as_callfunc_x86.cpp" />
+    <ClCompile Include="Source\as_compiler.cpp" />
+    <ClCompile Include="Source\as_configgroup.cpp" />
+    <ClCompile Include="Source\as_context.cpp" />
+    <ClCompile Include="Source\as_datatype.cpp" />
+    <ClCompile Include="Source\as_gcobject.cpp" />
+    <ClCompile Include="Source\as_generic.cpp" />
+    <ClCompile Include="Source\as_module.cpp" />
+    <ClCompile Include="Source\as_objecttype.cpp" />
+    <ClCompile Include="Source\as_outputbuffer.cpp" />
+    <ClCompile Include="Source\as_parser.cpp" />
+    <ClCompile Include="Source\as_restore.cpp" />
+    <ClCompile Include="Source\as_scriptcode.cpp" />
+    <ClCompile Include="Source\as_scriptengine.cpp" />
+    <ClCompile Include="Source\as_scriptfunction.cpp" />
+    <ClCompile Include="Source\as_scriptnode.cpp" />
+    <ClCompile Include="Source\as_scriptstruct.cpp" />
+    <ClCompile Include="Source\as_string.cpp" />
+    <ClCompile Include="Source\as_string_util.cpp" />
+    <ClCompile Include="Source\as_thread.cpp" />
+    <ClCompile Include="Source\as_tokenizer.cpp" />
+    <ClCompile Include="Source\as_typeinfo.cpp" />
+    <ClCompile Include="Source\as_variablescope.cpp" />
+    <ClCompile Include="stdstring.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Header\as_anyobject.h" />
+    <ClInclude Include="Header\as_array.h" />
+    <ClInclude Include="Header\as_arrayobject.h" />
+    <ClInclude Include="Header\as_builder.h" />
+    <ClInclude Include="Header\as_bytecode.h" />
+    <ClInclude Include="Header\as_bytecodedef.h" />
+    <ClInclude Include="Header\as_callfunc.h" />
+    <ClInclude Include="Header\as_compiler.h" />
+    <ClInclude Include="Header\as_config.h" />
+    <ClInclude Include="Header\as_configgroup.h" />
+    <ClInclude Include="Header\as_context.h" />
+    <ClInclude Include="Header\as_datatype.h" />
+    <ClInclude Include="Header\as_debug.h" />
+    <ClInclude Include="Header\as_gcobject.h" />
+    <ClInclude Include="Header\as_generic.h" />
+    <ClInclude Include="Header\as_map.h" />
+    <ClInclude Include="Header\as_module.h" />
+    <ClInclude Include="Header\as_objecttype.h" />
+    <ClInclude Include="Header\as_outputbuffer.h" />
+    <ClInclude Include="Header\as_parser.h" />
+    <ClInclude Include="Header\as_property.h" />
+    <ClInclude Include="Header\as_restore.h" />
+    <ClInclude Include="Header\as_scriptcode.h" />
+    <ClInclude Include="Header\as_scriptengine.h" />
+    <ClInclude Include="Header\as_scriptfunction.h" />
+    <ClInclude Include="Header\as_scriptnode.h" />
+    <ClInclude Include="Header\as_scriptstruct.h" />
+    <ClInclude Include="Header\as_string.h" />
+    <ClInclude Include="Header\as_string_util.h" />
+    <ClInclude Include="Header\as_structs.h" />
+    <ClInclude Include="Header\as_texts.h" />
+    <ClInclude Include="Header\as_thread.h" />
+    <ClInclude Include="Header\as_tokendef.h" />
+    <ClInclude Include="Header\as_tokenizer.h" />
+    <ClInclude Include="Header\as_typeinfo.h" />
+    <ClInclude Include="Header\as_types.h" />
+    <ClInclude Include="Header\as_variablescope.h" />
+    <ClInclude Include="angelscript.h" />
+    <ClInclude Include="stdstring.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

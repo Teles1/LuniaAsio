@@ -14,9 +14,9 @@ namespace Lunia {
 				UserRegistry& operator= (const UserRegistry&) = delete; // anti copy
 				UserRegistry(UserRegistry&&) = delete;
 				UserRegistry& operator=(UserRegistry&&) = delete;
-				~UserRegistry() { m_keepAliveLoop = false; m_keepAliveThread.join(); }
-				inline static UserRegistry& GetInstance(const uint32& timeout = 30000/*ms*/) {
-					static UserRegistry								m_instance(timeout);
+				~UserRegistry() {}
+				inline static UserRegistry& GetInstance() {
+					static UserRegistry								m_instance;
 					return m_instance;
 				}
 			public:
@@ -37,31 +37,14 @@ namespace Lunia {
 			private:
 				void RemoveUser(UserSharedPtr& user, AutoLock& _l);
 
-				UserRegistry(const uint32& timeout);
-
-				void NextAlivePingForAll();
+				UserRegistry();
 			private:
-				std::thread											m_keepAliveThread;
-
-				bool												m_keepAliveLoop = true; //set this to false to end the keepAlive
-
-				std::mutex											m_conditionalVar_lock;
-
-				std::condition_variable								m_conditionalVar;
-
-				uint32												m_timeOutTimer;
-
-				uint32												m_curTempUserId = 0xFFFFFFFF;
 
 				uint32												m_curUserId = 0;
 
 				std::mutex											m_usersMutex;
 
-				std::vector<UserSharedPtr>							m_users;
-
-				std::unordered_map<uint32, UserWeakPtr>				m_usersByUserId;
-
-				std::unordered_map<uint32, UserWeakPtr>				m_autorizedUsersByUserId;
+				std::unordered_map<uint32,UserSharedPtr>			m_users;
 			};
 		}
 	}

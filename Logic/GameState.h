@@ -35,12 +35,12 @@ namespace Lunia { namespace XRated {
 		std::queue<Serial> extraQueue;
 
 	public:
-		IdleSerialQueue( Serial startSerial, Serial endSerial )
+		inline IdleSerialQueue( Serial startSerial, Serial endSerial )
 			: start( startSerial ), current( startSerial ), end( endSerial )
 		{
 		}
 
-		Serial GetSerial( void )
+		inline Serial GetSerial( void )
 		{
 			Serial returnValue = 0;
 
@@ -62,12 +62,12 @@ namespace Lunia { namespace XRated {
 			return returnValue;
 		}
 
-		void PushExtraSerial( Serial serial )
+		inline void PushExtraSerial( Serial serial )
 		{
 			extraQueue.push( serial );
 		}
 
-		void Clear()
+		inline void Clear()
 		{
 			while( extraQueue.empty() == false )
 			{

@@ -26,7 +26,7 @@ namespace Lunia {
 
 				RoomKind GetRoomKind();
 			private:
-				bool SetStage(StageLicense& targetStage, int startUserCnt, const std::string& roomPass, int64 pActivateSerial, const std::wstring& userName);
+				bool SetStage(StageLicense& targetStage, const std::string& roomPass, int64 pActivateSerial, const std::wstring& userName);
 			private:
 				bool m_NowCampfire = false;
 				bool m_Active = false;

@@ -10,8 +10,10 @@ namespace Lunia {
 	namespace XRated {
 		namespace StageServer{
 			class User;
-			struct RoomUpdater : public Lunia::Runnable {
+			class Room;
+			class RoomUpdater : public Lunia::Runnable {
 				typedef std::shared_ptr<User> UserSharedPtr;
+				typedef std::shared_ptr<Room> RoomSharedPtr;
 			public:
 				RoomUpdater(int& index);
 				~RoomUpdater();
@@ -20,13 +22,13 @@ namespace Lunia {
 				void DelRoom(RoomSharedPtr room);
 
 				bool JoinUser(RoomSharedPtr room, UserSharedPtr user, const std::string& roomPass);
-				bool PartUser(RoomSharedPtr room, UserSharedPtr user);
+				/*bool PartUser(RoomSharedPtr room, UserSharedPtr user);
 
 				void UpdateExpFactor();
 				void NoticeHolidayEvent(uint32 eventId, bool start);
 
 				size_t GetRoomCnt();
-
+				*/
 			protected:
 				void UpdateRooms(float dt);
 				void ShowLogicPerformance();

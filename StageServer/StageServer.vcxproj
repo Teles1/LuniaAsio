@@ -136,7 +136,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;$(OutDir)Info.lib;$(OutDir)Logic.lib;$(OutDir)Lzma.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;$(OutDir)Info.lib;$(OutDir)Logic.lib;$(OutDir)AngelScript.lib;$(OutDir)Lzma.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -194,6 +194,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AngelScript\angelscript.vcxproj">
+      <Project>{39e6af97-6ba3-4a72-8c61-bcebf214ebfd}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Core\Core.vcxproj">
       <Project>{dd113a77-1c14-40e5-ae12-e50feecb28a4}</Project>
     </ProjectReference>

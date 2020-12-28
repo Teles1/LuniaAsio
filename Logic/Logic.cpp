@@ -2197,7 +2197,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		bUpdating = false;
 	}
 } } }
-
+/*
 #ifdef _SINGLE
 #include "Stage/Preprocessor/Preprocess.h"
 #include "Lunia/Resource/Resource.h"
@@ -2265,7 +2265,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 	
 }	}	}
 #endif
-
+*/
 namespace Lunia { namespace XRated {	namespace Logic {
 	ILogic* CreateLogic()
 	{

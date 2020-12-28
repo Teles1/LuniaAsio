@@ -38,6 +38,7 @@ namespace Lunia {
 				if (m_Users.find(userId) == m_Users.end())
 					return false;
 				m_Users.erase(userId);
+				return true;
 			}
 			UserSharedPtr RoomUserManager::GetUser(const uint32& userId)
 			{

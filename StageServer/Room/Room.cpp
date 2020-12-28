@@ -73,13 +73,13 @@ namespace Lunia {
 					Logger::GetInstance().Error("Could not join user={0} to the room={1}", user->GetId(), this->GetIndex());
 					return false;
 				}
-				if (!SetStage(user->GetCurrentStage(), user->GetStartUserCnt(), roomPass, user->GetRoomActivateSerial(), user->GetName())) {
+				/*if (!SetStage(user->GetCurrentStage(), roomPass, user->GetRoomActivateSerial(), user->GetName())) {
 
-				}
+				}*/
 				return false;
 			}
 
-			bool Room::SetStage(StageLicense& targetStage, int startUserCnt, const std::string& roomPass, int64 pActivateSerial, const std::wstring& userName)
+			bool Room::SetStage(StageLicense& targetStage, const std::string& roomPass, int64 pActivateSerial, const std::wstring& userName)
 			{
 				AutoLock lock(m_Mtx);
 

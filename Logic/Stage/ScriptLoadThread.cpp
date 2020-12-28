@@ -1,5 +1,5 @@
 #pragma warning( disable : 4121 )
-#include "AngelScript/stdstring.h"
+#include <AngelScript/stdstring.h>
 #pragma warning( default : 4121 )
 #include "ScriptLoadThread.h"
 #include "ScriptEngine.h"
@@ -91,7 +91,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		module = new ASModule;
 
 		//Create script engine and context
-		module->engine=asCreateScriptEngine(ANGELSCRIPT_VERSION);
+		module->engine = asCreateScriptEngine(ANGELSCRIPT_VERSION);
 		if ( !module->engine ) {
 			Logger::GetInstance().Exception(L"unable to create script engine." );
 		}

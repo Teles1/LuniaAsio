@@ -15,7 +15,7 @@ namespace Lunia {
 					[](UserSharedPtr& user, StageServer::Protocol::Stage& packet)
 					{
 						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Stage", user->GetId());
-						if (packet.Version != Constants::Version) {
+						if (packet.Version != Lunia::Constants::Version) {
 							Protocol::Error sendPacket;
 							sendPacket.errorcode = XRated::Errors::InvalidClientVersion;
 							user->Send(sendPacket);

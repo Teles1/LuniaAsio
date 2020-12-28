@@ -576,7 +576,7 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(Path);$(SolutionDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Path);$(SolutionDir);</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -592,6 +592,14 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     <Link>
       <AdditionalDependencies>$(OutDir)Core.lib</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir)Core.lib;$(OutDir)AngelScript.lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Action\ActionCenterMove.h" />
@@ -650,8 +658,6 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     <ClInclude Include="Stage\ScriptEngine.h" />
     <ClInclude Include="stage\ScriptLoadThread.h" />
     <ClInclude Include="Stage\Stage.h" />
-    <ClInclude Include="Stage\AngelScript\angelscript.h" />
-    <ClInclude Include="Stage\AngelScript\stdstring.h" />
     <ClInclude Include="stage\preprocessor\define_table.h" />
     <ClInclude Include="stage\preprocessor\lex.h" />
     <ClInclude Include="stage\preprocessor\lexem_list.h" />
@@ -788,7 +794,6 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     <ClCompile Include="Stage\ScriptEngine.cpp" />
     <ClCompile Include="stage\ScriptLoadThread.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
-    <ClCompile Include="Stage\AngelScript\stdstring.cpp" />
     <ClCompile Include="stage\preprocessor\lex.cpp" />
     <ClCompile Include="stage\preprocessor\lexem_list.cpp" />
     <ClCompile Include="stage\preprocessor\preprocess.cpp" />
@@ -809,10 +814,12 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     <ClCompile Include="Logic.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="Stage\AngelScript\angelscript.lib" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\AngelScript\angelscript.vcxproj">
+      <Project>{39e6af97-6ba3-4a72-8c61-bcebf214ebfd}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

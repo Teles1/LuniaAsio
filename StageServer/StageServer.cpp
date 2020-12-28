@@ -46,7 +46,6 @@ int main(int argc, char* argv[])
 	//setting log name to be used on the console.
 	Logger::GetInstance("StageServer");
 	Lunia::Config::GetInstance("Config_Stage.json");
-	Lunia::StageServer::UserRegistry::GetInstance(Lunia::Config::GetInstance().Get<Lunia::uint32>("PingTimeout"));
 	InitHandlers();
 	//Load Config
 	StageServer stageServer( Lunia::Config::GetInstance().Settings.ServerAddress );
