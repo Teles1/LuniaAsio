@@ -6,8 +6,9 @@ int main(int argc, char* argv[]) {
 	Lunia::Config::GetInstance("Config_Stage.json");
 	Lunia::Resource::ResourceSystemInstance().AddPath(L"C:\\Users\\WINDOWS\\Desktop\\Lunia\\x64\\Debug");
 	XRated::Database::DatabaseInstance().Init();
-	XRated::Database::DatabaseInstance().InfoCollections.Actions.LoadBinaryData();
-	XRated::Database::DatabaseInstance().InfoCollections.Actions.SaveXmlData();
+	XRated::Database::DatabaseInstance().InfoCollections.Npcs.LoadBinaryData();
+	//XRated::Database::DatabaseInstance().InfoCollections.Npcs.BinaryToXml();
+	XRated::Database::DatabaseInstance().InfoCollections.Npcs.Retrieve(71817);
 
 	//XRated::Database::DatabaseInstance().InfoCollections.Stages.SaveXml();
 	//XRated::Database::DatabaseInstance().InfoCollections.Skills.Init(false);

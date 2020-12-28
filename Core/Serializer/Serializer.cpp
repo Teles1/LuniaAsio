@@ -41,7 +41,6 @@ namespace Lunia {
 		{
 			wchar_t tmp[MaxString];
 			int readed = Read(name, tmp, MaxString);
-			std::cout << readed << std::endl;
 			assert(readed < MaxString);
 			value = tmp;
 			readed = 0;

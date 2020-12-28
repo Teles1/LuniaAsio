@@ -45,16 +45,19 @@ namespace Lunia {
 
 					int UnCompress(std::vector<unsigned char>& outBuf, const std::vector<unsigned char>& inBuf);
 					String GetStructName();
+
+
+					/*
+						[0-3] 	Bytes that belong to the object being read
+							First item
+							[4-7] 	compressed size
+							[8-11] 	uncompressed size
+							[11-12]	Prop
+					*/
+
+
 					template <typename T>
 					inline void Read(const String& name, T& data) {
-						/*
-							[0-3] 	Bytes that belong to the object being read
-								First item
-								[4-7] 	compressed size
-								[8-11] 	uncompressed size
-								[11-12]	Prop
-						*/
-
 						uint8* Buffer = new uint8[4];
 						std::vector<uint8> lReplayBuffer;
 
