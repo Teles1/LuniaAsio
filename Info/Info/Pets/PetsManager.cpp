@@ -310,11 +310,8 @@ namespace Lunia {
 							std::wcout << fmt::format(L"{0} - Not Linked Genus", itr->second.Id) << std::endl;
 							continue;
 						}
-						auto start = std::chrono::high_resolution_clock::now();
+						
 						NonPlayerInfo* npcData = DatabaseInstance().InfoCollections.Npcs.Retrieve(genus->DefaultNPCId.c_str());
-						auto finish = std::chrono::high_resolution_clock::now();
-						auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(finish - start);
-						Logger::GetInstance().Info("Took {0}ms", microseconds.count());
 
 						if (npcData == NULL)
 						{

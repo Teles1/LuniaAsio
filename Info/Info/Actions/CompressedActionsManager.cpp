@@ -19,20 +19,16 @@ namespace Lunia {
 					in.Read(L"compressedActionMap", compressedActionMap);
 					in.Read(L"reverseMap", reverseMap);
 					in.Read(L"actorList", actorList);
+				}
 
-
-					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateSerializerXmlStreamWriter(L"CompressedItemInfos.xml");
-					writer->Begin(L"AllM::XRated::Database::Info::CompressedActionInfoManager::Actions");
+				void CompressedActionInfoManager::SaveXmlData() {
+					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateSerializerXmlStreamWriter(L"CompressedActionInfos.xml");
 					writer->Write(L"compressedActionMap", compressedActionMap);
-					writer->Write(L"reverseMap", reverseMap);
-					writer->Write(L"actorList", actorList);
 				}
 
 				void CompressedActionInfoManager::LoadBinaryData()
 				{
-
 					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/CompressedActionInfos.b");
-					std::map<std::wstring, Actions> compressedActionMap;
 					reader->Read(L"compressedActionMap", compressedActionMap);
 				}
 

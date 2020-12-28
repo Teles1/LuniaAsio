@@ -2,10 +2,10 @@
 
 #include <Core/Core.h>
 #include "./Info/Database.h"
+#include <Info/Info/Actions/CompressedActionsManager.h>
 #include <Info/Info/Items/CompressedItemInfoManager.h>
 #include "Info/GlobalInfo.h"
 #include "Info/NPCs/NPCManager.h"
-#include "Info/Actions/ActionsManager.h"
 #include "Info/StateBundles/StateBundlesManager.h"
 #include "Info/StageGroup/StageGroupManager.h"
 #include "Info/StageInfo/StageInfoManager.h"
@@ -42,7 +42,7 @@ namespace Lunia {
 					Info::CompressedItemInfoManager Items;
 					Info::EquipSetManager EquipSet;
 					Info::PetManager Pets;
-					Info::ActionInfoManager Actions;
+					Info::CompressedActionInfoManager Actions;
 					Info::NPCInfoManager Npcs;
 					Info::StageInfoManager Stages;
 					Info::EventNonPlayerItemList EventNonPlayerItemLists;
