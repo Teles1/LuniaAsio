@@ -27,10 +27,10 @@ namespace Lunia {
 						 ItemInfoManager::LoadBinaryData();
 					 else */
 						LoadCompressedBinary();
-						cbfreader = Lunia::Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/ItemInfos.cbf");
-						cbfreader->SetReadCursor(0, Lunia::IStream::Begin);
-						Read(L"ItemInfos", Items);
-						Read(L"UnidentifiedItemInfo", UnidentifiedItems);
+						//cbfreader = Lunia::Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/ItemInfos.cbf");
+						//cbfreader->SetReadCursor(0, Lunia::IStream::Begin);
+						//Read(L"ItemInfos", Items);
+						//Read(L"UnidentifiedItemInfo", UnidentifiedItems);
 					}
 				}
 

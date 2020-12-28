@@ -327,7 +327,6 @@ namespace Lunia {
 						petNpcData.DefaultMeshs = itr->second.DefaultMeshs;
 
 						if (DatabaseInstance().InfoCollections.Npcs.Retrieve(petNpcData.Name.c_str()) == NULL) {
-							std::wcout << petNpcData.Name << std::endl;
 							DatabaseInstance().InfoCollections.Npcs.Add(petNpcData);
 						}
 						else

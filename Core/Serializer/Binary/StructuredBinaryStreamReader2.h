@@ -118,11 +118,12 @@ namespace Lunia {
 				unsigned int nameHash = StringUtil::Hash(type);
 
 				uint32 nameHashFromFile = 0;
+				
 				stream->Read(reinterpret_cast<uint8*>(&nameHashFromFile), sizeof(uint32));
 				if (nameHashFromFile != nameHash) {
 					Logger::GetInstance().Warn(L"reading nameHashFromFile={0}", nameHashFromFile);
 					std::wcout << L"validate' command needs addtional parameter!!\n";
-					Logger::GetInstance().Exception(L"class type name is not same in the file, type={0}", type);
+					Logger::GetInstance().Exception(L"class type name is not same in the file, type={0} - cursor: {1}", type, stream->GetReadCursor());
 				}
 
 				int32 majorVersionFromFile = 0;

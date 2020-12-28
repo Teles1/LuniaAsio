@@ -226,7 +226,6 @@ namespace Lunia {
 					in.Read(L"GlowColor", GlowColor, float4(1.0f, 1.0f, 1.0f, 1.0f));
 					in.Read(L"DefaultMeshs", DefaultMeshs, std::vector<std::wstring>());
 					in.Read(L"GiveItemToAllPlayer", GiveItemToAllPlayer, false);
-
 				}
 
 				bool NonPlayerInfo::CheckDropItemDuplication() const
