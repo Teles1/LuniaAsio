@@ -164,8 +164,10 @@
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="Room\Room.cpp" />
     <ClCompile Include="Room\RoomManager.cpp" />
+    <ClCompile Include="Room\RoomUpdater.cpp" />
     <ClCompile Include="StageServer.cpp" />
     <ClCompile Include="StageServerProtocol\StageServerProtocol.cpp" />
+    <ClCompile Include="User\RoomUserManager.cpp" />
     <ClCompile Include="User\UserManager.cpp" />
     <ClCompile Include="User\User.cpp" />
     <ClCompile Include="User\UserRegistry.cpp" />
@@ -175,10 +177,12 @@
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="Room\Room.h" />
     <ClInclude Include="Room\RoomManager.h" />
+    <ClInclude Include="Room\RoomUpdater.h" />
     <ClInclude Include="StageServer.h" />
     <ClInclude Include="StageServerProtocol\StageServerProtocol.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="PacketHandler.h" />
+    <ClInclude Include="User\RoomUserManager.h" />
     <ClInclude Include="User\UserManager.h" />
     <ClInclude Include="User\User.h" />
     <ClInclude Include="User\UserRegistry.h" />

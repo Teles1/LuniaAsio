@@ -128,7 +128,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		ILogic::UpdateInfo updateInfo;
 
 		bool bUpdating, bLoading;
-		ILogic::Config config;
 
 	private :
 		Logic(const Logic&);
@@ -139,13 +138,10 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 	public:
 		Logic();
-		Logic(const ILogic::Config& config);
 
 	public: /* ILogic implementation */
 		void SetEventListener(IEventListener& l) { listener = &l;}
 		IEventListener& GetEventListener() { return *listener; }
-		const ILogic::Config& GetConfig() const { return config; }
-		void Rehash(const ILogic::Config& config) { this->config=config; }
 
 		/** initlize stage */
 		void Init(uint32 stageGroupHash, uint16 accessLevel, uint16 uniqueId);
@@ -728,14 +724,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 	{
 		construct();
 	}
-
-	Logic::Logic(const ILogic::Config& config)
-		 : stageData(*this), elapsedTime(0), elapsedTick(1), locked(false), turnNo(0), bActivated(true), timer(0, 10), bUpdating(false), bLoading(false)
-		 , config(config)
-	{
-		construct();
-	}
-
 #pragma warning( pop )
 
 	void Logic::Init(uint32 stageGroupHash, uint16 accessLevel, uint16 uniqueId)
@@ -2281,11 +2269,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 namespace Lunia { namespace XRated {	namespace Logic {
 	ILogic* CreateLogic()
 	{
-		return new Logic();
-	}
-
-	ILogic* CreateLogic(const ILogic::Config& config)
-	{
-		return new Logic(config);
+		return new Logic;
 	}
 } } }

@@ -4,17 +4,19 @@
 #include <StageServer/User/UserRegistry.h>
 #include <queue>
 namespace Lunia {
-	namespace StageServer
-	{
-		class UserManager {
-		public:
-			UserManager();
-			~UserManager();
+	namespace XRated{
+		namespace StageServer
+		{
+			class UserManager {
+			public:
+				UserManager();
+				~UserManager();
 
-		public:
-			bool Auth(UserSharedPtr& user, const json& data);
-		};
+			public:
+				bool Auth(UserSharedPtr& user, const json& data);
+			};
 
-		UserManager& UserManagerInstance();
+			UserManager& UserManagerInstance();
+		}
 	}
 }
