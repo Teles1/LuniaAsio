@@ -62,8 +62,8 @@ namespace Lunia {
             return ApiUrl + "/" + ret;
         }
         void Api::AddHeaders() {
-            m_Header.emplace("ServerName", Config::GetInstance().m_ServerName);
-            m_Header.emplace("ServerIp", Config::GetInstance().m_ServerAddress.ServerIp);
+            m_Header.emplace("ServerName", Config::GetInstance().Settings.ServerName);
+            m_Header.emplace("ServerIp", Config::GetInstance().Settings.ServerAddress.ServerIp);
             m_Header.emplace("Content-Type", "application/json");
         }
     }

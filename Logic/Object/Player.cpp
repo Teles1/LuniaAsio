@@ -125,7 +125,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 #ifdef _SINGLE		///by kpongky( 09.07.13 ) to fix problem of single-client link error
 		playerData.UsableBonusLifeInStage = 2;
 #else
-		playerData.UsableBonusLifeInStage = Config::GetInstance().m_UsableBonusLifeInStage;
+		playerData.UsableBonusLifeInStage = Config::GetInstance().Get<uint16>("UsableBonusLifeInStage");
 #endif
 		playerData.SkillPoint = skillpoint;		
 		playerData.expFactor = expFactor;

@@ -321,7 +321,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		virtual bool AcquireItem(Database::Info::ItemInfo*) { return false; }
 
 
-		virtual	void Player::Initialize(IGameStateDatabase* db, const std::wstring& name, uint16 lv, uint32 xp, uint32 money, uint32 bankMoney, uint16 storedLevel, uint16 rebirthCount
+		virtual	void Initialize(IGameStateDatabase* db, const std::wstring& name, uint16 lv, uint32 xp, uint32 money, uint32 bankMoney, uint16 storedLevel, uint16 rebirthCount
 							, uint16 storedSkillPoint, uint32 ladderPoint, uint16 ladderMatchCount, uint32 ladderWinCount, uint32 ladderLoseCount, uint32 achievementScore
 							, uint16 life, uint16 bonusLife,  uint16 skillpoint, uint16 addedSkillPointPlus, uint8 t, float expFactor, float hpFactor, float mpFactor, const Lunia::XRated::CharacterStateFlags& characterStateFlags
 							, const std::vector<Pet>& pets, const std::vector<PetCaredBySchool>& petCared, const Lunia::DateTime& lastRebirthDateTime);

@@ -55,12 +55,8 @@ namespace Lunia {
 
 					Lunia::Xml::Element* elem = *col.begin();
 
-					std::wstring configValue;
-					bool bPreloadMovemap = (Config::GetInstance().m_PreloadMovemap == true) ? true : false;
-					bool bPreloadScript = (Config::GetInstance().m_PreloadScripts == true) ? true : false;
-
 					for (iter = elem->SubElements.begin(); iter != elem->SubElements.end(); ++iter)
-						LoadStage((*iter)->Attributes[L"path"].c_str(), bPreloadMovemap, bPreloadScript);
+						LoadStage((*iter)->Attributes[L"path"].c_str(), Config::GetInstance().Get<bool>("PreloadMovemap"), Config::GetInstance().Get<bool>("PreloadScripts"));
 
 					delete[]buffer;
 
@@ -179,12 +175,12 @@ namespace Lunia {
 						info.MoveMapInfo = &movemap;
 					}
 					std::wstring configValue;
-					if (Config::GetInstance().m_PreloadMovemap == true) {
+					if ( Config::GetInstance().Get<bool>("PreloadMovemap") ) {
 						StageInfoMap::iterator i = stages.begin();
 						for (; i != stages.end(); ++i)
 							(*i).second.GetMoveMapInfo(); //LoadMoveMap( (*i).second );
 					}
-					if (Config::GetInstance().m_PreloadScripts == true) {
+					if (Config::GetInstance().Get<bool>("PreloadScripts")) {
 						StageInfoMap::iterator i = stages.begin();
 						for (; i != stages.end(); ++i)
 							(*i).second.LoadScript();

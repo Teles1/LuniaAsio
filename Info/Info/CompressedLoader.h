@@ -1,3 +1,6 @@
+#ifndef CompressedLoader_H
+#define CompressedLoader_H
+
 #pragma once
 #include <Core/Resource/Resource.h>
 #include <LzmaLib/LzmaLib.h>
@@ -43,7 +46,7 @@ namespace Lunia {
 					int UnCompress(std::vector<unsigned char>& outBuf, const std::vector<unsigned char>& inBuf);
 					String GetStructName();
 					template <typename T>
-					void Read(const String& name, T& data) {
+					inline void Read(const String& name, T& data) {
 						/*
 							[0-3] 	Bytes that belong to the object being read
 								First item
@@ -101,3 +104,5 @@ namespace Lunia {
 		}
 	}
 }
+
+#endif

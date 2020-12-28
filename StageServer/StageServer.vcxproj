@@ -79,7 +79,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -136,7 +136,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;$(OutDir)Info.lib;$(OutDir)Lzma.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(OutDir)Core.lib;$(OutDir)Network.lib;$(OutDir)Info.lib;$(OutDir)Logic.lib;$(OutDir)Lzma.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -162,6 +162,8 @@
   <ItemGroup>
     <ClCompile Include="PacketHandler.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
+    <ClCompile Include="Room\Room.cpp" />
+    <ClCompile Include="Room\RoomManager.cpp" />
     <ClCompile Include="StageServer.cpp" />
     <ClCompile Include="StageServerProtocol\StageServerProtocol.cpp" />
     <ClCompile Include="User\UserManager.cpp" />
@@ -171,6 +173,8 @@
   <ItemGroup>
     <ClInclude Include="fwPacketListener.h" />
     <ClInclude Include="QuickSlot.h" />
+    <ClInclude Include="Room\Room.h" />
+    <ClInclude Include="Room\RoomManager.h" />
     <ClInclude Include="StageServer.h" />
     <ClInclude Include="StageServerProtocol\StageServerProtocol.h" />
     <ClInclude Include="Service.h" />
@@ -191,6 +195,9 @@
     </ProjectReference>
     <ProjectReference Include="..\Info\Info.vcxproj">
       <Project>{e559ad97-6832-455e-9a44-c91244f7ca56}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Logic\Logic.vcxproj">
+      <Project>{d567b4a0-00e5-4839-8ac7-4b5e7fc37d7b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\LzmaLib\LzmaLib.vcxproj">
       <Project>{c3e4f721-0d5e-43d3-903a-de230ea2ed09}</Project>
