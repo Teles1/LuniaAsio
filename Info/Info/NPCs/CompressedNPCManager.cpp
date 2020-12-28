@@ -58,6 +58,12 @@ namespace Lunia {
 				NonPlayerInfo* CompressedNPCInfoManager::Retrieve(const wchar_t* name) {
 					return Retrieve(StringUtil::Hash(name));
 				}
+
+				NPCInfoManager::BasicResist::Resist* CompressedNPCInfoManager::Retrieve(NonPlayerInfo::Races race)
+				{
+					if (race < 0 || race > 10) return NULL;
+					return &basicResist.resist[race];
+				}
 			}
 		}
 	}

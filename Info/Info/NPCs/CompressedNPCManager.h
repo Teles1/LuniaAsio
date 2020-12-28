@@ -20,7 +20,8 @@ namespace Lunia {
 					void BinaryToXml();
 					void GetNPC(const uint32 templateOffset);
 					NonPlayerInfo* Retrieve(const uint32 hash);
-					NonPlayerInfo* Retrieve(const wchar_t* name);
+					NonPlayerInfo* Retrieve(const wchar_t* name); 
+					NPCInfoManager::BasicResist::Resist* Retrieve(NonPlayerInfo::Races race);
 				};
 			}
 		}
