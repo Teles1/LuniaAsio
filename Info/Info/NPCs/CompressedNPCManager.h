@@ -14,6 +14,8 @@ namespace Lunia {
 					typedef std::map<uint32, uint32, Less<uint32> > CompressedNPCManager;
 					PositionData<CompressedNPCManager> compressedNpcs;
 
+					Resource::StreamReader compressedNpcCbf;
+
 					void LoadBinaryData();
 					void BinaryToXml();
 					void GetNPC(const uint32 templateOffset);

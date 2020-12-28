@@ -76,7 +76,7 @@ namespace Lunia{
 				void NPCInfoManager::Init(bool bForceXmlData)
 				{
 					Npcs.clear();
-					LoadCompressedNpc();
+					LoadBinaryData();
 				}
 
 				void NPCInfoManager::Add(const NonPlayerInfo& info)
