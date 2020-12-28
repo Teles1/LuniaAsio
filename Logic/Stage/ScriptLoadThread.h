@@ -2,7 +2,7 @@
 #include <Core/Runnable.h>
 #include <Core/CriticalSection.h>
 #pragma warning( disable : 4121 )
-#include <AngelScript/angelscript.h>
+#include "AngelScript/angelscript.h"
 #pragma warning( default : 4121 )
 
 #include "Preprocessor/Preprocess.h"

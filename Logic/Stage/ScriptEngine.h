@@ -1,14 +1,9 @@
-/*
-Copyright (c) 2000-, Lunia Corp. All rights reserved.
-http://www.Lunia.co.kr
-tel:82-2-888-1555
-fax:82-2-888-4414
-mailTo:webmaster@Lunia.co.kr
-*/
+#ifndef ScriptEngine_H
+#define ScriptEngine_H
 #pragma once
 #include "IStageScript.h"
 #include "ScriptLoadThread.h"
-#include <AngelScript/stdstring.h>
+#include "AngelScript/stdstring.h"
 
 namespace Lunia 
 { 
@@ -280,3 +275,5 @@ namespace Lunia
 		}
 	}	
 }
+
+#endif // ! ScriptEngine_H
