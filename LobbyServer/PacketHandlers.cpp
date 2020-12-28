@@ -9,8 +9,10 @@
 
 #include "Main.h"
 
+#include <Core/GameServer/OnGameServerInit.h>
+
 namespace Lunia {
-	void InitPacketHandlers()
+	static OnGameServerInit OnInit([]()
 	{
 		// typedef std::shared_ptr<ClientProxyLobby> ClientProxyLobbySharedPtr;
 
@@ -580,5 +582,5 @@ namespace Lunia {
 				Logger::GetInstance().Info("User[{0}] is trying to call JoinSquare unauthenticated.", client->GetId());
 			}
 		});
-	}
+	});
 }

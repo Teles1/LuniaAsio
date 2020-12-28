@@ -171,6 +171,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GameServer\OnGameServerInit.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="GameServer\fwPacketHandler.h" />
     <ClInclude Include="GameServer\Proxy\ClientProxy.h" />
@@ -262,6 +263,7 @@
     <ClInclude Include="Utils\Version.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameServer\OnGameServerInit.cpp" />
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="GameServer\Proxy\ClientProxy.cpp" />
     <ClCompile Include="GameServer\NetworkIO\ClientNetworkIO.cpp" />

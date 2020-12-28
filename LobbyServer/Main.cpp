@@ -2,6 +2,8 @@
 #include "Network/Api/Api.h"
 #include "PacketHandlers.h"
 
+#include <Core/GameServer/OnGameServerInit.h>
+
 using namespace Lunia;
 int main(int argc, char* argv[])
 {
@@ -9,9 +11,9 @@ int main(int argc, char* argv[])
 	Logger::GetInstance("LobbyServer");
 	Config::GetInstance("Config_Lobby.json");
 	g_gameServer = new GameServer<ServerProxyLobby>(Config::GetInstance().Settings.ServerAddress);
+	
 	Net::Api::ApiUrl = Config::GetInstance().Settings.ApiUrl;
-	//Initialize PacketHandler
-	InitPacketHandlers();
+
 	Net::Api api("AddServer");
 	api << Lunia::Config::GetInstance().Settings.ServerAddress.ServerPort;
 
@@ -31,6 +33,8 @@ int main(int argc, char* argv[])
 
 		Sleep(3000);
 	}
+
+	OnGameServerInit::OnInit();
 
 	g_gameServer->RunNetworkIOService(); /* WARN Will lock the thread for as long as it runs */
 
