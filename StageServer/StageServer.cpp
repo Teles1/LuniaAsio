@@ -49,6 +49,6 @@ int main(int argc, char* argv[])
 	InitHandlers();
 	//Load Config
 	StageServer stageServer( Lunia::Config::GetInstance().Settings.ServerAddress );
-	stageServer.Run();
+	stageServer.Run(); 
 	return 0;
 }
