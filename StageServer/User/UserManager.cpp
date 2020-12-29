@@ -38,7 +38,7 @@ namespace Lunia {
 				return nullptr;
 			}
 
-			UserSharedPtr UserManager::GetUserByConnectionSerial(const uint64& userSerial)
+			UserSharedPtr UserManager::GetUserBySerial(const uint64& userSerial)
 			{
 				AutoLock _l(m_usersMutex);
 				if (m_users.find(userSerial) != m_users.end())

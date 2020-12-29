@@ -35,7 +35,7 @@ namespace Lunia {
 
 				UserSharedPtr GetUserByConnectionId(const uint32& userId);
 
-				UserSharedPtr GetUserByConnectionSerial(const uint64& userSerial);
+				UserSharedPtr GetUserBySerial(const uint64& userSerial);
 
 				fwEvent<const UserSharedPtr&>						OnUserConnected;
 

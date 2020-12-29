@@ -36,7 +36,7 @@ namespace Lunia {
 				if(!IsAuthenticated())
 					fwPacketListener::GetInstance().Invoke(UserManagerInstance().GetUserByConnectionId(m_UserId), sReader.GetSerializedTypeHash(), sReader);
 				else
-					fwPacketListener::GetInstance().Invoke(UserManagerInstance().GetUserByConnectionSerial(m_UserSerial), sReader.GetSerializedTypeHash(), sReader);
+					fwPacketListener::GetInstance().Invoke(UserManagerInstance().GetUserBySerial(m_UserSerial), sReader.GetSerializedTypeHash(), sReader);
 				HandleRead();
 				return (uint32)size;
 			}
