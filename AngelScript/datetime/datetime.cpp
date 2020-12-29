@@ -39,8 +39,9 @@ static bool tm_to_time_point(const tm &_tm, std::chrono::time_point<std::chrono:
 		return false;
 	
 	// Adjust the time_t since epoch with the difference of the local timezone to the universal timezone
+#pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS
 	t += (mktime(localtime(&t)) - mktime(gmtime(&t)));
-
+#pragma warning(default : 4996)
 	// Verify if the members were modified, indicating an out-of-range value in input
 	if (localTm.tm_year != _tm.tm_year ||
 		localTm.tm_mon != _tm.tm_mon ||
