@@ -60,10 +60,12 @@ namespace Lunia {
 					};
 
 				public:
+					typedef std::map<std::wstring, ActionInfo, Less<std::wstring> > ActionsMap;
 					typedef std::map<std::wstring, Actions, Less<std::wstring> > ActionMap;
 					typedef std::vector<AutoAction> AutoActionList;
 					typedef std::map< uint32 /*unique id*/, std::vector<AutoAction> > AutoActionListMap;
-
+					
+					ActionsMap actions;
 					ActionMap actionMap;
 					AutoActionListMap AutoActions;
 

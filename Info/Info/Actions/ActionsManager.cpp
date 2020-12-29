@@ -16,16 +16,15 @@ namespace Lunia {
 				void ActionInfoManager::Init(bool bForceXmlData)
 				{
 					Clear();
+					//if (bForceXmlData) {//Xml loading
+					//	LoadXmlData();
+					//}
+					//else { //Binary loading
+					//	std::wstring fullLoading;
+					//	ActionInfoManager::LoadBinaryData();
+					//}
 
-					if (bForceXmlData) {//Xml loading
-						LoadXmlData();
-					}
-					else { //Binary loading
-						std::wstring fullLoading;
-						ActionInfoManager::LoadBinaryData();
-					}
-
-					MakeLinkedActionLink();
+					//MakeLinkedActionLink();
 				}
 
 				void ActionInfoManager::MakeLinkedActionLink()

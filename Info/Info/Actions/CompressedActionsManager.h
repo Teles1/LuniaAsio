@@ -21,9 +21,14 @@ namespace Lunia {
 						virtual void Serialize(Serializer::IStreamWriter& out) const;
 						virtual void Deserialize(Serializer::IStreamReader& in);
 					};
-					std::map<std::wstring, Actions> compressedActionMap;
 
-					virtual void LoadBinaryData();
+
+					std::map<std::wstring, Actions> compressedActionMap;
+					std::map<uint16, std::vector<uint8>> IndexedActionsCompressed;
+					Resource::StreamReader compressedActionsCbf;
+					void Init();
+					void LoadBinaryData();
+					void GetData();
 					void SaveXmlData();
 					ActionInfoManager::Actions& Retrieve(const wchar_t* templateName);
 					inline void ClearCache() { actionMap.clear(); }
