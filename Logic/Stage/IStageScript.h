@@ -9,7 +9,6 @@ namespace Lunia
 		namespace Logic 
 		{
 
-	// script�� ���� �� �� �ִ� event �� method
 	class IStageScript {
 	public :
 		virtual ~IStageScript() {}

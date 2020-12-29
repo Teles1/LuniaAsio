@@ -97,6 +97,7 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     </PostBuildEvent>
     <Lib>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>AngelScript.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -117,6 +118,7 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     </PostBuildEvent>
     <Lib>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>AngelScript.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -138,8 +140,7 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
       <AdditionalDependencies>$(OutDir)Core.lib</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>AngelScript.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
     </Lib>
     <ProjectReference>
@@ -153,6 +154,7 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>AngelScript.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -208,7 +210,6 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     <ClInclude Include="object\npcs\dnf\DnFNPC.h" />
     <ClInclude Include="Object\Misc\Misc.h" />
     <ClInclude Include="Map\Map.h" />
-    <ClInclude Include="Stage\AngelScript\angelscript.h" />
     <ClInclude Include="Stage\IStageScript.h" />
     <ClInclude Include="Stage\ScriptEngine.h" />
     <ClInclude Include="stage\ScriptLoadThread.h" />
@@ -370,9 +371,6 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="Stage\AngelScript\angelscript.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

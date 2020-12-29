@@ -46,34 +46,48 @@ int main(int argc, char* argv[]) {
 		{
 			// An error occurred. Instruct the script writer to fix the 
 			// compilation errors that were listed in the output stream.
-			printf("Please correct the errors in the script and try again.\n");
+			printf("ModuleBuild Please correct the errors in the script and try again.\n");
 			return 0;
 		}
 		
 	}
 	{
 		asIScriptModule* mod = engine->GetModule("MyModule");
-		asIScriptFunction* func = mod->GetFunctionByDecl("void main()");
-		if (func == 0)
-		{
-			// The function couldn't be found. Instruct the script writer
-			// to include the expected function in the script.
-			printf("The script must have the function 'void main()'. Please add it and try again.\n");
-			return 0;
-		}
 		// Create our context, prepare it, and then execute
 		asIScriptContext* ctx = engine->CreateContext();
-		ctx->Prepare(func);
-		int r = ctx->Execute();
-		if (r != asEXECUTION_FINISHED)
+		//Reading a random function from withing the script
 		{
-			// The execution didn't complete as expected. Determine what happened.
-			if (r == asEXECUTION_EXCEPTION)
+			auto* function = mod->GetFunctionByName("SetInstance");
+			ctx->Prepare(function);
+			int result = ctx->Execute();
+			if (result == asEXECUTION_FINISHED)
 			{
-				// An exception occurred, let the script writer know what happened so it can be corrected.
-				printf("An exception '%s' occurred. Please correct the code and try again.\n", ctx->GetExceptionString());
+				// The return value is only valid if the execution finished successfully
+				asDWORD ret = ctx->GetReturnDWord();
 			}
 		}
+		{
+			asIScriptFunction* func = mod->GetFunctionByDecl("void main()");
+			if (func == 0)
+			{
+				// The function couldn't be found. Instruct the script writer
+				// to include the expected function in the script.
+				printf("The script must have the function 'void main()'. Please add it and try again.\n");
+				return 0;
+			}
+			ctx->Prepare(func);
+			int r = ctx->Execute();
+			if (r != asEXECUTION_FINISHED)
+			{
+				// The execution didn't complete as expected. Determine what happened.
+				if (r == asEXECUTION_EXCEPTION)
+				{
+					// An exception occurred, let the script writer know what happened so it can be corrected.
+					printf("An exception '%s' occurred. Please correct the code and try again.\n", ctx->GetExceptionString());
+				}
+			}
+		}
+		ctx->Release();
 	}
 	return 0;
 }
