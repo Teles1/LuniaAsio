@@ -53,7 +53,7 @@ namespace Lunia {
 
 				std::mutex											m_tempUsersMutex;
 
-				std::unordered_map<uint64, UserSharedPtr>			m_users; //Using the id from the db after being authenticated.
+				std::unordered_map<uint64, UserSharedPtr>			m_users; //SerialId from the db after being authenticated.
 			};
 
 			UserManager& UserManagerInstance();
