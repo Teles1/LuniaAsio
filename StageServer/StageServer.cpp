@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
 {
 	//setting log name to be used on the console.
 	Logger::GetInstance("StageServer");
-	Lunia::Config::GetInstance("Config_Stage.json");
+	Lunia::Config::GetInstance( "Config_Stage.json" );
 	InitHandlers();
 	//Load Config
 	StageServer stageServer( Lunia::Config::GetInstance().Settings.ServerAddress );
