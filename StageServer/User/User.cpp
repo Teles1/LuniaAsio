@@ -1,7 +1,8 @@
 #include <StageServer/fwPacketListener.h>
-#include <StageServer/User/UserRegistry.h>
+#include <StageServer/User/UserManager.h>
 #include <Network/NetStream.h>
 #include <Network/CommonProtocol/Protocol.h>
+#include <StageServer/StageServerProtocol/StageServerProtocol.h>
 #include <Network/Api/Api.h>
 
 namespace Lunia {
@@ -35,9 +36,7 @@ namespace Lunia {
 
 				Net::StreamReader sReader(buffer);
 
-				auto userPtr = UserRegistry::GetInstance().GetUserByUserId(this->GetId());
-
-				fwPacketListener::GetInstance().Invoke(userPtr, sReader.GetSerializedTypeHash(), sReader);
+				fwPacketListener::GetInstance().Invoke(UserManagerInstance().GetUserByUserId(this->GetId()), sReader.GetSerializedTypeHash(), sReader);
 
 				HandleRead();
 				return (uint32)size;
@@ -56,12 +55,13 @@ namespace Lunia {
 			uint32 User::GetId() const {
 				return m_userId;
 			}
-
+			/*
 			void User::SetId(const uint32& userId)
 			{
 				AutoLock _l(mtx);
 				m_userId = userId;
 			}
+			*/
 			bool User::IsAuthenticated() const {
 				return m_IsAuthenticated;
 			}

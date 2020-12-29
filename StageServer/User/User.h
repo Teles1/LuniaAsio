@@ -1,7 +1,5 @@
 #pragma once
 #include "Network/Tcp/Client.h"
-#include <StageServer/StageServerProtocol/StageServerProtocol.h>
-#include <Core/GameConstants.h>
 #include <StageServer/Service.h>
 #include <Logic/Logic.h>
 #include <StageServer/QuickSlot.h>
@@ -28,7 +26,7 @@ namespace Lunia {
 
 				uint32 GetId() const;
 
-				void SetId(const uint32& userId);
+				//void SetId(const uint32& userId);
 
 				bool IsAuthenticated() const;
 

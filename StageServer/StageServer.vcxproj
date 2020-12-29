@@ -178,7 +178,6 @@
     <ClCompile Include="User\RoomUserManager.cpp" />
     <ClCompile Include="User\UserManager.cpp" />
     <ClCompile Include="User\User.cpp" />
-    <ClCompile Include="User\UserRegistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fwPacketListener.h" />
@@ -193,7 +192,6 @@
     <ClInclude Include="User\RoomUserManager.h" />
     <ClInclude Include="User\UserManager.h" />
     <ClInclude Include="User\User.h" />
-    <ClInclude Include="User\UserRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config_Stage.json">
