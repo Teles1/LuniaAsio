@@ -68,7 +68,7 @@ namespace Lunia {
                     m_callbacks[packet.value.TypeHash] = lambda;
                 }
 
-                void Invoke(UserSharedPtr user, const uint16& packetHeaderHash, Net::StreamReader& streamReader)
+                void Invoke(UserSharedPtr& user, const uint16& packetHeaderHash, Net::StreamReader& streamReader)
                 {
                     auto it = m_callbacks.find(packetHeaderHash);
 
