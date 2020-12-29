@@ -27,20 +27,20 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -73,9 +73,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -89,6 +93,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -103,6 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,6 +123,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,6 +143,7 @@
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,6 +154,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="angelscript.h" />
+    <ClInclude Include="autowrapper\aswrappedcall.h" />
+    <ClInclude Include="contextmgr\contextmgr.h" />
+    <ClInclude Include="datetime\datetime.h" />
+    <ClInclude Include="debugger\debugger.h" />
+    <ClInclude Include="scriptany\scriptany.h" />
+    <ClInclude Include="scriptarray\scriptarray.h" />
+    <ClInclude Include="scriptbuilder\scriptbuilder.h" />
+    <ClInclude Include="scriptdictionary\scriptdictionary.h" />
+    <ClInclude Include="scriptfile\scriptfile.h" />
+    <ClInclude Include="scriptfile\scriptfilesystem.h" />
+    <ClInclude Include="scriptgrid\scriptgrid.h" />
+    <ClInclude Include="scripthandle\scripthandle.h" />
+    <ClInclude Include="scripthelper\scripthelper.h" />
+    <ClInclude Include="scriptmath\scriptmath.h" />
+    <ClInclude Include="scriptmath\scriptmathcomplex.h" />
+    <ClInclude Include="scriptstdstring\scriptstdstring.h" />
+    <ClInclude Include="serializer\serializer.h" />
     <ClInclude Include="Source\as_array.h" />
     <ClInclude Include="Source\as_atomic.h" />
     <ClInclude Include="Source\as_builder.h" />
@@ -182,8 +208,30 @@
     <ClInclude Include="Source\as_tokenizer.h" />
     <ClInclude Include="Source\as_typeinfo.h" />
     <ClInclude Include="Source\as_variablescope.h" />
+    <ClInclude Include="weakref\weakref.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="autowrapper\generator\generateheader.cpp" />
+    <ClCompile Include="contextmgr\contextmgr.cpp" />
+    <ClCompile Include="datetime\datetime.cpp" />
+    <ClCompile Include="debugger\debugger.cpp" />
+    <ClCompile Include="scriptany\scriptany.cpp" />
+    <ClCompile Include="scriptarray\scriptarray.cpp" />
+    <ClCompile Include="scriptbuilder\scriptbuilder.cpp" />
+    <ClCompile Include="scriptdictionary\scriptdictionary.cpp" />
+    <ClCompile Include="scriptfile\scriptfile.cpp" />
+    <ClCompile Include="scriptfile\scriptfilesystem.cpp" />
+    <ClCompile Include="scriptgrid\scriptgrid.cpp" />
+    <ClCompile Include="scripthandle\scripthandle.cpp" />
+    <ClCompile Include="scripthelper\scripthelper.cpp" />
+    <ClCompile Include="scriptmath\scriptmath.cpp" />
+    <ClCompile Include="scriptmath\scriptmathcomplex.cpp" />
+    <ClCompile Include="scriptstdstring\scriptstdstring.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="scriptstdstring\scriptstdstring_utils.cpp" />
+    <ClCompile Include="serializer\serializer.cpp" />
     <ClCompile Include="Source\as_atomic.cpp" />
     <ClCompile Include="Source\as_builder.cpp" />
     <ClCompile Include="Source\as_bytecode.cpp" />
@@ -223,6 +271,7 @@
     <ClCompile Include="Source\as_tokenizer.cpp" />
     <ClCompile Include="Source\as_typeinfo.cpp" />
     <ClCompile Include="Source\as_variablescope.cpp" />
+    <ClCompile Include="weakref\weakref.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\as_callfunc_arm64_gcc.S" />
