@@ -15,22 +15,20 @@ namespace Lunia {
 			};
 			class User : public Net::ClientTcp {
 			public:
-				User(uint32& userId, asio::ip::tcp::socket&& socket)
-					: ClientTcp(std::move(socket))
-					, m_userId(userId)
+				inline User(asio::ip::tcp::socket&& socket, const uint32& userId)
+					: ClientTcp(std::move(socket)), m_UserId(userId)
 				{
 					Logger::GetInstance().Info("User :: Hey, I was created!", GetId());
 				}
-
 				void Init();
 
 				uint32 GetId() const;
 
-				//void SetId(const uint32& userId);
+				void SetSerial(const uint64& userSerial);
+
+				const uint64& GetSerial() const;
 
 				bool IsAuthenticated() const;
-
-				void SetIsAuthenticated();
 
 				void Error(ErrorLevel error, const String& message); // error handling with different outcome based on severity.
 
@@ -50,8 +48,8 @@ namespace Lunia {
 			public:
 				std::mutex 									mtx;
 			private:
-				bool										m_IsAuthenticated = false;
-				uint32										m_userId;
+				uint32										m_UserId = 0;
+				uint64										m_UserSerial = 0; //database
 				String										m_CharacterName;
 			public: //Auth_Publisher
 				std::wstring								m_SecuKey;

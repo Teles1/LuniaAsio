@@ -56,7 +56,7 @@ namespace Lunia {
 
                     packetFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
 
-                    auto lambda = [f](StageServer::UserSharedPtr& user, Net::StreamReader& streamReader)
+                    auto lambda = [f](const StageServer::UserSharedPtr& user, Net::StreamReader& streamReader)
                     {
                         //packetFromType<traits::result_type> packet;
                         packetFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
@@ -68,7 +68,7 @@ namespace Lunia {
                     m_callbacks[packet.value.TypeHash] = lambda;
                 }
 
-                void Invoke(UserSharedPtr user, const uint16& packetHeaderHash, Net::StreamReader& streamReader)
+                void Invoke(const UserSharedPtr& user, const uint16& packetHeaderHash, Net::StreamReader& streamReader)
                 {
                     auto it = m_callbacks.find(packetHeaderHash);
 
@@ -77,14 +77,14 @@ namespace Lunia {
                         it->second(user, streamReader);
                     }
                     else {
-                        Logger::GetInstance().Warn("fwPacket::Invoke::user{0} unhandled packet [{1:#4x}]", user->GetId(), packetHeaderHash);
+                        Logger::GetInstance().Warn("fwPacket::Invoke::user{0} unhandled packet [{1:#4x}]", user->GetSerial(), packetHeaderHash);
                         streamReader.PrintOutData();
                     }
                     //do something else ?
                 }
             private:
 
-                std::map<uint16, std::function<void(UserSharedPtr& user, Net::StreamReader&)>> m_callbacks;
+                std::map<uint16, std::function<void(const UserSharedPtr& user, Net::StreamReader&)>> m_callbacks;
             };
         }
     }

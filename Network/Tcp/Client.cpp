@@ -64,7 +64,7 @@ void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
 									//Putting work into the m_buffer
 									memmove(&m_buffer[total], work, Constants::HeaderSize);
 									
-									total += Parse(&m_buffer[size_t(total)], pSize);
+									total += Parse(&m_buffer[total], pSize);
 									//if not then something went wrong lol
 								}
 								//size - total - HeaderSize > lenght  means that there is more data to be processed.
@@ -135,7 +135,7 @@ uint32 ClientTcp::GetCryptoKey()
 	return m_decryptor.GetKey();
 }
 
-const std::string ClientTcp::GetPeerAddress() {
+const std::string ClientTcp::GetPeerAddress() const{
 	return std::move(m_socket.remote_endpoint().address().to_string());
 }
 

@@ -11,7 +11,7 @@ namespace Lunia {
 			{
 				Net::Api::ApiUrl = Config::GetInstance().Settings.ApiUrl;
 				Net::Api api("AddServer");
-				api << Config::GetInstance().Settings.ServerName;
+				api << address.ServerPort;
 				while (true) {
 					Net::Answer result("", -1);
 					if (Config::GetInstance().GetKind() == SquareKind)

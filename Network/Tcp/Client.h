@@ -14,7 +14,7 @@ namespace Lunia {
             void CloseSocket();
             void SetCryptoKey(uint32& newKey);
             uint32 GetCryptoKey();
-            const std::string GetPeerAddress();
+            const std::string GetPeerAddress() const;
 
             Crypt::Box		m_decryptor;
 
