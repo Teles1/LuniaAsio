@@ -19,54 +19,68 @@ namespace Lunia {
 			UserManager::UserManager() {}
 
 			UserSharedPtr UserManager::MakeUser(asio::ip::tcp::socket& socket) {
-				AutoLock lock(m_usersMutex);
-				UserSharedPtr user = std::make_shared<User>(m_curUserId, std::move(socket));
-				m_curUserId++;
-				m_users[m_curUserId] = user;
-				OnUserConnected(user);
-				return user;
+				AutoLock lock(m_tempUsersMutex);
+				m_tempUsers[m_curUserId] = std::make_shared<User>(std::move(socket), m_curUserId); //moving memory to inside of the vector and keeping the pointer ownership.
+				OnUserConnected(m_tempUsers[m_curUserId]);
+				return m_tempUsers[m_curUserId++];
 			}
 			
-			void UserManager::RemoveUser(UserSharedPtr& user) {
+			void UserManager::RemoveUser(const uint64& userSerial) {
 				AutoLock _l(m_usersMutex);
-				this->RemoveUser(user, _l);
+				this->RemoveUser(userSerial, _l);
 			}
 
-			void UserManager::AuthenticateUser(UserSharedPtr& user) {
-				if (user)
-				{
-					AutoLock _l(m_usersMutex);
-
-					//user->SetId(m_curUserId);
-					user->SetIsAuthenticated();
-
-					OnUserAuthenticated(user);
-				}
-				else
-					Logger::GetInstance().Exception("AuthenticateUser:: The user supplied is not a valid user.");
+			UserSharedPtr UserManager::GetUserByConnectionId(const uint32& userId){
+				AutoLock _l(m_tempUsersMutex);
+				if (m_tempUsers.find(userId) != m_tempUsers.end())
+					return m_tempUsers[userId];
+				Logger::GetInstance().Error("Could not find the specified TempUser@{}", userId);
+				return nullptr;
 			}
 
-			UserSharedPtr UserManager::GetUserByUserId(uint32 userId) {
+			UserSharedPtr UserManager::GetUserByConnectionSerial(const uint64& userSerial)
+			{
 				AutoLock _l(m_usersMutex);
-				if (m_users.find(userId) == m_users.end())
-					return nullptr;
-				return m_users[userId];
+				if (m_users.find(userSerial) != m_users.end())
+					return m_users[userSerial];
+				Logger::GetInstance().Error("Could not find the specified user@{}", userSerial);
+				return nullptr;
 			}
 
-			void UserManager::RemoveUser(UserSharedPtr& user, AutoLock& _l) {
+			void UserManager::RemoveUser(const uint64& userSerial, AutoLock& _l) {
 
 				//AutoLock lock(m_usersMutex);
 				/*
 					This second lock causes Thread lock. The thread is already locked by the lock on RemoveUser(user)
 					then it cant go past the lock above because the m_usersMutex is locked so it get stuck.
 				*/
-				if (m_users.find(user->GetId()) == m_users.end()) {
-					Logger::GetInstance().Error("User={0} not found", user->GetId());
+				if (m_users.find(userSerial) == m_users.end()) {
+					Logger::GetInstance().Error("User={0} not found", userSerial);
 					return;
 				}
-				m_users.erase(user->GetId());
-				user->CloseSocket();
-				OnUserDisconnected(user);
+				AutoLock lock(m_users[userSerial]->mtx);//Lock the user to make sure it's sync.
+				m_users[userSerial]->CloseSocket();
+				OnUserDisconnected(userSerial);
+				m_users.erase(userSerial);
+			}
+
+			bool UserManager::AuthenticateUser(const uint32& userId, const uint64& userSerial)
+			{
+				AutoLock l_(m_usersMutex);
+				if (m_users.find(userSerial) != m_users.end()) { //looking to see if the userSerial is already listed on our m_Users
+					Logger::GetInstance().Error("User already registred.");
+					return false;
+				} // Duplicated user
+				if (m_tempUsers.find(userId) == m_tempUsers.end()) {
+					// this is kind of weird. How would the user not be found on the authenticated list and at the same time not in the tempList?
+					Logger::GetInstance().Exception("Could not find the requested user at all.");
+					return false;
+				}
+				AutoLock lock(m_tempUsers[userId]->mtx); // making sure the user will remain sync while we work on it.
+				m_users[userSerial] = std::move(m_tempUsers[userId]); m_tempUsers.erase(userId);
+				m_users[userSerial]->SetSerial(userSerial);
+
+				return true;
 			}
 
 			bool UserManager::Auth(UserSharedPtr& user, const json& data) {
@@ -394,7 +408,7 @@ namespace Lunia {
 				//EndOfRoomJoined
 				{
 					Protocol::CreatePlayer createplayer;
-					createplayer.playerserial = user->GetId() + 1000;
+					createplayer.playerserial = user->GetSerial();
 					createplayer.classtype = user->m_PlayerData.type;
 					createplayer.charactername = user->GetCharacterName();//pPlayerData->BaseCharacter.BaseObject.Name;
 					createplayer.level = user->m_PlayerData.level;//pPlayerData->BaseCharacter.Level;

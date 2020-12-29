@@ -29,25 +29,31 @@ namespace Lunia {
 
 				UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);
 
-				void RemoveUser(UserSharedPtr& user);
+				bool AuthenticateUser(const uint32& userId, const uint64& userSerial);
 
-				void AuthenticateUser(UserSharedPtr& user);
+				void RemoveUser(const uint64& userSerial);
 
-				UserSharedPtr GetUserByUserId(uint32 userId);
+				UserSharedPtr GetUserByConnectionId(const uint32& userId);
+
+				UserSharedPtr GetUserByConnectionSerial(const uint64& userSerial);
 
 				fwEvent<const UserSharedPtr&>						OnUserConnected;
 
-				fwEvent<const UserSharedPtr&>						OnUserDisconnected;
+				fwEvent<const uint64&>								OnUserDisconnected;
 
 				fwEvent<const UserSharedPtr&>						OnUserAuthenticated;
 			private:
-				void RemoveUser(UserSharedPtr& user, AutoLock& _l);
+				void RemoveUser(const uint64& userSerial, AutoLock& _l);
 
 				uint32												m_curUserId = 0;
 
+				std::unordered_map<uint32, UserSharedPtr>			m_tempUsers; //temp connection id.
+
 				std::mutex											m_usersMutex;
 
-				std::unordered_map<uint32, UserSharedPtr>			m_users;
+				std::mutex											m_tempUsersMutex;
+
+				std::unordered_map<uint64, UserSharedPtr>			m_users; //Using the id from the db after being authenticated.
 			};
 
 			UserManager& UserManagerInstance();
