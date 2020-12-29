@@ -20,9 +20,6 @@
     <ClCompile Include="PacketHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="User\UserRegistry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="User\User.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,9 +54,6 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="fwPacketListener.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="User\UserRegistry.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="User\User.h">

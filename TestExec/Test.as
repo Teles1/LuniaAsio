@@ -1,4 +1,4 @@
-void SetInstance(int i)
+void SetInstance(int &in i)
 {
 	print("Hello Instance!");
 	

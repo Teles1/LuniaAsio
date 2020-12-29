@@ -2,22 +2,69 @@
 #include <Info/Info.h>
 #include <Info/Info/StageGroup/StageGroup.h>
 #include <Network/Api/Api.h>
-
+#include <StageServer/User/User.h>
+#include <StageServer/StageServerProtocol/StageServerProtocol.h>
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer
 		{
-			static UserManager& UserManagerInstance() {
+			UserManager& UserManager::GetInstance()
+			{
 				static UserManager m_Instance;
 				return m_Instance;
-			};
-
-			UserManager::UserManager() {
-
 			}
-			UserManager::~UserManager() {
-
+			UserManager::~UserManager() {}
+			UserManager::UserManager() {}
+			UserSharedPtr UserManager::MakeUser(asio::ip::tcp::socket& socket) {
+				AutoLock lock(m_usersMutex);
+				UserSharedPtr user = std::make_shared<User>(m_curUserId, std::move(socket));
+				m_curUserId++;
+				m_users[m_curUserId] = user;
+				OnUserConnected(user);
+				return user;
 			}
+			void UserManager::RemoveUser(UserSharedPtr& user) {
+				AutoLock _l(m_usersMutex);
+				this->RemoveUser(user, _l);
+			}
+
+			void UserManager::AuthenticateUser(UserSharedPtr& user) {
+				if (user)
+				{
+					AutoLock _l(m_usersMutex);
+
+					//user->SetId(m_curUserId);
+					user->SetIsAuthenticated();
+
+					OnUserAuthenticated(user);
+				}
+				else
+					Logger::GetInstance().Exception("AuthenticateUser:: The user supplied is not a valid user.");
+			}
+
+			UserSharedPtr UserManager::GetUserByUserId(uint32 userId) {
+				AutoLock _l(m_usersMutex);
+				if (m_users.find(userId) == m_users.end())
+					return nullptr;
+				return m_users[userId];
+			}
+
+			void UserManager::RemoveUser(UserSharedPtr& user, AutoLock& _l) {
+
+				//AutoLock lock(m_usersMutex);
+				/*
+					This second lock causes Thread lock. The thread is already locked by the lock on RemoveUser(user)
+					then it cant go past the lock above because the m_usersMutex is locked so it get stuck.
+				*/
+				if (m_users.find(user->GetId()) == m_users.end()) {
+					Logger::GetInstance().Error("User={0} not found", user->GetId());
+					return;
+				}
+				m_users.erase(user->GetId());
+				user->CloseSocket();
+				OnUserDisconnected(user);
+			}
+
 			bool UserManager::Auth(UserSharedPtr& user, const json& data) {
 				/*
 					tempId,characterName
@@ -375,6 +422,11 @@ namespace Lunia {
 				}
 				return true;
 			}
+
+			//Global Singleton
+			UserManager& UserManagerInstance() {
+				return UserManager::GetInstance();
+			};
 		}
 	}
 }
