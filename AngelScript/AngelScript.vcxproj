@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props" Condition="Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -22,40 +21,40 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{44d445b5-30f4-4372-bc37-69a52303056d}</ProjectGuid>
-    <RootNamespace>LuniaServer</RootNamespace>
+    <ProjectGuid>{29555ba3-dc5d-45c9-a7ba-93515ac0d36a}</ProjectGuid>
+    <RootNamespace>AngelScript</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>LobbyServer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -74,31 +73,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(SolutionDir)Includes;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <VcpkgUseStatic>false</VcpkgUseStatic>
-    <VcpkgConfiguration>$(Configuration)</VcpkgConfiguration>
-  </PropertyGroup>
-  <PropertyGroup Label="Vcpkg">
-    <VcpkgEnabled>true</VcpkgEnabled>
-    <VcpkgEnableManifest>false</VcpkgEnableManifest>
-    <VcpkgManifestInstall>true</VcpkgManifestInstall>
-    <VcpkgAutoLink>true</VcpkgAutoLink>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -106,17 +89,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,19 +103,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -148,22 +117,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>$(SolutionDir)Network\stdafx.h</PrecompiledHeaderFile>
-      <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <PrecompiledHeaderOutputFile>$(SolutionDir)Phcs\$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <ShowProgress>NotSet</ShowProgress>
-      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -172,69 +129,116 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ANGELSCRIPT_EXPORT;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameServer\ClientProxy\ClientProxyLobby.cpp" />
-    <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Packet\Head\PacketHead.cpp" />
-    <ClCompile Include="PacketHandlers.cpp" />
-    <ClCompile Include="GameServer\ServerProxy\ServerProxyLobby.cpp" />
+    <ClInclude Include="angelscript.h" />
+    <ClInclude Include="Source\as_array.h" />
+    <ClInclude Include="Source\as_atomic.h" />
+    <ClInclude Include="Source\as_builder.h" />
+    <ClInclude Include="Source\as_bytecode.h" />
+    <ClInclude Include="Source\as_callfunc.h" />
+    <ClInclude Include="Source\as_compiler.h" />
+    <ClInclude Include="Source\as_config.h" />
+    <ClInclude Include="Source\as_configgroup.h" />
+    <ClInclude Include="Source\as_context.h" />
+    <ClInclude Include="Source\as_criticalsection.h" />
+    <ClInclude Include="Source\as_datatype.h" />
+    <ClInclude Include="Source\as_debug.h" />
+    <ClInclude Include="Source\as_gc.h" />
+    <ClInclude Include="Source\as_generic.h" />
+    <ClInclude Include="Source\as_map.h" />
+    <ClInclude Include="Source\as_memory.h" />
+    <ClInclude Include="Source\as_module.h" />
+    <ClInclude Include="Source\as_namespace.h" />
+    <ClInclude Include="Source\as_objecttype.h" />
+    <ClInclude Include="Source\as_outputbuffer.h" />
+    <ClInclude Include="Source\as_parser.h" />
+    <ClInclude Include="Source\as_property.h" />
+    <ClInclude Include="Source\as_restore.h" />
+    <ClInclude Include="Source\as_scriptcode.h" />
+    <ClInclude Include="Source\as_scriptengine.h" />
+    <ClInclude Include="Source\as_scriptfunction.h" />
+    <ClInclude Include="Source\as_scriptnode.h" />
+    <ClInclude Include="Source\as_scriptobject.h" />
+    <ClInclude Include="Source\as_string.h" />
+    <ClInclude Include="Source\as_string_util.h" />
+    <ClInclude Include="Source\as_symboltable.h" />
+    <ClInclude Include="Source\as_texts.h" />
+    <ClInclude Include="Source\as_thread.h" />
+    <ClInclude Include="Source\as_tokendef.h" />
+    <ClInclude Include="Source\as_tokenizer.h" />
+    <ClInclude Include="Source\as_typeinfo.h" />
+    <ClInclude Include="Source\as_variablescope.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.vcxproj">
-      <Project>{dd113a77-1c14-40e5-ae12-e50feecb28a4}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Network\Network.vcxproj">
-      <Project>{a90c00e8-c1ba-48f1-987d-5017300d2f75}</Project>
-    </ProjectReference>
+    <ClCompile Include="Source\as_atomic.cpp" />
+    <ClCompile Include="Source\as_builder.cpp" />
+    <ClCompile Include="Source\as_bytecode.cpp" />
+    <ClCompile Include="Source\as_callfunc.cpp" />
+    <ClCompile Include="Source\as_callfunc_arm.cpp" />
+    <ClCompile Include="Source\as_callfunc_arm64.cpp" />
+    <ClCompile Include="Source\as_callfunc_mips.cpp" />
+    <ClCompile Include="Source\as_callfunc_ppc.cpp" />
+    <ClCompile Include="Source\as_callfunc_ppc_64.cpp" />
+    <ClCompile Include="Source\as_callfunc_sh4.cpp" />
+    <ClCompile Include="Source\as_callfunc_x64_gcc.cpp" />
+    <ClCompile Include="Source\as_callfunc_x64_mingw.cpp" />
+    <ClCompile Include="Source\as_callfunc_x64_msvc.cpp" />
+    <ClCompile Include="Source\as_callfunc_x86.cpp" />
+    <ClCompile Include="Source\as_callfunc_xenon.cpp" />
+    <ClCompile Include="Source\as_compiler.cpp" />
+    <ClCompile Include="Source\as_configgroup.cpp" />
+    <ClCompile Include="Source\as_context.cpp" />
+    <ClCompile Include="Source\as_datatype.cpp" />
+    <ClCompile Include="Source\as_gc.cpp" />
+    <ClCompile Include="Source\as_generic.cpp" />
+    <ClCompile Include="Source\as_globalproperty.cpp" />
+    <ClCompile Include="Source\as_memory.cpp" />
+    <ClCompile Include="Source\as_module.cpp" />
+    <ClCompile Include="Source\as_objecttype.cpp" />
+    <ClCompile Include="Source\as_outputbuffer.cpp" />
+    <ClCompile Include="Source\as_parser.cpp" />
+    <ClCompile Include="Source\as_restore.cpp" />
+    <ClCompile Include="Source\as_scriptcode.cpp" />
+    <ClCompile Include="Source\as_scriptengine.cpp" />
+    <ClCompile Include="Source\as_scriptfunction.cpp" />
+    <ClCompile Include="Source\as_scriptnode.cpp" />
+    <ClCompile Include="Source\as_scriptobject.cpp" />
+    <ClCompile Include="Source\as_string.cpp" />
+    <ClCompile Include="Source\as_string_util.cpp" />
+    <ClCompile Include="Source\as_thread.cpp" />
+    <ClCompile Include="Source\as_tokenizer.cpp" />
+    <ClCompile Include="Source\as_typeinfo.cpp" />
+    <ClCompile Include="Source\as_variablescope.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameServer\ClientProxy\ClientProxyLobby.h" />
-    <ClInclude Include="Common.h" />
-    <ClInclude Include="LobbyProtocol\LobbyProtocol.h" />
-    <ClInclude Include="GameServer\ServerProxy\ServerProxyLobby.h" />
-    <ClInclude Include="Main.h" />
-    <ClInclude Include="PacketHandlers.h" />
-    <ClInclude Include="Packet\Head\PacketHead.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Config_Lobby.json">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="packages.config" />
+    <None Include="Source\as_callfunc_arm64_gcc.S" />
+    <None Include="Source\as_callfunc_arm64_msvc.asm" />
+    <None Include="Source\as_callfunc_arm_gcc.S" />
+    <None Include="Source\as_callfunc_arm_msvc.asm" />
+    <None Include="Source\as_callfunc_arm_vita.S" />
+    <None Include="Source\as_callfunc_arm_xcode.S" />
+    <MASM Include="Source\as_callfunc_x64_msvc_asm.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </MASM>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets" Condition="Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets')" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.props'))" />
-    <Error Condition="!Exists('..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\vcpkg.C.vcpkg.1.0.0\build\native\vcpkg.C.vcpkg.targets'))" />
-  </Target>
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties />
-    </VisualStudio>
-  </ProjectExtensions>
 </Project>
