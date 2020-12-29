@@ -11,6 +11,7 @@ namespace Lunia {
 			class User;
 			typedef std::shared_ptr<User> UserSharedPtr;
 			typedef std::weak_ptr<User> UserWeakPtr;
+
 			class UserManager {
 #pragma region Singleton
 			private:

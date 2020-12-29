@@ -13,8 +13,11 @@ namespace Lunia {
 				static UserManager m_Instance;
 				return m_Instance;
 			}
+
 			UserManager::~UserManager() {}
+
 			UserManager::UserManager() {}
+
 			UserSharedPtr UserManager::MakeUser(asio::ip::tcp::socket& socket) {
 				AutoLock lock(m_usersMutex);
 				UserSharedPtr user = std::make_shared<User>(m_curUserId, std::move(socket));
@@ -23,6 +26,7 @@ namespace Lunia {
 				OnUserConnected(user);
 				return user;
 			}
+			
 			void UserManager::RemoveUser(UserSharedPtr& user) {
 				AutoLock _l(m_usersMutex);
 				this->RemoveUser(user, _l);
