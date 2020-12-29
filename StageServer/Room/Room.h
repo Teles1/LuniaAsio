@@ -1,13 +1,52 @@
 #pragma once
 #include <Logic/Logic.h>
 #include <Logic/Object/Player.h>
+#include <StageServer/StageServerProtocol/StageServerProtocol.h>
 
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer{
+			enum class RoomKind {
+				Stage,
+				Square,
+				Pvp
+			};
+			class User;
+			class Room /*: public Lunia::XRated::Logic::ILogic::IEventListener*/ {
+				typedef std::shared_ptr<User> UserSharedPtr;
+			public:
+				Room(const int& index);
+			public: //RoomUpdater
+				bool Update(const float& dt);
+				void SetThreadIndex(const int& i);
+				void CheckLoadingTime(const float& dt);
+				const Logic::ILogic::UpdateInfo& GetLogicUpdateInfo();
+				const int& GetIndex();
+				bool JoinUser(UserSharedPtr user, const std::string& roomPass);
 
-			struct Room : public Lunia::XRated::Logic::ILogic::IEventListener {
-
+				RoomKind GetRoomKind();
+			private:
+				bool SetStage(StageLicense& targetStage, const std::string& roomPass, int64 pActivateSerial, const std::wstring& userName);
+			private:
+				bool m_NowCampfire = false;
+				bool m_Active = false;
+				bool m_Loading = false;
+				int m_RoomIndex = 0;
+				int m_ThreadIndex = -1;
+				int m_LastThreadIndex = 0;
+				float m_LoadingTime = 0.0f;
+				RoomKind m_RoomKind;
+				struct Pvp
+				{
+					bool GameStarted;
+					bool BgmStarted;
+					int	SyncStartUserCnt;
+					int	SyncEnteredUserCnt;
+					bool bSendStartEvent;
+				} pvp;
+				Logic::ILogic* logic;
+				std::mutex m_Mtx;
+				/*
 			public: // IEventListener implementation which sends information from the Logic.
 				void Initialized(Database::Info::StageInfo* info, uint16 uniqueId);
 				ILockable& GetSyncRoom();
@@ -149,7 +188,9 @@ namespace Lunia {
 				void ChangeWeatherToRain(const float fadeIntime);
 				void ChangeWeatherToSnow(const float fadeIntime);
 				void ChangeWeatherToAqua(const float fadeIntime);
+				*/
 			};
+			typedef std::shared_ptr<Room> RoomSharedPtr;
 		}
 	}
 }

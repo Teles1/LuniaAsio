@@ -1,14 +1,13 @@
 #include "ScriptEngine.h"
 #include <Core/Utils/StringUtil/GenericConversion.h>
 #include <Core/Resource/Resource.h>
-#include "AngelScript/stdstring.h"
 #include "ScriptLoadThread.h"
 #include <Core/DeltaTimer.h>
 using namespace Lunia::StringUtil;
 #include <iostream>
 using namespace std;
 
-#define PREPARE_CONTEXT(func) if (PrepareContext(engine->GetFunctionIDByName(0, func), func, __FUNCTION__)==false) return
+#define PREPARE_CONTEXT(func) if (PrepareContext(asModule->GetFunctionByName(func), func, __FUNCTION__)==false) return
 
 namespace Lunia 
 {
@@ -22,6 +21,7 @@ namespace Lunia
 			ScriptEngine::ScriptEngine( IStageScript* initStageScript )//, const std::string& module, const std::string& filename)
 				: stageScript( initStageScript ), elapsedTime(0), engine(0), context(0), bLoading(false), refCount(1)
 			{
+				
 			}
 
 			ScriptEngine::~ScriptEngine() 
@@ -61,7 +61,7 @@ namespace Lunia
 
 			int ScriptEngine::ExecuteScript(const string& script)
 			{
-				return engine->ExecuteString(0/*moduleName.c_str()*/, script.c_str());
+				return 0;//engine->ExecuteString(0/*moduleName.c_str()*/, script.c_str());
 			}
 
 
@@ -73,7 +73,7 @@ namespace Lunia
 					, bLoading, moduleName.c_str(), stageScript->GetStageId(), uniqueId);
 
 				//Regist stageScript instance
-				if (PrepareContext(engine->GetFunctionIDByName(0, "SetInstance"), "SetInstance", __FUNCTION__)==false)
+				if (PrepareContext(engine->GetGlobalFunctionByDecl("SetInstance"), "SetInstance", __FUNCTION__)==false)
 					throw;
 
 				//PrepareContext(engine->GetFunctionIDByName(0/*moduleName.c_str()*/, "SetInstance"));
@@ -140,9 +140,9 @@ namespace Lunia
 				minute = time.wMinute;
 			}
 
-			void ScriptEngine::ShowScriptMsg(const asCScriptString& msg)
+			void ScriptEngine::ShowScriptMsg(const std::string& msg)
 			{
-				Logger::GetInstance().Info( "{0}.", msg.buffer.c_str() );
+				Logger::GetInstance().Info( "{0}.", msg.c_str() );
 			}
 
 			void ScriptEngine::Pause(float time)
@@ -569,14 +569,14 @@ namespace Lunia
 				stageScript->NoticeTextEvent(userSerial, (Constants::DisplayTextType)displayTo, textId, param);
 			}
 
-			void ScriptEngine::DisplayText(uint8 displayTo, const asCScriptString& text)
+			void ScriptEngine::DisplayText(uint8 displayTo, const std::string& text)
 			{
-				stageScript->DisplayText((Constants::DisplayTextType)displayTo, ToUnicode<string>(text.buffer));
+				stageScript->DisplayText((Constants::DisplayTextType)displayTo, ToUnicode<string>(text));
 			}
 
-			void ScriptEngine::NoticeText(uint32 userSerial, uint8 displayTo, const asCScriptString& text)
+			void ScriptEngine::NoticeText(uint32 userSerial, uint8 displayTo, const std::string& text)
 			{
-				stageScript->NoticeText(userSerial, (Constants::DisplayTextType)displayTo, ToUnicode<string>(text.buffer));
+				stageScript->NoticeText(userSerial, (Constants::DisplayTextType)displayTo, ToUnicode<string>(text));
 			}
 
 			void ScriptEngine::DisplayTimer(int timer, uint32 type)
@@ -696,9 +696,9 @@ namespace Lunia
 				stageScript->ChangeWeatherToAqua();
 			}
 
-			bool ScriptEngine::PrepareContext(int funcID, const char* funcName, const char* callerName)
+			bool ScriptEngine::PrepareContext(asIScriptFunction* function, const char* funcName, const char* callerName)
 			{
-				int result = context->Prepare(funcID);
+				int result = context->Prepare(function);
 				if( result < 0 )
 				{
 					switch( result )
@@ -708,7 +708,7 @@ namespace Lunia
 						// skip known issues
 						break;
 					default:
-						Logger::GetInstance().Error("Invalid Script Context(id:{0}, result:{1}, script_func:{2}, caller:{3}", funcID, result, funcName, callerName);
+						Logger::GetInstance().Error("Invalid Script Context(id:{0}, result:{1}, script_func:{2}, caller:{3}", function->GetId(), result, funcName, callerName);
 						break;
 					}
 

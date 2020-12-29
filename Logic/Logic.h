@@ -269,8 +269,6 @@ namespace Lunia {
 			};
 
 			virtual ~ILogic() {}
-			virtual const ILogic::Config& GetConfig() const=0;
-			virtual void Rehash(const ILogic::Config& config)=0;
 
 			virtual void SetEventListener(IEventListener& listener)=0;
 			virtual IEventListener& GetEventListener()=0;
@@ -403,7 +401,6 @@ namespace Lunia {
 		};
 
 		ILogic* CreateLogic();
-		ILogic* CreateLogic(const ILogic::Config& config);
 	}
 
 } }

@@ -64,7 +64,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			} battleGround ;
 		} pvp;
 	public:
-		void GetCurrentBattleGroundInfo( std::map<uint8 , uint8 >& killcount , float& remainTime ) { 
+		inline void GetCurrentBattleGroundInfo( std::map<uint8 , uint8 >& killcount , float& remainTime ) {
 			killcount[1]=pvp.battleGround.killCount[0];
 			killcount[2]=pvp.battleGround.killCount[1];
 			
@@ -100,9 +100,9 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		~GameStateDatabase();
 		void LoadStage(Database::Info::StageGroup* sGroup, uint32 name, uint16 uniqueId);
 		void GameStart();
-		bool IsLoading() const { return stage.IsLoading(); }
-		bool IsStageEnded() const { return stage.IsMissionCleared(); }
-		float GetElpasedTime() { return stage.GetElpasedTime(); }
+		inline bool IsLoading() const { return stage.IsLoading(); }
+		inline bool IsStageEnded() const { return stage.IsMissionCleared(); }
+		inline float GetElpasedTime() { return stage.GetElpasedTime(); }
 
 		void operator=(GameStateDatabase&) {};
 
@@ -121,8 +121,8 @@ namespace Lunia { namespace XRated {	namespace Logic {
 	public:
 		
 		
-		void PlayerLeft( Serial playerSerial, uint8 team ) { stage.PlayerLeft( playerSerial, team ); }
-		void PlayerEntered( Serial playerSerial, uint8 team ) { stage.PlayerEntered( playerSerial, team); }
+		inline void PlayerLeft( Serial playerSerial, uint8 team ) { stage.PlayerLeft( playerSerial, team ); }
+		inline void PlayerEntered( Serial playerSerial, uint8 team ) { stage.PlayerEntered( playerSerial, team); }
 
 
 
@@ -212,9 +212,9 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		float3 GetAvailablePos(const float3& pos, const float& rad);
 		float3 GetAvailablePos(const float3& pos, const float& rad, Actor* it);
 		float3 GetAvailableGhostPos(const float3& pos, const float& rad);
-		float GetRandomFloat() { AutoLock lock(csUpdateObject); return static_cast<float>(randomFloat.Next()); }
-		int GetRandomInt(int min, int max) { return (int)randomInt.Next(min, max); }
-		Lunia::Math::PseudoRandomFloat* GetRandomClass() { return &randomFloat; }
+		inline float GetRandomFloat() { AutoLock lock(csUpdateObject); return static_cast<float>(randomFloat.Next()); }
+		inline int GetRandomInt(int min, int max) { return (int)randomInt.Next(min, max); }
+		inline Lunia::Math::PseudoRandomFloat* GetRandomClass() { return &randomFloat; }
 		bool IsAbletoLocate(Serial serial, const float3& pos, float rad);
 		bool IsAbletoLocate(Serial serial, const float3& pos, float rad, Actor* it);
 		bool IsAbletoLocateInMap(const float3& pos, float rad);
@@ -226,7 +226,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 		void ObjectMoved(Object*);
 
-		//npc�� path�� Ư�� ����Ʈ�� �����ߴ�.
 		void NPCArrived(NonPlayer* npc, int pathCnt, int posCnt);
 
 		//Stage Trigger event
@@ -234,7 +233,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		void CampfireBegin();
 		void FastMatch();
 
-		void GiveUpRevive(Player* player) { stage.CoinPlayerGiveUp(player->GetSerial()); }
+		inline void GiveUpRevive(Player* player) { stage.CoinPlayerGiveUp(player->GetSerial()); }
 		float GetObjectDistance(Player* player, uint32 hash) const; ///<@return minimal distance from the object(hash) and -1 if it does not exist.
 
 		//MissionClear Exp 

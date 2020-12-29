@@ -8,6 +8,7 @@
 #include "Preprocessor/Preprocess.h"
 #include <vector>
 #include <map>
+#include <AngelScript/scriptbuilder/scriptbuilder.h>
 
 namespace Lunia { namespace XRated {	namespace Logic {
 
@@ -27,6 +28,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			virtual void ScriptLoaded(uint16 uniqueId)=0; 
 			virtual void SetEngine(asIScriptEngine* e)=0;
 			virtual void SetContext(asIScriptContext* c)=0;
+			virtual void SetModule(asIScriptModule* m)=0;
 			virtual ILockable& GetSyncRoom()=0;
 		};
 
@@ -36,10 +38,10 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			IThreadListener* listener;
 			std::string module;
 			uint16 uniqueId;
-			Ticket(TicketType tp, IThreadListener* l, const std::string& stageName, uint16 id)
+			inline Ticket(TicketType tp, IThreadListener* l, const std::string& stageName, uint16 id)
 				: type(tp), listener(l), module(stageName), uniqueId(id) {}
 
-			Ticket& operator= (const Ticket& t) {
+			inline Ticket& operator= (const Ticket& t) {
 				type = t.type;
 				listener = t.listener;
 				module = t.module;
@@ -49,7 +51,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		};
 		typedef std::vector<Ticket> JobList;
 
-		class Output : public asIOutputStream {
+		class Output{
 			Preprocessor::LineNumberTranslator translator;
 			std::string stageCode;
 
@@ -66,9 +68,10 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			IThreadListener* listener;
 			asIScriptEngine* engine;
 			asIScriptContext* context;
+			asIScriptModule* module;
 			Output out;
 
-			ASModule() : bUsing(false), listener(0), engine(0), context(0) {}
+			inline ASModule() : bUsing(false), listener(0), engine(0), context(0) {}
 		private:
 			ASModule(const ASModule&); // prevent copy construct
 		};
@@ -108,8 +111,9 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		void ReleaseScriptEngine( const Ticket& ticket );
 
 	public : // Helper
-		int GetStageCnt() const { return (int)ASPool.size(); }
-		int GetPoolSize(const std::string& name) const { return (int)ASPool.find(name)->second.size(); }
+		CScriptBuilder builder;
+		inline int GetStageCnt() const { return (int)ASPool.size(); }
+		inline int GetPoolSize(const std::string& name) const { return (int)ASPool.find(name)->second.size(); }
 		int GetAvailablePool(const std::string& name) const;
 	public : // Lunia::Runnable implement
 		void Run();

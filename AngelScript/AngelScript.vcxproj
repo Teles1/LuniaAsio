@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{29555ba3-dc5d-45c9-a7ba-93515ac0d36a}</ProjectGuid>
+    <RootNamespace>AngelScript</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ANGELSCRIPT_EXPORT;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="angelscript.h" />
+    <ClInclude Include="autowrapper\aswrappedcall.h" />
+    <ClInclude Include="contextmgr\contextmgr.h" />
+    <ClInclude Include="datetime\datetime.h" />
+    <ClInclude Include="debugger\debugger.h" />
+    <ClInclude Include="scriptany\scriptany.h" />
+    <ClInclude Include="scriptarray\scriptarray.h" />
+    <ClInclude Include="scriptbuilder\scriptbuilder.h" />
+    <ClInclude Include="scriptdictionary\scriptdictionary.h" />
+    <ClInclude Include="scriptfile\scriptfile.h" />
+    <ClInclude Include="scriptfile\scriptfilesystem.h" />
+    <ClInclude Include="scriptgrid\scriptgrid.h" />
+    <ClInclude Include="scripthandle\scripthandle.h" />
+    <ClInclude Include="scripthelper\scripthelper.h" />
+    <ClInclude Include="scriptmath\scriptmath.h" />
+    <ClInclude Include="scriptmath\scriptmathcomplex.h" />
+    <ClInclude Include="scriptstdstring\scriptstdstring.h" />
+    <ClInclude Include="serializer\serializer.h" />
+    <ClInclude Include="Source\as_array.h" />
+    <ClInclude Include="Source\as_atomic.h" />
+    <ClInclude Include="Source\as_builder.h" />
+    <ClInclude Include="Source\as_bytecode.h" />
+    <ClInclude Include="Source\as_callfunc.h" />
+    <ClInclude Include="Source\as_compiler.h" />
+    <ClInclude Include="Source\as_config.h" />
+    <ClInclude Include="Source\as_configgroup.h" />
+    <ClInclude Include="Source\as_context.h" />
+    <ClInclude Include="Source\as_criticalsection.h" />
+    <ClInclude Include="Source\as_datatype.h" />
+    <ClInclude Include="Source\as_debug.h" />
+    <ClInclude Include="Source\as_gc.h" />
+    <ClInclude Include="Source\as_generic.h" />
+    <ClInclude Include="Source\as_map.h" />
+    <ClInclude Include="Source\as_memory.h" />
+    <ClInclude Include="Source\as_module.h" />
+    <ClInclude Include="Source\as_namespace.h" />
+    <ClInclude Include="Source\as_objecttype.h" />
+    <ClInclude Include="Source\as_outputbuffer.h" />
+    <ClInclude Include="Source\as_parser.h" />
+    <ClInclude Include="Source\as_property.h" />
+    <ClInclude Include="Source\as_restore.h" />
+    <ClInclude Include="Source\as_scriptcode.h" />
+    <ClInclude Include="Source\as_scriptengine.h" />
+    <ClInclude Include="Source\as_scriptfunction.h" />
+    <ClInclude Include="Source\as_scriptnode.h" />
+    <ClInclude Include="Source\as_scriptobject.h" />
+    <ClInclude Include="Source\as_string.h" />
+    <ClInclude Include="Source\as_string_util.h" />
+    <ClInclude Include="Source\as_symboltable.h" />
+    <ClInclude Include="Source\as_texts.h" />
+    <ClInclude Include="Source\as_thread.h" />
+    <ClInclude Include="Source\as_tokendef.h" />
+    <ClInclude Include="Source\as_tokenizer.h" />
+    <ClInclude Include="Source\as_typeinfo.h" />
+    <ClInclude Include="Source\as_variablescope.h" />
+    <ClInclude Include="weakref\weakref.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="autowrapper\generator\generateheader.cpp" />
+    <ClCompile Include="contextmgr\contextmgr.cpp" />
+    <ClCompile Include="datetime\datetime.cpp" />
+    <ClCompile Include="debugger\debugger.cpp" />
+    <ClCompile Include="scriptany\scriptany.cpp" />
+    <ClCompile Include="scriptarray\scriptarray.cpp" />
+    <ClCompile Include="scriptbuilder\scriptbuilder.cpp" />
+    <ClCompile Include="scriptdictionary\scriptdictionary.cpp" />
+    <ClCompile Include="scriptfile\scriptfile.cpp" />
+    <ClCompile Include="scriptfile\scriptfilesystem.cpp" />
+    <ClCompile Include="scriptgrid\scriptgrid.cpp" />
+    <ClCompile Include="scripthandle\scripthandle.cpp" />
+    <ClCompile Include="scripthelper\scripthelper.cpp" />
+    <ClCompile Include="scriptmath\scriptmath.cpp" />
+    <ClCompile Include="scriptmath\scriptmathcomplex.cpp" />
+    <ClCompile Include="scriptstdstring\scriptstdstring.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="scriptstdstring\scriptstdstring_utils.cpp" />
+    <ClCompile Include="serializer\serializer.cpp" />
+    <ClCompile Include="Source\as_atomic.cpp" />
+    <ClCompile Include="Source\as_builder.cpp" />
+    <ClCompile Include="Source\as_bytecode.cpp" />
+    <ClCompile Include="Source\as_callfunc.cpp" />
+    <ClCompile Include="Source\as_callfunc_arm.cpp" />
+    <ClCompile Include="Source\as_callfunc_arm64.cpp" />
+    <ClCompile Include="Source\as_callfunc_mips.cpp" />
+    <ClCompile Include="Source\as_callfunc_ppc.cpp" />
+    <ClCompile Include="Source\as_callfunc_ppc_64.cpp" />
+    <ClCompile Include="Source\as_callfunc_sh4.cpp" />
+    <ClCompile Include="Source\as_callfunc_x64_gcc.cpp" />
+    <ClCompile Include="Source\as_callfunc_x64_mingw.cpp" />
+    <ClCompile Include="Source\as_callfunc_x64_msvc.cpp" />
+    <ClCompile Include="Source\as_callfunc_x86.cpp" />
+    <ClCompile Include="Source\as_callfunc_xenon.cpp" />
+    <ClCompile Include="Source\as_compiler.cpp" />
+    <ClCompile Include="Source\as_configgroup.cpp" />
+    <ClCompile Include="Source\as_context.cpp" />
+    <ClCompile Include="Source\as_datatype.cpp" />
+    <ClCompile Include="Source\as_gc.cpp" />
+    <ClCompile Include="Source\as_generic.cpp" />
+    <ClCompile Include="Source\as_globalproperty.cpp" />
+    <ClCompile Include="Source\as_memory.cpp" />
+    <ClCompile Include="Source\as_module.cpp" />
+    <ClCompile Include="Source\as_objecttype.cpp" />
+    <ClCompile Include="Source\as_outputbuffer.cpp" />
+    <ClCompile Include="Source\as_parser.cpp" />
+    <ClCompile Include="Source\as_restore.cpp" />
+    <ClCompile Include="Source\as_scriptcode.cpp" />
+    <ClCompile Include="Source\as_scriptengine.cpp" />
+    <ClCompile Include="Source\as_scriptfunction.cpp" />
+    <ClCompile Include="Source\as_scriptnode.cpp" />
+    <ClCompile Include="Source\as_scriptobject.cpp" />
+    <ClCompile Include="Source\as_string.cpp" />
+    <ClCompile Include="Source\as_string_util.cpp" />
+    <ClCompile Include="Source\as_thread.cpp" />
+    <ClCompile Include="Source\as_tokenizer.cpp" />
+    <ClCompile Include="Source\as_typeinfo.cpp" />
+    <ClCompile Include="Source\as_variablescope.cpp" />
+    <ClCompile Include="weakref\weakref.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\as_callfunc_arm64_gcc.S" />
+    <None Include="Source\as_callfunc_arm64_msvc.asm" />
+    <None Include="Source\as_callfunc_arm_gcc.S" />
+    <None Include="Source\as_callfunc_arm_msvc.asm" />
+    <None Include="Source\as_callfunc_arm_vita.S" />
+    <None Include="Source\as_callfunc_arm_xcode.S" />
+    <MASM Include="Source\as_callfunc_x64_msvc_asm.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </MASM>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  </ImportGroup>
+</Project>

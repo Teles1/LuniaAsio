@@ -176,6 +176,7 @@ namespace Lunia { namespace XRated {	namespace Logic { namespace Stat {
 		}
 
 		Logger::GetInstance().Exception("[Stat::CreateState<Object>] Unknown state [{0}].", (int)type);
+		return NULL;
 	}
 
 

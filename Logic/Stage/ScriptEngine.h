@@ -1,14 +1,8 @@
-/*
-Copyright (c) 2000-, Lunia Corp. All rights reserved.
-http://www.Lunia.co.kr
-tel:82-2-888-1555
-fax:82-2-888-4414
-mailTo:webmaster@Lunia.co.kr
-*/
+#ifndef ScriptEngine_H
+#define ScriptEngine_H
 #pragma once
 #include "IStageScript.h"
 #include "ScriptLoadThread.h"
-#include "AngelScript/stdstring.h"
 
 namespace Lunia 
 { 
@@ -23,6 +17,7 @@ namespace Lunia
 				IStageScript* stageScript;
 
 				asIScriptEngine* engine;
+				asIScriptModule* asModule;
 				asIScriptContext* context;
 				std::string moduleName;
 
@@ -35,37 +30,41 @@ namespace Lunia
 
 			private :
 				ScriptEngine();
-				bool PrepareContext( int funcID, const char* funcName, const char* callerName ); ///< @return false if the preparing is failed
+				bool PrepareContext( asIScriptFunction* function, const char* funcName, const char* callerName ); ///< @return false if the preparing is failed
 
 			public :
 				ScriptEngine( IStageScript* initStageScript );//, const std::string& module, const std::string& filename);
 				virtual ~ScriptEngine();
 
-				int AddRef() 
+				inline int AddRef()
 				{
 					return ++refCount;
 				}
 
-				int Release() 
+				inline int Release()
 				{
 					return --refCount;
 				} //�����ϴ³��� ���̻� ���ٰ� �ؼ� �������� �ʴ´�.
 
 				int LoadScript( const std::string& module, uint16 uniqueId );
 
-				void SetEngine( asIScriptEngine* e ) 
+				inline void SetEngine( asIScriptEngine* e )
 				{ 
 					engine = e; 
 				}
 
-				void SetContext( asIScriptContext* c ) 
+				inline void SetContext( asIScriptContext* c )
 				{ 
 					context = c; 
+				}
+				inline void SetModule(asIScriptModule* m)
+				{
+					asModule = m;
 				}
 
 				bool IsLoading() const;
 
-				void ReleaseEngine() 
+				inline void ReleaseEngine()
 				{ 
 					Clear(); 
 				}
@@ -124,7 +123,7 @@ namespace Lunia
 					stageScript->SetPvpMissionClearDelay( delay ); 
 				}
 
-				void ShowScriptMsg( const asCScriptString& msg );
+				void ShowScriptMsg( const std::string& msg );
 				///* stageScript */
 				void SetPvpItemInfo( uint32 hash );
 				void DropPvpItem();
@@ -217,8 +216,8 @@ namespace Lunia
 				///* output */
 				void DisplayTextEvent( uint8 displayTo, uint16 textId, float param ); //�ؽ�Ʈ ���÷����̺�Ʈ�� ������.
 				void NoticeTextEvent( uint32 userSerial, uint8 displayTo, uint16 textId, float param ); //�ؽ�Ʈ ���÷��� �̺�Ʈ�� ������. Ư������
-				void DisplayText( uint8 displayTo, const asCScriptString& text ); // displayTo �� ���� �޽����� ���޵� ��ġ�� ��, ������ ���� ( enum type���� �����ʿ� )
-				void NoticeText( uint32 userSerial, uint8 displayTo, const asCScriptString& text );
+				void DisplayText( uint8 displayTo, const std::string& text ); // displayTo �� ���� �޽����� ���޵� ��ġ�� ��, ������ ���� ( enum type���� �����ʿ� )
+				void NoticeText( uint32 userSerial, uint8 displayTo, const std::string& text );
 				void DisplayTimer (int timer, uint32 type ); // color==0 �̸� hiding
 				void BroadcastEvent( int eventId ); // contains cinematic
 				void NoticeEvent( uint32 userSerial, int eventId ); // personal event
@@ -280,3 +279,5 @@ namespace Lunia
 		}
 	}	
 }
+
+#endif // ! ScriptEngine_H

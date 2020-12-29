@@ -1596,7 +1596,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		for ( int a=0; a<size ; ++a) {
 			XRated::UnidentifiedItemInfo* itemInfo = Database::DatabaseInstance().InfoCollections.Items.RetrieveUnidentifiedItem( info->UnidentifiedItems[a].c_str() );
 			if (itemInfo) {
-				int cnt = logic.GetConfig().NumberOfBossRewardUnidentifiedItem;
+				int cnt = Config::GetInstance().Get<int>("NumberOfBossRewardUnidentifiedItem");
 
 				for ( int k=0; k < cnt ; ++k ) {
 					PlayerMap::iterator i = players.begin();
@@ -2869,7 +2869,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		{
 			if ( logic.GetEventListener().GetBattleGroundInfo().GoalKillCount == 0 ) 
 			{
-				return; // �������̴� ������
+				return;
 			}
 			else
 			{

@@ -38,6 +38,12 @@
     <ClCompile Include="Room\RoomManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Room\RoomUpdater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\RoomUserManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -75,6 +81,12 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Room\RoomManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\RoomUpdater.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\RoomUserManager.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

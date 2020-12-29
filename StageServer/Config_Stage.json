@@ -43,6 +43,9 @@
         }
       ]
     },
+    "StageServer": {
+      "NumberOfBossRewardUnidentifiedItem": 2
+    },
     "Locale": {
       "FobbidenNames": [
         "\u00E9",
