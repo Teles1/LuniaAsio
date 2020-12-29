@@ -1,6 +1,5 @@
 #include "Room.h"
 #include <StageServer/User/UserManager.h>
-#include <StageServer/User/User.h>
 #include <Core/ErrorDefinition.h>
 
 namespace Lunia {

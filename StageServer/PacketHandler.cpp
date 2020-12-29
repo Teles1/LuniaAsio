@@ -1,9 +1,9 @@
 #include "fwPacketListener.h"
 #include "../Core/Utils/InitFunction.h"
 #include <Core/ErrorDefinition.h>
-#include <StageServer/User/UserManager.h>
-#include <StageServer/StageServerProtocol/StageServerProtocol.h>
+#include <StageServer/User/UserRegistry.h>
 #include <Network/Api/Api.h>
+#include <StageServer/User/UserManager.h>
 #include <timeapi.h>
 #pragma comment(lib, "winmm.lib")
 
@@ -20,7 +20,7 @@ namespace Lunia {
 							sendPacket.errorcode = XRated::Errors::InvalidClientVersion;
 							user->Send(sendPacket);
 							user->Terminate();
-							UserManagerInstance().RemoveUser(user);
+							UserRegistry::GetInstance().RemoveUser(user);
 							return;
 						}
 
@@ -28,7 +28,7 @@ namespace Lunia {
 						user->m_UsingLocale = packet.Locale.c_str();
 
 						{
-							UserManagerInstance().AuthenticateUser(user);
+							UserRegistry::GetInstance().AuthenticateUser(user);
 							Logger::GetInstance().Info("A connection with (Id: {0} - Ip: {1}) is authorizing", user->GetId(), user->GetPeerAddress());
 							Net::Api api("AuthConnection");
 							api << user->m_SecuKey;
@@ -57,7 +57,7 @@ namespace Lunia {
 												[&](const Net::Answer& result) {
 													if (result.errorCode == 0) {
 														if (!result.resultObject.is_null()) {
-															if (UserManagerInstance().Auth(user, result.resultObject))
+															if (UserManager().Auth(user, result.resultObject))
 															{
 
 															}
