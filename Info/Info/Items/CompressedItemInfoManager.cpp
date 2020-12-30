@@ -5,8 +5,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
-
-				void CompressedItemInfoManager::Init(bool bForceXmlData)
+				void CompressedItemInfoManager::Init()
 				{
 					Items.clear();
 					CategoryList.clear();
@@ -17,25 +16,11 @@ namespace Lunia {
 					ComposeItemList.clear();
 					ComposeGradeInfos.clear();
 
-					if (bForceXmlData) {//Xml loading
-						LoadXmlData();
-					}
-					else { //Binary loading
-					 /* std::wstring fullLoading;
-					 Lunia::Config::ConfigInstance().Get(L"database", L"fullLoading", fullLoading, L"1");
-					 if (fullLoading == L"1")
-						 ItemInfoManager::LoadBinaryData();
-					 else */
-						LoadCompressedBinary();
-						//cbfreader = Lunia::Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/ItemInfos.cbf");
-						//cbfreader->SetReadCursor(0, Lunia::IStream::Begin);
-						//Read(L"ItemInfos", Items);
-						//Read(L"UnidentifiedItemInfo", UnidentifiedItems);
-					}
+					LoadBinaryData();
+					LoadData();
 				}
 
-				void CompressedItemInfoManager::LoadCompressedBinary()
-				{
+				void CompressedItemInfoManager::LoadBinaryData() {
 					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/CompressedItemInfos.b");
 					reader->Begin(L"AllM::XRated::Database::Info::ItemInfoManager");
 					reader->Read(L"compressedItems", CompressedItems);
@@ -44,102 +29,118 @@ namespace Lunia {
 					reader->Read(L"SetItemList", SetItemList);
 					reader->Read(L"ComposeItemList", ComposeItemList);
 					reader->Read(L"ComposeGradeInfos", ComposeGradeInfos);
+
+					compressedItemsCBF = Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/ItemInfos.cbf");
 				}
 
-				void CompressedItemInfoManager::SaveCompressedXml() {
-					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateSerializerXmlStreamWriter(L"./Database/CompressedItemInfos.xml");
-					writer->Begin(L"AllM::XRated::Database::Info::ItemInfoManager");
-					writer->Write(L"compressedItems", CompressedItems);
-					writer->Write(L"compressedUnidentifiedItems", UnidentifiedItemInfoCompressed);
-					writer->Write(L"CategoryList", CategoryList);
-					writer->Write(L"SetItemList", SetItemList);
-					writer->Write(L"ComposeItemList", ComposeItemList);
-					writer->Write(L"ComposeGradeInfos", ComposeGradeInfos);
-				}
-
-				void CompressedItemInfoManager::SaveCompressedB() {
-
-					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateDefaultSerializer(L"./Database/CompressedItemInfos.b");
-					writer->Begin(L"AllM::XRated::Database::Info::ItemInfoManager");
-					writer->Write(L"compressedItems", CompressedItems);
-					writer->Write(L"compressedUnidentifiedItems", UnidentifiedItemInfoCompressed);
-					writer->Write(L"CategoryList", CategoryList);
-					writer->Write(L"SetItemList", SetItemList);
-					writer->Write(L"ComposeItemList", ComposeItemList);
-					writer->Write(L"ComposeGradeInfos", ComposeGradeInfos);
-				}
-
-				void CompressedItemInfoManager::SaveItemsCbf() {
-					uint32 bufSize(123845181);
-					uint8* inBuf = (uint8*)malloc(bufSize);
-					Lunia::Resource::StreamWriter temp = new Lunia::FileIO::RefCountedMemoryStreamWriter(inBuf, bufSize);
-					Lunia::Resource::SerializerStreamWriter binary =
-						Serializer::CreateBinaryStreamWriter(temp);
-					std::cout << "Writing ItemInfo to inBuf ..." << std::endl;
-					binary->Write(L"ItemInfo", Items);
-					std::cout << "Done Writing ItemInfo to inBuf ..." << std::endl;
-					//hexdump(binary->GetStream(), 1024);
-					std::cout << "bufSize[" << bufSize << "]" << std::endl;
-					/* std::wstring filename(L"./Database/inFile.cbf");
-					FileIO::FileStreamWriter writer(filename.c_str());
-					writer.Write(binary->GetStream(), bufSize); */
-
-					std::cout << "Compressing data" << std::endl;
-					//uint8* outBuf;
-					//lzmaCompress(inBuf, bufSize, outBuf);
-					delete[] inBuf;
-				}
-
-				Lunia::XRated::Database::Info::ItemInfo* CompressedItemInfoManager::Retrieve(uint32 hash)
+				void CompressedItemInfoManager::LoadData()
 				{
-					ItemInfoMap::iterator ita = Items.find(hash);
-					if (ita != Items.end())
-						return &ita->second;
-					else
-					{
-						return NULL;
+					compressedItemsCBF->SetReadCursor(0, Lunia::IStream::Begin);
+					/* Items */
+					uint8* BufferItems = reinterpret_cast<uint8*>(new char[4]);
+					compressedItemsCBF->Read(BufferItems, 4);
+					size_t BufferSize = *(int*)BufferItems;
+					std::vector<uint8> IBufferItems;
+					IBufferItems.resize(BufferSize);
+					compressedItemsCBF->Read(&IBufferItems[0], BufferSize);
+					IndexedItemsCompressed = IBufferItems;
+
+					/* Unidentified */
+					uint8* BufferUnidentified = reinterpret_cast<uint8*>(new char[4]);
+					compressedItemsCBF->Read(BufferUnidentified, 4);
+					size_t BufferUnidentifiedSize = *(int*)BufferUnidentified;
+					std::vector<uint8> IBufferUnidentified;
+					IBufferUnidentified.resize(BufferUnidentifiedSize);
+					compressedItemsCBF->Read(&IBufferUnidentified[0], BufferUnidentifiedSize);
+					IndexedUnidentifiedCompressed = IBufferUnidentified;
+				}
+
+				/* Items */
+				bool CompressedItemInfoManager::GetItems(const uint32& templateOffset) {
+					compressedItemsCBF = new FileIO::RefCountedMemoryStreamReader(IndexedItemsCompressed.data(), (uint32)IndexedItemsCompressed.size());
+					compressedItemsCBF->SetReadCursor(templateOffset, Lunia::IStream::Begin);
+					std::vector<uint8> Buffer;
+					Buffer.resize(4);
+					size_t COMPRESSED_SIZE = 0;
+					size_t UNCOMPRESSED_SIZE = 0;
+
+					compressedItemsCBF->Read(&Buffer[0], 4);
+					COMPRESSED_SIZE = *(int*)&Buffer[0];
+					compressedItemsCBF->Read(&Buffer[0], 4);
+					UNCOMPRESSED_SIZE = *(int*)&Buffer[0];
+
+					/* Setting buffer input and output sizes*/
+					std::vector<uint8> inBuf;
+					inBuf.resize(COMPRESSED_SIZE + LZMA_PROPS_SIZE);
+					std::vector<uint8> outBuf;
+					outBuf.resize(UNCOMPRESSED_SIZE);
+
+					compressedItemsCBF->Read(inBuf.data(), inBuf.size());
+
+					/*decoding and decrypting the binary owo*/
+					SRes res = LzmaUncompress(outBuf.data(), &UNCOMPRESSED_SIZE, inBuf.data() + LZMA_PROPS_SIZE, &COMPRESSED_SIZE, inBuf.data(), LZMA_PROPS_SIZE);
+
+					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], UNCOMPRESSED_SIZE));
+					BlockDecrypted->Read(L"ItemInfoManager", Items, false);
+					return true;
+				}
+
+				ItemInfo* CompressedItemInfoManager::Retrieve(const uint32& hash) {
+					if (CompressedItems.dataPosition.find(hash) == CompressedItems.dataPosition.end()) return nullptr;
+					if (this->Items.find(hash) != this->Items.end()) return &Items[hash];
+					if (GetItems(CompressedItems.dataPosition[hash])) {
+						return &Items[hash];
 					}
+					return nullptr;
 				}
 
-				Lunia::XRated::Database::Info::ItemInfo* CompressedItemInfoManager::Retrieve(const wchar_t* id)
-				{
-					return Retrieve(Lunia::StringUtil::Hash(id));
+				ItemInfo* CompressedItemInfoManager::Retrieve(const wchar_t* name) {
+					return Retrieve(StringUtil::Hash(name));
 				}
 
-				Lunia::XRated::UnidentifiedItemInfo* CompressedItemInfoManager::RetrieveUnidentifiedItem(uint32 hash)
-				{
-					return NULL;
+				/* Unidentified Items */
+				bool CompressedItemInfoManager::GetUnidentifiedItems(const uint32& templateOffset) {
+					compressedItemsCBF = new FileIO::RefCountedMemoryStreamReader(IndexedUnidentifiedCompressed.data(), (uint32)IndexedUnidentifiedCompressed.size());
+					compressedItemsCBF->SetReadCursor(templateOffset, Lunia::IStream::Begin);
+					std::vector<uint8> Buffer;
+					Buffer.resize(4);
+					size_t COMPRESSED_SIZE = 0;
+					size_t UNCOMPRESSED_SIZE = 0;
+
+					compressedItemsCBF->Read(&Buffer[0], 4);
+					COMPRESSED_SIZE = *(int*)&Buffer[0];
+					compressedItemsCBF->Read(&Buffer[0], 4);
+					UNCOMPRESSED_SIZE = *(int*)&Buffer[0];
+
+					/* Setting buffer input and output sizes*/
+					std::vector<uint8> inBuf;
+					inBuf.resize(COMPRESSED_SIZE + LZMA_PROPS_SIZE);
+					std::vector<uint8> outBuf;
+					outBuf.resize(UNCOMPRESSED_SIZE);
+
+					compressedItemsCBF->Read(inBuf.data(), inBuf.size());
+
+					/*decoding and decrypting the binary owo*/
+					SRes res = LzmaUncompress(outBuf.data(), &UNCOMPRESSED_SIZE, inBuf.data() + LZMA_PROPS_SIZE, &COMPRESSED_SIZE, inBuf.data(), LZMA_PROPS_SIZE);
+
+					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], UNCOMPRESSED_SIZE));
+					BlockDecrypted->Read(L"UnidentifiedItemInfoManager", UnidentifiedItems, false);
+					return true;
 				}
 
-				Lunia::XRated::UnidentifiedItemInfo* CompressedItemInfoManager::RetrieveUnidentifiedItem(const wchar_t* id)
+				UnidentifiedItemInfo* CompressedItemInfoManager::RetrieveUnidentifiedItem(const uint32& hash)
 				{
-					return RetrieveUnidentifiedItem(Lunia::StringUtil::Hash(id));
-				}
-
-				bool CompressedItemInfoManager::Remove(Lunia::uint32 hash)
-				{
-					ItemInfoMap::iterator it = Items.find(hash);
-					if (it != Items.end())
-					{
-						Items.erase(it);
-						return true;
+					if (UnidentifiedItemInfoCompressed.dataPosition.find(hash) == UnidentifiedItemInfoCompressed.dataPosition.end()) return nullptr;
+					if (this->UnidentifiedItems.find(hash) != this->UnidentifiedItems.end()) return &UnidentifiedItems[hash];
+					if (GetUnidentifiedItems(UnidentifiedItemInfoCompressed.dataPosition[hash])) {
+						return &UnidentifiedItems[hash];
 					}
-
-					/*UnidentifiedItemInfoMap::iterator ita=UnidentifiedItems.find(hash);
-					if (ita!=UnidentifiedItems.end())
-					{
-						UnidentifiedItems.erase(ita);
-						return true;
-					}*/
-
-					return false;
+					return nullptr;
 				}
-
-				bool CompressedItemInfoManager::Remove(const wchar_t* id)
+				UnidentifiedItemInfo* CompressedItemInfoManager::RetrieveUnidentifiedItem(const wchar_t* id)
 				{
-					return Remove(Lunia::StringUtil::Hash(id));
+					return RetrieveUnidentifiedItem(StringUtil::Hash(id));
 				}
-
 			}
 		}
 	}

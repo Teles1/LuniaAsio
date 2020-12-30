@@ -12,7 +12,6 @@ namespace Lunia {
 				InfoCollections.StageGroups.Init(false);
 				InfoCollections.StageGroups.SetStageInfo(&InfoCollections.Stages);
 				//InfoCollections.Stages.Init(false);
-				//InfoCollections.actions.Init(false);
 				//InfoCollections.npcs.Init(false);
 				//InfoCollections.stateBundles.Init(false);
 				//InfoCollections.itemInfos.Init(false);

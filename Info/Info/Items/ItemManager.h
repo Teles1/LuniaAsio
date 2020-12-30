@@ -22,20 +22,14 @@ namespace Lunia {
 
 					std::map<uint32, UnidentifiedItemInfo> eventUnidentifiedItems;
 
-					void LoadItemTemplates(const wchar_t* xml);
-					void LoadUnidentfiedItemTemplates(const wchar_t* xml);
-
 				public:
 				
 					typedef std::map<uint32, ItemInfo, Less<uint32> >::iterator	ItemInfoIter;
-					void Init(bool bForceXmlData);
 					size_t Size() { return Items.size(); }
 					ItemInfoIter Begin() { return Items.begin(); }
 					ItemInfoIter End() { return Items.end(); }
 				public:
 					ItemInfoManager();
-				
-					void Add(const ItemInfo& info);
 				
 					struct Finder
 					{
@@ -51,23 +45,9 @@ namespace Lunia {
 						}
 					};
 
-					void Remove(uint32 hash);
-					void AddUnidentifiedItemList(const std::map<uint32, UnidentifiedItemInfo>& unidentifiedItemList);
-					void ReloadEventUnidentifiedItemList();
-
-					void LoadXmlData();
-					virtual void LoadBinaryData();
-					virtual void LoadUnidentifiedData();
-					virtual void SaveUnidentifiedData(bool bForceXml);
-
-					virtual ItemInfo* Retrieve(uint32 hash);
-					virtual ItemInfo* Retrieve(const wchar_t* id);
-					virtual UnidentifiedItemInfo* RetrieveUnidentifiedItem(uint32 hash);
-					virtual UnidentifiedItemInfo* RetrieveUnidentifiedItem(const wchar_t* id);
-
+				public:
 					void GetItemList(std::vector<std::wstring>& l);
 					void GetUnidentifiedItemList(std::vector<std::wstring>& l);
-				public:
 				
 					std::pair<uint16, uint16> GetComposeGrade(std::pair<const ItemInfo*, const ItemInfo*> input);
 				public:

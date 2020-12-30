@@ -16,16 +16,15 @@ namespace Lunia {
 				void ActionInfoManager::Init(bool bForceXmlData)
 				{
 					Clear();
+					//if (bForceXmlData) {//Xml loading
+					//	LoadXmlData();
+					//}
+					//else { //Binary loading
+					//	std::wstring fullLoading;
+					//	ActionInfoManager::LoadBinaryData();
+					//}
 
-					if (bForceXmlData) {//Xml loading
-						LoadXmlData();
-					}
-					else { //Binary loading
-						std::wstring fullLoading;
-						ActionInfoManager::LoadBinaryData();
-					}
-
-					MakeLinkedActionLink();
+					//MakeLinkedActionLink();
 				}
 
 				void ActionInfoManager::MakeLinkedActionLink()
@@ -189,7 +188,7 @@ namespace Lunia {
 						return NULL;
 				}
 
-				ActionInfoManager::Actions& ActionInfoManager::Retrieve(const wchar_t* templateName)
+				/*ActionInfoManager::Actions& ActionInfoManager::Retrieve(const wchar_t* templateName)
 				{
 					ActionMap::iterator i = actionMap.find(templateName);
 					if (i == actionMap.end())
@@ -197,7 +196,7 @@ namespace Lunia {
 						throw Exception(L"unable to find action by template name({0})", templateName);
 					}
 					return (*i).second;
-				}
+				}*/
 
 				void ActionInfoManager::RetrieveTemplateName(std::vector<std::wstring>& l)
 				{
