@@ -168,6 +168,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="User\ExpFactorManager.cpp" />
     <ClCompile Include="PacketHandler.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="Room\Room.cpp" />
@@ -175,11 +176,13 @@
     <ClCompile Include="Room\RoomUpdater.cpp" />
     <ClCompile Include="StageServer.cpp" />
     <ClCompile Include="StageServerProtocol\StageServerProtocol.cpp" />
+    <ClCompile Include="User\PetData.cpp" />
     <ClCompile Include="User\RoomUserManager.cpp" />
     <ClCompile Include="User\UserManager.cpp" />
     <ClCompile Include="User\User.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="User\ExpFactorManager.h" />
     <ClInclude Include="fwPacketListener.h" />
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="Room\Room.h" />
@@ -189,6 +192,7 @@
     <ClInclude Include="StageServerProtocol\StageServerProtocol.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="PacketHandler.h" />
+    <ClInclude Include="User\PetData.h" />
     <ClInclude Include="User\RoomUserManager.h" />
     <ClInclude Include="User\UserManager.h" />
     <ClInclude Include="User\User.h" />

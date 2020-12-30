@@ -47,8 +47,16 @@ namespace Lunia {
         ServerKind GetKind();
         template <typename T>
         T Get(const char* name) {
-            if (m_Config[m_BaseStr][name].is_null())
+            if (m_Config[m_BaseStr][name].is_null()) {
                 Logger::GetInstance().Exception("{0} is not present within {1} on the config file.", name, m_BaseStr);
+            }
+            return m_Config[m_BaseStr][name].get<T>();
+        }
+        template <typename T>
+        T Get(const char* name, const T& defaulValue) {
+            if (m_Config[m_BaseStr][name].is_null()) {
+                return defaulValue;
+            }
             return m_Config[m_BaseStr][name].get<T>();
         }
     private:
