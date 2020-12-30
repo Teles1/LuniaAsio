@@ -101,8 +101,8 @@ int main(int argc, char* argv[]) {
 	auto TargetItem = XRated::Database::Info::ItemInfo();
 	TargetItem.Id = L"TW_091209_CashEirHand_C078_b";
 	TargetItem.Hash = StringUtil::Hash(TargetItem.Id.c_str());
-	TargetItem.Limits.Class = (XRated::Constants::ClassType)3;
-	TargetItem.EquipParts = (XRated::Constants::EquipParts)3;
+	TargetItem.Limits.Class = (XRated::Constants::ClassType)14;
+	TargetItem.EquipParts = (XRated::Constants::EquipParts)16;
 
 	auto PortionItem = XRated::Database::Info::ItemInfo();
 	PortionItem.Id = L"ArutaItem_60SKILL_001_001";

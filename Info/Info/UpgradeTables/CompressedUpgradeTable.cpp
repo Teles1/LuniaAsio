@@ -134,17 +134,19 @@ namespace Lunia {
 							return &(*findIter);
 						}
 					}
-
-					if (GetNewUpgradeTable(compressedNewUpgradeTables.dataPosition[potionItem->Id])) {
-						auto findIter = std::find_if(newIt->second.begin(), newIt->second.end(), UpgradeTableInfo::NewInfoFinder(targetItem->Limits.Class, targetItem->EquipParts));
-						if (findIter != newIt->second.end())
-						{
-							return &(*findIter);
+					else {
+						if (GetNewUpgradeTable(compressedNewUpgradeTables.dataPosition[potionItem->Id])) {
+							newIt = this->NewUpgradeTables.find(potionItem->Id);
+							auto findIter = std::find_if(newIt->second.begin(), newIt->second.end(), UpgradeTableInfo::NewInfoFinder(targetItem->Limits.Class, targetItem->EquipParts));
+							if (findIter != newIt->second.end()) {
+								return &(*findIter);
+							}
+						}
+						else {
+							Logger::GetInstance().Error(L"Unexpected Behavior - Item found on .b but not on .cbf ");
 						}
 					}
-					else {
-						Logger::GetInstance().Error(L"Unexpected Behavior - Item found on .b but not on .cbf ");
-					}
+					
 					return nullptr;
 				}
 			}
