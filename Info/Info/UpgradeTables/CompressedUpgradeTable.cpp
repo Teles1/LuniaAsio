@@ -125,10 +125,10 @@ namespace Lunia {
 				const UpgradeTableInfo* CompressedUpgradeTableManager::RetrieveNewUpgrade(const Database::Info::ItemInfo* potionItem, const Database::Info::ItemInfo* targetItem) {
 					if (compressedNewUpgradeTables.dataPosition.find(potionItem->Id) == compressedNewUpgradeTables.dataPosition.end()) return nullptr;
 
-					auto newIt = this->NewUpgradeTables.find(potionItem->Id);
+					NewUpgradeTableMap::const_iterator newIt = this->NewUpgradeTables.find(potionItem->Id);
 					if (newIt != NewUpgradeTables.end())
 					{
-						auto findIter = std::find_if(newIt->second.begin(), newIt->second.end(), UpgradeTableInfo::NewInfoFinder(targetItem->Limits.Class, targetItem->EquipParts));
+						UpgradeInfoList::const_iterator findIter = std::find_if(newIt->second.begin(), newIt->second.end(), UpgradeTableInfo::NewInfoFinder(targetItem->Limits.Class, targetItem->EquipParts));
 						if (findIter != newIt->second.end())
 						{
 							return &(*findIter);
@@ -137,7 +137,7 @@ namespace Lunia {
 					else {
 						if (GetNewUpgradeTable(compressedNewUpgradeTables.dataPosition[potionItem->Id])) {
 							newIt = this->NewUpgradeTables.find(potionItem->Id);
-							auto findIter = std::find_if(newIt->second.begin(), newIt->second.end(), UpgradeTableInfo::NewInfoFinder(targetItem->Limits.Class, targetItem->EquipParts));
+							UpgradeInfoList::const_iterator findIter = std::find_if(newIt->second.begin(), newIt->second.end(), UpgradeTableInfo::NewInfoFinder(targetItem->Limits.Class, targetItem->EquipParts));
 							if (findIter != newIt->second.end()) {
 								return &(*findIter);
 							}

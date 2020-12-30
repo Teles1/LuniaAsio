@@ -11,6 +11,7 @@ namespace Lunia {
 				InfoCollections.Stages.Init(false);
 				InfoCollections.StageGroups.Init(false);
 				InfoCollections.StageGroups.SetStageInfo(&InfoCollections.Stages);
+				InfoCollections.UpgradeTables.Init();
 				//InfoCollections.Stages.Init(false);
 				//InfoCollections.npcs.Init(false);
 				//InfoCollections.stateBundles.Init(false);

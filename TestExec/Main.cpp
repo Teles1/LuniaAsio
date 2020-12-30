@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
 
 	auto start = std::chrono::high_resolution_clock::now();
 	//XRated::Database::DatabaseInstance().InfoCollections.UpgradeTables.Retrieve(&PortionItem, &TargetItem);					
-	XRated::Database::DatabaseInstance().InfoCollections.UpgradeTables.RetrieveNewUpgrade(&PortionItem, &TargetItem);					
+	auto teste = XRated::Database::DatabaseInstance().InfoCollections.UpgradeTables.RetrieveNewUpgrade(&PortionItem, &TargetItem);					
 	
 	auto finish = std::chrono::high_resolution_clock::now();
 	auto microseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start);
