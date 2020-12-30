@@ -25,6 +25,8 @@ namespace Lunia {
 				}
 				void Init();
 
+				bool AuthConnection(const json& result);
+
 				bool Auth(const json& result);
 
 				bool Auth_CharacterInfos(const json& characterinfo);

@@ -29,7 +29,7 @@ namespace Lunia {
 
 				UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);
 
-				bool AuthenticateUser(const uint32& userId, const uint64& userSerial);
+				bool AuthenticateUser(const uint32& userId, const json& result);
 
 				void RemoveUser(const uint64& userSerial);
 
