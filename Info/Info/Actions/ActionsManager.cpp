@@ -83,7 +83,7 @@ namespace Lunia {
 					}
 				}
 
-				void ActionInfoManager::SaveXmlData(ActionInfoManager::Actions a) {
+				void ActionInfoManager::SaveXmlData(const ActionInfoManager::Actions& a) {
 					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateSerializerXmlStreamWriter(L"XMLMaluco.xml");
 					writer->Write(L"Actions", a);
 				}

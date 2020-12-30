@@ -42,7 +42,7 @@ namespace Lunia {
 					size_t BufferSize = *(int*)BufferItems;
 					std::vector<uint8> IBufferItems;
 					IBufferItems.resize(BufferSize);
-					compressedItemsCBF->Read(&IBufferItems[0], BufferSize);
+					compressedItemsCBF->Read(&IBufferItems[0], (uint32)BufferSize);
 					IndexedItemsCompressed = IBufferItems;
 
 					/* Unidentified */
@@ -51,7 +51,7 @@ namespace Lunia {
 					size_t BufferUnidentifiedSize = *(int*)BufferUnidentified;
 					std::vector<uint8> IBufferUnidentified;
 					IBufferUnidentified.resize(BufferUnidentifiedSize);
-					compressedItemsCBF->Read(&IBufferUnidentified[0], BufferUnidentifiedSize);
+					compressedItemsCBF->Read(&IBufferUnidentified[0], (uint32)BufferUnidentifiedSize);
 					IndexedUnidentifiedCompressed = IBufferUnidentified;
 				}
 
@@ -80,7 +80,7 @@ namespace Lunia {
 					/*decoding and decrypting the binary owo*/
 					SRes res = LzmaUncompress(outBuf.data(), &UNCOMPRESSED_SIZE, inBuf.data() + LZMA_PROPS_SIZE, &COMPRESSED_SIZE, inBuf.data(), LZMA_PROPS_SIZE);
 
-					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], UNCOMPRESSED_SIZE));
+					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)UNCOMPRESSED_SIZE));
 					BlockDecrypted->Read(L"ItemInfoManager", Items, false);
 					return true;
 				}
@@ -118,12 +118,12 @@ namespace Lunia {
 					std::vector<uint8> outBuf;
 					outBuf.resize(UNCOMPRESSED_SIZE);
 
-					compressedItemsCBF->Read(inBuf.data(), inBuf.size());
+					compressedItemsCBF->Read(inBuf.data(), (uint32)inBuf.size());
 
 					/*decoding and decrypting the binary owo*/
 					SRes res = LzmaUncompress(outBuf.data(), &UNCOMPRESSED_SIZE, inBuf.data() + LZMA_PROPS_SIZE, &COMPRESSED_SIZE, inBuf.data(), LZMA_PROPS_SIZE);
 
-					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], UNCOMPRESSED_SIZE));
+					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)UNCOMPRESSED_SIZE));
 					BlockDecrypted->Read(L"UnidentifiedItemInfoManager", UnidentifiedItems, false);
 					return true;
 				}

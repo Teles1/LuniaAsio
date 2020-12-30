@@ -35,7 +35,7 @@ namespace Lunia {
 					compressedProjectileCBF->Read(SizeBlock, 4);
 					uint32 UNCOMPRESSED_SIZE = *(int*)SizeBlock;
 					uint8* lReplayBuffer = reinterpret_cast<uint8*>(new char[srcSize]);
-					compressedProjectileCBF->Read(lReplayBuffer, srcSize);
+					compressedProjectileCBF->Read(lReplayBuffer, (uint32)srcSize);
 
 					/* Setting buffer input and output sizes*/
 					std::vector<uint8> inBuf(srcSize);
@@ -48,7 +48,7 @@ namespace Lunia {
 					size_t srcLen = inBuf.size() - LZMA_PROPS_SIZE;
 					SRes res = LzmaUncompress(&outBuf[0], &dstLen, &inBuf[LZMA_PROPS_SIZE], &srcLen, &inBuf[0], LZMA_PROPS_SIZE);
 
-					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], dstLen));
+					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)dstLen));
 					BlockDecrypted->Read(L"ProjectileInfoManager", Projectiles, false);
 				}
 

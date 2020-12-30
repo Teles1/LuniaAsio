@@ -29,16 +29,16 @@ namespace Lunia {
 					size_t BufferSize = *(int*)BufferUpgradeTables;
 					std::vector<uint8> IBufferUpgradeTables;
 					IBufferUpgradeTables.resize(BufferSize);
-					compressedUpgradeCbf->Read(&IBufferUpgradeTables[0], BufferSize);
+					compressedUpgradeCbf->Read(&IBufferUpgradeTables[0], (uint32)BufferSize);
 					IndexedUpgradeTablesCompressed = IBufferUpgradeTables;
-					
+
 					/* Unidentified */
 					uint8* BufferNewUpgrades = reinterpret_cast<uint8*>(new char[4]);
 					compressedUpgradeCbf->Read(BufferNewUpgrades, 4);
 					size_t BufferUnidentifiedSize = *(int*)BufferNewUpgrades;
 					std::vector<uint8> IBufferNewUpgrades;
 					IBufferNewUpgrades.resize(BufferUnidentifiedSize);
-					compressedUpgradeCbf->Read(&IBufferNewUpgrades[0], BufferUnidentifiedSize);
+					compressedUpgradeCbf->Read(&IBufferNewUpgrades[0], (int)BufferUnidentifiedSize);
 					IndexedNewUpgradeTablesCompressed = IBufferNewUpgrades;
 				}
 
@@ -55,7 +55,7 @@ namespace Lunia {
 					compressedUpgradeCbf->Read(SizeBlock, 4);
 					uint32 UNCOMPRESSED_SIZE = *(int*)SizeBlock;
 					uint8* lReplayBuffer = reinterpret_cast<uint8*>(new char[srcSize]);
-					compressedUpgradeCbf->Read(lReplayBuffer, srcSize);
+					compressedUpgradeCbf->Read(lReplayBuffer, (int)srcSize);
 
 					/* Setting buffer input and output sizes*/
 					std::vector<uint8> inBuf(srcSize);
@@ -68,7 +68,7 @@ namespace Lunia {
 					size_t srcLen = inBuf.size() - LZMA_PROPS_SIZE;
 					SRes res = LzmaUncompress(&outBuf[0], &dstLen, &inBuf[LZMA_PROPS_SIZE], &srcLen, &inBuf[0], LZMA_PROPS_SIZE);
 
-					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], dstLen));
+					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)dstLen));
 					BlockDecrypted->Read(L"UpgradeTables", UpgradeTables, false);
 					return true;
 				}
@@ -86,7 +86,7 @@ namespace Lunia {
 					compressedUpgradeCbf->Read(SizeBlock, 4);
 					uint32 UNCOMPRESSED_SIZE = *(int*)SizeBlock;
 					uint8* lReplayBuffer = reinterpret_cast<uint8*>(new char[srcSize]);
-					compressedUpgradeCbf->Read(lReplayBuffer, srcSize);
+					compressedUpgradeCbf->Read(lReplayBuffer, (uint32)srcSize);
 
 					/* Setting buffer input and output sizes*/
 					std::vector<uint8> inBuf(srcSize);
@@ -99,7 +99,7 @@ namespace Lunia {
 					size_t srcLen = inBuf.size() - LZMA_PROPS_SIZE;
 					SRes res = LzmaUncompress(&outBuf[0], &dstLen, &inBuf[LZMA_PROPS_SIZE], &srcLen, &inBuf[0], LZMA_PROPS_SIZE);
 
-					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], dstLen));
+					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)dstLen));
 					BlockDecrypted->Read(L"NewUpgradeTables", NewUpgradeTables, false);
 					return true;
 				}
@@ -125,10 +125,10 @@ namespace Lunia {
 				const UpgradeTableInfo* CompressedUpgradeTableManager::RetrieveNewUpgrade(const Database::Info::ItemInfo* potionItem, const Database::Info::ItemInfo* targetItem) {
 					if (compressedNewUpgradeTables.dataPosition.find(potionItem->Id) == compressedNewUpgradeTables.dataPosition.end()) return nullptr;
 
-					NewUpgradeTableMap::const_iterator newIt = this->NewUpgradeTables.find(potionItem->Id);
+					auto newIt = this->NewUpgradeTables.find(potionItem->Id);
 					if (newIt != NewUpgradeTables.end())
 					{
-						UpgradeInfoList::const_iterator findIter = std::find_if(newIt->second.begin(), newIt->second.end(), UpgradeTableInfo::NewInfoFinder(targetItem->Limits.Class, targetItem->EquipParts));
+						auto findIter = std::find_if(newIt->second.begin(), newIt->second.end(), UpgradeTableInfo::NewInfoFinder(targetItem->Limits.Class, targetItem->EquipParts));
 						if (findIter != newIt->second.end())
 						{
 							return &(*findIter);
@@ -137,7 +137,7 @@ namespace Lunia {
 					else {
 						if (GetNewUpgradeTable(compressedNewUpgradeTables.dataPosition[potionItem->Id])) {
 							newIt = this->NewUpgradeTables.find(potionItem->Id);
-							UpgradeInfoList::const_iterator findIter = std::find_if(newIt->second.begin(), newIt->second.end(), UpgradeTableInfo::NewInfoFinder(targetItem->Limits.Class, targetItem->EquipParts));
+							auto findIter = std::find_if(newIt->second.begin(), newIt->second.end(), UpgradeTableInfo::NewInfoFinder(targetItem->Limits.Class, targetItem->EquipParts));
 							if (findIter != newIt->second.end()) {
 								return &(*findIter);
 							}
@@ -146,7 +146,7 @@ namespace Lunia {
 							Logger::GetInstance().Error(L"Unexpected Behavior - Item found on .b but not on .cbf ");
 						}
 					}
-					
+
 					return nullptr;
 				}
 			}

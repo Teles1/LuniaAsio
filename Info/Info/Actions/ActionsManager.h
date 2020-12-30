@@ -82,7 +82,7 @@ namespace Lunia {
 
 					void Init(bool bForceXml);
 					void LoadXmlData();
-					void SaveXmlData(ActionInfoManager::Actions a);
+					void SaveXmlData(const ActionInfoManager::Actions& a);
 					virtual void LoadBinaryData();
 					void MakeLinkedActionLink();
 					void MakeLinkedActionLinkToPart(const wchar_t* key, Actions& actions);
