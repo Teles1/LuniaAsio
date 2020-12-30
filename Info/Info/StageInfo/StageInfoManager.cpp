@@ -186,7 +186,28 @@ namespace Lunia {
 							(*i).second.LoadScript();
 					}
 				}
-			}
+				void StageInfoManager::ItemStageInfoContainer::Serialize(Serializer::IStreamWriter& out) const {
+					out.Begin(L"AllM::XRated::Database::Info::StageInfoManager::ItemStageInfoContainer");
+					out.Write(L"DropTables", DropTables);
+					out.Write(L"DropProbabilities", DropProbabilities);
+					out.Write(L"ItemStagesInfos", ItemStagesInfos);
+				}
+				void StageInfoManager::ItemStageInfoContainer::Deserialize(Serializer::IStreamReader& in) {
+					in.Begin(L"AllM::XRated::Database::Info::StageInfoManager::ItemStageInfoContainer");
+					in.Read(L"DropTables", DropTables);
+					in.Read(L"DropProbabilities", DropProbabilities);
+					in.Read(L"ItemStagesInfos", ItemStagesInfos);
+
+					//For fast search
+					ItemStageInfoVector::iterator i = ItemStagesInfos.begin();
+					ItemStageInfoVector::iterator end = ItemStagesInfos.end();
+					for (; i != end; ++i) {
+						ItemStageInfo::DropTable* table = FindValue((*i).DropTableHash, DropTables.begin(), DropTables.end());
+						ItemStageInfo::DropProbability* prob = FindValue((*i).DropProbabilityHash, DropProbabilities.begin(), DropProbabilities.end());
+						ItemStageInfoDataList.push_back(ItemStageInfo::ItemStageInfoData((*i).Hash, &(*i), table, prob));
+					}
+				}
+}
 		}
 	}
 }

@@ -8,6 +8,8 @@ namespace Lunia {
 			void LuniaDatabase::Init() {
 				InfoCollections.Npcs.Init(false);
 				InfoCollections.Pets.Init(false);
+				InfoCollections.StageGroups.Init(false);
+				InfoCollections.Stages.Init(false);
 				//InfoCollections.Stages.Init(false);
 				//InfoCollections.actions.Init(false);
 				//InfoCollections.npcs.Init(false);
@@ -15,9 +17,14 @@ namespace Lunia {
 				//InfoCollections.itemInfos.Init(false);
 			}
 
+			LuniaDatabase& LuniaDatabase::GetInstance()
+			{
+				static LuniaDatabase m_instance;
+				return m_instance;
+			}
+
 			LuniaDatabase& DatabaseInstance() {
-				static LuniaDatabase m_Instance;
-				return m_Instance;
+				return LuniaDatabase::GetInstance();
 			}
 		}
 	}

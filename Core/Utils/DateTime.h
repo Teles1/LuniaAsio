@@ -73,9 +73,9 @@ namespace Lunia {
 			std::wstring ToString(Format::type format = Format::Default) const;
 
 			uint32 GetCumulatedDay(const Date& origin = Date(0, 0, 0)) const;
-			uint16 GetYear(bool checkValid = true)const { return dateValue.Year; }
-			uint16 GetMonth(bool checkValid = true)const { return dateValue.Month; }
-			uint16 GetDay(bool checkValid = true)const { return dateValue.Day; }
+			uint16 GetYear(bool checkValid = true)const { if (checkValid) IsValid(); return dateValue.Year; }
+			uint16 GetMonth(bool checkValid = true)const { if (checkValid) IsValid(); return dateValue.Month; }
+			uint16 GetDay(bool checkValid = true)const { if (checkValid) IsValid(); return dateValue.Day; }
 
 			void SetYear(uint16 year) { dateValue.Year = year; }
 			void SetMonth(uint8 month) { dateValue.Month = month; }
