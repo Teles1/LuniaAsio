@@ -19,6 +19,8 @@
         "ServerPort": 15000
       },
       "UsableBonusLifeInStage": 2,
+      "PreloadMovemap": false,
+      "PreloadScripts": false,
       "SquareList": [
         {
           "Name": "01 Square",
@@ -55,8 +57,6 @@
       "FobbidenStrings": [
 
       ]
-    },
-    "PreloadMovemap": false,
-    "PreloadScripts": false
+    }
   }
 }

@@ -61,7 +61,7 @@ namespace Lunia {
 												[&](const Net::Answer& result) {
 													if (result.errorCode == 0) {
 														if (!result.resultObject.is_null()) {
-															if (UserManagerInstance().Auth(user, result.resultObject))
+															if (user->Auth(result.resultObject))
 															{
 
 															}

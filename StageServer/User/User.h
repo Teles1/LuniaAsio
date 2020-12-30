@@ -3,6 +3,7 @@
 #include <StageServer/Service.h>
 #include <Logic/Logic.h>
 #include <StageServer/QuickSlot.h>
+#include <Network/Api/Api.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -21,6 +22,8 @@ namespace Lunia {
 					Logger::GetInstance().Info("User :: Hey, I was created!", GetId());
 				}
 				void Init();
+
+				bool Auth(const json& data);
 
 				uint32 GetId() const;
 
@@ -65,7 +68,6 @@ namespace Lunia {
 				XRated::StageLicense						m_CurrentStage;
 			public: //Auth
 				XRated::Logic::ILogic::PlayerInitialData	m_PlayerData;
-				uint32										m_CurrentStageHash;
 				XRated::CharacterStateFlags					m_CharacterStateFlags;
 				DateTime									m_CreateDate;
 				DateTime									m_LastLoggedDate;

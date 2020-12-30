@@ -31,10 +31,9 @@ namespace Lunia {
 		namespace Database {
 
 			class LuniaDatabase {
-			private:
 			public:
 				void Init();
-
+				static LuniaDatabase& GetInstance();
 				struct Collection {
 					Info::SkillInfoManager Skills;
 					Info::StateBundleInfoManager StateBundles;
