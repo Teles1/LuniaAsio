@@ -97,16 +97,12 @@ namespace Lunia {
 
 				ActionInfo* CompressedActionInfoManager::Retrieve(const wchar_t* actionName)
 				{
-					auto start = std::chrono::high_resolution_clock::now();
 					for (int i = 0; i < actionNames.size(); i++) {
 						if (actionNames[i] == actionName) {
 							GetData(i);
 							return &actions[actionName];
 						}
 					}
-					auto finish = std::chrono::high_resolution_clock::now();
-					auto microseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start);
-					Logger::GetInstance().Info("Took {0}ms", microseconds.count());
 					return nullptr;
 				}
 			}

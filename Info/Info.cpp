@@ -9,7 +9,7 @@ namespace Lunia {
 				//InfoCollections.Npcs.Init(false);
 				//InfoCollections.Pets.Init(false);
 				InfoCollections.Actions.Init();
-				//InfoCollections.Stages.Init(false);
+				InfoCollections.Stages.Init(false);
 				//InfoCollections.npcs.Init(false);
 				//InfoCollections.stateBundles.Init(false);
 				//InfoCollections.itemInfos.Init(false);
