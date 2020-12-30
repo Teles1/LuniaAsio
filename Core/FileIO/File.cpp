@@ -32,7 +32,7 @@ namespace Lunia {
 				if (::CopyFileA(StringUtil::ToASCII(existFilename).c_str(), StringUtil::ToASCII(newFilename).c_str(), failExist))
 					return;
 
-			THROWFILEEXCEPTION(L"Copy {0} to {1} (exist {2})", existFilename, newFilename, (failExist ? L"True" : L"False")); // need to throw exception 
+			THROWFILEEXCEPTION(fmt::format(L"Copy {0} to {1} (exist {2})", existFilename, newFilename, (failExist ? L"True" : L"False")).c_str()); // need to throw exception 
 		}
 
 		FileInfo::FileAttributes File::GetAttributes(const wchar_t* filename)
@@ -69,7 +69,7 @@ namespace Lunia {
 
 		void File::GetFileInfo(const wchar_t* filename, FileInfo* fileInfo)
 		{
-			WIN32_FILE_ATTRIBUTE_DATA info;
+			WIN32_FILE_ATTRIBUTE_DATA info{};
 			if (::GetFileAttributesExW(filename, GetFileExInfoStandard, &info))
 			{
 				//comming here instead

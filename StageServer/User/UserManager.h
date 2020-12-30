@@ -25,11 +25,12 @@ namespace Lunia {
 #pragma endregion Singleton
 			public:
 				~UserManager();
-				bool Auth(UserSharedPtr& user, const json& data);
 
 				UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);
 
 				bool AuthenticateUser(const uint32& userId, const json& result);
+
+				void RoomAuth(const UserSharedPtr& user);
 
 				void RemoveUser(const uint64& userSerial);
 

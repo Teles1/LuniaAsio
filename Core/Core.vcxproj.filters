@@ -25,11 +25,8 @@
     <ClCompile Include="Serializer\Binary\BinaryStream.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Resource\BinaryLoader.cpp" />
-    <ClCompile Include="GameServer\GameServer.cpp" />
     <ClCompile Include="GameServer\NetworkIO\GameServerNetworkIO.cpp" />
     <ClCompile Include="GameServer\NetworkIO\ClientNetworkIO.cpp" />
-    <ClCompile Include="GameServer\ClientRegistry.cpp" />
-    <ClCompile Include="GameServer\Proxy\ServerProxy.cpp" />
     <ClCompile Include="GameServer\Proxy\ClientProxy.cpp" />
     <ClCompile Include="Packet\PacketBase.cpp" />
     <ClCompile Include="DeltaTimer.cpp" />

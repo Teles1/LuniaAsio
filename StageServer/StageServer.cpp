@@ -47,7 +47,7 @@ using namespace Lunia::XRated::Database;
 int main(int argc, char* argv[])
 {
 	//setting log name to be used on the console.
-	Logger::GetInstance("StageServer");
+	Lunia::Logger::GetInstance("StageServer");
 	Lunia::Config::GetInstance( "Config_Stage.json" );
 	InitHandlers();
 	Lunia::Resource::ResourceSystemInstance().AddPath(L"../x64/Debug/");

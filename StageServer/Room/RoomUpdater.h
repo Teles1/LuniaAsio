@@ -11,24 +11,25 @@ namespace Lunia {
 		namespace StageServer{
 			class User;
 			class Room;
+
+			typedef std::shared_ptr<User> UserSharedPtr;
+			typedef std::shared_ptr<Room> RoomSharedPtr;
+
 			class RoomUpdater : public Lunia::Runnable {
-				typedef std::shared_ptr<User> UserSharedPtr;
-				typedef std::shared_ptr<Room> RoomSharedPtr;
 			public:
-				RoomUpdater(int& index);
+				RoomUpdater(uint16 index);
 				~RoomUpdater();
 				void Run();
 				void AddRoom(RoomSharedPtr room);
 				void DelRoom(RoomSharedPtr room);
 
 				bool JoinUser(RoomSharedPtr room, UserSharedPtr user, const std::string& roomPass);
-				/*bool PartUser(RoomSharedPtr room, UserSharedPtr user);
+				bool PartUser(RoomSharedPtr room, UserSharedPtr user);
 
 				void UpdateExpFactor();
-				void NoticeHolidayEvent(uint32 eventId, bool start);
+				void NoticeHolidayEvent(const uint32& eventId, bool start);
 
-				size_t GetRoomCnt();
-				*/
+				uint16 GetRoomCnt();
 			protected:
 				void UpdateRooms(float dt);
 				void ShowLogicPerformance();
@@ -45,11 +46,11 @@ namespace Lunia {
 				uint32						m_LoopTime = 0;
 				uint32						m_UpdateCount = 0;
 
-				int							m_Index;
+				uint16						m_Index;
 
 				std::mutex					m_Mtx;
 			};
-
+			typedef std::shared_ptr<RoomUpdater> RoomUpdaterSharedPtr;
 		}
 	}
 }

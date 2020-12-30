@@ -1,13 +1,14 @@
 #include "RoomUpdater.h"
+#include <StageServer/User/UserManager.h>
 #include <Core/Utils/StringUtil/General.h>
 #include <mmsystem.h>
+#include <StageServer/Room/RoomUpdateManager.h>
 #include <StageServer/Room/Room.h>
-#include <StageServer/User/UserManager.h>
-
+#include <StageServer/User/User.h>
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
-			RoomUpdater::RoomUpdater(int& index) 
+			RoomUpdater::RoomUpdater(uint16 index)
 				: Runnable(fmt::format(L"Room Updator Index {0}", index).c_str())
 				, m_Index(index)
 			{
@@ -39,7 +40,7 @@ namespace Lunia {
 				m_PassedTime += m_Dt;
 				if (m_PassedTime > 5.0f) {
 					if(true)
-						Logger::GetInstance().Info("[Info Perfomance] TotalTime=%d, Loop=%d, lps=%d\n", m_LoopTime, m_UpdateCount, (m_UpdateCount * 1000) / (m_LoopTime == 0 ? 1 : m_LoopTime) );
+						Logger::GetInstance().Info("[Info Perfomance] TotalTime={0}, Loop={1}, lps={2}", m_LoopTime, m_UpdateCount, (m_UpdateCount * 1000) / (m_LoopTime == 0 ? 1 : m_LoopTime) );
 				}
 			}
 
@@ -54,6 +55,7 @@ namespace Lunia {
 			void RoomUpdater::DelRoom(RoomSharedPtr room)
 			{
 				AutoLock lock(m_Mtx);
+
 				room->SetThreadIndex(-1);
 				m_Rooms.erase(room);
 			}
@@ -61,10 +63,41 @@ namespace Lunia {
 			bool RoomUpdater::JoinUser(RoomSharedPtr room, UserSharedPtr user, const std::string& roomPass)
 			{
 				AutoLock lock(m_Mtx);
+
 				auto itr = m_Rooms.find(room);
 				if (itr != m_Rooms.end())
 					(*itr)->JoinUser(user, roomPass);
 				return false;
+			}
+
+			bool RoomUpdater::PartUser(RoomSharedPtr room, UserSharedPtr user) {
+				AutoLock lock(m_Mtx);
+
+				auto itr = m_Rooms.find(room);
+				if (itr != m_Rooms.end())
+					return (*itr)->PartUser(user);
+				return false;
+			}
+
+			void RoomUpdater::UpdateExpFactor() {
+				AutoLock lock(m_Mtx);
+
+				for (auto& x: m_Rooms)
+				{
+					//(*itr)->ChangeExpFactor( expFactor );
+					x->UpdateExpFactor();
+				}
+			}
+
+			void RoomUpdater::NoticeHolidayEvent(const uint32& eventId, bool start) {
+				AutoLock lock(m_Mtx);
+
+				for (auto& x : m_Rooms)
+					x->NoticeHolidayEvent(eventId, start);
+			}
+
+			uint16 RoomUpdater::GetRoomCnt() {
+				return uint16(m_Rooms.size());
 			}
 
 			void RoomUpdater::UpdateRooms(float dt)

@@ -3,6 +3,9 @@
 #include <Network/Api/Api.h>
 #include <StageServer/User/User.h>
 #include <StageServer/StageServerProtocol/StageServerProtocol.h>
+#include <StageServer/Room/RoomManager.h>
+#include <StageServer/Room/Room.h>
+
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer
@@ -62,32 +65,9 @@ namespace Lunia {
 				OnUserDisconnected(userSerial);
 				m_users.erase(userSerial);
 			}
-
-			bool UserManager::AuthenticateUser(const uint32& userId, const json& result)
-			{
-				auto userSerial = result["charactersId"].get<uint64>();
-				if (userSerial == 0)
-					Logger::GetInstance().Exception("UserManager::AuthenticateUser() not a valid UserSerial={0}", userSerial);
-				AutoLock l_(m_usersMutex);
-				if (m_users.find(userSerial) != m_users.end()) { //looking to see if the userSerial is already listed on our m_Users
-					Logger::GetInstance().Error("UserManager::AuthenticateUser() already registred user={0}.", userSerial);
-					return false;
-				} // Duplicated user
-				if (m_tempUsers.find(userId) == m_tempUsers.end()) {
-					// this is kind of weird. How would the user not be found on the authenticated list and at the same time not in the tempList?
-					Logger::GetInstance().Exception("UserManager::AuthenticateUser() requested user={0} doesnt exist.", userSerial);
-					return false;
-				}
-				{
-					AutoLock lock(m_tempUsers[userId]->mtx); // making sure the user will remain sync while we work on it.
-					m_users[userSerial] = std::move(m_tempUsers[userId]); m_tempUsers.erase(userId);
-					m_users[userSerial]->SetSerial(userSerial);
-				}
-				return m_users[userSerial]->AuthConnection(result);
-			}
-
+			/*
 			bool UserManager::Auth(UserSharedPtr& user, const json& data) {
-				/*
+				
 				//After this is all done and good we have to send this user to the "Room" responsible for the stage it'll be joining. but for now since we dont have any room
 				//anything really i'll just "fake it"
 				//Load
@@ -188,8 +168,36 @@ namespace Lunia {
 					createplayer.eventExpFactor = 1.0;
 					user->Send(createplayer);
 				}
-				*/
 				return true;
+			}
+				*/
+
+			bool UserManager::AuthenticateUser(const uint32& userId, const json& result)
+			{
+				auto userSerial = result["charactersId"].get<uint64>();
+				if (userSerial == 0)
+					Logger::GetInstance().Exception("UserManager::AuthenticateUser() not a valid UserSerial={0}", userSerial);
+				AutoLock l_(m_usersMutex);
+				if (m_users.find(userSerial) != m_users.end()) { //looking to see if the userSerial is already listed on our m_Users
+					Logger::GetInstance().Error("UserManager::AuthenticateUser() already registred user={0}.", userSerial);
+					return false;
+				} // Duplicated user
+				if (m_tempUsers.find(userId) == m_tempUsers.end()) {
+					// this is kind of weird. How would the user not be found on the authenticated list and at the same time not in the tempList?
+					Logger::GetInstance().Exception("UserManager::AuthenticateUser() requested user={0} doesnt exist.", userSerial);
+					return false;
+				}
+				{
+					AutoLock lock(m_tempUsers[userId]->mtx); // making sure the user will remain sync while we work on it.
+					m_users[userSerial] = std::move(m_tempUsers[userId]); m_tempUsers.erase(userId);
+					m_users[userSerial]->SetSerial(userSerial);
+				}
+				return m_users[userSerial]->AuthConnection(result);
+			}
+
+			void UserManager::RoomAuth(const UserSharedPtr& user)
+			{
+				//RoomManagerInstance()
 			}
 
 			//Global Singleton

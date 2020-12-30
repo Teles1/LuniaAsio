@@ -6,9 +6,9 @@
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
-			Room::Room(const int& index)
+			Room::Room(const uint16& index)
 			{
-				logic = Logic::CreateLogic();
+				m_Logic = Logic::CreateLogic();
 			}
 
 			bool Room::Update(const float& dt)
@@ -27,14 +27,14 @@ namespace Lunia {
 							m_LastThreadIndex = m_ThreadIndex;
 						}
 						assert(m_ThreadIndex != -1);
-						logic->Update(dt);
+						m_Logic->Update(dt);
 					}
 				}
 				CheckLoadingTime(dt);
 
 				return true;
 			}
-			void Room::SetThreadIndex(const int& i)
+			void Room::SetThreadIndex(const uint16& i)
 			{
 				AutoLock lock(m_Mtx);
 				m_Active = false; // kind of hack - because when SetThreadIndex is set, logic should not be updated before initialize 
@@ -43,24 +43,24 @@ namespace Lunia {
 
 			void Room::CheckLoadingTime(const float& dt)
 			{
-				if (GetRoomKind() == RoomKind::Pvp && pvp.SyncEnteredUserCnt == pvp.SyncStartUserCnt) {
+				if (GetRoomKind() == Common::ROOMKIND::PVP && pvp.SyncEnteredUserCnt == pvp.SyncStartUserCnt) {
 					m_LoadingTime += dt;
 					if (m_LoadingTime > 180.0f)
 						; // kick all users using user manager
 				}
 			}
 
-			RoomKind Room::GetRoomKind()
+			Common::ROOMKIND Room::GetRoomKind()
 			{
 				return m_RoomKind;
 			}
 
 			const Logic::ILogic::UpdateInfo& Room::GetLogicUpdateInfo()
 			{
-				return logic->GetUpdateInfo();
+				return m_Logic->GetUpdateInfo();
 			}
 
-			const int& Room::GetIndex()
+			uint16 Room::GetIndex()
 			{
 				return m_RoomIndex;
 			}
@@ -78,6 +78,15 @@ namespace Lunia {
 
 				}*/
 				return false;
+			}
+
+			void Room::UpdateExpFactor(){
+				//userMgr.UpdateExpFactor(logic);
+			}
+
+			void Room::NoticeHolidayEvent(const uint32& eventId, bool start)
+			{
+				m_Logic->NoticeHolidayEvent(eventId, start);
 			}
 
 			bool Room::SetStage(StageLicense& targetStage, const std::string& roomPass, int64 pActivateSerial, const std::wstring& userName)

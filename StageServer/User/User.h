@@ -73,6 +73,10 @@ namespace Lunia {
 
 				StageLicense& GetCurrentStage();
 
+				uint32 GetRoomIndex() const;
+
+				std::string GetRoomPass() const;
+
 				void Terminate();
 			public://Network Related;
 				void Send(Serializer::ISerializable& packet);
@@ -91,7 +95,7 @@ namespace Lunia {
 				std::wstring 								m_UsingLocale;
 				std::wstring								m_Name;
 				std::string									m_RoomPass;
-				int											m_RoomIndex;
+				uint32										m_RoomIndex;
 				int											m_TeamNumber;
 				int64										m_RoomActivateSerial;
 				uint32										m_RoomFullCount;

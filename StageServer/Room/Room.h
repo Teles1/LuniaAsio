@@ -2,40 +2,41 @@
 #include <Logic/Logic.h>
 #include <Logic/Object/Player.h>
 #include <StageServer/StageServerProtocol/StageServerProtocol.h>
+#include <StageServer/Room/IUpdateRoom.h>
+#include <StageServer/Common.h>
 
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer{
-			enum class RoomKind {
-				Stage,
-				Square,
-				Pvp
-			};
 			class User;
-			class Room /*: public Lunia::XRated::Logic::ILogic::IEventListener*/ {
-				typedef std::shared_ptr<User> UserSharedPtr;
+			typedef std::shared_ptr<User> UserSharedPtr;
+			class Room
+				: public IUpdateRoom 
+			{
 			public:
-				Room(const int& index);
+				Room(const uint16& index);
 			public: //RoomUpdater
 				bool Update(const float& dt);
-				void SetThreadIndex(const int& i);
+				void SetThreadIndex(const uint16& i);
 				void CheckLoadingTime(const float& dt);
 				const Logic::ILogic::UpdateInfo& GetLogicUpdateInfo();
-				const int& GetIndex();
+				uint16 GetIndex();
 				bool JoinUser(UserSharedPtr user, const std::string& roomPass);
+				void UpdateExpFactor();
+				void NoticeHolidayEvent(const uint32& eventId, bool start);
 
-				RoomKind GetRoomKind();
+				Common::ROOMKIND GetRoomKind();
 			private:
 				bool SetStage(StageLicense& targetStage, const std::string& roomPass, int64 pActivateSerial, const std::wstring& userName);
 			private:
 				bool m_NowCampfire = false;
 				bool m_Active = false;
 				bool m_Loading = false;
-				int m_RoomIndex = 0;
-				int m_ThreadIndex = -1;
-				int m_LastThreadIndex = 0;
+				uint16 m_RoomIndex = 0;
+				uint16 m_ThreadIndex = -1;
+				uint16 m_LastThreadIndex = 0;
 				float m_LoadingTime = 0.0f;
-				RoomKind m_RoomKind;
+				Common::ROOMKIND m_RoomKind;
 				struct Pvp
 				{
 					bool GameStarted;
@@ -44,7 +45,7 @@ namespace Lunia {
 					int	SyncEnteredUserCnt;
 					bool bSendStartEvent;
 				} pvp;
-				Logic::ILogic* logic;
+				Logic::ILogic* m_Logic;
 				std::mutex m_Mtx;
 				/*
 			public: // IEventListener implementation which sends information from the Logic.

@@ -44,7 +44,9 @@ namespace Lunia {
 					size_t srcLen = inBuf.size() - LZMA_PROPS_SIZE;
 					SRes res = LzmaUncompress(&outBuf[0], &dstLen, &inBuf[LZMA_PROPS_SIZE], &srcLen, &inBuf[0], LZMA_PROPS_SIZE);
 
-					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)dstLen));
+					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(
+						new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)dstLen)
+					);
 					BlockDecrypted->Read(L"NPCInfoManager", Npcs, false);
 				}
 

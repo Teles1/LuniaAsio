@@ -74,5 +74,6 @@ namespace Lunia {
             return m_instance;
         }
     };
+    Config& GetConfigInstance(const char* filename = "");
 }
 #endif // ! ConfigReader_H
