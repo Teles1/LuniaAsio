@@ -96,8 +96,7 @@ using namespace Lunia;
 int main(int argc, char* argv[]) {
 	Lunia::Config::GetInstance("Config_Stage.json");
 	Lunia::Resource::ResourceSystemInstance().AddPath(L"..\\x64\\Debug");
-	XRated::Database::DatabaseInstance().Init();					
-	auto teste = XRated::Database::DatabaseInstance().InfoCollections.Items.RetrieveUnidentifiedItem(3926);
+	XRated::Database::DatabaseInstance().Init();			
 	//XRated::Database::DatabaseInstance().InfoCollections.Stages.SaveXml();
 	//XRated::Database::DatabaseInstance().InfoCollections.Skills.Init(false);
 	//XRated::Database::DatabaseInstance().InfoCollections.EnchantTables.Init(false);

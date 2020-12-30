@@ -226,6 +226,7 @@
     <ClInclude Include="Info\NPCs\NPCManager.h" />
     <ClInclude Include="Info\Pets\Pets.h" />
     <ClInclude Include="Info\Pets\PetsManager.h" />
+    <ClInclude Include="Info\Projectiles\CompressedProjectileInfoManager.h" />
     <ClInclude Include="Info\Projectiles\IndexedProjectileInfoManager.h" />
     <ClInclude Include="Info\Projectiles\Projectile.h" />
     <ClInclude Include="Info\PvPRankRewardItemInfos\PvPRankRewardInfo.h" />
@@ -287,6 +288,7 @@
     <ClCompile Include="Info\NPCs\NPCManager.cpp" />
     <ClCompile Include="Info\Pets\Pets.cpp" />
     <ClCompile Include="Info\Pets\PetsManager.cpp" />
+    <ClCompile Include="Info\Projectiles\CompressedProjectileInfoManager.cpp" />
     <ClCompile Include="Info\Projectiles\IndexedProjectileInfoManager.cpp" />
     <ClCompile Include="Info\Projectiles\Projectile.cpp" />
     <ClCompile Include="Info\Projectiles\ProjectileInfoManager.cpp" />

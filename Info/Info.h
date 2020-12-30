@@ -19,7 +19,7 @@
 #include <Info/Info/GeneralInfos/GeneralInfoManager.h>
 #include <Info/Info/NonPlayerModifier/NonPlayerModifierManager.h>
 #include <Info/Info/StatusInfo/IndexedStatusInfoManager.h>
-#include <Info/Info/Projectiles/IndexedProjectileInfoManager.h>
+#include <Info/Info/Projectiles/CompressedProjectileInfoManager.h>
 #include <Info/Info/MISCS/IndexedMISCSManager.h>
 #include <Info/Info/Skills/SkillInfoManager.h>
 #include <Info/Info/EventNonPlayerItemList/EventNonPlayerItemListManager.h>
@@ -55,7 +55,7 @@ namespace Lunia {
 					Info::StylePointInfoManager StylePoints;
 					Info::GeneralInfoManager GeneralInfos;
 					Info::NonPlayerModifierTable NonPlayerModifierInfos;
-					Info::IndexedProjectileInfoManager Projectiles;
+					Info::CompressedProjectileInfoManager Projectiles;
 					Info::IndexedMISCInfoManager Miscs;
 				} InfoCollections;
 			};

@@ -6,7 +6,10 @@ namespace Lunia {
 		namespace Database {
 
 			void LuniaDatabase::Init() {
-				InfoCollections.Items.Init();
+				//InfoCollections.Items.Init();
+				
+				InfoCollections.Projectiles.Init();
+
 				//InfoCollections.Npcs.Init(false);
 				//InfoCollections.Pets.Init(false);
 				//InfoCollections.Actions.Init();

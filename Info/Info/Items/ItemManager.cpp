@@ -61,7 +61,7 @@ namespace Lunia {
 
 				void ItemInfoManager::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"Lunia::XRated::Database::Info::ItemInfoManager");
+					out.Begin(L"AllM::XRated::Database::Info::ItemInfoManager");
 					out.Write(L"Items", Items);
 					out.Write(L"UnidentifiedItems", UnidentifiedItems);
 					out.Write(L"CategoryList", CategoryList);
@@ -70,7 +70,7 @@ namespace Lunia {
 
 				void ItemInfoManager::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"Lunia::XRated::Database::Info::ItemInfoManager");
+					in.Begin(L"AllM::XRated::Database::Info::ItemInfoManager");
 					in.Read(L"Items", Items);
 					in.Read(L"UnidentifiedItems", UnidentifiedItems);
 					in.Read(L"CategoryList", CategoryList);
