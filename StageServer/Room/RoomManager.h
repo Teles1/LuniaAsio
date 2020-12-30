@@ -1,14 +1,20 @@
+#ifndef RoomManager_H
+#define RoomManager_H
 #pragma once
-#include <StageServer/Room/Room.h>
-#include <Core/Utils/ConfigReader.h>
-
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
+			class User;
+			class Room;
+			typedef std::shared_ptr<User> UserSharedPtr;
 			struct RoomManager {
-			
+			public:
+				bool RoomJoin(const int& roomIndex, UserSharedPtr user, const std::string& roomPass);
 			private:
-				std::vector<Room> m_Rooms;
+				uint16							m_PoolSize;
+				std::mutex						mtx;
+				std::vector<Room>				m_Rooms;
+#pragma region Singleton
 			public://Singleton
 				RoomManager(const RoomManager&) = delete; //anti creation  of a copy
 				RoomManager& operator= (const RoomManager&) = delete; // anti copy
@@ -19,9 +25,11 @@ namespace Lunia {
 					return m_RoomManagerInstance;
 				}
 			private:
-				inline RoomManager() {}
+				RoomManager();
+#pragma endregion Singleton
 			};
-			RoomManager& GetRoomManager();
+			RoomManager& RoomManagerInstance();
 		}
 	}
 }
+#endif // ! RoomManager_H

@@ -162,9 +162,9 @@ namespace Lunia{
 					//printf(" - Size : (Decimal: %d, Hex: 0%.2x) \n", compSize, compSize);
 					/* BlockRead */
 					uint8* Block = reinterpret_cast<uint8*>(new char[compSize]);
-					cbfreader->Read(Block, compSize);
+					cbfreader->Read(Block, (uint32)compSize);
 					/* Block Reader */
-					Resource::StreamReader reader = new FileIO::RefCountedMemoryStreamReader(Block, compSize);
+					Resource::StreamReader reader = new FileIO::RefCountedMemoryStreamReader(Block, (uint32)compSize);
 					uint32 count(0);
 					/* Loop in Block Size Left */
 					std::vector<uint8> completeBuff;
@@ -179,7 +179,7 @@ namespace Lunia{
 						reader->Read(Block, 4);
 						uint32 UNCOMPRESSED_SIZE = *(int*)Block;
 						uint8* lReplayBuffer = reinterpret_cast<uint8*>(new char[srcSize]);
-						reader->Read(lReplayBuffer, srcSize);
+						reader->Read(lReplayBuffer, (uint32)srcSize);
 
 						/* Setting buffer input and output sizes*/
 						std::vector<uint8> inBuf(srcSize);

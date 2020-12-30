@@ -1,18 +1,13 @@
 ﻿#pragma once
 
-#include <AngelScript/angelscript.h>
-#include <AngelScript/scriptstdstring/scriptstdstring.h>
-#include <AngelScript/scriptbuilder/scriptbuilder.h>
-#include <cassert>
-#include <string>
-#include <iostream>
+/*
 void MessageCallback(const asSMessageInfo* msg) {
 	
 }
 void print(const std::string& in){
 	std::cout << in << std::endl;
 }
-int main(int argc, char* argv[]) {
+int notsoMain(int argc, char* argv[]) {
 	auto* engine = asCreateScriptEngine();
 	{
 		int r = engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
@@ -91,3 +86,4 @@ int main(int argc, char* argv[]) {
 	}
 	return 0;
 }
+*/

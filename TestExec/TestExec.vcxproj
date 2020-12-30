@@ -134,7 +134,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AngelScript.lib;</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -165,11 +166,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Config_Stage.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AngelScript\AngelScript.vcxproj">
-      <Project>{29555ba3-dc5d-45c9-a7ba-93515ac0d36a}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

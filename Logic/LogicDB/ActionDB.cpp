@@ -37,6 +37,7 @@ namespace Lunia { namespace XRated { namespace Logic {
 
 	void ActionDB::CreateActionTemplate(const std::wstring& templateName)
 	{
+		/*
 		Info::ActionInfoManager::Actions& actions = info.Retrieve( templateName.c_str() );
 		ActionTemplate& actionTemplate = actionMap[ Lunia::StringUtil::Hash(templateName.c_str()) ]; 
 
@@ -49,6 +50,7 @@ namespace Lunia { namespace XRated { namespace Logic {
 		for (; iActor != actions.actorList.end() ; ++iActor) {
 			actionTemplate.AddActor( (*iActor).first, (*iActor).second );
 		}
+		*/
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////

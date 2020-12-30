@@ -40,4 +40,7 @@ namespace Lunia {
     {
         return this->m_ServerKind;
     }
+    Config& GetConfigInstance(const char* filename) {
+        return Config::GetInstance();
+    }
 }

@@ -52,7 +52,7 @@ namespace Lunia {
 			{
 				AutoLock lock(mtx);
 				m_CharacterName = StringUtil::ToUnicode(result["characterName"].get<std::string>());
-				m_RoomIndex = result["roomNumber"].get<int>();
+				m_RoomIndex = result["roomNumber"].get<uint32>();
 				m_CurrentStage.StageGroupHash = result["stageGroupHash"].get<uint32>();
 				m_CurrentStage.Level = result["accessLevel"].get<uint16>();
 				m_CurrentStage.Difficulty = result["difficulty"].get<uint8>();
@@ -499,6 +499,16 @@ namespace Lunia {
 
 			StageLicense& User::GetCurrentStage(){
 				return m_CurrentStage;
+			}
+
+			uint32 User::GetRoomIndex() const
+			{
+				return m_RoomIndex;
+			}
+
+			std::string User::GetRoomPass() const
+			{
+				return m_RoomPass;
 			}
 
 			void User::Terminate(){

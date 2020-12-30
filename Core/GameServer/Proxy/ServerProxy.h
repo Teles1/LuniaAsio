@@ -1,79 +1,80 @@
+#ifndef ServerProxy_H
+#define ServerProxy_H
 #pragma once
-
 #include "../ClientRegistry.h"
-
 #include <Core/GameServer/fwPacketHandler.h>
-
 #include <iostream>
-
-template<typename TClientProxy>
-struct ServerProxy // : TODO? std::enable_shared_from_this<ServerProxy>
-{
-
-	typedef std::shared_ptr<TClientProxy> TClientProxySharedPtr;
-	typedef std::weak_ptr<TClientProxy> TClientProxyWeakPtr;
-
-public:
-	inline ServerProxy()
+namespace Lunia {
+	template<typename TClientProxy>
+	struct ServerProxy // : TODO? std::enable_shared_from_this<ServerProxy>
 	{
-		ClientRegistry.OnClientCreated.Connect([PacketHandler = &PacketHandler, ClientRegistry = &ClientRegistry](TClientProxySharedPtr& client)
+
+		typedef std::shared_ptr<TClientProxy> TClientProxySharedPtr;
+		typedef std::weak_ptr<TClientProxy> TClientProxyWeakPtr;
+
+	public:
+		inline ServerProxy()
 		{
-			/*
-				// It actually should be handled as below!
-				// but we would have to change the packetHandler to take const clients
-				// and that would need us to make sure every packet handler uses a member function
-				// instead of modifying a member variable directly
-
-				client->OnSocketReadPacket.Connect([clientLocked = client, &PacketHandler, &ClientRegistry](char* buffer, unsigned short& len)
+			ClientRegistry.OnClientCreated.Connect([PacketHandler = &PacketHandler, ClientRegistry = &ClientRegistry](TClientProxySharedPtr& client)
 				{
-					Lunia::Net::StreamReader streamReader(buffer);
+					/*
+						// It actually should be handled as below!
+						// but we would have to change the packetHandler to take const clients
+						// and that would need us to make sure every packet handler uses a member function
+						// instead of modifying a member variable directly
 
-					if (clientLocked)
+						client->OnSocketReadPacket.Connect([clientLocked = client, &PacketHandler, &ClientRegistry](char* buffer, unsigned short& len)
+						{
+							Lunia::Net::StreamReader streamReader(buffer);
+
+							if (clientLocked)
+							{
+								unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[4]);
+
+								PacketHandler->Invoke(clientLocked, (uint16_t)*packetNameHashed, streamReader);
+
+								std::cout << "Client@" << clientLocked->GetId() << " -> server :: " << (uint16_t)*packetNameHashed << std::endl;
+							}
+						});
+					*/
+
+					std::cout << "Incoming Connection :: Client:" << client->GetId() << "@" << client->GetPeerAddress() << std::endl;
+
+					client->OnSocketReadPacket.Connect([clientId = client->GetId(), &PacketHandler, &ClientRegistry](char* buffer, unsigned short& len)
 					{
-						unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[4]);
+						Lunia::Net::StreamReader streamReader(buffer);
 
-						PacketHandler->Invoke(clientLocked, (uint16_t)*packetNameHashed, streamReader);
+						TClientProxyWeakPtr clientWeak = ClientRegistry->GetClientById(clientId);
 
-						std::cout << "Client@" << clientLocked->GetId() << " -> server :: " << (uint16_t)*packetNameHashed << std::endl;
-					}
+						auto clientLocked = clientWeak.lock();
+
+						if (clientLocked)
+						{
+							unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[4]);
+
+							PacketHandler->Invoke(clientLocked, (uint16_t)*packetNameHashed, streamReader);
+						}
+					});
 				});
-			*/
+		}
 
-			std::cout << "Incoming Connection :: Client:" << client->GetId() << "@" << client->GetPeerAddress() << std::endl;
+		inline ~ServerProxy() { };
 
-			client->OnSocketReadPacket.Connect([clientId = client->GetId(), &PacketHandler, &ClientRegistry](char* buffer, unsigned short& len)
-			{
-				Lunia::Net::StreamReader streamReader(buffer);
+	public:
+		/*
+		ClientRegistry<TClientProxy>& GetClientRegistry()
+		{
+			// lock
+			return m_clientRegistry;
+			// unlock
+		}
+		*/
 
-				TClientProxyWeakPtr clientWeak = ClientRegistry->GetClientById(clientId);
+	public:
+		fwPacketHandler<TClientProxySharedPtr> PacketHandler;
 
-				auto clientLocked = clientWeak.lock();
+		ClientRegistry<TClientProxy> ClientRegistry;
+	};
+}
 
-				if (clientLocked)
-				{
-					unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[4]);
-
-					PacketHandler->Invoke(clientLocked, (uint16_t)*packetNameHashed, streamReader);
-				}
-			});
-		});
-	}
-
-	inline ~ServerProxy() { };
-
-public:
-	/*
-	ClientRegistry<TClientProxy>& GetClientRegistry()
-	{
-		// lock
-		return m_clientRegistry;
-		// unlock
-	}
-	*/
-
-public:
-	fwPacketHandler<TClientProxySharedPtr> PacketHandler;
-
-	ClientRegistry<TClientProxy> ClientRegistry;
-};
-
+#endif // ! ServerProxy_H

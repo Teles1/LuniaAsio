@@ -397,7 +397,7 @@ namespace Lunia {
 #ifdef _SINGLE
 			virtual void ReloadScript()=0;
 			virtual bool CheckScript()=0;
-#endif
+#endif // ! _SINGLE
 		};
 
 		ILogic* CreateLogic();

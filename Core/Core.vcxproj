@@ -286,13 +286,11 @@
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="GameServer\Proxy\ClientProxy.cpp" />
     <ClCompile Include="GameServer\NetworkIO\ClientNetworkIO.cpp" />
-    <ClCompile Include="GameServer\ClientRegistry.cpp" />
     <ClCompile Include="DeltaTimer.cpp" />
     <ClCompile Include="FileIO\Directory.cpp" />
     <ClCompile Include="FileIO\File.cpp" />
     <ClCompile Include="FileIO\FileHelper.cpp" />
     <ClCompile Include="GameServer\NetworkIO\GameServerNetworkIO.cpp" />
-    <ClCompile Include="GameServer\GameServer.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="Packet\PacketBase.cpp" />
@@ -304,7 +302,6 @@
     <ClCompile Include="Serializer\Binary\XmlSerializer.cpp" />
     <ClCompile Include="Serializer\Binary\XmlStream.cpp" />
     <ClCompile Include="Serializer\Serializer.cpp" />
-    <ClCompile Include="GameServer\Proxy\ServerProxy.cpp" />
     <ClCompile Include="ServiceHelper\LobbyService.cpp" />
     <ClCompile Include="Utils\ConfigReader.cpp" />
     <ClCompile Include="Utils\Math\Color.cpp" />
