@@ -92,7 +92,7 @@ namespace Lunia {
 					virtual ActionInfo* Retrieve(XRated::Constants::ClassType classType, const wchar_t* actionName);
 					virtual ActionInfo* Retrieve(XRated::Constants::ClassType classType, uint32 actionName);
 					virtual const std::vector<std::wstring>* RetrieveActionList(const wchar_t* name, const wchar_t* templateName);
-					virtual Actions& Retrieve(const wchar_t* templateName);
+					//virtual Actions& Retrieve(const wchar_t* templateName);
 					void RetrieveTemplateName(std::vector<std::wstring>& l);
 
 					const AutoActionList* RetriveAutoAction(uint32 hash) const;

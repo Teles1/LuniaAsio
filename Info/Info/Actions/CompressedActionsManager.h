@@ -28,9 +28,10 @@ namespace Lunia {
 					Resource::StreamReader compressedActionsCbf;
 					void Init();
 					void LoadBinaryData();
-					void GetData();
+					void LoadCBFInData();
 					void SaveXmlData();
-					ActionInfoManager::Actions& Retrieve(const wchar_t* templateName);
+					void GetData(const uint32 hash);
+					ActionInfo* Retrieve(const wchar_t* templateName);
 					inline void ClearCache() { actionMap.clear(); }
 				};
 			}

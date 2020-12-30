@@ -67,7 +67,6 @@ namespace Lunia {
 			virtual void inline Read(const wchar_t* name, Locator& value) {
 				std::wstring path;
 				Read(name, path);
-				std::wcout << stream->GetName() << std::endl;
 				value = Locator(path.c_str(), stream->GetName());
 			}
 

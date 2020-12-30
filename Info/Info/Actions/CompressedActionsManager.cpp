@@ -5,7 +5,8 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
-				std::vector<std::wstring> asodjasidjasid;
+				std::vector<std::wstring> actionNames;
+				//std::map<uint32, std::wstring> actionNames;
 				void CompressedActionInfoManager::Actions::Serialize(Serializer::IStreamWriter& out) const
 				{
 					out.Begin(L"AllM::XRated::Database::Info::CompressedActionInfoManager::Actions");
@@ -22,7 +23,7 @@ namespace Lunia {
 					in.Read(L"reverseMap", reverseMap);
 					in.Read(L"actorList", actorList);
 
-					asodjasidjasid.push_back(std::prev(actorList.end())->first);
+					actionNames.push_back( std::prev( actorList.end() )->first );
 				}
 
 				void CompressedActionInfoManager::SaveXmlData() {
@@ -34,6 +35,7 @@ namespace Lunia {
 				void CompressedActionInfoManager::Init()
 				{
 					LoadBinaryData();
+					LoadCBFInData();
 				}
 
 				void CompressedActionInfoManager::LoadBinaryData()
@@ -44,42 +46,68 @@ namespace Lunia {
 					compressedActionsCbf = Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/ActionInfos.cbf");
 				}
 
-				void CompressedActionInfoManager::GetData()
+				void CompressedActionInfoManager::LoadCBFInData()
 				{
-					uint16 index = 0;
 					compressedActionsCbf->SetReadCursor(0, Lunia::IStream::Begin);
-					for (int i = 0; i < 756; i++) {
+					for (int i = 0; i < actionNames.size(); i++) {
+						if (actionNames[i] == L"") {
+							compressedActionsCbf->SetReadCursor(compressedActionsCbf->GetReadCursor() + 4, Lunia::IStream::Begin); 
+							continue;
+						}
 						uint8* SizeNpc = reinterpret_cast<uint8*>(new char[4]);
 						compressedActionsCbf->Read(SizeNpc, 4);
-						std::cout << std::hex << compressedActionsCbf->GetReadCursor() << std::endl;
-						std::wcout << asodjasidjasid[i] << std::endl;
 						size_t srcSize = *(int*)SizeNpc;
 						std::vector<uint8> lReplayBuffer;
 						lReplayBuffer.resize(srcSize);
 						compressedActionsCbf->Read(&lReplayBuffer[0], srcSize);
-						IndexedActionsCompressed[index] = lReplayBuffer;
-						index++;
+						IndexedActionsCompressed[i] = lReplayBuffer;
 					}
-					std::cout << std::hex << compressedActionsCbf->GetReadCursor() << std::endl;
-					compressedActionsCbf->SetReadCursor(compressedActionsCbf->GetReadCursor() + 4, Lunia::IStream::Begin);
-					for (int i = 0; i < 612; i++) {
-						uint8* SizeNpc = reinterpret_cast<uint8*>(new char[4]);
-						compressedActionsCbf->Read(SizeNpc, 4);
-						//std::cout << std::hex << compressedActionsCbf->GetReadCursor() << std::endl;
-						//std::wcout << asodjasidjasid[i+757] << std::endl;
-						size_t srcSize = *(int*)SizeNpc;
-						std::vector<uint8> lReplayBuffer;
-						lReplayBuffer.resize(srcSize);
-						compressedActionsCbf->Read(&lReplayBuffer[0], srcSize);
-						IndexedActionsCompressed[index] = lReplayBuffer;
-						index++;
-					}
-					//std::cout << std::hex << compressedActionsCbf->GetReadCursor() << std::endl;
 				}
 
-				ActionInfoManager::Actions& CompressedActionInfoManager::Retrieve(const wchar_t* templateName)
+				void CompressedActionInfoManager::GetData(const uint32 index)
 				{
-					return actionMap[templateName];
+					compressedActionsCbf = new FileIO::RefCountedMemoryStreamReader(&IndexedActionsCompressed[index][0], (uint32)IndexedActionsCompressed[index].size());
+
+					std::vector<uint8> Buffer;
+					Buffer.resize(4);
+					size_t COMPRESSED_SIZE = 0;
+					size_t UNCOMPRESSED_SIZE = 0;
+
+					while (compressedActionsCbf->GetSizeLeft() > 0) {
+						compressedActionsCbf->Read(&Buffer[0], 4);
+						COMPRESSED_SIZE = *(int*)&Buffer[0];
+						compressedActionsCbf->Read(&Buffer[0], 4);
+						UNCOMPRESSED_SIZE = *(int*)&Buffer[0];
+
+						/* Setting buffer input and output sizes*/
+						std::vector<uint8> inBuf;
+						inBuf.resize(COMPRESSED_SIZE + LZMA_PROPS_SIZE);
+						std::vector<uint8> outBuf;
+						outBuf.resize(UNCOMPRESSED_SIZE);
+
+						compressedActionsCbf->Read(inBuf.data(), inBuf.size());
+
+						/*decoding and decrypting the binary owo*/
+						SRes res = LzmaUncompress(outBuf.data(), &UNCOMPRESSED_SIZE, inBuf.data() + LZMA_PROPS_SIZE, &COMPRESSED_SIZE, inBuf.data(), LZMA_PROPS_SIZE);
+
+						Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], UNCOMPRESSED_SIZE));
+						BlockDecrypted->Read(L"ActionsInfoManager", actions, false);
+					}
+				}
+
+				ActionInfo* CompressedActionInfoManager::Retrieve(const wchar_t* actionName)
+				{
+					auto start = std::chrono::high_resolution_clock::now();
+					for (int i = 0; i < actionNames.size(); i++) {
+						if (actionNames[i] == actionName) {
+							GetData(i);
+							return &actions[actionName];
+						}
+					}
+					auto finish = std::chrono::high_resolution_clock::now();
+					auto microseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start);
+					Logger::GetInstance().Info("Took {0}ms", microseconds.count());
+					return nullptr;
 				}
 			}
 		}
