@@ -377,7 +377,7 @@ namespace Lunia {
 								const CatalystTable& Catalyst = *iter;
 								if (cnt == 0 || Catalyst.ProbabilityPerCnt.empty()) return 0.0f; /* no catalyst, no additional probability */
 								if (cnt >= static_cast<int>(Catalyst.ProbabilityPerCnt.size())) /* force to be last element */
-									cnt = Catalyst.ProbabilityPerCnt.size();
+									cnt = (int)Catalyst.ProbabilityPerCnt.size();
 
 								return Catalyst.ProbabilityPerCnt[(size_t)cnt - 1];
 							}
@@ -407,7 +407,7 @@ namespace Lunia {
 						std::vector<CatalystTable>::const_iterator end = Catalysts.end();
 						while (iter != end) {
 							if ((*iter).ItemHash == hash) {
-								return (*iter).ProbabilityPerCnt.size();
+								return (uint32)(*iter).ProbabilityPerCnt.size();
 							}
 							++iter;
 						}

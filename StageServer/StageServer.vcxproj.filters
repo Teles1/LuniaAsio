@@ -41,6 +41,12 @@
     <ClCompile Include="User\RoomUserManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="User\ExpFactorManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\PetData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -81,6 +87,12 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="User\RoomUserManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\ExpFactorManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\PetData.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

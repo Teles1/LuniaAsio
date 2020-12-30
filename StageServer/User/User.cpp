@@ -4,11 +4,12 @@
 #include <Network/CommonProtocol/Protocol.h>
 #include <StageServer/StageServerProtocol/StageServerProtocol.h>
 #include <Info/Info.h>
+
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer
 		{
-			void User::Send(Serializer::ISerializable& packet){
+			void User::Send(Serializer::ISerializable& packet) {
 				StaticBuffer<2 << 12> buffer;
 				try
 				{
@@ -24,7 +25,7 @@ namespace Lunia {
 				Logger::GetInstance().Info("Sending packet[{0:#04x}] to User@{1}", *((HashType*)buffer.GetData() + 2), this->GetSerial());
 				this->SendAsync(reinterpret_cast<uint8*>(buffer.GetData()), buffer.GetLength());
 			}
-			uint32 User::Parse(uint8* buffer, size_t size){
+			uint32 User::Parse(uint8* buffer, size_t size) {
 				/*
 					We should technically see but i think that if the server doesn't recognize the packet I say we let the client connection dies.
 					That's why I want to keep this call in here
@@ -32,7 +33,7 @@ namespace Lunia {
 				*/
 
 				Net::StreamReader sReader(buffer);
-				if(!IsAuthenticated())
+				if (!IsAuthenticated())
 					fwPacketListener::GetInstance().Invoke(UserManagerInstance().GetUserByConnectionId(m_UserId), sReader.GetSerializedTypeHash(), sReader);
 				else
 					fwPacketListener::GetInstance().Invoke(UserManagerInstance().GetUserBySerial(m_UserSerial), sReader.GetSerializedTypeHash(), sReader);
@@ -47,8 +48,71 @@ namespace Lunia {
 				Send(way);
 			}
 
-			bool User::Auth(const json& data)
+			bool User::Auth(const json& result)
 			{
+				AutoLock lock(mtx);//self lock.
+				AutoLock stageLock(m_PlayerData.SyncRoot); // prevent the room/stagescript from modifiyng the userData
+				if (!Auth_CharacterInfos(result["characterInfo"])) {
+					Logger::GetInstance().Error(L"User::Auth_CharacterInfos={0}", GetSerial());
+					return false;
+				}
+				if (!Auth_CharacterRebirth(result["characterRebirth"])) {
+					Logger::GetInstance().Error(L"User::Auth_CharacterRebirth={0}", GetSerial());
+					return false;
+				}
+				if (!Auth_CharacterLicenses(result["accountsLicenses"])) {
+					Logger::GetInstance().Error(L"User::Auth_CharacterLicenses={0}", GetSerial());
+					return false;
+				}
+				if (!Auth_SetBagList(result["bags"])) {
+					Logger::GetInstance().Error(L"User::Auth_SetBagList={0}", GetSerial());
+					return false;
+				}
+				if (!Auth_SkillLicenses(result["skillLicenses"])) {
+					Logger::GetInstance().Error(L"User::Auth_SkillLicenses={0}", GetSerial());
+				}
+				if (!Auth_SetItemList(result["items"])) {
+					Logger::GetInstance().Error(L"User::Auth_SetItemList={0}", GetSerial());
+				}
+				if (!Auth_Skills(result["skills"])) {
+					Logger::GetInstance().Error(L"User::Auth_Skills={0}", GetSerial());
+				}
+				if (!Auth_QuickSlots(result["quickSlots"])) {
+					Logger::GetInstance().Error(L"User::Auth_QuickSlots={0}", GetSerial());
+				}
+				if (!Auth_PetsInfo(result["petsInfo"])) {
+					Logger::GetInstance().Error(L"User::Auth_PetsInfo={0}", GetSerial());
+				}
+				if (!Auth_PetsItems(result["petsItems"])) {
+					Logger::GetInstance().Error(L"User::Auth_PetsItems={0}", GetSerial());
+				}
+				if (!Auth_PetsTraining(result["petsTraining"])) {
+					Logger::GetInstance().Error(L"User::Auth_PetsTraining={0}", GetSerial());
+				}
+				return true;
+			}
+
+			bool User::Auth_CharacterInfos(const json& characterinfo)
+			{
+				//StageGroup. If this is not valid we don't even need to bother authing the user.
+#pragma region StageGroupVerification
+				auto stageGroup = Database::DatabaseInstance().InfoCollections.StageGroups.Retrieve(m_CurrentStage.StageGroupHash);
+				if (stageGroup == NULL) {
+					Logger::GetInstance().Error("User::Auth({0}) - stageGroup({1}) == NULL", GetSerial(), m_CurrentStage.StageGroupHash);
+					return false;
+				}
+				if (stageGroup->Stages.size() <= m_CurrentStage.Level) {
+					Logger::GetInstance().Error("User::Auth({0}) - StageLevel={1} not found on current StageGroup={2}", GetSerial(), m_CurrentStage.Level, m_CurrentStage.StageGroupHash);
+					return false;
+				}
+				m_CurrentStageHash = stageGroup->StageHashes[m_CurrentStage.Level];
+				auto stageInfo = stageGroup->Stages.at(m_CurrentStage.Level);
+
+				if (!stageInfo || !stageInfo->isOpened) {
+					Logger::GetInstance().Error("User::Auth({0}) - Stage{1} is closed.", GetSerial(), m_CurrentStageHash);
+					return false;
+				}
+#pragma endregion
 				/*
 					tempId,characterName
 					classNumber,stageLevel,stageExp,pvpLevel,pvpExp,warLevel,warExp,gameMoney,bankMoney,skillPoint,instantStateFlags,createDate
@@ -74,9 +138,9 @@ namespace Lunia {
 					m_PlayerData.name = GetCharacterName();
 					//Character
 
-					auto& mPlayerData = data["character"];
+					auto& mPlayerData = characterinfo["character"];
 					if (mPlayerData.is_null())
-						Logger::GetInstance().Exception(L"Could not parse character on Auth user = {0}", GetCharacterName());
+						return false;
 
 					m_PlayerData.type = (XRated::Constants::ClassType)mPlayerData["classNumber"].get<int>();
 					m_PlayerData.level = mPlayerData["stageLevel"].get<uint16>();
@@ -92,40 +156,54 @@ namespace Lunia {
 					m_CreateDate.Parse(mPlayerData["createDate"].get<std::string>());
 
 					//The one that gives you +1 that paid op one.
-					if (!data["addedSkillPoint"].is_null())
-						m_AddedSkillPoint = data["addedSkillPoint"]["skillPoint"].get<uint16>();
+					if (!characterinfo["addedSkillPoint"].is_null())
+						m_PlayerData.addedSkillPointPlus = characterinfo["addedSkillPoint"]["skillPoint"].get<uint16>();
+					else
+						m_PlayerData.addedSkillPointPlus = 0;
 
 					m_PlayerData.characterStateFlags = m_CharacterStateFlags;
 
-					//CharacterRebirth
-					{
-						auto& rebirth = data["characterRebirth"];
-						if (rebirth.is_null())
-							Logger::GetInstance().Exception(L"Could not parse CharacterRebirth on Auth user = {0}", GetCharacterName());
-						m_PlayerData.rebirthCount = rebirth["rebirthCount"].get<uint16>();
-						m_PlayerData.storedLevel = m_PlayerData.rebirthCount == 0 ? m_PlayerData.level : rebirth["storedLevel"].get<uint16>();
-						m_PlayerData.storedSkillPoint = rebirth["storedSkillPoint"].get<uint16>();
-						m_PlayerData.lastRebirthDateTime.Parse(rebirth["lastRebirth"].get<std::string>());
-					}
 					//Pvp
-					{
-						auto& pvp = data["ladderPoint"];
-						if (pvp.is_null())
-							Logger::GetInstance().Exception(L"Could not parse LadderPoint on Auth user = {0}", GetCharacterName());
-						m_PlayerData.ladderPoint = pvp["ladderPoint"].get<uint32>();
-						m_PlayerData.ladderMatchCount = pvp["dailyPlayCount"].get<uint16>();
-						m_PlayerData.ladderWinCount = pvp["winCount"].get<uint32>();
-						m_PlayerData.ladderLoseCount = pvp["loseCount"].get<uint32>();
-					}
+					auto& pvp = characterinfo["ladderPoint"];
+					if (pvp.is_null())
+						Logger::GetInstance().Exception(L"Could not parse LadderPoint on Auth user = {0}", GetCharacterName());
+					m_PlayerData.ladderPoint = pvp["ladderPoint"].get<uint32>();
+					m_PlayerData.ladderMatchCount = pvp["dailyPlayCount"].get<uint16>();
+					m_PlayerData.ladderWinCount = pvp["winCount"].get<uint32>();
+					m_PlayerData.ladderLoseCount = pvp["loseCount"].get<uint32>();
+
 					//Achivement
-					{
-						if (data["achievementPoint"].is_null())
-							Logger::GetInstance().Exception(L"Could not parse achievementPoint on Auth user = {0}", GetCharacterName());
+					if (characterinfo["achievementPoint"].is_null())
+						Logger::GetInstance().Exception(L"Could not parse achievementPoint on Auth user = {0}", GetCharacterName());
 
-						m_PlayerData.achievementScore = data["achievementPoint"]["achievementPoint"].get<uint32>();
+					m_PlayerData.achievementScore = characterinfo["achievementPoint"]["achievementPoint"].get<uint32>();
+
+					return true;
+				}
+				//Setting the next position if square
+				{
+					if (stageGroup->GameType & XRated::Constants::SquareType) {
+						if (m_LastStage.StageGroupHash != 0) { // there is no last stage
+							const auto squareInfo = stageGroup->Stages.at(m_CurrentStage.Level);
+							const auto laststageGroup = Database::DatabaseInstance().InfoCollections.StageGroups.Retrieve(m_LastStage.StageGroupHash);
+							Database::Info::StageInfo* lastStageInfo = nullptr;
+							if (laststageGroup == NULL) {
+								Logger::GetInstance().Warn("User::Auth({0}) - LastStageGroup isn't valid ", GetSerial());
+								return false;
+							}
+							else {
+								if (laststageGroup->Stages.size() <= m_LastStage.Level)
+									lastStageInfo = laststageGroup->Stages.back();
+								else
+									lastStageInfo = laststageGroup->Stages[m_LastStage.Level];
+								auto it = squareInfo->SquareStartingPoints.find(lastStageInfo->Episode);
+								if (it != squareInfo->SquareStartingPoints.end()) {
+									m_PlayerData.StartPosition.UseCustomStartPoint = true;
+									m_PlayerData.StartPosition.Place = it->second;
+								}
+							}
+						}
 					}
-
-
 				}
 				//Granted
 				{
@@ -134,7 +212,7 @@ namespace Lunia {
 					sendPacket.targetStage = m_CurrentStage;
 					Send(sendPacket);
 				}
-				//CharacterInfo
+				//CharacterInfo -Packet being sent to user
 				{
 					Protocol::CharacterInfo characterinfo;
 					characterinfo.classtype = m_PlayerData.type;
@@ -160,160 +238,214 @@ namespace Lunia {
 					characterinfo.IsSpectator = m_PlayerData.characterStateFlags.IsSpectator == 1 ? true : false;
 					Send(characterinfo);
 				}
-
-				//CharacterLicense // Which characters the user is allowed to create. yikes oWo
+				if (m_CharacterStateFlags.IsPcRoom && ((stageGroup->GameType & Constants::GameTypes::PvpGameTypeMask) == 0))
 				{
-					if (data["accountsLicenses"]["licenses"].is_null())
-						Logger::GetInstance().Exception(L"Could not parse LadderPoint on Auth user = {0}", GetCharacterName());
-					uint32 aux = data["accountsLicenses"]["licenses"].get<uint32>();
-					for (int i = 0; i < 16; i++) {
-						if (static_cast<bool>(aux & (1 << i)))
-							m_CharacterLicenses.push_back(i);
-					}
+					m_PlayerData.life = static_cast<uint16>(stageGroup->InitailLife + 1);// one more life for PC room
+					m_PlayerData.Factors.MaxHp = 1.2f;
+					m_PlayerData.Factors.MaxMp = 1.2f;
 				}
+				else { //normal user
+					m_PlayerData.life = static_cast<uint16>(stageGroup->InitailLife);
+					m_PlayerData.Factors.MaxHp = 1.0f;
+					m_PlayerData.Factors.MaxMp = 1.0f;
+				}
+
+				m_ExpFactorManager.SetPenal(m_StageStateFlags.IsPrivate);
+				m_ExpFactorManager.SetExtra(m_CharacterStateFlags.IsPcRoom);
+
+				m_PlayerData.Factors.ExpFactor = m_ExpFactorManager.TotalExpFactor();
+
+				return true;
+			}
+
+			bool User::Auth_CharacterLicenses(const json& licenses)
+			{
+				if (licenses.is_null())
+					return false;
+				//CharacterLicense // Which characters the user is allowed to create.
+				uint32 aux = licenses["licenses"].get<uint32>();
+				for (int i = 0; i < 16; i++) {
+					if (static_cast<bool>(aux & (1 << i)))
+						m_CharacterLicenses.push_back(i);
+				}
+				return true;
+			}
+
+			bool User::Auth_StageLicenses(const json& licenses)
+			{
+				if (licenses.is_null())
+					return false;
 				//StageLicense // What Stages the users is allowed to go and what AccessLevel the user has
-				for (auto& x : data["stageLicenses"])
+				for (auto& x : licenses["stageLicenses"]) {
 					m_StageLicenses.push_back(XRated::StageLicense(x["stageGroupHash"].get<uint32>(), x["accessLevel"].get<uint16>()));
-				//Skilllicenses
-				{
-					for (auto& x : data["skillLicenses"]) {
-						m_SkillLicenses.push_back(x["skillGrouphash"].get<uint32>());
-					}
-					Protocol::ListSkillLicenses sendPacket;
-					sendPacket.listSkillLicenses = m_SkillLicenses;
-					Send(sendPacket);
+					SendRewardMailByGainStageLicense(m_StageLicenses.back());
 				}
-				//Items
-				{
-					//Bags
-					{
-						//Check the reason why we have two tables doing the same damn thing.
-						Protocol::BagStates sendPacket;
-						//Bags Character
-						for (auto& x : data["bags"])
-							if (!x["isBank"].get<bool>())
-								sendPacket.Bags.push_back(XRated::BagState(x["bagNumber"].get<int>(), x["expireDate"].get<std::string>()));
-						//Bags Bank
-						for (auto& x : data["bankBags"])
-							sendPacket.BankBags.push_back(XRated::BagState(x["bagNumber"].get<int>(), x["expireDate"].get<std::string>()));
+				return true;
+			}
 
-						Send(sendPacket);
-					}
-					//Items
-					{
-						//We should check weather the position where the item is at is valid.
-						Protocol::ListItem sendPacket;
-						for (auto& x : data["items"])
-							sendPacket.listitem.push_back(
-								XRated::ItemSlot(
-									x["itemHash"].get<uint32>(),
-									x["stackedCount"].get<uint16>(),
-									XRated::InstanceEx(
-										x["instance"].get<int64>(),
-										x["itemExpire"].get<std::string>())
-								));
-						Send(sendPacket);
-					}
-				}
-				//Skills // The ones that the user has levelup and has license basedon the class it's
-				{
-					for (auto& x : data["skills"]) {
-						m_PlayerData.skills.push_back(XRated::Skill(x["skillGroupHash"].get<uint32>(), x["skillLevel"].get<uint8>()));
-					}
-					Protocol::ListSkill sendPacket;
-					sendPacket.listskill = m_PlayerData.skills;
-					Send(sendPacket);
-				}
-				//QuickSlots
-				{
-					Protocol::ListQuickSlot sendPacket;
-					for (auto& x : data["quickSlots"]) {
-						XRated::QuickSlot tempSlot;
-						tempSlot.Id = x["hash"].get<uint32>();
-						tempSlot.Pos = x["position"].get<uint8>();
-						tempSlot.IsSkill = x["isSkill"].get<bool>();
-						if (!tempSlot.IsSkill) {
-							tempSlot.InstanceEx.Instance = x["instance"].get<int64>();
-							tempSlot.InstanceEx.ExpireDate.Parse(x["itemExpire"].get<std::string>());
-						}
-						else
-							tempSlot.InstanceEx = XRated::InstanceEx(0);
-						m_QuickSlot.SetSlot(tempSlot);
-						sendPacket.quickslotlist.push_back(tempSlot);
-					}
-					m_QuickSlot.UpdateOriginData(); // What is this ugly shit?!
-					Send(sendPacket);
-				}
-				//Pets
-				{
-					//PetItems
-					{
-						//We should check weather the position where the item is at is valid.
-						Protocol::ListPetItem sendPacket;
-						for (auto& x : data["petItems"])
-							sendPacket.PetsItems[x["petId"].get<int64>()].push_back(XRated::PetItemSlot(
-								static_cast<XRated::PetItemSlot::PositionType>(x["bagNumber"].get<int>()),
-								x["positionNumber"].get<uint8>(),
-								x["itemHash"].get<uint32>(),
-								XRated::InstanceEx(
-									x["instance"].get<int64>(),
-									x["itemExpire"].get<std::string>()
-								),
-								x["stackedCount"].get<uint16>()
-							));
-						Send(sendPacket);
-					}
-					//PetTraining
-					{
-						Protocol::PetsCaredBySchool sendPacket;
-						sendPacket.OwnerSerial = 0;
-						for (auto& x : data["petTraining"]) {
-							XRated::PetCaredBySchool petTraining;
-							petTraining.PetItemSerial = x["petId"].get<int64>();
-							petTraining.PetItemHash = x["itemHash"].get<uint32>();
-							petTraining.PetItemCount = x["stackedCount"].get<uint16>();
-							petTraining.PetItemInstanceEx = x["instance"].get<int64>();
-							petTraining.ExpFactor = x["expFactor"].get<float>();
-							petTraining.Start.Parse(x["startTime"].get<std::string>());
-							petTraining.End.Parse(x["endTime"].get<std::string>());
+			bool User::Auth_CharacterRebirth(const json& rebirth)
+			{
+				if (rebirth.is_null())
+					return false;
+				m_PlayerData.rebirthCount = rebirth["rebirthCount"].get<uint16>();
+				m_PlayerData.storedLevel = m_PlayerData.rebirthCount == 0 ? m_PlayerData.level : rebirth["storedLevel"].get<uint16>();
+				m_PlayerData.storedSkillPoint = rebirth["storedSkillPoint"].get<uint16>();
+				m_PlayerData.lastRebirthDateTime.Parse(rebirth["lastRebirth"].get<std::string>());
+				return true;
+			}
 
-							sendPacket.CaredPets.push_back(petTraining);
-						}
+			bool User::Auth_SetItemList(const json& items)
+			{
+				//We should check weather the position where the item is at is valid.
+				Protocol::ListItem sendPacket;
+				for (auto& x : items)
+					sendPacket.listitem.push_back(
+						XRated::ItemSlot(
+							x["itemHash"].get<uint32>(),
+							x["stackedCount"].get<uint16>(),
+							XRated::InstanceEx(
+								x["instance"].get<int64>(),
+								x["itemExpire"].get<std::string>())
+						));
+				Send(sendPacket);
+				return true;
+			}
 
-						Send(sendPacket);
-					}
-					Protocol::PetInfo sendPacket;
-					for (auto& x : data["pets"]) {
-						XRated::PetDataWithItemPos petDataWithPos;
-						petDataWithPos.Pet.PetSerial = x["id"].get<int64>();
-						petDataWithPos.Pet.PetName = StringUtil::ToUnicode(x["petName"].get<std::string>());
-						petDataWithPos.Pet.Level = x["petLevel"].get<uint16>();
-						petDataWithPos.Pet.Exp = x["petExp"].get<uint32>();
-						petDataWithPos.Pet.Full = x["fullValue"].get<float>();
-						petDataWithPos.Pet.PrevFull = petDataWithPos.Pet.Full;
-						petDataWithPos.Pet.IsRarePet = x["isRare"].get<bool>();
-						petDataWithPos.Pet.RareProbability = x["rareProbability"].get<float>();
-						petDataWithPos.Pet.FullSum = x["fullRateSum"].get<float>();
-						petDataWithPos.Pet.LevelUpPeriod = x["dtSum"].get<float>();
-						petDataWithPos.Pet.PetHash = x["petHash"].get<uint32>();
-						petDataWithPos.Pet.Appear = false;
+			bool User::Auth_SetBagList(const json& bags)
+			{
+				if (bags.is_null())
+					return false;
+				//Check the reason why we have two tables doing the same damn thing.
+				Protocol::BagStates sendPacket;
+				//Bags Character
+				for (auto& x : bags["bags"])
+					if (!x["isBank"].get<bool>())
+						sendPacket.Bags.push_back(XRated::BagState(x["bagNumber"].get<int>(), x["expireDate"].get<std::string>()));
 
-						//XRated::ItemPosition itemPosition = items.FindPetItem(petDataWithPos.Pet.PetSerial);
-						petDataWithPos.PetItemPosition = XRated::ItemPosition();//itemPosition;
-						//packet
-						sendPacket.PetDataWithPos.push_back(petDataWithPos);
-					}
-					Send(sendPacket);
+				//Bags Bank
+				for (auto& x : bags["bankBags"])
+					sendPacket.BankBags.push_back(XRated::BagState(x["bagNumber"].get<int>(), x["expireDate"].get<std::string>()));
+
+				Send(sendPacket);
+				return true;
+			}
+
+			bool User::Auth_SkillLicenses(const json& licenses)
+			{
+				for (auto& x : licenses) {
+					m_SkillLicenses.push_back(x["skillGrouphash"].get<uint32>());
 				}
-				//StageGroup info
+				Protocol::ListSkillLicenses sendPacket;
+				sendPacket.listSkillLicenses = m_SkillLicenses;
+				Send(sendPacket);
+				return true;
+			}
 
-				auto stageGroup = Database::DatabaseInstance().InfoCollections.StageGroups.Retrieve(m_CurrentStage.StageGroupHash);
-				
-				if (stageGroup == NULL) {
-					Logger::GetInstance().Error("User::Auth() - stageGroup({0}) == NULL", m_CurrentStage.StageGroupHash);
-						return false;
+			bool User::Auth_Skills(const json& skills)
+			{
+				for (auto& x : skills) {
+					m_PlayerData.skills.push_back(XRated::Skill(x["skillGroupHash"].get<uint32>(), x["skillLevel"].get<uint8>()));
 				}
-				return false;
+				Protocol::ListSkill sendPacket;
+				sendPacket.listskill = m_PlayerData.skills;
+				Send(sendPacket);
+				return true;
+			}
+
+			bool User::Auth_QuickSlots(const json& quickslots)
+			{
+				Protocol::ListQuickSlot sendPacket;
+				for (auto& x : quickslots) {
+					XRated::QuickSlot tempSlot;
+					tempSlot.Id = x["hash"].get<uint32>();
+					tempSlot.Pos = x["position"].get<uint8>();
+					tempSlot.IsSkill = x["isSkill"].get<bool>();
+					if (!tempSlot.IsSkill) {
+						tempSlot.InstanceEx.Instance = x["instance"].get<int64>();
+						tempSlot.InstanceEx.ExpireDate.Parse(x["itemExpire"].get<std::string>());
+					}
+					else
+						tempSlot.InstanceEx = XRated::InstanceEx(0);
+					m_QuickSlot.SetSlot(tempSlot);
+					sendPacket.quickslotlist.push_back(tempSlot);
+				}
+				m_QuickSlot.UpdateOriginData(); // What is this for?!
+				Send(sendPacket);
+				return true;
+			}
+
+			bool User::Auth_PetsInfo(const json& petsinfo)
+			{
+				Protocol::PetInfo sendPacket;
+				for (auto& x : petsinfo) {
+					XRated::PetDataWithItemPos petDataWithPos;
+					petDataWithPos.Pet.PetSerial = x["id"].get<int64>();
+					petDataWithPos.Pet.PetName = StringUtil::ToUnicode(x["petName"].get<std::string>());
+					petDataWithPos.Pet.Level = x["petLevel"].get<uint16>();
+					petDataWithPos.Pet.Exp = x["petExp"].get<uint32>();
+					petDataWithPos.Pet.Full = x["fullValue"].get<float>();
+					petDataWithPos.Pet.PrevFull = petDataWithPos.Pet.Full;
+					petDataWithPos.Pet.IsRarePet = x["isRare"].get<bool>();
+					petDataWithPos.Pet.RareProbability = x["rareProbability"].get<float>();
+					petDataWithPos.Pet.FullSum = x["fullRateSum"].get<float>();
+					petDataWithPos.Pet.LevelUpPeriod = x["dtSum"].get<float>();
+					petDataWithPos.Pet.PetHash = x["petHash"].get<uint32>();
+					petDataWithPos.Pet.Appear = false;
+
+					//XRated::ItemPosition itemPosition = items.FindPetItem(petDataWithPos.Pet.PetSerial);
+					petDataWithPos.PetItemPosition = XRated::ItemPosition();//itemPosition;
+					//packet
+					sendPacket.PetDataWithPos.push_back(petDataWithPos);
+					m_PlayerData.pets.push_back(petDataWithPos.Pet);
+					m_PetDatas.Add(petDataWithPos.Pet);
+				}
+				Send(sendPacket);
+				return true;
+			}
+
+			bool User::Auth_PetsItems(const json& petsitems)
+			{
+				//We should check weather the position where the item is at is valid.
+				Protocol::ListPetItem sendPacket;
+				for (auto& x : petsitems)
+					sendPacket.PetsItems[x["petId"].get<int64>()].push_back(XRated::PetItemSlot(
+						static_cast<XRated::PetItemSlot::PositionType>(x["bagNumber"].get<int>()),
+						x["positionNumber"].get<uint8>(),
+						x["itemHash"].get<uint32>(),
+						XRated::InstanceEx(
+							x["instance"].get<int64>(),
+							x["itemExpire"].get<std::string>()
+						),
+						x["stackedCount"].get<uint16>()
+					));
+				Send(sendPacket);
+				return true;
+			}
+
+			bool User::Auth_PetsTraining(const json& petstraining)
+			{
+				Protocol::PetsCaredBySchool sendPacket;
+				sendPacket.OwnerSerial = 0;
+				for (auto& x : petstraining) {
+					XRated::PetCaredBySchool petTraining;
+					petTraining.PetItemSerial = x["petId"].get<int64>();
+					petTraining.PetItemHash = x["itemHash"].get<uint32>();
+					petTraining.PetItemCount = x["stackedCount"].get<uint16>();
+					petTraining.PetItemInstanceEx = x["instance"].get<int64>();
+					petTraining.ExpFactor = x["expFactor"].get<float>();
+					petTraining.Start.Parse(x["startTime"].get<std::string>());
+					petTraining.End.Parse(x["endTime"].get<std::string>());
+
+					sendPacket.CaredPets.push_back(petTraining);
+					m_PlayerData.petCared.push_back(petTraining);
+				}
+				Send(sendPacket);
+				return true;
+			}
+
+			void User::SendRewardMailByGainStageLicense(const XRated::StageLicense& license)
+			{
+				//Gotta have the mail system working beforehand.
 			}
 
 			uint32 User::GetId() const {
@@ -356,6 +488,8 @@ namespace Lunia {
 				AutoLock _l(mtx);
 				Net::Api api("Terminate");
 				api << GetCharacterName();
+				api.GetAsync();
+				CloseSocket();
 			}
 		}
 	}

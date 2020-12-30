@@ -76,18 +76,18 @@ public:
 		return m_clients;
 	}
 
-	ClientSharedPtr& GetClientById(const uint32_t & id)
+	ClientSharedPtr& GetClientById(const uint32_t& id)
 	{
 		std::scoped_lock<std::mutex> slock(m_clientIdToClientWeakMutex);
-
-		ClientSharedPtr ptr;
 
 		auto it = m_clientIdToClientWeak.find(id);
 
 		if (it != m_clientIdToClientWeak.end())
-			ptr = it->second.lock();
-		
-		return ptr;
+			return it->second.lock();
+
+		Logger::GetInstance().Exception("Could not find the requested user={0}", id);
+
+		return nullptr;
 	}
 
 	void AuthenticateClient(ClientSharedPtr& client)
