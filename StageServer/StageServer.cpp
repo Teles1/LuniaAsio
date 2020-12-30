@@ -3,6 +3,7 @@
 #include "StageServer.h"
 #include <StageServer/User/UserManager.h>
 #include <StageServer/PacketHandler.h>
+#include <Info/Info.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -11,7 +12,7 @@ namespace Lunia {
 			{
 				Net::Api::ApiUrl = Config::GetInstance().Settings.ApiUrl;
 				Net::Api api("AddServer");
-				api << Config::GetInstance().Settings.ServerName;
+				api << address.ServerPort;
 				while (true) {
 					Net::Answer result("", -1);
 					if (Config::GetInstance().GetKind() == SquareKind)
@@ -33,6 +34,7 @@ namespace Lunia {
 			void StageServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
 			{
 				auto user = UserManagerInstance().MakeUser(socket);
+				AutoLock lock(user->mtx);
 				user->HandleRead();
 				user->Init();
 				Logger::GetInstance().Info("Connection handled by StageServer");
@@ -41,12 +43,15 @@ namespace Lunia {
 	}
 }
 using namespace Lunia::XRated::StageServer;
+using namespace Lunia::XRated::Database;
 int main(int argc, char* argv[])
 {
 	//setting log name to be used on the console.
 	Logger::GetInstance("StageServer");
 	Lunia::Config::GetInstance( "Config_Stage.json" );
 	InitHandlers();
+	Lunia::Resource::ResourceSystemInstance().AddPath(L"../x64/Debug/");
+	DatabaseInstance().Init();
 	//Load Config
 	StageServer stageServer( Lunia::Config::GetInstance().Settings.ServerAddress );
 	stageServer.Run(); 

@@ -52,6 +52,16 @@ namespace Lunia {
             }
             return std::move(Answer("Whoops!", -1));
         }
+        void Api::GetAsync(){
+            auto cb = cpr::GetCallback(
+                [](const cpr::Response& r) {},
+                cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ 1000 });
+            }
+        void Api::PostAsync(const json& value) {
+            auto cb = cpr::PostCallback(
+                [](const cpr::Response&) {}, 
+                cpr::Url(BuildUrl()), cpr::Body{ value.dump() }, m_Header, cpr::Timeout{ 1000 });
+        }
         std::string Api::BuildUrl() const {
             std::string ret;
             for (size_t i = 0; i < m_Url.size(); i++) {

@@ -86,8 +86,6 @@ namespace Lunia {
 					int tmp;
 					in.Read(L"morphBundle", tmp, 0);
 					morphBundle = tmp ? true : false;
-
-					std::wcout << "Name-> " << name << " - Level->" << level << std::endl;
 				}
 
 			}

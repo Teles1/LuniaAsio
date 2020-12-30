@@ -63,6 +63,7 @@ namespace Lunia {
 
                     }, cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ 1000 });
             }
+            void GetAsync();
             template<typename F>
             inline void PostAsync(const F& callback, const json& value)
             {
@@ -87,7 +88,7 @@ namespace Lunia {
 
                     }, cpr::Url(BuildUrl()), cpr::Body{value.dump()}, m_Header, cpr::Timeout{ 1000 });
             }
-
+            void PostAsync(const json& value);
             ~Api() {}
             void AddHeaders();
         private:

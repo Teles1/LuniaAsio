@@ -3,6 +3,9 @@
 #include <StageServer/Service.h>
 #include <Logic/Logic.h>
 #include <StageServer/QuickSlot.h>
+#include <Network/Api/Api.h>
+#include <StageServer/User/ExpFactorManager.h>
+#include <StageServer/User/PetData.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -15,22 +18,48 @@ namespace Lunia {
 			};
 			class User : public Net::ClientTcp {
 			public:
-				User(uint32& userId, asio::ip::tcp::socket&& socket)
-					: ClientTcp(std::move(socket))
-					, m_userId(userId)
+				inline User(asio::ip::tcp::socket&& socket, const uint32& userId)
+					: ClientTcp(std::move(socket)), m_UserId(userId)
 				{
 					Logger::GetInstance().Info("User :: Hey, I was created!", GetId());
 				}
-
 				void Init();
+
+				bool Auth(const json& result);
+
+				bool Auth_CharacterInfos(const json& characterinfo);
+
+				bool Auth_CharacterLicenses(const json& licenses);
+
+				bool Auth_StageLicenses(const json& licenses);
+
+				bool Auth_CharacterRebirth(const json& rebirth);
+
+				bool Auth_SetItemList(const json& items);
+
+				bool Auth_SetBagList(const json& bags);
+
+				bool Auth_SkillLicenses(const json& licenses);
+				
+				bool Auth_Skills(const json& skills);
+
+				bool Auth_QuickSlots(const json& quickslots);
+
+				bool Auth_PetsInfo(const json& petsinfo);
+
+				bool Auth_PetsItems(const json& petsitems);
+
+				bool Auth_PetsTraining(const json& petstraining);
+
+				void SendRewardMailByGainStageLicense(const XRated::StageLicense& license);
 
 				uint32 GetId() const;
 
-				//void SetId(const uint32& userId);
+				void SetSerial(const uint64& userSerial);
+
+				const uint64& GetSerial() const;
 
 				bool IsAuthenticated() const;
-
-				void SetIsAuthenticated();
 
 				void Error(ErrorLevel error, const String& message); // error handling with different outcome based on severity.
 
@@ -50,9 +79,11 @@ namespace Lunia {
 			public:
 				std::mutex 									mtx;
 			private:
-				bool										m_IsAuthenticated = false;
-				uint32										m_userId;
+				uint32										m_UserId = 0;
+				uint64										m_UserSerial = 0; //database
 				String										m_CharacterName;
+				ExpFactorManager							m_ExpFactorManager;
+				PetDatas									m_PetDatas;
 			public: //Auth_Publisher
 				std::wstring								m_SecuKey;
 				std::wstring 								m_UsingLocale;
@@ -67,15 +98,14 @@ namespace Lunia {
 				XRated::StageLicense						m_CurrentStage;
 			public: //Auth
 				XRated::Logic::ILogic::PlayerInitialData	m_PlayerData;
-				uint32										m_CurrentStageHash;
 				XRated::CharacterStateFlags					m_CharacterStateFlags;
 				DateTime									m_CreateDate;
 				DateTime									m_LastLoggedDate;
-				uint16										m_AddedSkillPoint;
 				std::vector<int>							m_CharacterLicenses;
 				std::vector<XRated::StageLicense>			m_StageLicenses;
 				std::vector<uint32>							m_SkillLicenses;
 				QuickSlot									m_QuickSlot;
+				uint32										m_CurrentStageHash;
 			public: //Alive
 				DWORD										m_AliveTime;
 			};
