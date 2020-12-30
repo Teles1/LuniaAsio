@@ -6,7 +6,6 @@ namespace Lunia {
 		namespace Database {
 			namespace Info {
 				std::vector<std::wstring> actionNames;
-				//std::map<uint32, std::wstring> actionNames;
 				void CompressedActionInfoManager::Actions::Serialize(Serializer::IStreamWriter& out) const
 				{
 					out.Begin(L"AllM::XRated::Database::Info::CompressedActionInfoManager::Actions");
