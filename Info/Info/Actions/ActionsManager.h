@@ -60,10 +60,12 @@ namespace Lunia {
 					};
 
 				public:
+					typedef std::map<std::wstring, ActionInfo, Less<std::wstring> > ActionsMap;
 					typedef std::map<std::wstring, Actions, Less<std::wstring> > ActionMap;
 					typedef std::vector<AutoAction> AutoActionList;
 					typedef std::map< uint32 /*unique id*/, std::vector<AutoAction> > AutoActionListMap;
-
+					
+					ActionsMap actions;
 					ActionMap actionMap;
 					AutoActionListMap AutoActions;
 
@@ -80,7 +82,7 @@ namespace Lunia {
 
 					void Init(bool bForceXml);
 					void LoadXmlData();
-					void SaveXmlData(ActionInfoManager::Actions a);
+					void SaveXmlData(const ActionInfoManager::Actions& a);
 					virtual void LoadBinaryData();
 					void MakeLinkedActionLink();
 					void MakeLinkedActionLinkToPart(const wchar_t* key, Actions& actions);
@@ -90,7 +92,7 @@ namespace Lunia {
 					virtual ActionInfo* Retrieve(XRated::Constants::ClassType classType, const wchar_t* actionName);
 					virtual ActionInfo* Retrieve(XRated::Constants::ClassType classType, uint32 actionName);
 					virtual const std::vector<std::wstring>* RetrieveActionList(const wchar_t* name, const wchar_t* templateName);
-					virtual Actions& Retrieve(const wchar_t* templateName);
+					//virtual Actions& Retrieve(const wchar_t* templateName);
 					void RetrieveTemplateName(std::vector<std::wstring>& l);
 
 					const AutoActionList* RetriveAutoAction(uint32 hash) const;

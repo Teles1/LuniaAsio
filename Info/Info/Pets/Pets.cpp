@@ -168,7 +168,7 @@ namespace Lunia {
 					index += additionalIndex;
 
 					if (StateBundles.size() <= index)
-						index = StateBundles.size() - 1;
+						index = (int)StateBundles.size() - 1;
 
 					return index;
 				}
@@ -191,7 +191,7 @@ namespace Lunia {
 					int index = level / levelInterval;
 
 					if (States.size() <= index)
-						index = States.size() - 1;
+						index = (int)States.size() - 1;
 
 					return States[index];
 				}

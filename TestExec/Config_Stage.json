@@ -41,7 +41,12 @@
           "OrderNumber": 3,
           "Capacity": 70
         }
-      ]
+      ],
+	  "PreloadMovemap": false,
+	  "PreloadScripts": false
+    },
+    "StageServer": {
+      "NumberOfBossRewardUnidentifiedItem": 2
     },
     "Locale": {
       "FobbidenNames": [
@@ -52,8 +57,6 @@
       "FobbidenStrings": [
 
       ]
-    },
-    "PreloadMovemap": false,
-    "PreloadScripts": false
+    }
   }
 }

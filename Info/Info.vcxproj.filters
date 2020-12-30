@@ -200,6 +200,18 @@
     <ClInclude Include="Info\PvPRankRewardItemInfos\PvPRankRewardInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\Projectiles\CompressedProjectileInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\UpgradeTables\UpgradeTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\UpgradeTables\UpgradeInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\UpgradeTables\CompressedUpgradeTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -374,6 +386,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\PvPRankRewardItemInfos\PvPRankRewardItemTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Projectiles\CompressedProjectileInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\UpgradeTables\UpgradeTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\UpgradeTables\UpgradeInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\UpgradeTables\CompressedUpgradeTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

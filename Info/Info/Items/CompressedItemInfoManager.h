@@ -15,18 +15,21 @@ namespace Lunia {
 					PositionDat UnidentifiedItemInfoCompressed;
 					PositionDat CompressedItems;
 
-					void LoadCompressedBinary();
-					void SaveCompressedB();
-					void SaveCompressedXml();
-					void SaveItemsCbf();
-					ItemInfo* Retrieve(uint32 hash);
-					ItemInfo* Retrieve(const wchar_t* id);
-					UnidentifiedItemInfo* RetrieveUnidentifiedItem(uint32 hash);
+					Resource::StreamReader compressedItemsCBF;
+					std::vector<uint8> IndexedItemsCompressed;
+					std::vector<uint8> IndexedUnidentifiedCompressed;
+
+					void Init();
+					void LoadData();
+					void LoadBinaryData();
+					ItemInfo* Retrieve(const uint32& hash);
+					ItemInfo* Retrieve(const wchar_t* name);
+					UnidentifiedItemInfo* RetrieveUnidentifiedItem(const uint32& hash);
 					UnidentifiedItemInfo* RetrieveUnidentifiedItem(const wchar_t* id);
 
-					virtual bool Remove(const wchar_t* id);
-					virtual bool Remove(uint32 hash);
-					void Init(bool bForceXmlData);
+				private:
+					bool GetUnidentifiedItems(const uint32& templateOffset);
+					bool GetItems(const uint32& templateOffset);
 				};
 			}
 		}

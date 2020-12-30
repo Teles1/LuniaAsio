@@ -9,7 +9,7 @@ namespace Lunia {
 				public:
 					typedef std::map<uint32, ProjectileInfo, Less<uint32> > ProjectileMap;
 
-				protected:
+				public:
 					ProjectileMap Projectiles;
 
 					void LoadProjectileInfo(const wchar_t* xml);

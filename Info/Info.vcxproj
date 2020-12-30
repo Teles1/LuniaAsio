@@ -226,6 +226,7 @@
     <ClInclude Include="Info\NPCs\NPCManager.h" />
     <ClInclude Include="Info\Pets\Pets.h" />
     <ClInclude Include="Info\Pets\PetsManager.h" />
+    <ClInclude Include="Info\Projectiles\CompressedProjectileInfoManager.h" />
     <ClInclude Include="Info\Projectiles\IndexedProjectileInfoManager.h" />
     <ClInclude Include="Info\Projectiles\Projectile.h" />
     <ClInclude Include="Info\PvPRankRewardItemInfos\PvPRankRewardInfo.h" />
@@ -250,6 +251,9 @@
     <ClInclude Include="Info\StatusInfo\StatusInfoManager.h" />
     <ClInclude Include="Info\StylePoints\StylePoint.h" />
     <ClInclude Include="Info\StylePoints\StylePointInfoManager.h" />
+    <ClInclude Include="Info\UpgradeTables\CompressedUpgradeTable.h" />
+    <ClInclude Include="Info\UpgradeTables\UpgradeInfoManager.h" />
+    <ClInclude Include="Info\UpgradeTables\UpgradeTable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info\ETC\Balance.cpp" />
@@ -287,6 +291,7 @@
     <ClCompile Include="Info\NPCs\NPCManager.cpp" />
     <ClCompile Include="Info\Pets\Pets.cpp" />
     <ClCompile Include="Info\Pets\PetsManager.cpp" />
+    <ClCompile Include="Info\Projectiles\CompressedProjectileInfoManager.cpp" />
     <ClCompile Include="Info\Projectiles\IndexedProjectileInfoManager.cpp" />
     <ClCompile Include="Info\Projectiles\Projectile.cpp" />
     <ClCompile Include="Info\Projectiles\ProjectileInfoManager.cpp" />
@@ -310,6 +315,9 @@
     <ClCompile Include="Info\StatusInfo\StatusInfoManager.cpp" />
     <ClCompile Include="Info\StylePoints\StylePoint.cpp" />
     <ClCompile Include="Info\StylePoints\StylePointInfoManager.cpp" />
+    <ClCompile Include="Info\UpgradeTables\CompressedUpgradeTable.cpp" />
+    <ClCompile Include="Info\UpgradeTables\UpgradeInfoManager.cpp" />
+    <ClCompile Include="Info\UpgradeTables\UpgradeTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
