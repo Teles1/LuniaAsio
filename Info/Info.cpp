@@ -8,7 +8,8 @@ namespace Lunia {
 			void LuniaDatabase::Init() {
 				//InfoCollections.Items.Init();
 				
-				InfoCollections.Projectiles.Init();
+				InfoCollections.UpgradeTables.Init();
+				//InfoCollections.Projectiles.Init();
 
 				//InfoCollections.Npcs.Init(false);
 				//InfoCollections.Pets.Init(false);

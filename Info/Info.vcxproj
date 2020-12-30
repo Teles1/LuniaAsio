@@ -251,6 +251,9 @@
     <ClInclude Include="Info\StatusInfo\StatusInfoManager.h" />
     <ClInclude Include="Info\StylePoints\StylePoint.h" />
     <ClInclude Include="Info\StylePoints\StylePointInfoManager.h" />
+    <ClInclude Include="Info\UpgradeTables\CompressedUpgradeTable.h" />
+    <ClInclude Include="Info\UpgradeTables\UpgradeInfoManager.h" />
+    <ClInclude Include="Info\UpgradeTables\UpgradeTable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info\ETC\Balance.cpp" />
@@ -312,6 +315,9 @@
     <ClCompile Include="Info\StatusInfo\StatusInfoManager.cpp" />
     <ClCompile Include="Info\StylePoints\StylePoint.cpp" />
     <ClCompile Include="Info\StylePoints\StylePointInfoManager.cpp" />
+    <ClCompile Include="Info\UpgradeTables\CompressedUpgradeTable.cpp" />
+    <ClCompile Include="Info\UpgradeTables\UpgradeInfoManager.cpp" />
+    <ClCompile Include="Info\UpgradeTables\UpgradeTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">

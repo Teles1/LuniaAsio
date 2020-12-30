@@ -96,7 +96,27 @@ using namespace Lunia;
 int main(int argc, char* argv[]) {
 	Lunia::Config::GetInstance("Config_Stage.json");
 	Lunia::Resource::ResourceSystemInstance().AddPath(L"..\\x64\\Debug");
-	XRated::Database::DatabaseInstance().Init();			
+	XRated::Database::DatabaseInstance().Init();		
+
+	auto TargetItem = XRated::Database::Info::ItemInfo();
+	TargetItem.Id = L"TW_091209_CashEirHand_C078_b";
+	TargetItem.Hash = StringUtil::Hash(TargetItem.Id.c_str());
+	TargetItem.Limits.Class = (XRated::Constants::ClassType)3;
+	TargetItem.EquipParts = (XRated::Constants::EquipParts)3;
+
+	auto PortionItem = XRated::Database::Info::ItemInfo();
+	PortionItem.Id = L"ArutaItem_60SKILL_001_001";
+	PortionItem.Hash = StringUtil::Hash(PortionItem.Id.c_str());
+
+	auto start = std::chrono::high_resolution_clock::now();
+	//XRated::Database::DatabaseInstance().InfoCollections.UpgradeTables.Retrieve(&PortionItem, &TargetItem);					
+	XRated::Database::DatabaseInstance().InfoCollections.UpgradeTables.RetrieveNewUpgrade(&PortionItem, &TargetItem);					
+	
+	auto finish = std::chrono::high_resolution_clock::now();
+	auto microseconds = std::chrono::duration_cast<std::chrono::milliseconds>(finish - start);
+	Logger::GetInstance().Info("Took {0}ms", microseconds.count());
+
+
 	//XRated::Database::DatabaseInstance().InfoCollections.Stages.SaveXml();
 	//XRated::Database::DatabaseInstance().InfoCollections.Skills.Init(false);
 	//XRated::Database::DatabaseInstance().InfoCollections.EnchantTables.Init(false);

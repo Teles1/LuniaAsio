@@ -24,6 +24,7 @@
 #include <Info/Info/Skills/SkillInfoManager.h>
 #include <Info/Info/EventNonPlayerItemList/EventNonPlayerItemListManager.h>
 #include <Info/Info/StagePlayTime/StagePlayTimeManager.h>
+#include <Info/Info/UpgradeTables/CompressedUpgradeTable.h>
 #include <Info/Info/HashTable.h>
 
 namespace Lunia {
@@ -57,6 +58,7 @@ namespace Lunia {
 					Info::NonPlayerModifierTable NonPlayerModifierInfos;
 					Info::CompressedProjectileInfoManager Projectiles;
 					Info::IndexedMISCInfoManager Miscs;
+					Info::CompressedUpgradeTableManager UpgradeTables;
 				} InfoCollections;
 			};
 			LuniaDatabase& DatabaseInstance();
