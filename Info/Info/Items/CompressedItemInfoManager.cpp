@@ -75,12 +75,14 @@ namespace Lunia {
 					std::vector<uint8> outBuf;
 					outBuf.resize(UNCOMPRESSED_SIZE);
 
-					compressedItemsCBF->Read(inBuf.data(), inBuf.size());
+					compressedItemsCBF->Read(inBuf.data(), (uint32)inBuf.size());
 
 					/*decoding and decrypting the binary owo*/
 					SRes res = LzmaUncompress(outBuf.data(), &UNCOMPRESSED_SIZE, inBuf.data() + LZMA_PROPS_SIZE, &COMPRESSED_SIZE, inBuf.data(), LZMA_PROPS_SIZE);
 
-					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)UNCOMPRESSED_SIZE));
+					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(
+						new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)UNCOMPRESSED_SIZE)
+					);
 					BlockDecrypted->Read(L"ItemInfoManager", Items, false);
 					return true;
 				}

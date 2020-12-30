@@ -55,10 +55,10 @@ namespace Lunia {
 						}
 						uint8* SizeNpc = reinterpret_cast<uint8*>(new char[4]);
 						compressedActionsCbf->Read(SizeNpc, 4);
-						size_t srcSize = *(int*)SizeNpc;
+						uint32 srcSize = *(int*)SizeNpc;
 						std::vector<uint8> lReplayBuffer;
 						lReplayBuffer.resize(srcSize);
-						compressedActionsCbf->Read(&lReplayBuffer[0], srcSize);
+						compressedActionsCbf->Read(&lReplayBuffer[0], (uint32)srcSize);
 						IndexedActionsCompressed[i] = lReplayBuffer;
 					}
 				}
@@ -84,12 +84,14 @@ namespace Lunia {
 						std::vector<uint8> outBuf;
 						outBuf.resize(UNCOMPRESSED_SIZE);
 
-						compressedActionsCbf->Read(inBuf.data(), inBuf.size());
+						compressedActionsCbf->Read(inBuf.data(), (uint32)inBuf.size());
 
 						/*decoding and decrypting the binary owo*/
 						SRes res = LzmaUncompress(outBuf.data(), &UNCOMPRESSED_SIZE, inBuf.data() + LZMA_PROPS_SIZE, &COMPRESSED_SIZE, inBuf.data(), LZMA_PROPS_SIZE);
 
-						Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], UNCOMPRESSED_SIZE));
+						Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(
+							new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)UNCOMPRESSED_SIZE)
+						);
 						BlockDecrypted->Read(L"ActionsInfoManager", actions, false);
 					}
 				}
