@@ -48,6 +48,24 @@ namespace Lunia {
 				Send(way);
 			}
 
+			bool User::AuthConnection(const json& result)
+			{
+				AutoLock lock(mtx);
+				m_CharacterName = StringUtil::ToUnicode(result["characterName"].get<std::string>());
+				m_RoomIndex = result["roomNumber"].get<int>();
+				m_CurrentStage.StageGroupHash = result["stageGroupHash"].get<uint32>();
+				m_CurrentStage.Level = result["accessLevel"].get<uint16>();
+				m_CurrentStage.Difficulty = result["difficulty"].get<uint8>();
+				m_RoomPass = result["password"].get<std::string>();
+				m_RoomFullCount = result["capacity"].get<uint32>();
+				m_TeamNumber = result["teamNumber"].get<int>();
+				m_StageStateFlags = result["stageStates"].get<int>();
+				m_LastStage.StageGroupHash = result["lastPlayedStageGroupHash"].get<uint32>();
+				m_LastStage.Level = result["lastPlayedStageLevel"].get<uint16>();
+				m_RoomActivateSerial = result["uniqueKey"].get<int64>();
+				return true;
+			}
+
 			bool User::Auth(const json& result)
 			{
 				AutoLock lock(mtx);//self lock.

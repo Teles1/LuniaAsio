@@ -63,23 +63,27 @@ namespace Lunia {
 				m_users.erase(userSerial);
 			}
 
-			bool UserManager::AuthenticateUser(const uint32& userId, const uint64& userSerial)
+			bool UserManager::AuthenticateUser(const uint32& userId, const json& result)
 			{
+				auto userSerial = result["charactersId"].get<uint64>();
+				if (userSerial == 0)
+					Logger::GetInstance().Exception("UserManager::AuthenticateUser() not a valid UserSerial={0}", userSerial);
 				AutoLock l_(m_usersMutex);
 				if (m_users.find(userSerial) != m_users.end()) { //looking to see if the userSerial is already listed on our m_Users
-					Logger::GetInstance().Error("User already registred.");
+					Logger::GetInstance().Error("UserManager::AuthenticateUser() already registred user={0}.", userSerial);
 					return false;
 				} // Duplicated user
 				if (m_tempUsers.find(userId) == m_tempUsers.end()) {
 					// this is kind of weird. How would the user not be found on the authenticated list and at the same time not in the tempList?
-					Logger::GetInstance().Exception("Could not find the requested user at all.");
+					Logger::GetInstance().Exception("UserManager::AuthenticateUser() requested user={0} doesnt exist.", userSerial);
 					return false;
 				}
-				AutoLock lock(m_tempUsers[userId]->mtx); // making sure the user will remain sync while we work on it.
-				m_users[userSerial] = std::move(m_tempUsers[userId]); m_tempUsers.erase(userId);
-				m_users[userSerial]->SetSerial(userSerial);
-
-				return true;
+				{
+					AutoLock lock(m_tempUsers[userId]->mtx); // making sure the user will remain sync while we work on it.
+					m_users[userSerial] = std::move(m_tempUsers[userId]); m_tempUsers.erase(userId);
+					m_users[userSerial]->SetSerial(userSerial);
+				}
+				return m_users[userSerial]->AuthConnection(result);
 			}
 
 			bool UserManager::Auth(UserSharedPtr& user, const json& data) {
