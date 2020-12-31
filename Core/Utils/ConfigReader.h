@@ -33,11 +33,8 @@ namespace Lunia {
         std::string ServerName;
         uint32 Capacity;
         uint32 PingTimeout;
-        uint16 RoomSize;
         bool ShowPacket;
         ServerAddressStruct AchievementAddress;
-        bool PreloadMovemap;
-        bool PreloadScripts;
         friend void to_json(json& j, const GeneralSettings& t);
         friend void from_json(const json& j, GeneralSettings& t);
     };

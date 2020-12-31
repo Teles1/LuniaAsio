@@ -66,11 +66,8 @@ namespace Lunia {
         j["ServerName"] = t.ServerName;
         j["Capacity"] = t.Capacity;
         j["PingTimeout"] = t.PingTimeout;
-        j["RoomSize"] = t.RoomSize;
         j["ShowPacket"] = t.ShowPacket;
         j["AchievementAddress"] = t.AchievementAddress;
-        j["PreloadMovemap"] = t.PreloadMovemap;
-        j["PreloadScripts"] = t.PreloadScripts;
     }
     void from_json(const json& j, GeneralSettings& t) {
         j.at("Logging").get_to(t.Logging);
@@ -79,11 +76,8 @@ namespace Lunia {
         j.at("ServerName").get_to(t.ServerName);
         j.at("Capacity").get_to(t.Capacity);
         j.at("PingTimeout").get_to(t.PingTimeout);
-        j.at("RoomSize").get_to(t.RoomSize);
         j.at("ShowPacket").get_to(t.ShowPacket);
         j.at("AchievementAddress").get_to(t.AchievementAddress);
-        j.at("PreloadMovemap").get_to(t.PreloadMovemap);
-        j.at("PreloadScripts").get_to(t.PreloadScripts);
     }
     void to_json(json& j, const SquareStruct& t) {
         j["Name"] = t.Name;

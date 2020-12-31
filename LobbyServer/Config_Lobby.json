@@ -4,20 +4,20 @@
       "Filename": "lobby_bulky.txt",
       "LoggingLevel": 0
     },
+    "ApiUrl": "http://localhost:51542/Lobby",
+    "ServerAddress": {
+      "ServerIp": "127.0.0.1",
+      "ServerPort": 15550
+    },
+    "ServerName": "Lobby_DEV",
+    "Capacity": 500,
+    "PingTimeout": 30,
+    "ShowPacket": true,
+    "AchievementAddress": {
+      "ServerIp": "127.0.0.1",
+      "ServerPort": 15000
+    },
     "LobbyServer": {
-      "ApiUrl": "http://localhost:51542/Lobby",
-      "ServerAddress": {
-        "ServerIp": "127.0.0.1",
-        "ServerPort": 15550
-      },
-      "ServerName": "Lobby_DEV",
-      "PingTimeout": 30,
-      "ShowPacket": true,
-      "Capacity": 500,
-      "AchievementAddress": {
-        "ServerIp": "127.0.0.1",
-        "ServerPort": 15000
-      }
     },
     "Locale": {
       "FobbidenNames": [ "yCrazy", "Teles", "key_value" ],

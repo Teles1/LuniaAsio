@@ -6,7 +6,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
 			RoomManager::RoomManager() {
-				m_PoolSize = ConfigInstance().Settings.RoomSize;
+				m_PoolSize = ConfigInstance().Get("RoomSize", uint16(150));
 			}
 			bool RoomManager::RoomJoin(const uint16& roomIndex, UserSharedPtr user, const std::string& roomPass)
 			{

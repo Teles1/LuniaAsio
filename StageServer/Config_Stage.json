@@ -12,16 +12,16 @@
     "ServerName": "SquareStageDev",
     "Capacity": 500,
     "PingTimeout": 30,
-    "RoomSize": 2,
     "ShowPacket": true,
     "AchievementAddress": {
       "ServerIp": "127.0.0.1",
       "ServerPort": 15000
     },
-    "PreloadMovemap": false,
-    "PreloadScripts": false,
     "SquareServer": {
       "UsableBonusLifeInStage": 2,
+      "RoomSize": 2,
+      "PreloadMovemap": false,
+      "PreloadScripts": false,
       "SquareList": [
         {
           "Name": "01 Square",

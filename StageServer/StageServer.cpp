@@ -13,7 +13,7 @@ namespace Lunia {
 				Net::Api::ApiUrl = Config::GetInstance().Settings.ApiUrl;
 				Net::Api api("AddServer");
 				api << address.ServerPort;
-				api << ConfigInstance().Settings.RoomSize;
+				api << ConfigInstance().Get("RoomSize", uint16(150));
 				while (true) {
 					Net::Answer result("", -1);
 					if (Config::GetInstance().GetKind() == SquareKind)
