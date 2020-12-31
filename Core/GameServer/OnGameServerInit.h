@@ -1,16 +1,21 @@
+#ifndef OnGameServerInit_H
+#define OnGameServerInit_H
+
 #pragma once
 #include <Core/fwEvent.h>
-
-struct OnGameServerInit
-{
-	static fwEvent<> OnInit;
-
-	template<typename T>
-	OnGameServerInit(T func)
+namespace Lunia {
+	struct OnGameServerInit
 	{
+		static fwEvent<> OnInit;
 
-		OnGameServerInit::OnInit.Connect(func);
-	}
-};
+		template<typename T>
+		OnGameServerInit(T func)
+		{
 
-__declspec(selectany) fwEvent<> OnGameServerInit::OnInit;
+			OnGameServerInit::OnInit.Connect(func);
+		}
+	};
+	__declspec(selectany) fwEvent<> OnGameServerInit::OnInit;
+}
+
+#endif // ! OnGameServerInit_H

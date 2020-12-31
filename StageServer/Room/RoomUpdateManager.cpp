@@ -9,7 +9,7 @@ namespace Lunia {
 		namespace StageServer {
 			RoomUpdateManager::RoomUpdateManager() : m_ThreadCnt(0)
 			{
-				GetLoggerInstance().Info(L"RoomUpdateManager::RoomUpdateManager()");
+				LoggerInstance().Info(L"RoomUpdateManager::RoomUpdateManager()");
 
 				InitUpdater(GetProcessorCnt());
 			}
@@ -17,7 +17,7 @@ namespace Lunia {
 
 			RoomUpdateManager::RoomUpdateManager(uint16 processorCnt) : m_ThreadCnt(processorCnt)
 			{
-				GetLoggerInstance().Info(L"RoomUpdateManager::RoomUpdateManager({0})", processorCnt);
+				LoggerInstance().Info(L"RoomUpdateManager::RoomUpdateManager({0})", processorCnt);
 				InitUpdater(processorCnt);
 			}
 
@@ -26,7 +26,7 @@ namespace Lunia {
 			{
 				DeleteUpdater();
 
-				GetLoggerInstance().Info(L"RoomUpdateManager::~RoomUpdateManager()");
+				LoggerInstance().Info(L"RoomUpdateManager::~RoomUpdateManager()");
 			}
 
 

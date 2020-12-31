@@ -9,7 +9,7 @@ namespace Lunia {
 			typedef std::shared_ptr<User> UserSharedPtr;
 			struct RoomManager {
 			public:
-				bool RoomJoin(const int& roomIndex, UserSharedPtr user, const std::string& roomPass);
+				bool RoomJoin(const uint16& roomIndex, UserSharedPtr user, const std::string& roomPass);
 			private:
 				uint16							m_PoolSize;
 				std::mutex						mtx;

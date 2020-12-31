@@ -159,7 +159,7 @@ namespace Lunia {
 		}
 #pragma endregion
 	};
-	inline Logger& GetLoggerInstance() {
+	inline Logger& LoggerInstance() {
 		return Logger::GetInstance();
 	}
 }

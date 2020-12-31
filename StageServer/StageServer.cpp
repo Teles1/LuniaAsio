@@ -8,11 +8,12 @@
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
-			StageServer::StageServer(const ServerAddress& address) : ServerTcp(address.ServerIp, address.ServerPort)
+			StageServer::StageServer(const ServerAddressStruct& address) : ServerTcp(address.ServerIp, address.ServerPort)
 			{
 				Net::Api::ApiUrl = Config::GetInstance().Settings.ApiUrl;
 				Net::Api api("AddServer");
 				api << address.ServerPort;
+				api << ConfigInstance().Settings.RoomSize;
 				while (true) {
 					Net::Answer result("", -1);
 					if (Config::GetInstance().GetKind() == SquareKind)

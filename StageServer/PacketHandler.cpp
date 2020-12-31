@@ -96,13 +96,13 @@ namespace Lunia {
 					[](UserSharedPtr user, StageServer::Protocol::ListItem& packet)
 					{
 						//this does literally nothing but i'm handling it so it doesnt bother me.
-						//Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListItem", user->GetId());
+						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListItem", user->GetId());
 					});
 				fwPacketListener::GetInstance().Connect(
 					[](UserSharedPtr user, StageServer::Protocol::ListQuickSlot& packet)
 					{
 						//this does literally nothing but i'm handling it so it doesnt bother me.
-						//Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListQuickSlot", user->GetId());
+						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListQuickSlot", user->GetId());
 					});
 			}
 		}

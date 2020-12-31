@@ -197,7 +197,17 @@ namespace Lunia {
 
 			void UserManager::RoomAuth(const UserSharedPtr& user)
 			{
-				//RoomManagerInstance()
+				AutoLock lock(user->mtx);
+				if (!RoomManagerInstance().RoomJoin(user->GetRoomIndex(), user, user->GetRoomPass())) {
+					LoggerInstance().Error("user={0} failed to join room={1}",user->GetSerial(),user->GetRoomIndex());
+					user->Terminate();
+					return;
+				}
+				if (!user->IsConnected())
+					user->Terminate();
+				Net::Api request("Market.GetExpired"); //missing implementation
+				request << user->GetCharacterName();
+				//request.GetAsync();
 			}
 
 			//Global Singleton

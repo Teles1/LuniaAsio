@@ -34,13 +34,69 @@ namespace Lunia {
             Logger::GetInstance().Exception("Could not find a valid ServerKind");
         if (m_Config[m_BaseStr].is_null())
             throw;
-        m_Config[m_BaseStr].get_to(Settings);
+        m_Config.get_to(Settings);
     }
     ServerKind Config::GetKind()
     {
         return this->m_ServerKind;
     }
-    Config& GetConfigInstance(const char* filename) {
+    Config& ConfigInstance(const char* filename) {
         return Config::GetInstance();
+    }
+    void to_json(json& j, const LoggingStruct& o){
+        j["Filename"] = o.Filename;
+        j["LoggingLevel"] = o.LoggingLevel;
+    }
+    void from_json(const json& j, LoggingStruct& o){
+        j.at("Filename").get_to(o.Filename);
+        j.at("LoggingLevel").get_to(o.LoggingLevel);
+    }
+    void to_json(json& j, const ServerAddressStruct& o) {
+        j["ServerIp"] = o.ServerIp;
+        j["ServerPort"] = o.ServerPort;
+    }
+    void from_json(const json& j, ServerAddressStruct& o) {
+        j.at("ServerIp").get_to(o.ServerIp);
+        j.at("ServerPort").get_to(o.ServerPort);
+    }
+    void to_json(json& j, const GeneralSettings& t) {
+        j["Logging"] = t.Logging;
+        j["ServerAddress"] = t.ServerAddress;
+        j["ApiUrl"] = t.ApiUrl;
+        j["ServerName"] = t.ServerName;
+        j["Capacity"] = t.Capacity;
+        j["PingTimeout"] = t.PingTimeout;
+        j["RoomSize"] = t.RoomSize;
+        j["ShowPacket"] = t.ShowPacket;
+        j["AchievementAddress"] = t.AchievementAddress;
+        j["PreloadMovemap"] = t.PreloadMovemap;
+        j["PreloadScripts"] = t.PreloadScripts;
+    }
+    void from_json(const json& j, GeneralSettings& t) {
+        j.at("Logging").get_to(t.Logging);
+        j.at("ServerAddress").get_to(t.ServerAddress);
+        j.at("ApiUrl").get_to(t.ApiUrl);
+        j.at("ServerName").get_to(t.ServerName);
+        j.at("Capacity").get_to(t.Capacity);
+        j.at("PingTimeout").get_to(t.PingTimeout);
+        j.at("RoomSize").get_to(t.RoomSize);
+        j.at("ShowPacket").get_to(t.ShowPacket);
+        j.at("AchievementAddress").get_to(t.AchievementAddress);
+        j.at("PreloadMovemap").get_to(t.PreloadMovemap);
+        j.at("PreloadScripts").get_to(t.PreloadScripts);
+    }
+    void to_json(json& j, const SquareStruct& t) {
+        j["Name"] = t.Name;
+        j["StageGroupHash"] = t.StageGroupHash;
+        j["AccessLevel"] = t.AccessLevel;
+        j["Capacity"] = t.Capacity;
+        j["OrderNumber"] = t.OrderNumber;
+    }
+    void from_json(const json& j, SquareStruct& t) {
+        j.at("Name").get_to(t.Name);
+        j.at("StageGroupHash").get_to(t.StageGroupHash);
+        j.at("AccessLevel").get_to(t.AccessLevel);
+        j.at("Capacity").get_to(t.Capacity);
+        j.at("OrderNumber").get_to(t.OrderNumber);
     }
 }

@@ -47,7 +47,7 @@ namespace Lunia {
 			OnClientCreated(client);
 		}
 
-		void DropClient(ClientSharedPtr& client, std::string reason = "")
+		inline void DropClient(ClientSharedPtr& client, std::string reason = "")
 		{
 			m_clientIdToClientWeak.erase(client->GetId());
 
@@ -71,14 +71,14 @@ namespace Lunia {
 			client->Drop();
 		}
 
-		std::vector<ClientSharedPtr&> GetClients()
+		inline std::vector<ClientSharedPtr&> GetClients()
 		{
 			return m_clients;
 		}
 
-		ClientSharedPtr& GetClientById(const uint32_t& id)
+		inline ClientSharedPtr GetClientById(const uint32_t& id)
 		{
-			std::scoped_lock<std::mutex> slock(m_clientIdToClientWeakMutex);
+			AutoLock slock(m_clientIdToClientWeakMutex);
 
 			auto it = m_clientIdToClientWeak.find(id);
 
@@ -86,11 +86,10 @@ namespace Lunia {
 				return it->second.lock();
 
 			Logger::GetInstance().Exception("Could not find the requested user={0}", id);
-
-			return nullptr;
+			throw; //shutup compiler!
 		}
 
-		void AuthenticateClient(ClientSharedPtr& client)
+		inline void AuthenticateClient(ClientSharedPtr& client)
 		{
 			client->SetAsAuthenticated();
 
@@ -121,7 +120,7 @@ namespace Lunia {
 			}
 		}
 
-		void PingClients() /* TODO! Does it need to be authenticated only? */
+		inline void PingClients() /* TODO! Does it need to be authenticated only? */
 		{
 			// Logger::GetInstance().Info("Ping!");
 
@@ -174,7 +173,7 @@ namespace Lunia {
 
 	public:
 		template<typename F>
-		void ForAllClients(F f)
+		inline void ForAllClients(F f)
 		{
 			std::scoped_lock<std::mutex> slock(m_clientsMutex);
 

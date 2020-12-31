@@ -484,6 +484,12 @@ namespace Lunia {
 				return m_UserSerial == 0 ? false : true;
 			}
 
+			bool User::IsConnected() const
+			{
+				//Gotta figure out a good way to do this return.
+				return true;
+			}
+
 			void User::SetCharacterName(const String& name) {
 				this->m_CharacterName = name;
 			}

@@ -63,6 +63,8 @@ namespace Lunia {
 
 				bool IsAuthenticated() const;
 
+				bool IsConnected() const;
+
 				void Error(ErrorLevel error, const String& message); // error handling with different outcome based on severity.
 
 				void SetCharacterName(const String& name);

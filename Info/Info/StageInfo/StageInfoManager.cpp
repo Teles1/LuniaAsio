@@ -175,12 +175,12 @@ namespace Lunia {
 						info.MoveMapInfo = &movemap;
 					}
 					std::wstring configValue;
-					if ( Config::GetInstance().Get<bool>("PreloadMovemap") ) {
+					if ( ConfigInstance().Settings.PreloadMovemap ) {
 						StageInfoMap::iterator i = stages.begin();
 						for (; i != stages.end(); ++i)
 							(*i).second.GetMoveMapInfo(); //LoadMoveMap( (*i).second );
 					}
-					if (Config::GetInstance().Get<bool>("PreloadScripts")) {
+					if ( ConfigInstance().Settings.PreloadScripts ) {
 						StageInfoMap::iterator i = stages.begin();
 						for (; i != stages.end(); ++i)
 							(*i).second.LoadScript();

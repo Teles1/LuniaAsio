@@ -11,20 +11,35 @@ namespace Lunia {
         SquareKind,
         StageKind
     };
-    struct ServerAddress {
+    struct LoggingStruct {
+    public:
+        std::string Filename;
+        uint8 LoggingLevel;
+        friend void to_json(json& j, const LoggingStruct& o);
+        friend void from_json(const json& j, LoggingStruct& o);
+    };
+    struct ServerAddressStruct {
     public:
         std::string ServerIp;
         uint16 ServerPort;
-        NLOHMANN_DEFINE_TYPE_INTRUSIVE(ServerAddress, ServerIp, ServerPort);
+        friend void to_json(json& j, const ServerAddressStruct& o);
+        friend void from_json(const json& j, ServerAddressStruct& o);
     };
     struct GeneralSettings{
     public:
-        ServerAddress ServerAddress;
+        LoggingStruct Logging;
+        ServerAddressStruct ServerAddress;
         std::string ApiUrl;
         std::string ServerName;
         uint32 Capacity;
         uint32 PingTimeout;
-        NLOHMANN_DEFINE_TYPE_INTRUSIVE(GeneralSettings, ServerAddress, ApiUrl, ServerName, Capacity, PingTimeout);
+        uint16 RoomSize;
+        bool ShowPacket;
+        ServerAddressStruct AchievementAddress;
+        bool PreloadMovemap;
+        bool PreloadScripts;
+        friend void to_json(json& j, const GeneralSettings& t);
+        friend void from_json(const json& j, GeneralSettings& t);
     };
     struct SquareStruct {
     public:
@@ -33,7 +48,8 @@ namespace Lunia {
         uint16 AccessLevel;
         uint8 OrderNumber;
         uint16 Capacity;
-        NLOHMANN_DEFINE_TYPE_INTRUSIVE(SquareStruct, Name, StageGroupHash, AccessLevel, Capacity, OrderNumber);
+        friend void to_json(json& j, const SquareStruct& t);
+        friend void from_json(const json& j, SquareStruct& t);
     };
 
     struct Config {
@@ -74,6 +90,6 @@ namespace Lunia {
             return m_instance;
         }
     };
-    Config& GetConfigInstance(const char* filename = "");
+    Config& ConfigInstance(const char* filename = "");
 }
 #endif // ! ConfigReader_H

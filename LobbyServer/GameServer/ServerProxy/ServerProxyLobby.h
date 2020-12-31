@@ -1,15 +1,14 @@
+#ifndef ServerProxyLobby_H
+#define ServerProxyLobby_H
 #pragma once
-
 #include <Core/GameServer/Proxy/ServerProxy.h>
-
 #include "../ClientProxy/ClientProxyLobby.h"
-
-struct ServerProxyLobby : public ServerProxy<ClientProxyLobby>
-{
-public:
-	void Say()
+namespace Lunia {
+	struct ServerProxyLobby : public ServerProxy<ClientProxyLobby>
 	{
-		std::cout << "ServerProxyLobby :: Say" << std::endl;
+	public:
+		void Say();
 	};
-};
+}
 
+#endif // !ServerProxyLobby_H

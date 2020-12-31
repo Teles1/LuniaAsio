@@ -154,6 +154,7 @@
       <Optimization>Disabled</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -303,7 +304,9 @@
     <ClCompile Include="Serializer\Binary\XmlStream.cpp" />
     <ClCompile Include="Serializer\Serializer.cpp" />
     <ClCompile Include="ServiceHelper\LobbyService.cpp" />
-    <ClCompile Include="Utils\ConfigReader.cpp" />
+    <ClCompile Include="Utils\ConfigReader.cpp">
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</PreprocessToFile>
+    </ClCompile>
     <ClCompile Include="Utils\Math\Color.cpp" />
     <ClCompile Include="Utils\StringUtil\General.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
