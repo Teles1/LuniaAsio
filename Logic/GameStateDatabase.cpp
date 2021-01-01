@@ -1946,7 +1946,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		//Lunia_INFO(( L"[GameStateDatabase::Initialized] stage initialized." ));
 	}
 
-	ILockable& GameStateDatabase::GetSyncRoom()
+	std::mutex& GameStateDatabase::GetSyncRoom()
 	{
 		return logic.GetEventListener().GetSyncRoom();
 	}

@@ -24,10 +24,10 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 		struct Timer
 		{
-			float time;
-			float alarmAt;
-			bool bCountdown;
-			bool bEnabled;
+			float time = 0.0f;
+			float alarmAt = 0.0f;
+			bool bCountdown = false;
+			bool bEnabled = false;
 
 			Timer() {}
 			Timer(bool cd) : time(0), bCountdown(cd), bEnabled(false), alarmAt(0) {}
@@ -204,7 +204,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 	public :// IStageScript impl	////////////////////////////////////////////////////////////////////////////////////////
 		uint32 GetStageId() const { return id; }
 
-		ILockable& GetSyncRoom();
+		std::mutex& GetSyncRoom();
 		void Initialized(uint16 uniqueId);
 		bool IsPlayer(uint32 userSerial);
 		int GetPlayerCnt() const;

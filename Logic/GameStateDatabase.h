@@ -279,7 +279,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 		//Event to logic	////////////////////////////////////////////////////////////////////////////////////////////////////
 		void Initialized(uint16 uniqueId);
-		ILockable& GetSyncRoom();
+		std::mutex& GetSyncRoom();
 		bool PlayerCreated(Player* player);
 		void NonPlayerCreated(NonPlayerData& data);
 		bool Tamed(Player* player, Serial familiar, Constants::Familiar::Type type);

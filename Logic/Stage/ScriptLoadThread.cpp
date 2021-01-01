@@ -1,4 +1,3 @@
-#include "AngelScript/angelscript.h"
 #include "ScriptLoadThread.h"
 #include "ScriptEngine.h"
 #include <Info/Info/Database.h>
@@ -10,6 +9,7 @@
 #include <Core/Utils/ConfigReader.h>
 
 #include <AngelScript/scriptstdstring/scriptstdstring.h>
+#include <AngelScript/scriptarray/scriptarray.h>
 using namespace Lunia::XRated::Database;
 
 namespace Lunia { namespace XRated {	namespace Logic {
@@ -83,6 +83,16 @@ namespace Lunia { namespace XRated {	namespace Logic {
 	}
 
 
+	// Implement a simple message callback function
+	void MessageCallback(const asSMessageInfo* msg, void* param)
+	{
+		const char* type = "ERR ";
+		if (msg->type == asMSGTYPE_WARNING)
+			type = "WARN";
+		else if (msg->type == asMSGTYPE_INFORMATION)
+			type = "INFO";
+		LoggerInstance().Info("{0} ({1}, {2}) : {3} : {4}\n", msg->section, msg->row, msg->col, type, msg->message);
+	}
 	ScriptLoader::ASModule* ScriptLoader::CreateASModule(const std::string& name)
 	{
 		ASModule* asmodule;
@@ -94,6 +104,9 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 		if (this->builder.StartNewModule(asmodule->engine, name.c_str()) < 0)
 			Logger::GetInstance().Exception(L"Unable to create module");
+
+		asmodule->engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
+
 		asmodule->module = asmodule->engine->GetModule(name.c_str());
 		asmodule->context = asmodule->engine->CreateContext();
 		if (!asmodule->context) {
@@ -168,7 +181,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		(*i).second.push_back( module );
 		return module;
 	}
-
 	void ScriptLoader::Run()
 	{
 		Sleep(1);
@@ -192,7 +204,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 				ASModule* module = GetASModule(ticket.module);
 				module->bUsing = true;
 				module->listener = ticket.listener;
-				Lunia::AutoLockCS lock(ticket.listener->GetSyncRoom());
+				AutoLock lock(ticket.listener->GetSyncRoom());
 				ticket.listener->SetEngine( module->engine );
 				ticket.listener->SetContext( module->context );
 				ticket.listener->SetModule( module->module );
@@ -286,49 +298,49 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		int r;
 		//Register std::string class
 		RegisterStdString(module->engine);
-
+		RegisterScriptArray(module->engine, true);
 		//Register stage interface(IStageScript) class
-		r = module->engine->RegisterObjectType("IStageScript", sizeof(IStageScript), asOBJ_APP_CLASS_CDA);
-		if (r < 0) return r;
+		r = module->engine->RegisterObjectType("IStageScript", sizeof(IStageScript), asOBJ_VALUE | asGetTypeTraits<IStageScript>()); if (r < 0) return r;
 
 		//Register ScriptEngine class and behaviour
-		r = module->engine->RegisterObjectType("ScriptEngine", sizeof(ScriptEngine), asOBJ_APP_CLASS); if (r < 0) return r;
+		r = module->engine->RegisterObjectType("ScriptEngine", sizeof(ScriptEngine), asOBJ_REF); if (r < 0) return r;
 		r = module->engine->RegisterObjectBehaviour("ScriptEngine", asBEHAVE_ADDREF, "void f()", asMETHOD(ScriptEngine, AddRef), asCALL_THISCALL); if (r < 0) return r;
 		r = module->engine->RegisterObjectBehaviour("ScriptEngine", asBEHAVE_RELEASE, "void f()", asMETHOD(ScriptEngine, Release), asCALL_THISCALL); if (r < 0) return r;
-
+		/* I dont get why they added a count for this if they not gonna use it?! */
 
 		/* arrays should resgister as custom way to validate index range or so. */
-
+		
 		/* register int arrays */
-		r = module->engine->RegisterObjectType("int[]", sizeof(std::vector<int>), asOBJ_APP_CLASS_CDA); if (r < 0) return r;
-		r = module->engine->RegisterObjectBehaviour("int[]", asBEHAVE_CONSTRUCT, "void f()", asFUNCTIONPR(ConstructArray<int>, (std::vector<int> *), void), asCALL_CDECL_OBJLAST);
-		r = module->engine->RegisterObjectBehaviour("int[]", asBEHAVE_CONSTRUCT, "void f(int)", asFUNCTIONPR(ConstructArray<int>, (int, std::vector<int> *), void), asCALL_CDECL_OBJLAST);
-		r = module->engine->RegisterObjectBehaviour("int[]", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(DestructIntArray), asCALL_CDECL_OBJLAST);
-		//r = module->engine->RegisterObjectBehaviour("int[]", asBEHAVE_ASSIGNMENT, "int[] &f(int[]&in)", asMETHODPR(std::vector<int>, operator=, (const std::vector<int> &), std::vector<int>&), asCALL_THISCALL);
+		//r = module->engine->RegisterObjectType("int[]", sizeof(std::vector<int>), asOBJ_VALUE | asOBJ_APP_CLASS_CDA);
+		//if (r < 0) return r;
+		//r = module->engine->RegisterObjectBehaviour("int[]", asBEHAVE_CONSTRUCT, "void f()", asFUNCTIONPR(ConstructArray<int>, (std::vector<int> *), void), asCALL_CDECL_OBJLAST);
+		//r = module->engine->RegisterObjectBehaviour("int[]", asBEHAVE_CONSTRUCT, "void f(int)", asFUNCTIONPR(ConstructArray<int>, (int, std::vector<int> *), void), asCALL_CDECL_OBJLAST);
+		//r = module->engine->RegisterObjectBehaviour("int[]", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(DestructIntArray), asCALL_CDECL_OBJLAST);
+		//r = module->engine->RegisterObjectBehaviour("int[]", asBEHAVE_FACTORY, "int &f(int[]&in)", asMETHODPR(std::vector<int>, operator=, (const std::vector<int> &), std::vector<int>&), asCALL_THISCALL);
 		//r = module->engine->RegisterObjectBehaviour("int[]", asBEHAVE_INDEX, "int &f(int)", asMETHODPR(std::vector<int>, at, (std::size_t), int&), asCALL_THISCALL);
-		r = module->engine->RegisterObjectMethod("int[]", "int length()", asMETHOD(std::vector<int>, size), asCALL_THISCALL);
+		//r = module->engine->RegisterObjectMethod("int[]", "int length()", asMETHOD(std::vector<int>, size), asCALL_THISCALL);
 		//r=module->engine->RegisterObjectBehaviour("int[]", asBEHAVE_ADDREF, "void f()", asFUNCTION(DoNothing), asCALL_CDECL_OBJFIRST); if ( r < 0) return r;
 		//r=module->engine->RegisterObjectBehaviour("int[]", asBEHAVE_RELEASE, "void f()", asFUNCTION(DoNothing), asCALL_CDECL_OBJFIRST); if ( r < 0) return r;
 
 		/* register uint32 arrays */
-		r = module->engine->RegisterObjectType("uint32[]", sizeof(std::vector<uint32>), asOBJ_APP_CLASS_CDA); if (r < 0) return r;
-		r = module->engine->RegisterObjectBehaviour("uint32[]", asBEHAVE_CONSTRUCT, "void f()", asFUNCTIONPR(ConstructArray<uint32>, (std::vector<uint32> *), void), asCALL_CDECL_OBJLAST);
-		r = module->engine->RegisterObjectBehaviour("uint32[]", asBEHAVE_CONSTRUCT, "void f(int)", asFUNCTIONPR(ConstructArray<uint32>, (int, std::vector<uint32> *), void), asCALL_CDECL_OBJLAST);
-		r = module->engine->RegisterObjectBehaviour("uint32[]", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(DestructUInt32Array), asCALL_CDECL_OBJLAST);
+		//r = module->engine->RegisterObjectType("uint32[]", sizeof(std::vector<uint32>), asOBJ_APP_CLASS_CDA); if (r < 0) return r;
+		//r = module->engine->RegisterObjectBehaviour("uint32[]", asBEHAVE_CONSTRUCT, "void f()", asFUNCTIONPR(ConstructArray<uint32>, (std::vector<uint32> *), void), asCALL_CDECL_OBJLAST);
+		//r = module->engine->RegisterObjectBehaviour("uint32[]", asBEHAVE_CONSTRUCT, "void f(int)", asFUNCTIONPR(ConstructArray<uint32>, (int, std::vector<uint32> *), void), asCALL_CDECL_OBJLAST);
+		//r = module->engine->RegisterObjectBehaviour("uint32[]", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(DestructUInt32Array), asCALL_CDECL_OBJLAST);
 		//r = module->engine->RegisterObjectBehaviour("uint32[]", asBEHAVE_ASSIGNMENT, "uint32[] &f(uint32[]&in)", asMETHODPR(std::vector<uint32>, operator=, (const std::vector<uint32> &), std::vector<uint32>&), asCALL_THISCALL);
 		//r = module->engine->RegisterObjectBehaviour("uint32[]", asBEHAVE_INDEX, "uint32 &f(int)", asMETHODPR(std::vector<uint32>, at, (std::size_t), uint32&), asCALL_THISCALL);
-		r = module->engine->RegisterObjectMethod("uint32[]", "int length()", asMETHOD(std::vector<uint32>, size), asCALL_THISCALL);
+		//r = module->engine->RegisterObjectMethod("uint32[]", "int length()", asMETHOD(std::vector<uint32>, size), asCALL_THISCALL);
 		//r=module->engine->RegisterObjectBehaviour("uint32[]", asBEHAVE_ADDREF, "void f()", asFUNCTION(DoNothing), asCALL_CDECL_OBJFIRST); if ( r < 0) return r;
 		//r=module->engine->RegisterObjectBehaviour("uint32[]", asBEHAVE_RELEASE, "void f()", asFUNCTION(DoNothing), asCALL_CDECL_OBJFIRST); if ( r < 0) return r;
 
 		/* register float arrays */
-		r = module->engine->RegisterObjectType("float[]", sizeof(std::vector<float>), asOBJ_APP_CLASS_CDA); if (r < 0) return r;
-		r = module->engine->RegisterObjectBehaviour("float[]", asBEHAVE_CONSTRUCT, "void f()", asFUNCTIONPR(ConstructArray<float>, (std::vector<float> *), void), asCALL_CDECL_OBJLAST);
-		r = module->engine->RegisterObjectBehaviour("float[]", asBEHAVE_CONSTRUCT, "void f(int)", asFUNCTIONPR(ConstructArray<float>, (int, std::vector<float> *), void), asCALL_CDECL_OBJLAST);
-		r = module->engine->RegisterObjectBehaviour("float[]", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(DestructFloatArray), asCALL_CDECL_OBJLAST);
+		//r = module->engine->RegisterObjectType("float[]", sizeof(std::vector<float>), asOBJ_APP_CLASS_CDA); if (r < 0) return r;
+		//r = module->engine->RegisterObjectBehaviour("float[]", asBEHAVE_CONSTRUCT, "void f()", asFUNCTIONPR(ConstructArray<float>, (std::vector<float> *), void), asCALL_CDECL_OBJLAST);
+		//r = module->engine->RegisterObjectBehaviour("float[]", asBEHAVE_CONSTRUCT, "void f(int)", asFUNCTIONPR(ConstructArray<float>, (int, std::vector<float> *), void), asCALL_CDECL_OBJLAST);
+		//r = module->engine->RegisterObjectBehaviour("float[]", asBEHAVE_DESTRUCT, "void f()", asFUNCTION(DestructFloatArray), asCALL_CDECL_OBJLAST);
 		//r = module->engine->RegisterObjectBehaviour("float[]", asBEHAVE_ASSIGNMENT, "float[] &f(float[]&in)", asMETHODPR(std::vector<float>, operator=, (const std::vector<float> &), std::vector<float>&), asCALL_THISCALL);
 		//r = module->engine->RegisterObjectBehaviour("float[]", asBEHAVE_INDEX, "float &f(int)", asMETHODPR(std::vector<float>, at, (std::size_t), float&), asCALL_THISCALL);
-		r = module->engine->RegisterObjectMethod("float[]", "int length()", asMETHOD(std::vector<float>, size), asCALL_THISCALL);
+		//r = module->engine->RegisterObjectMethod("float[]", "int length()", asMETHOD(std::vector<float>, size), asCALL_THISCALL);
 		//r=module->engine->RegisterObjectBehaviour("float[]", asBEHAVE_ADDREF, "void f()", asFUNCTION(DoNothing), asCALL_CDECL_OBJFIRST); if ( r < 0) return r;
 		//r=module->engine->RegisterObjectBehaviour("float[]", asBEHAVE_RELEASE, "void f()", asFUNCTION(DoNothing), asCALL_CDECL_OBJFIRST); if ( r < 0) return r;
 

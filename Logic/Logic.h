@@ -127,7 +127,7 @@ namespace Lunia {
 				virtual ~IEventListener() {}
 
 				virtual void Initialized(Database::Info::StageInfo* info, uint16 uniqueId)=0;
-				virtual ILockable& GetSyncRoom()=0;
+				virtual std::mutex &GetSyncRoom() = 0;
 				virtual void NonPlayerCreated(Lunia::XRated::NonPlayerData& data)=0;
 				virtual bool Tamed(Player* player, Serial familiar, Lunia::XRated::Constants::Familiar::Type type)=0;
 				virtual void StructureCreated(Lunia::XRated::CharacterData& data)=0;

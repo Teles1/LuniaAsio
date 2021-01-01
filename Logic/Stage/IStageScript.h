@@ -13,7 +13,7 @@ namespace Lunia
 	public :
 		virtual ~IStageScript() {}
 
-		virtual ILockable& GetSyncRoom()=0;
+		virtual std::mutex& GetSyncRoom()=0;
 		virtual void Initialized(uint16 uniqueId)=0;
 		// Addby Caspian 20071115
 		virtual uint16 GetPlayerCnt(uint8 team) const=0;    // ���� �ش� ���� �Ҽӵ� ���� �� �Դϴ�.

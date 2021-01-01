@@ -29,7 +29,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			virtual void SetEngine(asIScriptEngine* e)=0;
 			virtual void SetContext(asIScriptContext* c)=0;
 			virtual void SetModule(asIScriptModule* m)=0;
-			virtual ILockable& GetSyncRoom()=0;
+			virtual std::mutex& GetSyncRoom()=0;
 		};
 
 		struct Ticket {

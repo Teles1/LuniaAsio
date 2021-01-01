@@ -70,7 +70,7 @@ namespace Lunia
 				}
 			public : //ScriptLoadThread::IThreadListener implement
 				void ScriptLoaded( uint16 uniqueId );
-				inline ILockable& GetSyncRoom() 
+				inline std::mutex& GetSyncRoom() 
 				{ 
 					return stageScript->GetSyncRoom(); 
 				}

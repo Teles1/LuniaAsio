@@ -196,7 +196,7 @@ namespace Lunia { namespace XRated {
 
 		//Event to logic
 		virtual void Initialized(uint16 uniqueId)=0;
-		virtual ILockable& GetSyncRoom()=0;
+		virtual std::mutex& GetSyncRoom()=0;
 		virtual bool PlayerCreated(Player* player)=0;
 		virtual void NonPlayerCreated(NonPlayerData& data)=0;
 		virtual bool Tamed(Player* player, Serial familiar, Constants::Familiar::Type type)=0;
