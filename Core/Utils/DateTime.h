@@ -1,5 +1,5 @@
-#ifndef DateTime_HEADER_GUARD
-#define DateTime_HEADER_GUARD
+#ifndef DateTime_H
+#define DateTime_H
 
 #pragma once
 #include "../Serializer/Serializer.h"
