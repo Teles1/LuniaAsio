@@ -21,7 +21,7 @@ namespace Lunia {
 				{
 					return !(*this == rhs);
 				}
-				bool ItemEx::IsTradable(User* user) const
+				bool ItemEx::IsTradable(UserSharedPtr user) const
 				{
 					if (!(Info->Attributes.Attr & XRated::Database::Info::ItemInfo::ATTRIBUTES::TRADE)) {
 						if (Info->Attributes.Attr & XRated::Database::Info::ItemInfo::ATTRIBUTES::TRADEWHENEXPIRED)

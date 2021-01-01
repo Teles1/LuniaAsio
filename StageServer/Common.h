@@ -7,6 +7,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
 			class User;
+			typedef std::shared_ptr<User> UserSharedPtr;
 			namespace Common {
 				enum ROOMKIND { STAGE = 0, SQUARE, PVP };
 				enum { NONPARTY = -1, PARTYMAX = 4 };
@@ -48,7 +49,7 @@ namespace Lunia {
 					void operator=(const ItemEx& rhs);
 					bool operator==(const ItemEx& rhs) const;
 					bool operator!=(const ItemEx& rhs) const;
-					bool IsTradable(User* user) const;
+					bool IsTradable(UserSharedPtr user) const;
 
 					// functors for comparing interfaces //////////////////////////////////////////////////
 					class IFindCondition
