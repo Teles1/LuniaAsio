@@ -17,7 +17,7 @@ namespace Lunia {
 					std::vector<uint8> IndexedUpgradeTablesCompressed;
 					std::vector<uint8> IndexedNewUpgradeTablesCompressed;
 
-					void Init();
+					void Init(bool forceXml = false);
 					void LoadBinaryData();
 					void LoadData();
 					bool GetUpgradeTable(const uint32 templateOffset);

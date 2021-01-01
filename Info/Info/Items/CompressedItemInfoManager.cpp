@@ -5,7 +5,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
-				void CompressedItemInfoManager::Init()
+				void CompressedItemInfoManager::Init(bool forceXml)
 				{
 					Items.clear();
 					CategoryList.clear();

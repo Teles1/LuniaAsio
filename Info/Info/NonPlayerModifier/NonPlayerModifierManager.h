@@ -11,7 +11,7 @@ namespace Lunia {
 					const NonPlayerModifierInfo::ModifierInfo* GetModifierInfo(NonPlayerData::NpcType type, int userCnt, int nonPlayerLevel) const;
 					const NonplayerLvModifierInfo::ModifierInfo* GetLv(uint8 stageDifficulty, uint32 beforeNpcLv) const;
 
-					void Load(bool xml);
+					void Init(bool xml);
 					void Save(bool xml);
 				private:
 					std::map<int /*Level*/, NonPlayerModifierInfo > nonPlayerModifierInfos;

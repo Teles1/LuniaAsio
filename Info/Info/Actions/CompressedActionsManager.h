@@ -26,7 +26,7 @@ namespace Lunia {
 					std::map<std::wstring, Actions> compressedActionMap;
 					std::map<uint16, std::vector<uint8>> IndexedActionsCompressed;
 					Resource::StreamReader compressedActionsCbf;
-					void Init();
+					void Init(bool forceXml = false);
 					void LoadBinaryData();
 					void LoadCBFInData();
 					void SaveXmlData();

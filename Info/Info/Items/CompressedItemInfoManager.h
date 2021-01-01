@@ -19,7 +19,7 @@ namespace Lunia {
 					std::vector<uint8> IndexedItemsCompressed;
 					std::vector<uint8> IndexedUnidentifiedCompressed;
 
-					void Init();
+					void Init(bool forceXml = false);
 					void LoadData();
 					void LoadBinaryData();
 					ItemInfo* Retrieve(const uint32& hash);

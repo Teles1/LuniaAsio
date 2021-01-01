@@ -37,7 +37,7 @@ namespace Lunia {
 					return nonPlayerLvModifierInfo.GetLv(stageDifficulty, beforeNpcLv);
 				}
 
-				void NonPlayerModifierTable::Load(bool xml)
+				void NonPlayerModifierTable::Init(bool xml)
 				{
 					if (xml == true)
 					{

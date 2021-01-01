@@ -4,7 +4,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
-				void CompressedUpgradeTableManager::Init()
+				void CompressedUpgradeTableManager::Init(bool forceXml)
 				{
 					LoadBinaryData();
 					LoadData();

@@ -31,7 +31,7 @@ namespace Lunia {
 					writer->Write(L"compressedActionMap", compressedActionMap);
 				}
 
-				void CompressedActionInfoManager::Init()
+				void CompressedActionInfoManager::Init(bool forceXml)
 				{
 					LoadBinaryData();
 					LoadCBFInData();
