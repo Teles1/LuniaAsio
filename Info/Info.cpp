@@ -10,7 +10,6 @@ namespace Lunia {
 				InfoCollections.Items.Init(xmlLoad);
 				InfoCollections.Npcs.Init(xmlLoad);
 				//InfoCollections.Miscs.Init(xmlLoad);
-				InfoCollections.Pets.Init(xmlLoad);
 				//InfoCollections.Projectiles.Init(xmlLoad);
 				//InfoCollections.Skills.Init(xmlLoad);
 				InfoCollections.Stages.Init(xmlLoad);
@@ -28,7 +27,7 @@ namespace Lunia {
 				InfoCollections.StagePlayTimes.Init(xmlLoad);
 				//InfoCollections.BossItems.Init(xmlLoad);
 				//InfoCollections.BonusItems.Init(xmlLoad);
-				InfoCollections.BarterItems.Init(xmlLoad);
+				//InfoCollections.BarterItems.Init(xmlLoad);
 				InfoCollections.CashStamps.Init(xmlLoad);
 				InfoCollections.EquipSet.Init(xmlLoad);
 				InfoCollections.Pets.Init(xmlLoad);
