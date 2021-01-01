@@ -187,6 +187,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Info\CashShopBarter\CashShopBarter.h" />
+    <ClInclude Include="Info\CashShopBarter\CashShopBarterManager.h" />
     <ClInclude Include="Info\ETC\Balance.h" />
     <ClInclude Include="Info\Actions\CompressedActionsManager.h" />
     <ClInclude Include="Info.h" />
@@ -199,6 +201,7 @@
     <ClInclude Include="Info\Enchant\EnchantTable.h" />
     <ClInclude Include="Info\EquipSet\EquipSet.h" />
     <ClInclude Include="Info\EquipSet\EquipSetManager.h" />
+    <ClInclude Include="Info\ETC\StageClearPresentInfo.h" />
     <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.h" />
     <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.h" />
     <ClInclude Include="Info\Event\EventInfo.h" />
@@ -206,6 +209,10 @@
     <ClInclude Include="Info\GeneralInfos\GeneralInfo.h" />
     <ClInclude Include="Info\GeneralInfos\GeneralInfoManager.h" />
     <ClInclude Include="Info\GlobalInfo.h" />
+    <ClInclude Include="Info\GuildFamily\FamilyInfo.h" />
+    <ClInclude Include="Info\GuildFamily\FamilyInfoManager.h" />
+    <ClInclude Include="Info\GuildFamily\GuildInfo.h" />
+    <ClInclude Include="Info\GuildFamily\GuildInfoManager.h" />
     <ClInclude Include="Info\HashTable.h" />
     <ClInclude Include="Info\IndexedInfoManager.h" />
     <ClInclude Include="Info\InfoHelper.h" />
@@ -256,6 +263,8 @@
     <ClInclude Include="Info\UpgradeTables\UpgradeTable.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Info\CashShopBarter\CashShopBarter.cpp" />
+    <ClCompile Include="Info\CashShopBarter\CashShopBarterManager.cpp" />
     <ClCompile Include="Info\ETC\Balance.cpp" />
     <ClCompile Include="Info\Actions\CompressedActionsManager.cpp" />
     <ClCompile Include="Info.cpp" />
@@ -267,6 +276,7 @@
     <ClCompile Include="Info\Enchant\EnchantTable.cpp" />
     <ClCompile Include="Info\EquipSet\EquipSet.cpp" />
     <ClCompile Include="Info\EquipSet\EquipSetManager.cpp" />
+    <ClCompile Include="Info\ETC\StageClearPresentInfo.cpp" />
     <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.cpp" />
     <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.cpp" />
     <ClCompile Include="Info\Event\EventInfo.cpp" />
@@ -274,6 +284,10 @@
     <ClCompile Include="Info\GeneralInfos\GeneralInfo.cpp" />
     <ClCompile Include="Info\GeneralInfos\GeneralInfoManager.cpp" />
     <ClCompile Include="Info\GlobalInfo.cpp" />
+    <ClCompile Include="Info\GuildFamily\FamilyInfo.cpp" />
+    <ClCompile Include="Info\GuildFamily\FamilyInfoManager.cpp" />
+    <ClCompile Include="Info\GuildFamily\GuildInfo.cpp" />
+    <ClCompile Include="Info\GuildFamily\GuildInfoManager.cpp" />
     <ClCompile Include="Info\IndexedInfoManager.cpp" />
     <ClCompile Include="Info\ItemStageInfo\ItemStageInfo.cpp" />
     <ClCompile Include="Info\Items\CompressedItemInfoManager.cpp" />

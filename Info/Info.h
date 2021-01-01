@@ -1,3 +1,5 @@
+#ifndef Info_H
+#define Info_H
 #pragma once
 
 #include <Core/Core.h>
@@ -26,6 +28,9 @@
 #include <Info/Info/StagePlayTime/StagePlayTimeManager.h>
 #include <Info/Info/UpgradeTables/CompressedUpgradeTable.h>
 #include <Info/Info/HashTable.h>
+#include <Info/Info/GuildFamily/GuildInfoManager.h>
+#include <Info/Info/GuildFamily/FamilyInfoManager.h>
+#include <Info/Info/CashShopBarter/CashShopBarterManager.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -58,9 +63,14 @@ namespace Lunia {
 					Info::CompressedProjectileInfoManager Projectiles;
 					Info::IndexedMISCInfoManager Miscs;
 					Info::CompressedUpgradeTableManager UpgradeTables;
+					Info::GuildInfoManager GuildInfos;
+					Info::CashStampInfoManager CashStamps;
+					Info::BarterItemInfoManager BarterItems;
+					Info::FamilyInfoManager FamilyInfos;
 				} InfoCollections;
 			};
 			LuniaDatabase& DatabaseInstance();
 		}
 	}
 }
+#endif // !Info_H
