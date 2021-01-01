@@ -8,13 +8,13 @@ namespace Lunia {
 
 				void FilePosData::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"Lunia::XRated::Database::Info::FilePosData");
+					out.Begin(L"AllM::XRated::Database::Info::FilePosData");
 					out.Write(L"StartPos", StartPos);
 					out.Write(L"EndPos", EndPos);
 				}
 				void FilePosData::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"Lunia::XRated::Database::Info::FilePosData");
+					in.Begin(L"AllM::XRated::Database::Info::FilePosData");
 					in.Read(L"StartPos", StartPos);
 					in.Read(L"EndPos", EndPos);
 				}

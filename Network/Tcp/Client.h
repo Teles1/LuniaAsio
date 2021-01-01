@@ -6,7 +6,7 @@
 #include "../Crypt/Crypt.h"
 namespace Lunia {
     namespace Net {
-        struct ClientTcp : std::enable_shared_from_this<ClientTcp> {
+        struct ClientTcp : public std::enable_shared_from_this<ClientTcp> {
         public:
             ClientTcp(tcp::socket&& s);
             void HandleRead();
