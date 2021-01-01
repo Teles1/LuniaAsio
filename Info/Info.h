@@ -31,6 +31,7 @@
 #include <Info/Info/GuildFamily/GuildInfoManager.h>
 #include <Info/Info/GuildFamily/FamilyInfoManager.h>
 #include <Info/Info/CashShopBarter/CashShopBarterManager.h>
+#include <Info/Info/StageInfo/StageLicenseProvider.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -67,6 +68,7 @@ namespace Lunia {
 					Info::CashStampInfoManager CashStamps;
 					Info::BarterItemInfoManager BarterItems;
 					Info::FamilyInfoManager FamilyInfos;
+					Info::StageLicenseProvider LicenseProvider;
 				} InfoCollections;
 			};
 			LuniaDatabase& DatabaseInstance();

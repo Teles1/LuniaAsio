@@ -247,6 +247,7 @@
     <ClInclude Include="Info\StageGroup\StageGroupManager.h" />
     <ClInclude Include="Info\StageInfo\StageInfo.h" />
     <ClInclude Include="Info\StageInfo\StageInfoManager.h" />
+    <ClInclude Include="Info\StageInfo\StageLicenseProvider.h" />
     <ClInclude Include="Info\StagePlayTime\PvPRewardItemTableManager.h" />
     <ClInclude Include="Info\StagePlayTime\StagePlayTime.h" />
     <ClInclude Include="Info\StagePlayTime\StagePlayTimeManager.h" />
@@ -320,6 +321,7 @@
     <ClCompile Include="Info\StageGroup\StageGroupManager.cpp" />
     <ClCompile Include="Info\StageInfo\StageInfo.cpp" />
     <ClCompile Include="Info\StageInfo\StageInfoManager.cpp" />
+    <ClCompile Include="Info\StageInfo\StageLicenseProvider.cpp" />
     <ClCompile Include="Info\StagePlayTime\StagePlayTime.cpp" />
     <ClCompile Include="Info\StagePlayTime\StagePlayTimeManager.cpp" />
     <ClCompile Include="Info\StateBundles\IndexedStateBundles.cpp" />

@@ -233,6 +233,9 @@
     <ClInclude Include="Info\ETC\StageClearPresentInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\StageInfo\StageLicenseProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -440,6 +443,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\GuildFamily\FamilyInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\StageInfo\StageLicenseProvider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -752,11 +752,13 @@ namespace Lunia {
 						std::pair<uint8, uint8> option = enchant.GetIdentifyFields(i);
 
 						/* preparing values */
-						float value = (info->Limits.RebirthCount == 0) ? database.RetrieveIdentifyValue((uint16)info->Limits.Level, (Enchant::EnchantTableManager::EnchantTargets::Type)option.first, option.second) : database.RetrieveIdentifyRebirthedItemValue(basisRatioValue, (Enchant::EnchantTableManager::EnchantTargets::Type)option.first, option.second, (uint16)info->Limits.RebirthCount);
+						float value = (info->Limits.RebirthCount == 0) 
+							? database.RetrieveIdentifyValue((uint16)info->Limits.Level, (Enchant::EnchantTableManager::EnchantTargets::Type)option.first, option.second) 
+							: database.RetrieveIdentifyRebirthedItemValue((uint16)basisRatioValue, (Enchant::EnchantTableManager::EnchantTargets::Type)option.first, option.second, (uint16)info->Limits.RebirthCount);
 
 						if (info->Limits.RebirthCount == 0)
 						{
-							value *= info->Limits.Level; // ÀÏ¹Ý Àåºñµµ ½ÅÈ­ ÀåºñÃ³·³ ºñÀ²·Î ÀÛ¾÷ÇÒ ¼ö ÀÖ°Ô °³¼±
+							value *= info->Limits.Level; 
 						}
 						else
 						{
