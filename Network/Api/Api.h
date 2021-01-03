@@ -8,6 +8,18 @@
 #include <Core/Utils/DateTime.h>
 // for convenience
 using json = nlohmann::json;
+namespace nlohmann {
+    template <>
+    struct adl_serializer<std::wstring> {
+        static void to_json(json& j, const std::wstring& str) {
+            j = Lunia::StringUtil::ToASCII(str);
+        }
+
+        static void from_json(const json& j, std::wstring& str) {
+            str = Lunia::StringUtil::ToUnicode(j.get<std::string>());
+        }
+    };
+}
 namespace Lunia {
     namespace Net {
         struct Answer {
