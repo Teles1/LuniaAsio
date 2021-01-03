@@ -281,6 +281,10 @@ namespace Lunia {
 		return true;
 
 	}
+	bool DateTime::Time::Parse(const std::string& timeString)
+	{
+		return Parse(StringUtil::ToUnicode(timeString));
+	}
 	std::wstring DateTime::Time::ToString(Format::type format) const
 	{
 		if (IsValid())
@@ -1762,6 +1766,30 @@ namespace Lunia {
 			return !(*this < rhs);
 		}
 		return false;
+	}
+	void to_json(json& j, const DateTime::Date& o)
+	{
+		j = o.ToString();
+	}
+	void from_json(const json& j, DateTime::Date& o)
+	{
+		o.Parse(j.get<std::string>());
+	}
+	void to_json(json& j, const DateTime::Time& o)
+	{
+		j = o.ToString();
+	}
+	void from_json(const json& j, DateTime::Time& o)
+	{
+		o.Parse(j.get<std::string>());
+	}
+	void to_json(json& j, const DateTime& o)
+	{
+		j = o.ToString();
+	}
+	void from_json(const json& j, DateTime& o)
+	{
+		o.Parse(j.get<std::string>());
 	}
 	DateTime::Time operator+(const DateTime::Time& lhs, const DateTime::Time& rhs)
 	{

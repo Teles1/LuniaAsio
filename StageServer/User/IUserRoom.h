@@ -1,7 +1,8 @@
 #ifndef IUserRoom_H
 #define IUserRoom_h
 #pragma once
-#include <StageServer/StageServerProtocol/StageServerProtocol.h>
+#include <StageServer/Protocol/ToServer.h>
+#include <StageServer/Protocol/FromServer.h>
 #include <StageServer/Common.h>
 #include <Logic/Object/Player.h>
 
@@ -10,7 +11,6 @@ namespace Lunia {
 		namespace StageServer {
 			class User;
 
-			/*
 			class IUserRoom
 			{
 			public:
@@ -18,16 +18,16 @@ namespace Lunia {
 
 			public:
 				virtual void DebugCommand(User& user, const std::wstring& msg) = 0;
-				virtual void SpectatorChat(const std::wstring& characterName, Protocol::Chat& chat) = 0;
-				virtual void Chat(const uint64& serial, Protocol::Chat& chat) = 0;
-				virtual void Voice(const uint64& serial, Protocol::Voice& voice) = 0;
+				virtual void SpectatorChat(const std::wstring& characterName, Protocol::ToServer::Chat& chat) = 0;
+				virtual void Chat(const uint64& serial, Protocol::ToServer::Chat& chat) = 0;
+				virtual void Voice(const uint64& serial, Protocol::ToServer::Voice& voice) = 0;
 				virtual void PartyInvite(User* user, const uint64& serial) = 0;
 				virtual void PartyAccept(User* accepter, User* inviter) = 0;
 				virtual void PartyLeave(User* user) = 0;
 				virtual void NotifySpectatorLeft(User* user) = 0;
 				virtual bool Command(XRated::Logic::Player* player, XRated::Constants::Command command, XRated::Constants::Direction dir) = 0; ///< @reutrn false if the command is invalid
 				virtual void Cast(XRated::Logic::Player* player, uint32 skill) = 0;
-				virtual void LogicSkillPointUp(XRated::Logic::Player* player, Protocol::SetSkillLevel& setskilllevel) = 0;
+				virtual void LogicSkillPointUp(XRated::Logic::Player* player, Protocol::ToServer::SetSkillLevel& setskilllevel) = 0;
 				virtual void AddSkillPointPlus(XRated::Logic::Player* player, uint16 skillPointPlus) = 0;
 				virtual void Revive(XRated::Logic::Player* player, bool self = true) = 0;
 				virtual void DailyRevive(XRated::Logic::Player* player) = 0;
@@ -59,10 +59,10 @@ namespace Lunia {
 				virtual void PetRenaming(Serial playerSerial, const XRated::GlobalSerial petSerial, const std::wstring& newName) = 0;
 				virtual void UnsummonPet(Logic::Player* player, const XRated::Serial playerSerial) = 0;
 
-				virtual void VoteRequest(User* user, Protocol::RequestVoting& requestvoting) = 0;
+				virtual void VoteRequest(User* user, Protocol::ToServer::RequestVoting& requestvoting) = 0;
 				virtual void Vote(User* user, Constants::VoteResult vote) = 0;
-				virtual void PersonalVoteRequest(User* user, Protocol::RequestPersonalVoting& requestvoting) = 0;
-				virtual void PersonalVoteClear(User* user, Protocol::AnswerPersonalVoting& requestvoting) = 0;
+				virtual void PersonalVoteRequest(User* user, Protocol::ToServer::RequestPersonalVoting& requestvoting) = 0;
+				virtual void PersonalVoteClear(User* user, Protocol::ToServer::AnswerPersonalVoting& requestvoting) = 0;
 				virtual void EnterShop(const uint64& serial, Constants::ShopType shop, uint32 param) = 0;
 				virtual void LeaveShop(const uint64& serial, float3 position, float3 direction) = 0;
 				virtual void JoinEndUser(User* user, float progress) = 0;
@@ -114,8 +114,8 @@ namespace Lunia {
 				virtual void StageGiveUpLog(User* user) = 0;
 
 				//Gamble - SlimeRace
-				virtual void SlimeRaceBet(User* user, Net::Protocol::Stage::ToServer::Gamble::SlimeRace::Bet& packet) = 0;
-				virtual void SlimeRaceClearBet(User* user, Net::Protocol::Stage::ToServer::Gamble::SlimeRace::ClearBet& packet) = 0;
+				virtual void SlimeRaceBet(User* user, Protocol::ToServer::Gamble::SlimeRace::Bet& packet) = 0;
+				virtual void SlimeRaceClearBet(User* user, Protocol::ToServer::Gamble::SlimeRace::ClearBet& packet) = 0;
 				virtual void SlimeRaceRequestBettingState(User* user) = 0;
 				virtual void SlimeRaceRequestRecentResults(User* user) = 0;
 
@@ -131,8 +131,8 @@ namespace Lunia {
 				virtual bool RebirthRollBack(const User& user) = 0;
 				virtual void NotifyRebirth(XRated::Serial serial, uint16 level, uint16 rebirthCount, uint16 storedLevel, uint16 storedSkillPoint, const std::vector<XRated::StageLicense>& updatedLicense, const DateTime& lastRebirthDateTime) = 0;
 
-				virtual Net::Protocol::Stage::FromServer::Family::InviteResult::Type RequestInviteFamily(XRated::Family::FamilySerial familySerial, DateTime createdDate, XRated::Serial targetSerial, const std::wstring& targetName, const std::wstring& invter) = 0;
-				virtual Net::Protocol::Stage::FromServer::Family::InviteResult::Type RequestInviteFamily(XRated::Serial targetSerial, const std::wstring& targetName, const std::wstring& invter) = 0;
+				virtual Protocol::FromServer::Family::InviteResult::Type RequestInviteFamily(XRated::Family::FamilySerial familySerial, DateTime createdDate, XRated::Serial targetSerial, const std::wstring& targetName, const std::wstring& invter) = 0;
+				virtual Protocol::FromServer::Family::InviteResult::Type RequestInviteFamily(XRated::Serial targetSerial, const std::wstring& targetName, const std::wstring& invter) = 0;
 
 
 				virtual bool CompletedQuest(User& user, uint32 questHash) = 0;
@@ -146,7 +146,6 @@ namespace Lunia {
 				};
 				virtual uint32 ExcuteRoomSerialUsers(IExcuter& excuter) = 0;
 			};
-			*/
 		}
 	}
 }

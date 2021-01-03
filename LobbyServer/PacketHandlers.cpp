@@ -88,7 +88,7 @@ namespace Lunia {
 						sendPacketCharacterSlots.NumberOfSlots = client->m_numOfCharacterSlots;
 
 						for (int i = 0; i < 16; i++) {
-							if (static_cast<bool>(client->m_accountLicense & (1 << i)))
+							if (client->m_accountLicense & (1 << i))
 								sendPacketCharacterSlots.CharacterLicenses.push_back(i);
 						};
 
@@ -110,12 +110,12 @@ namespace Lunia {
 							info.WarLevel = y["warLevel"].get<uint16>();
 							info.WarExp = y["warExp"].get<uint32>();
 							info.StateFlags = static_cast<XRated::CharacterStateFlags>(y["instantStateFlag"].get<int>());
-							info.RebirthCount = y["characterRebirth"]["rebirthCount"].get<uint16>();
-							info.StoredLevel = y["characterRebirth"]["storedLevel"].get<uint16>();
+							info.RebirthCount = y["characterrebirth"]["rebirthCount"].get<uint16>();
+							info.StoredLevel = y["characterrebirth"]["storedLevel"].get<uint16>();
 
 							for (auto& item : y["stageLicenses"]) { //[{"stageHash":19999,"accessLevel":1,"difficulty": 1}]
 								info.Licenses.push_back(
-									XRated::StageLicense(item["stageGroupHash"].get<uint32>(), item["accessLevel"].get<uint16>()));
+									XRated::StageLicense(item["stagelicenses"].get<uint32>(), item["accessLevel"].get<uint16>()));
 							}
 
 							for (auto& item : y["items"]) {
@@ -512,7 +512,7 @@ namespace Lunia {
 							XRated::SquareInfo info;
 
 							info.StageGroupHash = x["stageGroupHash"].get<uint32>();
-							info.AccessLevel = x["accessLevel"].get<uint16>();
+							info.AccessLevel = x["accessLevel"].get<uint8>();
 							info.Capacity = x["capacity"].get<uint16>();
 							{
 								float helper = (float)x["connectionCount"].get<uint32>() / info.Capacity;

@@ -52,7 +52,7 @@ namespace Lunia {
 				uint16 addedSkillPointPlus;
 				uint8 team;
 				XRated::CharacterStateFlags characterStateFlags;
-				void* user;
+				std::shared_ptr<void> user;
 
 				struct FactorGroup
 				{
@@ -155,7 +155,7 @@ namespace Lunia {
 
 				/* Async Events for player commands*/
 				virtual bool PlayerCreated(Player* player)=0;
-				virtual void JoinFailed(void* user)=0;
+				virtual void JoinFailed(std::shared_ptr<void> user)=0;
 				virtual void ItemUsed(uint32 returnValue/*Logic::Player::ItemUseResult*/, Player* player, const Database::Info::ItemInfo* info, int bag, int pos)=0;
 				virtual void Casted(Serial gameObjectSerial, uint32 skillGroupName, uint8 skilllevel)=0;
 				virtual void ItemEquipped(bool bequipped, Player* player, uint32 itemId, Database::Enchant::EnchantBitfields fields, uint32 itemOldId)=0;
@@ -282,7 +282,7 @@ namespace Lunia {
 
 			/* asynchronous commands **************************************************************/
 			// player commands
-			virtual void Join(PlayerInitialData* player, void* user)=0;
+			virtual void Join(PlayerInitialData* player, std::shared_ptr<void> user)=0;
 			virtual void ChangeTeam(Player* player, int teamSerial)=0;
 			virtual void Part(Player* player)=0;
 			virtual void Command(Player* player, Constants::Command command, const Constants::Direction dir)=0; // Command sends action only, move, stop, dash, attackA and attackB

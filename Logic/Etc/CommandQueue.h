@@ -12,7 +12,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 					   , TypeSwapEquipment, TypeSwapCashEquipment };
 
 		struct JoinQueue {
-			void* user;
+			std::shared_ptr<void> user;
 			ILogic::PlayerInitialData* data;
 		};
 
@@ -228,7 +228,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		void ClearTempQueue();
 		void SwapQueue();
 
-		void Join(ILogic::PlayerInitialData* data, void* user);
+		void Join(ILogic::PlayerInitialData* data, std::shared_ptr<void> user);
 		void Use(uint32 name, Database::Info::ItemInfo* info, int bag, int pos);
 
 		void PetItemUse(uint32 userSerial, Database::Info::ItemInfo* info, int bag, int pos, GlobalSerial serial);

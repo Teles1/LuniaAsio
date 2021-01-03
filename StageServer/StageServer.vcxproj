@@ -170,16 +170,20 @@
   <ItemGroup>
     <ClCompile Include="Room\RoomUpdateManager.cpp" />
     <ClCompile Include="Common.cpp" />
-    <ClCompile Include="User\ExpFactorManager.cpp" />
+    <ClCompile Include="Room\Services\Guild.cpp" />
+    <ClCompile Include="Protocol\FromServer.cpp" />
+    <ClCompile Include="Protocol\ToServer.cpp" />
+    <ClCompile Include="User\Services\ExpFactorManager.cpp" />
     <ClCompile Include="PacketHandler.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="Room\Room.cpp" />
     <ClCompile Include="Room\RoomManager.cpp" />
     <ClCompile Include="Room\RoomUpdater.cpp" />
     <ClCompile Include="StageServer.cpp" />
-    <ClCompile Include="StageServerProtocol\StageServerProtocol.cpp" />
     <ClCompile Include="User\PetData.cpp" />
     <ClCompile Include="User\RoomUserManager.cpp" />
+    <ClCompile Include="User\Services\FamilyManager.cpp" />
+    <ClCompile Include="User\Services\GuildState.cpp" />
     <ClCompile Include="User\UserManager.cpp" />
     <ClCompile Include="User\User.cpp" />
   </ItemGroup>
@@ -187,19 +191,24 @@
     <ClInclude Include="Room\IUpdateRoom.h" />
     <ClInclude Include="Room\RoomUpdateManager.h" />
     <ClInclude Include="Common.h" />
-    <ClInclude Include="User\ExpFactorManager.h" />
+    <ClInclude Include="Room\Services\Guild.h" />
+    <ClInclude Include="Protocol\FromServer.h" />
+    <ClInclude Include="Protocol\Protocol.h" />
+    <ClInclude Include="Protocol\ToServer.h" />
+    <ClInclude Include="User\Services\ExpFactorManager.h" />
     <ClInclude Include="fwPacketListener.h" />
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="Room\Room.h" />
     <ClInclude Include="Room\RoomManager.h" />
     <ClInclude Include="Room\RoomUpdater.h" />
     <ClInclude Include="StageServer.h" />
-    <ClInclude Include="StageServerProtocol\StageServerProtocol.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="PacketHandler.h" />
     <ClInclude Include="User\IUserRoom.h" />
     <ClInclude Include="User\PetData.h" />
     <ClInclude Include="User\RoomUserManager.h" />
+    <ClInclude Include="User\Services\FamilyManager.h" />
+    <ClInclude Include="User\Services\GuildState.h" />
     <ClInclude Include="User\UserManager.h" />
     <ClInclude Include="User\User.h" />
   </ItemGroup>

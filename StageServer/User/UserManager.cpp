@@ -2,7 +2,6 @@
 #include <Info/Info.h>
 #include <Network/Api/Api.h>
 #include <StageServer/User/User.h>
-#include <StageServer/StageServerProtocol/StageServerProtocol.h>
 #include <StageServer/Room/RoomManager.h>
 #include <StageServer/Room/Room.h>
 
@@ -197,7 +196,6 @@ namespace Lunia {
 
 			void UserManager::RoomAuth(const UserSharedPtr& user)
 			{
-				AutoLock lock(user->mtx);
 				if (!RoomManagerInstance().RoomJoin(user->GetRoomIndex(), user, user->GetRoomPass())) {
 					LoggerInstance().Error("user={0} failed to join room={1}",user->GetSerial(),user->GetRoomIndex());
 					user->Terminate();

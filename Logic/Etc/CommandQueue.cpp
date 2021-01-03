@@ -145,7 +145,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		tempCashSwapEquipmentQueue.clear();
 	}
 
-	void CommandQueue::Join(ILogic::PlayerInitialData* data, void* user)
+	void CommandQueue::Join(ILogic::PlayerInitialData* data, std::shared_ptr<void> user)
 	{
 		JoinQueue queueItem;
 

@@ -73,7 +73,8 @@ namespace Lunia
 					, bLoading, moduleName.c_str(), stageScript->GetStageId(), uniqueId);
 
 				//Regist stageScript instance
-				if (PrepareContext(engine->GetGlobalFunctionByDecl("SetInstance"), "SetInstance", __FUNCTION__)==false)
+				auto* func = asModule->GetFunctionByName("SetInstance");
+				if (PrepareContext(func, "SetInstance", __FUNCTION__)==false)
 					throw;
 
 				//PrepareContext(engine->GetFunctionIDByName(0/*moduleName.c_str()*/, "SetInstance"));

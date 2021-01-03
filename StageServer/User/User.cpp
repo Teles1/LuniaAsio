@@ -1,14 +1,24 @@
+#pragma once
 #include <StageServer/fwPacketListener.h>
 #include <StageServer/User/UserManager.h>
 #include <Network/NetStream.h>
 #include <Network/CommonProtocol/Protocol.h>
-#include <StageServer/StageServerProtocol/StageServerProtocol.h>
+#include <StageServer/Protocol/FromServer.h>
 #include <Info/Info.h>
 
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer
 		{
+			template <typename T>
+			inline std::shared_ptr<T> shared_from_enabled(std::enable_shared_from_this<T>* base) {
+				return base->shared_from_this();
+			}
+			template <typename T>
+			inline std::shared_ptr<T> shared_from(T* derived) {
+				return std::static_pointer_cast<T>(shared_from_enabled(derived));
+			}
+			template<> std::shared_ptr<User> shared_from_enabled(std::enable_shared_from_this<User>* base);
 			void User::Send(Serializer::ISerializable& packet) {
 				StaticBuffer<2 << 12> buffer;
 				try
@@ -41,11 +51,32 @@ namespace Lunia {
 				return (uint32)size;
 			}
 
+			User::User(asio::ip::tcp::socket&& socket, const uint32& userId)
+				: ClientTcp(std::move(socket))
+				, m_UserId(userId)
+				, m_GuildState(*this)
+				, m_FamilyManager(*this)
+			{
+				Logger::GetInstance().Info("User :: Hey, I was created!", GetId());
+			}
+
+			std::shared_ptr<User> User::shared_from_this() {
+				return shared_from(this);
+			}
+
 			void User::Init() {
-				Protocol::Way way;
+				Protocol::FromServer::Way way;
 				way.EncryptKey = Math::Random();
 				SetCryptoKey(way.EncryptKey);
 				Send(way);
+			}
+
+			void User::Flush()
+			{
+				if (!IsConnected())
+					return;
+				LoggerInstance().Info("Flushing user:{0}", GetSerial());
+				CloseSocket();
 			}
 
 			bool User::AuthConnection(const json& result)
@@ -57,19 +88,19 @@ namespace Lunia {
 				m_CurrentStage.Level = result["accessLevel"].get<uint16>();
 				m_CurrentStage.Difficulty = result["difficulty"].get<uint8>();
 				m_RoomPass = result["password"].get<std::string>();
-				m_RoomFullCount = result["capacity"].get<uint32>();
-				m_TeamNumber = result["teamNumber"].get<int>();
+				m_RoomCapacity = result["capacity"].get<uint16>();
+				m_TeamNumber = result["teamNumber"].get<uint8>();
 				m_StageStateFlags = result["stageStates"].get<int>();
 				m_LastStage.StageGroupHash = result["lastPlayedStageGroupHash"].get<uint32>();
 				m_LastStage.Level = result["lastPlayedStageLevel"].get<uint16>();
-				m_RoomActivateSerial = result["uniqueKey"].get<int64>();
+				m_RoomActivationSerial = result["roomActivationSerial"].get<int64>();
 				return true;
 			}
 
 			bool User::Auth(const json& result)
 			{
 				AutoLock lock(mtx);//self lock.
-				AutoLock stageLock(m_PlayerData.SyncRoot); // prevent the room/stagescript from modifiyng the userData
+				AutoLock stageLock(m_PlayerInitialData.SyncRoot); // prevent the room/stagescript from modifiyng the userData
 				if (!Auth_CharacterInfos(result["characterInfo"])) {
 					Logger::GetInstance().Error(L"User::Auth_CharacterInfos={0}", GetSerial());
 					return false;
@@ -152,49 +183,45 @@ namespace Lunia {
 				*/
 				// CharacterInfos
 				{
-					m_PlayerData.team = m_TeamNumber;
-					m_PlayerData.name = GetCharacterName();
+					m_PlayerInitialData.team = m_TeamNumber;
+					m_PlayerInitialData.name = GetCharacterName();
 					//Character
 
 					auto& mPlayerData = characterinfo["character"];
 					if (mPlayerData.is_null())
 						return false;
 
-					m_PlayerData.type = (XRated::Constants::ClassType)mPlayerData["classNumber"].get<int>();
-					m_PlayerData.level = mPlayerData["stageLevel"].get<uint16>();
-					m_PlayerData.xp = mPlayerData["stageExp"].get<uint32>();
-					m_PlayerData.pvpLevel = mPlayerData["pvpLevel"].get<uint16>();
-					m_PlayerData.pvpXp = mPlayerData["pvpExp"].get<uint32>();
-					m_PlayerData.warLevel = mPlayerData["warLevel"].get<uint32>();
-					m_PlayerData.warXp = mPlayerData["warExp"].get<uint32>();
-					m_PlayerData.money = mPlayerData["gameMoney"].get<uint32>();
-					m_PlayerData.bankMoney = mPlayerData["bankMoney"].get<uint32>();
-					m_PlayerData.skillpoint = mPlayerData["skillPoint"].get<uint16>();
+					m_PlayerInitialData.type = (XRated::Constants::ClassType)mPlayerData["classNumber"].get<int>();
+					m_PlayerInitialData.level = mPlayerData["stageLevel"].get<uint16>();
+					m_PlayerInitialData.xp = mPlayerData["stageExp"].get<uint32>();
+					m_PlayerInitialData.pvpLevel = mPlayerData["pvpLevel"].get<uint16>();
+					m_PlayerInitialData.pvpXp = mPlayerData["pvpExp"].get<uint32>();
+					m_PlayerInitialData.warLevel = mPlayerData["warLevel"].get<uint32>();
+					m_PlayerInitialData.warXp = mPlayerData["warExp"].get<uint32>();
+					m_PlayerInitialData.money = mPlayerData["gameMoney"].get<uint32>();
+					m_PlayerInitialData.bankMoney = mPlayerData["bankMoney"].get<uint32>();
+					m_PlayerInitialData.skillpoint = mPlayerData["skillPoint"].get<uint16>();
 					m_CharacterStateFlags = mPlayerData["instantStateFlag"].get<int>();
 					m_CreateDate.Parse(mPlayerData["createDate"].get<std::string>());
 
 					//The one that gives you +1 that paid op one.
-					if (!characterinfo["addedSkillPoint"].is_null())
-						m_PlayerData.addedSkillPointPlus = characterinfo["addedSkillPoint"]["skillPoint"].get<uint16>();
-					else
-						m_PlayerData.addedSkillPointPlus = 0;
+					mPlayerData["addedSkillPoint"].get_to(m_PlayerInitialData.addedSkillPointPlus);
 
-					m_PlayerData.characterStateFlags = m_CharacterStateFlags;
+					m_PlayerInitialData.characterStateFlags = m_CharacterStateFlags;
 
 					//Pvp
 					auto& pvp = characterinfo["ladderPoint"];
 					if (pvp.is_null())
 						Logger::GetInstance().Exception(L"Could not parse LadderPoint on Auth user = {0}", GetCharacterName());
-					m_PlayerData.ladderPoint = pvp["ladderPoint"].get<uint32>();
-					m_PlayerData.ladderMatchCount = pvp["dailyPlayCount"].get<uint16>();
-					m_PlayerData.ladderWinCount = pvp["winCount"].get<uint32>();
-					m_PlayerData.ladderLoseCount = pvp["loseCount"].get<uint32>();
+					m_PlayerInitialData.ladderPoint = pvp["points"].get<uint32>();
+					m_PlayerInitialData.ladderMatchCount = pvp["dailyPlayCount"].get<uint16>();
+					m_PlayerInitialData.ladderWinCount = pvp["winCount"].get<uint32>();
+					m_PlayerInitialData.ladderLoseCount = pvp["loseCount"].get<uint32>();
 
 					//Achivement
-					if (characterinfo["achievementPoint"].is_null())
+					if (mPlayerData.at("achievementPoints").is_null())
 						Logger::GetInstance().Exception(L"Could not parse achievementPoint on Auth user = {0}", GetCharacterName());
-
-					m_PlayerData.achievementScore = characterinfo["achievementPoint"]["achievementPoint"].get<uint32>();
+					mPlayerData.at("achievementPoints").get_to(m_PlayerInitialData.achievementScore);
 
 					return true;
 				}
@@ -216,8 +243,8 @@ namespace Lunia {
 									lastStageInfo = laststageGroup->Stages[m_LastStage.Level];
 								auto it = squareInfo->SquareStartingPoints.find(lastStageInfo->Episode);
 								if (it != squareInfo->SquareStartingPoints.end()) {
-									m_PlayerData.StartPosition.UseCustomStartPoint = true;
-									m_PlayerData.StartPosition.Place = it->second;
+									m_PlayerInitialData.StartPosition.UseCustomStartPoint = true;
+									m_PlayerInitialData.StartPosition.Place = it->second;
 								}
 							}
 						}
@@ -225,53 +252,53 @@ namespace Lunia {
 				}
 				//Granted
 				{
-					Protocol::Granted sendPacket;
+					Protocol::FromServer::Granted sendPacket;
 					sendPacket.charactername = GetCharacterName();
 					sendPacket.targetStage = m_CurrentStage;
 					Send(sendPacket);
 				}
 				//CharacterInfo -Packet being sent to user
 				{
-					Protocol::CharacterInfo characterinfo;
-					characterinfo.classtype = m_PlayerData.type;
-					characterinfo.level = m_PlayerData.level;
-					characterinfo.xp = m_PlayerData.xp;
-					characterinfo.pvpLevel = m_PlayerData.pvpLevel;
-					characterinfo.pvpXp = m_PlayerData.pvpXp;
-					characterinfo.warLevel = m_PlayerData.warLevel;
-					characterinfo.warXp = m_PlayerData.warXp;
-					characterinfo.storedLevel = m_PlayerData.storedLevel;
-					characterinfo.rebirthCount = m_PlayerData.rebirthCount;
-					characterinfo.money = m_PlayerData.money;
-					characterinfo.bankMoney = m_PlayerData.bankMoney;
-					characterinfo.life = m_PlayerData.life;
-					characterinfo.skillpoint = m_PlayerData.skillpoint;
-					characterinfo.ladderPoint = m_PlayerData.ladderPoint;
-					characterinfo.ladderMatchCount = m_PlayerData.ladderMatchCount;
-					characterinfo.ladderWinCount = m_PlayerData.ladderWinCount;
-					characterinfo.ladderLoseCount = m_PlayerData.ladderLoseCount;
-					characterinfo.addedSkillPointPlus = m_PlayerData.addedSkillPointPlus;
-					characterinfo.storedSkillPoint = m_PlayerData.storedSkillPoint;
-					characterinfo.achievementScore = m_PlayerData.achievementScore;
-					characterinfo.IsSpectator = m_PlayerData.characterStateFlags.IsSpectator == 1 ? true : false;
+					Protocol::FromServer::CharacterInfo characterinfo;
+					characterinfo.classtype = m_PlayerInitialData.type;
+					characterinfo.level = m_PlayerInitialData.level;
+					characterinfo.xp = m_PlayerInitialData.xp;
+					characterinfo.pvpLevel = m_PlayerInitialData.pvpLevel;
+					characterinfo.pvpXp = m_PlayerInitialData.pvpXp;
+					characterinfo.warLevel = m_PlayerInitialData.warLevel;
+					characterinfo.warXp = m_PlayerInitialData.warXp;
+					characterinfo.storedLevel = m_PlayerInitialData.storedLevel;
+					characterinfo.rebirthCount = m_PlayerInitialData.rebirthCount;
+					characterinfo.money = m_PlayerInitialData.money;
+					characterinfo.bankMoney = m_PlayerInitialData.bankMoney;
+					characterinfo.life = m_PlayerInitialData.life;
+					characterinfo.skillpoint = m_PlayerInitialData.skillpoint;
+					characterinfo.ladderPoint = m_PlayerInitialData.ladderPoint;
+					characterinfo.ladderMatchCount = m_PlayerInitialData.ladderMatchCount;
+					characterinfo.ladderWinCount = m_PlayerInitialData.ladderWinCount;
+					characterinfo.ladderLoseCount = m_PlayerInitialData.ladderLoseCount;
+					characterinfo.addedSkillPointPlus = m_PlayerInitialData.addedSkillPointPlus;
+					characterinfo.storedSkillPoint = m_PlayerInitialData.storedSkillPoint;
+					characterinfo.achievementScore = m_PlayerInitialData.achievementScore;
+					characterinfo.IsSpectator = m_PlayerInitialData.characterStateFlags.IsSpectator == 1 ? true : false;
 					Send(characterinfo);
 				}
 				if (m_CharacterStateFlags.IsPcRoom && ((stageGroup->GameType & Constants::GameTypes::PvpGameTypeMask) == 0))
 				{
-					m_PlayerData.life = static_cast<uint16>(stageGroup->InitailLife + 1);// one more life for PC room
-					m_PlayerData.Factors.MaxHp = 1.2f;
-					m_PlayerData.Factors.MaxMp = 1.2f;
+					m_PlayerInitialData.life = static_cast<uint16>(stageGroup->InitailLife + 1);// one more life for PC room
+					m_PlayerInitialData.Factors.MaxHp = 1.2f;
+					m_PlayerInitialData.Factors.MaxMp = 1.2f;
 				}
 				else { //normal user
-					m_PlayerData.life = static_cast<uint16>(stageGroup->InitailLife);
-					m_PlayerData.Factors.MaxHp = 1.0f;
-					m_PlayerData.Factors.MaxMp = 1.0f;
+					m_PlayerInitialData.life = static_cast<uint16>(stageGroup->InitailLife);
+					m_PlayerInitialData.Factors.MaxHp = 1.0f;
+					m_PlayerInitialData.Factors.MaxMp = 1.0f;
 				}
 
 				m_ExpFactorManager.SetPenal(m_StageStateFlags.IsPrivate);
 				m_ExpFactorManager.SetExtra(m_CharacterStateFlags.IsPcRoom);
 
-				m_PlayerData.Factors.ExpFactor = m_ExpFactorManager.TotalExpFactor();
+				m_PlayerInitialData.Factors.ExpFactor = m_ExpFactorManager.TotalExpFactor();
 
 				return true;
 			}
@@ -281,11 +308,11 @@ namespace Lunia {
 				if (licenses.is_null())
 					return false;
 				//CharacterLicense // Which characters the user is allowed to create.
-				uint32 aux = licenses["licenses"].get<uint32>();
-				for (int i = 0; i < 16; i++) {
-					if (static_cast<bool>(aux & (1 << i)))
+				licenses.get_to(m_CharacterLicenses);
+				/*for (int i = 0; i < 16; i++) {
+					if (aux & (1 << i))
 						m_CharacterLicenses.push_back(i);
-				}
+				}*/
 				return true;
 			}
 
@@ -305,17 +332,17 @@ namespace Lunia {
 			{
 				if (rebirth.is_null())
 					return false;
-				m_PlayerData.rebirthCount = rebirth["rebirthCount"].get<uint16>();
-				m_PlayerData.storedLevel = m_PlayerData.rebirthCount == 0 ? m_PlayerData.level : rebirth["storedLevel"].get<uint16>();
-				m_PlayerData.storedSkillPoint = rebirth["storedSkillPoint"].get<uint16>();
-				m_PlayerData.lastRebirthDateTime.Parse(rebirth["lastRebirth"].get<std::string>());
+				m_PlayerInitialData.rebirthCount = rebirth["rebirthCount"].get<uint16>();
+				m_PlayerInitialData.storedLevel = m_PlayerInitialData.rebirthCount == 0 ? m_PlayerInitialData.level : rebirth["storedLevel"].get<uint16>();
+				m_PlayerInitialData.storedSkillPoint = rebirth["storedSkillPoint"].get<uint16>();
+				m_PlayerInitialData.lastRebirthDateTime.Parse(rebirth["lastRebirth"].get<std::string>());
 				return true;
 			}
 
 			bool User::Auth_SetItemList(const json& items)
 			{
 				//We should check weather the position where the item is at is valid.
-				Protocol::ListItem sendPacket;
+				Protocol::FromServer::ListItem sendPacket;
 				for (auto& x : items)
 					sendPacket.listitem.push_back(
 						XRated::ItemSlot(
@@ -334,7 +361,7 @@ namespace Lunia {
 				if (bags.is_null())
 					return false;
 				//Check the reason why we have two tables doing the same damn thing.
-				Protocol::BagStates sendPacket;
+				Protocol::FromServer::BagStates sendPacket;
 				//Bags Character
 				for (auto& x : bags["bags"])
 					if (!x["isBank"].get<bool>())
@@ -353,7 +380,7 @@ namespace Lunia {
 				for (auto& x : licenses) {
 					m_SkillLicenses.push_back(x["skillGrouphash"].get<uint32>());
 				}
-				Protocol::ListSkillLicenses sendPacket;
+				Protocol::FromServer::ListSkillLicenses sendPacket;
 				sendPacket.listSkillLicenses = m_SkillLicenses;
 				Send(sendPacket);
 				return true;
@@ -362,17 +389,17 @@ namespace Lunia {
 			bool User::Auth_Skills(const json& skills)
 			{
 				for (auto& x : skills) {
-					m_PlayerData.skills.push_back(XRated::Skill(x["skillGroupHash"].get<uint32>(), x["skillLevel"].get<uint8>()));
+					m_PlayerInitialData.skills.push_back(XRated::Skill(x["skillGroupHash"].get<uint32>(), x["skillLevel"].get<uint8>()));
 				}
-				Protocol::ListSkill sendPacket;
-				sendPacket.listskill = m_PlayerData.skills;
+				Protocol::FromServer::ListSkill sendPacket;
+				sendPacket.listskill = m_PlayerInitialData.skills;
 				Send(sendPacket);
 				return true;
 			}
 
 			bool User::Auth_QuickSlots(const json& quickslots)
 			{
-				Protocol::ListQuickSlot sendPacket;
+				Protocol::FromServer::ListQuickSlot sendPacket;
 				for (auto& x : quickslots) {
 					XRated::QuickSlot tempSlot;
 					tempSlot.Id = x["hash"].get<uint32>();
@@ -394,7 +421,7 @@ namespace Lunia {
 
 			bool User::Auth_PetsInfo(const json& petsinfo)
 			{
-				Protocol::PetInfo sendPacket;
+				Protocol::FromServer::PetInfo sendPacket;
 				for (auto& x : petsinfo) {
 					XRated::PetDataWithItemPos petDataWithPos;
 					petDataWithPos.Pet.PetSerial = x["id"].get<int64>();
@@ -414,7 +441,7 @@ namespace Lunia {
 					petDataWithPos.PetItemPosition = XRated::ItemPosition();//itemPosition;
 					//packet
 					sendPacket.PetDataWithPos.push_back(petDataWithPos);
-					m_PlayerData.pets.push_back(petDataWithPos.Pet);
+					m_PlayerInitialData.pets.push_back(petDataWithPos.Pet);
 					m_PetDatas.Add(petDataWithPos.Pet);
 				}
 				Send(sendPacket);
@@ -424,7 +451,7 @@ namespace Lunia {
 			bool User::Auth_PetsItems(const json& petsitems)
 			{
 				//We should check weather the position where the item is at is valid.
-				Protocol::ListPetItem sendPacket;
+				Protocol::FromServer::ListPetItem sendPacket;
 				for (auto& x : petsitems)
 					sendPacket.PetsItems[x["petId"].get<int64>()].push_back(XRated::PetItemSlot(
 						static_cast<XRated::PetItemSlot::PositionType>(x["bagNumber"].get<int>()),
@@ -442,7 +469,7 @@ namespace Lunia {
 
 			bool User::Auth_PetsTraining(const json& petstraining)
 			{
-				Protocol::PetsCaredBySchool sendPacket;
+				Protocol::FromServer::PetsCaredBySchool sendPacket;
 				sendPacket.OwnerSerial = 0;
 				for (auto& x : petstraining) {
 					XRated::PetCaredBySchool petTraining;
@@ -455,7 +482,7 @@ namespace Lunia {
 					petTraining.End.Parse(x["endTime"].get<std::string>());
 
 					sendPacket.CaredPets.push_back(petTraining);
-					m_PlayerData.petCared.push_back(petTraining);
+					m_PlayerInitialData.petCared.push_back(petTraining);
 				}
 				Send(sendPacket);
 				return true;
@@ -474,14 +501,53 @@ namespace Lunia {
 				m_UserSerial = userSerial;
 			}
 
+			void User::AddPassive(const uint32& hash)
+			{
+				LoggerInstance().Warn("AddPassive Missing on user");
+			}
+
+			void User::RemovePassive(const uint32& hash)
+			{
+				LoggerInstance().Warn("RemovePassive Missing on user");
+			}
+
 			const uint64& User::GetSerial() const
 			{
 				return m_UserSerial;
 			}
 
+			const int64& User::GetActivationSerial() const
+			{
+				return m_RoomActivationSerial;
+			}
+
 			bool User::IsAuthenticated() const
 			{
 				return m_UserSerial == 0 ? false : true;
+			}
+
+			bool User::IsAbleToJoinStage(const StageLicense& targetStage) const
+			{
+				//Data By Level License Check
+				uint16 level = 0;
+				if (m_Player != nullptr)
+					level = m_Player->GetPlayerData().BaseCharacter.Level;
+				else
+					level = m_PlayerInitialData.level;
+				uint16 rebitrhCount = 0;
+				if (m_Player != nullptr)
+					rebitrhCount = m_Player->GetPlayerData().RebirthCount;
+				else 
+					rebitrhCount = m_PlayerInitialData.rebirthCount;
+				if (Database::DatabaseInstance().InfoCollections.LicenseProvider.IsEnableJoinToStage(level, rebitrhCount, targetStage))
+					return true;
+				//DB License Check
+				for (auto& x : m_StageLicenses)
+				{
+					if (targetStage.StageGroupHash == x.StageGroupHash && targetStage.Level <= x.Level)
+						return true;
+				}
+				return false;
 			}
 
 			bool User::IsConnected() const
@@ -503,8 +569,78 @@ namespace Lunia {
 				//Update the user with the time.
 			}
 
+			void User::RoomJoined(std::shared_ptr<IUserRoom> room, StageLicense& targetStage)
+			{
+				this->m_Room = room;
+				m_State = LOAD;
+
+				Protocol::FromServer::Stage packet;
+				packet.charactername = GetCharacterName();
+				packet.targetStage = targetStage;
+				Send(packet);
+				//quest.RefreshWorkingQuests(this);
+				m_FamilyManager.Init(GetCharacterName());
+			}
+
 			StageLicense& User::GetCurrentStage(){
 				return m_CurrentStage;
+			}
+
+			CharacterStateFlags User::GetCharacterStateFlags() const
+			{
+				return m_CharacterStateFlags;
+			}
+
+			GuildState& User::GetGuildState()
+			{
+				return m_GuildState;
+			}
+
+			Logic::ILogic::PlayerInitialData* User::GetInitialPlayerData()
+			{
+				return &m_PlayerInitialData;
+			}
+
+			const Constants::ClassType& User::GetClassType() const
+			{
+				if (m_Player == nullptr) {
+					LoggerInstance().Error("User::GetClassType() - m_Player==null");
+					return std::move(Constants::ClassType::NoClass);
+				}
+				return m_Player->GetClassType();
+			}
+
+			std::mutex& User::GetSyncObject()
+			{
+				return mtx;
+			}
+
+			uint8 User::GetTeamNumber() const
+			{
+				return m_TeamNumber;
+			}
+
+			uint16 User::GetLevel() const
+			{
+				if (m_Player == nullptr) {
+					LoggerInstance().Error("User::GetLevel() - m_Player==null");
+					return 0;
+				}
+				return m_Player->GetLevel();
+			}
+
+			uint16 User::GetPvpLevel() const
+			{
+				if (m_Player == nullptr) {
+					LoggerInstance().Error("User::GetPvpLevel() - m_Player==null");
+					return 0;
+				}
+				return m_Player->GetPvpLevel();
+			}
+
+			uint16 User::GetRoomCapacity() const
+			{
+				return m_RoomCapacity;
 			}
 
 			uint32 User::GetRoomIndex() const
@@ -517,13 +653,92 @@ namespace Lunia {
 				return m_RoomPass;
 			}
 
+			Logic::Player* User::GetPlayer() const
+			{
+				return m_Player;
+			}
+
+			float User::GetExpFactor()
+			{
+				return m_ExpFactorManager.TotalExpFactor();
+			}
+
+			void User::RoomParted()
+			{
+				UpdateInitialPlayerData();
+				ClearGuildInfo();
+				PlayerDeleted();
+
+				m_Room = NULL;
+
+				/* release quest information */
+				//quest.Release(this);
+
+				m_State = NONE; // this should be set NONE when the player is parted from game logic completely.
+			}
+
+			bool User::UpdateInitialPlayerData()
+			{
+				AutoLock lock(m_PlayerInitialData.SyncRoot);//Prevent Room from modifying the initial values.
+				if (m_CharacterStateFlags.IsSpectator)
+					return false;
+				if (m_Player == nullptr) {
+					LoggerInstance().Error("User({0})::UpdateInitialPlayerData() m_Player == null", GetSerial());
+					return false;
+				}
+				if (m_Player->GetName() != GetCharacterName()) {
+					LoggerInstance().Exception("User({0})::UpdateInitialPlayerData - PlayerName != UserName {0}");
+					return false;
+				}
+				auto& newData = m_Player->GetPlayerData();
+				m_PlayerInitialData.type = newData.Job;
+				m_PlayerInitialData.level = newData.BaseCharacter.Level;
+				m_PlayerInitialData.xp = newData.BaseCharacter.Xp;
+				m_PlayerInitialData.pvpLevel = newData.PvpLevel;
+				m_PlayerInitialData.pvpXp = newData.PvpXp;
+				m_PlayerInitialData.warLevel = newData.WarLevel;
+				m_PlayerInitialData.warXp = newData.WarXp;
+				m_PlayerInitialData.storedLevel = newData.StoredLevel;
+				m_PlayerInitialData.rebirthCount = newData.RebirthCount;
+				m_PlayerInitialData.storedSkillPoint = newData.StoredSkillPoint;
+				m_PlayerInitialData.money = newData.BaseCharacter.Money;
+				m_PlayerInitialData.bankMoney = newData.BaseCharacter.BankMoney;
+				m_PlayerInitialData.skillpoint = newData.SkillPoint;
+				m_PlayerInitialData.skills = newData.Skills;
+				m_PlayerInitialData.lastRebirthDateTime = newData.LastRebirthDateTime;
+				m_PlayerInitialData.ladderPoint = newData.LadderPoint;
+				m_PlayerInitialData.ladderMatchCount = newData.LadderMatchCount;
+				m_PlayerInitialData.ladderWinCount = newData.LadderWinCount;
+				m_PlayerInitialData.ladderLoseCount = newData.LadderLoseCount;
+				m_PlayerInitialData.achievementScore = newData.achievementScore;
+				m_PlayerInitialData.equipments.clear();
+				return true;
+			}
+
+			bool User::ClearGuildInfo()
+			{
+				LoggerInstance().Warn("User({0})::ClearGuildInfo - NotImplemented", GetSerial());
+				return true;
+			}
+
+			bool User::PlayerDeleted()
+			{
+				LoggerInstance().Warn("User({0})::PlayerDeleted - NotImplemented", GetSerial());
+				return true;
+			}
+
 			void User::Terminate(){
 				Logger::GetInstance().Warn("Terminate has to be implemented.");
-				AutoLock _l(mtx);
 				Net::Api api("Terminate");
 				api << GetCharacterName();
 				api.GetAsync();
 				CloseSocket();
+			}
+			void User::Close()
+			{
+				if (!IsConnected())
+					return;
+				Terminate();
 			}
 		}
 	}

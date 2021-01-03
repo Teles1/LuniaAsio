@@ -101,19 +101,18 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		if (!asmodule->engine) {
 			Logger::GetInstance().Exception(L"unable to create script engine.");
 		}
-
-		if (this->builder.StartNewModule(asmodule->engine, name.c_str()) < 0)
-			Logger::GetInstance().Exception(L"Unable to create module");
-
 		asmodule->engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
 
-		asmodule->module = asmodule->engine->GetModule(name.c_str());
 		asmodule->context = asmodule->engine->CreateContext();
 		if (!asmodule->context) {
 			Logger::GetInstance().Exception(L"unable to create script context.");
 		}
-
-		int r;
+		CScriptBuilder builder;
+		int r = builder.StartNewModule(asmodule->engine, name.c_str());
+		if (r < 0)
+		{
+			LoggerInstance().Exception("Unrecoverable error while starting a new module.");
+		}
 
 		Info::StageInfo* info = DatabaseInstance().InfoCollections.Stages.Retrieve(StringUtil::To<std::wstring>(name.c_str()).c_str());
 		const std::vector<char>& source = info->GetScriptSource();
@@ -134,12 +133,15 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			Logger::GetInstance().Exception(L"Unable to add scriptsection to engine.");
 		}
 		*/
+		r = builder.AddSectionFromMemory(name.c_str(), VOS.data(), (int)VOS.size(), 0);
+		if (r < 0) {
+			Logger::GetInstance().Exception(L"Unable to add scriptsection to engine.");
+		}
 		r = BindScript(asmodule);
 		if (r < 0) {
 			Logger::GetInstance().Exception(L"Cannot bind script.");
 		}
-		/*
-		r = module->engine->Build(0);
+		r = builder.BuildModule();
 		if ( r < 0 ) {
 			FileIO::File scFile;
 			scFile.Open(L"tmpScript.txt", FileIO::File::WriteMode);
@@ -147,7 +149,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			scFile.Close();
 			Logger::GetInstance().Exception(L"Script build error.");
 		}
-		*/
+		asmodule->module = asmodule->engine->GetModule(name.c_str());
 		return asmodule;
 	}
 
@@ -204,14 +206,13 @@ namespace Lunia { namespace XRated {	namespace Logic {
 				ASModule* module = GetASModule(ticket.module);
 				module->bUsing = true;
 				module->listener = ticket.listener;
-				AutoLock lock(ticket.listener->GetSyncRoom());
-				ticket.listener->SetEngine( module->engine );
-				ticket.listener->SetContext( module->context );
-				ticket.listener->SetModule( module->module );
-
-				Logger::GetInstance().Warn("a roomCs(0x) got a module(stagename:{0}), {1} jobs left", ticket.module.c_str(), jobsCount );
-
-				//Script�� �ε��ƴٴ� ���� ��û�ڿ��� �˸���.
+				{
+					AutoLock lock(ticket.listener->GetSyncRoom());
+					ticket.listener->SetEngine(module->engine);
+					ticket.listener->SetContext(module->context);
+					ticket.listener->SetModule(module->module);
+				}
+				Logger::GetInstance().Warn("a roomCs(0x) got a module(stagename:{0}), {1} jobs left", ticket.module.c_str(), jobsCount);
 				ticket.listener->ScriptLoaded(ticket.uniqueId);
 			}
 			break;
@@ -300,7 +301,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		RegisterStdString(module->engine);
 		RegisterScriptArray(module->engine, true);
 		//Register stage interface(IStageScript) class
-		r = module->engine->RegisterObjectType("IStageScript", sizeof(IStageScript), asOBJ_VALUE | asGetTypeTraits<IStageScript>()); if (r < 0) return r;
+		//r = module->engine->RegisterObjectType("IStageScript", sizeof(IStageScript), asOBJ_VALUE | asGetTypeTraits<IStageScript>()); if (r < 0) return r;
 
 		//Register ScriptEngine class and behaviour
 		r = module->engine->RegisterObjectType("ScriptEngine", sizeof(ScriptEngine), asOBJ_REF); if (r < 0) return r;

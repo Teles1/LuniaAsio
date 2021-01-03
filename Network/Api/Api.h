@@ -5,8 +5,7 @@
 #include "./Core/Core.h"
 #include <cpr/cpr.h>
 #include "Json.hpp"
-#include <string>
-
+#include <Core/Utils/DateTime.h>
 // for convenience
 using json = nlohmann::json;
 namespace Lunia {
@@ -25,9 +24,9 @@ namespace Lunia {
         public:
             Api(const std::string& reqPage = "");
 
-            template <typename T> inline void Append(const T& param) { Append(StringUtil::ToASCII(param)); }
-            template <> inline void Append(const std::string& param) { m_Url.push_back(param); }
-
+            template <typename T> inline void Append(const T& param);
+            template <typename T> inline void Append(const T* param);
+            
             template<typename T> 
             inline Api& operator<< (const T& param)
             {

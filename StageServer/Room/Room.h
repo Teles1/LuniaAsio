@@ -1,9 +1,10 @@
 #pragma once
 #include <Logic/Logic.h>
 #include <Logic/Object/Player.h>
-#include <StageServer/StageServerProtocol/StageServerProtocol.h>
 #include <StageServer/Room/IUpdateRoom.h>
 #include <StageServer/Common.h>
+#include <StageServer/User/RoomUserManager.h>
+#include <StageServer/Room/Services/Guild.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -11,54 +12,43 @@ namespace Lunia {
 			class User;
 			typedef std::shared_ptr<User> UserSharedPtr;
 			class Room
-				: public IUpdateRoom 
+				: public IUpdateRoom
+				, Logic::ILogic::IEventListener
+				, std::enable_shared_from_this<Room>
 			{
 			public:
 				Room(const uint16& index);
-			public: //RoomUpdater
-				bool Update(const float& dt);
-				void SetThreadIndex(const uint16& i);
-				void CheckLoadingTime(const float& dt);
-				const Logic::ILogic::UpdateInfo& GetLogicUpdateInfo();
+			public: //IUpdateRoom
 				uint16 GetIndex();
-				bool JoinUser(UserSharedPtr user, const std::string& roomPass);
+				uint16 GetThreadIndex();
+				void SetThreadIndex(const uint16& i);
+
+				bool Update(const float& dt);
 				void UpdateExpFactor();
 				void NoticeHolidayEvent(const uint32& eventId, bool start);
 
-				Common::ROOMKIND GetRoomKind();
-			private:
-				bool SetStage(StageLicense& targetStage, const std::string& roomPass, int64 pActivateSerial, const std::wstring& userName);
-			private:
-				bool m_NowCampfire = false;
-				bool m_Active = false;
-				bool m_Loading = false;
-				uint16 m_RoomIndex = 0;
-				uint16 m_ThreadIndex = -1;
-				uint16 m_LastThreadIndex = 0;
-				float m_LoadingTime = 0.0f;
-				Common::ROOMKIND m_RoomKind;
-				struct Pvp
-				{
-					bool GameStarted;
-					bool BgmStarted;
-					int	SyncStartUserCnt;
-					int	SyncEnteredUserCnt;
-					bool bSendStartEvent;
-				} pvp;
-				Logic::ILogic* m_Logic;
-				std::mutex m_Mtx;
-				/*
+				bool JoinUser(UserSharedPtr user, const std::string& roomPass);
+				bool PartUser(UserSharedPtr user);
+
+				const Logic::ILogic::UpdateInfo& GetLogicUpdateInfo();
+
+				void CheckLoadingTime(const float& dt);
+				Common::ROOMKIND GetRoomKind() const;
+				Constants::GameTypes GetRoomType() const;
+			public:
+				uint16 UserCount() const;
+				void Clear();
 			public: // IEventListener implementation which sends information from the Logic.
 				void Initialized(Database::Info::StageInfo* info, uint16 uniqueId);
-				ILockable& GetSyncRoom();
-				void NonPlayerCreated(Lunia::XRated::NonPlayerData& data);
-				bool Tamed(Logic::Player* player, Serial familiar, Lunia::XRated::Constants::Familiar::Type type);
-				void StructureCreated(Lunia::XRated::CharacterData& data);
-				void VehicleCreated(Lunia::XRated::CharacterData& data);
-				void ProjectileCreated(Lunia::XRated::ObjectData& obj, const float3& targetPos, Serial target, const std::wstring& owner);
-				void ItemCreated(Lunia::XRated::ObjectData& data, const std::wstring& owner, float dt, uint16 stackCount, bool isPrivateItem);
-				void ObjectCreated(Lunia::XRated::ObjectData& data);
-				void ObjectDestroyed(Serial gameObjectSerial, Lunia::XRated::Constants::ObjectType type, uint32 hash, bool silent, uint8 team = 255, Lunia::XRated::NonPlayerData::NpcType npcType = Lunia::XRated::NonPlayerData::NpcType::Normal);
+				std::mutex& GetSyncRoom();
+				void NonPlayerCreated(NonPlayerData& data);
+				bool Tamed(Logic::Player* player, Serial familiar, Constants::Familiar::Type type);
+				void StructureCreated(CharacterData& data);
+				void VehicleCreated(CharacterData& data);
+				void ProjectileCreated(ObjectData& obj, const float3& targetPos, Serial target, const std::wstring& owner);
+				void ItemCreated(ObjectData& data, const std::wstring& owner, float dt, uint16 stackCount, bool isPrivateItem);
+				void ObjectCreated(ObjectData& data);
+				void ObjectDestroyed(Serial gameObjectSerial, Constants::ObjectType type, uint32 hash, bool silent, uint8 team = 255, NonPlayerData::NpcType npcType = NonPlayerData::NpcType::Normal);
 
 				void Died(Logic::Player* player);
 				void Revived(Logic::Player* player, uint16 totalReviveCount);
@@ -78,13 +68,13 @@ namespace Lunia {
 
 				// Async Events for player commands
 				bool PlayerCreated(Logic::Player* player);
-				void JoinFailed(void* user);
+				void JoinFailed(std::shared_ptr<void> user);
 				void ItemUsed(uint32 returnValue, Logic::Player* player, const Database::Info::ItemInfo* info, int bag, int pos);
 				void Casted(Serial gameObjectSerial, uint32 skillGroupName, uint8 skilllevel);
 				void ItemEquipped(bool bequipped, Logic::Player* player, uint32 itemId, Database::Enchant::EnchantBitfields fields, uint32 itemOldId);
 				void EquipementSwapped(bool bequipped, Logic::Player* player, const std::vector< EquippedItem>& newEquipments);
 				void CashEquipementSwapped(bool bequipped, Logic::Player* player, const std::vector< EquippedItem>& newEquipments);
-				void ItemEquipToEquipChanged(bool bChanged, Logic::Player* player, Lunia::XRated::Constants::Equipment from, Lunia::XRated::Constants::Equipment to);
+				void ItemEquipToEquipChanged(bool bChanged, Logic::Player* player, Constants::Equipment from, Constants::Equipment to);
 				//void SkillPointIncreased(bool bIncreased, Player* player, uint32 skillGroup, int level)=0; ///< @remarks skillGroup parameter can be 0 as all skills
 				void SkillPointChanged(Logic::Player* player, uint32 skillGroupHash, int level); ///< skillGroupHash parameter can be 0 as all skills. and level can be less than 0 by setting failure
 
@@ -160,7 +150,7 @@ namespace Lunia {
 				void GambleNextGame(Logic::Player* player, float seconds);
 				void GambleNextGame(float seconds);
 
-				const Lunia::XRated::StageLicense& GetCurrentStageLicense();
+				const StageLicense& GetCurrentStageLicense();
 
 				int GetSlimeRaceIntervalInMin() const;
 
@@ -189,7 +179,66 @@ namespace Lunia {
 				void ChangeWeatherToRain(const float fadeIntime);
 				void ChangeWeatherToSnow(const float fadeIntime);
 				void ChangeWeatherToAqua(const float fadeIntime);
-				*/
+			private:
+				bool m_NowCampfire = false;
+				bool m_Active = false;
+				bool m_Loading = false;
+				bool m_Locked = false;
+				bool m_WaitRoomDelete = false;
+				bool m_OpenRoom = false;
+				bool m_MissionCleared = false;
+				bool m_EnabledPartyJoin = false;
+
+				uint16 m_RoomIndex = 0;
+				uint16 m_ThreadIndex = -1;
+				uint16 m_LastThreadIndex = 0;
+				uint16 m_CurrentId = 0;
+				uint16 m_CurrentFloor = 0;
+				uint16 m_StartingUserCount = 0;
+				uint16 m_CountReviveLimit = 0;
+				uint16 m_PartyDeathCount = 0;
+				uint32 m_SkillUseCount = 0;
+
+				uint32 m_FloorClearedTime = 0;
+
+				int64 m_ActivationSerial = -1;
+
+				float m_WaitRoomDeleteTime = -1.0f;
+				float m_LoadingTime = 0.0f;
+
+				String m_PartyChannelName = L"";
+
+				StageLicense m_CurrentStage;
+				Database::Info::StageGroup* m_StageGroupInfo;
+				Database::Info::StageInfo* m_StageInfo;
+
+				Common::ROOMKIND m_RoomKind;
+				Logic::ILogic* m_Logic;
+				RoomUserManager m_UserManager;
+				std::list<UserSharedPtr> m_WaitingUsers;
+
+				std::map<uint64, uint16> m_DieCountSerial;
+				std::map<uint64, uint16> m_KillCountSerial;
+
+				std::mutex m_Mtx;
+
+				struct Pvp
+				{
+					bool GameStarted;
+					bool BgmStarted;
+					int	SyncStartUserCnt;
+					int	SyncEnteredUserCnt;
+					bool bSendStartEvent;
+				} pvp;
+				//BattleGround
+				PvpRoomInfo::BattleGroundInfoType m_BattleGroundInfo;
+				typedef std::vector<Guild> Guilds;
+				Guilds m_Guilds;
+			private:
+				bool SetStage(StageLicense& targetStage, const std::string& roomPass, const int64& pActivationSerial, const std::wstring& userName);
+				bool SideStageJoinCheck() const;
+				bool CapacityCheck(UserSharedPtr user) const;
+				uint16 GetStageCapcacity() const;
 			};
 			typedef std::shared_ptr<Room> RoomSharedPtr;
 		}

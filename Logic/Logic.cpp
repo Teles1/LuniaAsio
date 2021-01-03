@@ -152,7 +152,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		void CreateItem(float3 position, std::wstring itemId, std::wstring ownerId);
 
 		/* player commands */
-		void Join(PlayerInitialData* player, void* user);
+		void Join(PlayerInitialData* player, std::shared_ptr<void> user);
 		void ChangeTeam(Player* player, int teamSerial);
 		void Part(Player* player);
 		void Command(Player* player, Constants::Command command, const Constants::Direction dir); // Command sends action only, move, stop, dash, attackA and attackB
@@ -754,17 +754,16 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		totalDelay = 0;
 		termDelay = 0;
 
-		if ( (int)stageGroup->StageHashes.size() <= accessLevel ) {
+		if ( (uint16)(stageGroup->StageHashes.size()) <= accessLevel ) {
 			Logger::GetInstance().Exception(L"Wrong accesslevel. [{0}/{1}]", stageGroupHash, accessLevel);
 		}
 		stageCode = stageGroup->StageHashes[accessLevel];
 		bActivated = true;
 		commandQueue.Clear();
 
-		Logger::GetInstance().Warn( L"Stage(hash:{0}) initializing in logic(0x), roomCs(0x)", stageCode);
+		Logger::GetInstance().Info( L"Stage(hash:{0}) initializing", stageCode);
 		stageData.LoadStage(stageGroup, stageGroup->StageHashes[accessLevel], uniqueId);
 
-		//��������Ʈ ����� ������. -0-
 		startingPoint = &stageData.GetStageInfo()->PlayerStartingPoints;
 		for ( int a=0; a<Constants::MaxTeamCnt ; ++a)
 			teamMemberCnt[a] = 0;
@@ -792,7 +791,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// player commands
-	void Logic::Join(PlayerInitialData* data, void* user)
+	void Logic::Join(PlayerInitialData* data, std::shared_ptr<void> user)
 	{
 		commandQueue.Join(data, user);
 

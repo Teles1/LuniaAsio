@@ -3,6 +3,8 @@
 
 #pragma once
 #include "../Serializer/Serializer.h"
+#include <Network/Api/Json.hpp>
+using json = nlohmann::json;
 namespace Lunia {
 	class DateTime : public Serializer::ISerializable {
 	public:
@@ -102,6 +104,8 @@ namespace Lunia {
 		public:
 			void Deserialize(Serializer::IStreamReader& in);
 			void Serialize(Serializer::IStreamWriter& out) const;
+			friend void to_json(json& j, const Date& o);
+			friend void from_json(const json& j, Date& o);
 		};
 		
 		class Time : public Serializer::ISerializable {
@@ -120,6 +124,7 @@ namespace Lunia {
 			Time(time_t time);
 
 			bool Parse(const std::wstring& timeString);
+			bool Parse(const std::string& timeString);
 			std::wstring ToString(Format::type format = Format::Default) const;
 
 			uint8 GetHour(bool checkValid = true) const { return timeValue.Hour; }
@@ -152,6 +157,8 @@ namespace Lunia {
 		public:
 			void Deserialize(Serializer::IStreamReader& in);
 			void Serialize(Serializer::IStreamWriter& out) const;
+			friend void to_json(json& j, const Time& o);
+			friend void from_json(const json& j, Time& o);
 		};
 
 		DateTime();
@@ -207,6 +214,8 @@ namespace Lunia {
 	public:
 		void Deserialize(Serializer::IStreamReader& in) override;
 		void Serialize(Serializer::IStreamWriter& out)  const;
+		friend void to_json(json& j, const DateTime& o);
+		friend void from_json(const json& j, DateTime& o);
 	};
 
 	DateTime::Time operator+(const DateTime::Time& lhs, const DateTime::Time& rhs);

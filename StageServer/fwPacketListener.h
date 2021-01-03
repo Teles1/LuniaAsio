@@ -58,6 +58,8 @@ namespace Lunia {
 
                     auto lambda = [f](const StageServer::UserSharedPtr& user, Net::StreamReader& streamReader)
                     {
+                        if (!user)
+                            LoggerInstance().Error("Could not find user");
                         //packetFromType<traits::result_type> packet;
                         packetFromType<std::remove_reference<traits::template arg<1>::type>::type> packet;
                         streamReader.Read(packet.value);

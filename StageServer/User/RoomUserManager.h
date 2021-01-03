@@ -1,4 +1,5 @@
 #pragma once
+#include "User.h"
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
@@ -10,15 +11,23 @@ namespace Lunia {
 				RoomUserManager(const RoomUserManager&);
 				~RoomUserManager();
 			public:
-				uint32 NowCount();
+				uint16 NowCount() const;
+				uint16 MaxCount() const;
 				void AddUser(UserSharedPtr user);
 				bool RemoveUser(UserSharedPtr user);
 				bool RemoveUser(const uint32& userId);
+				bool DelSerialUser(const uint32& serial);
 				UserSharedPtr GetUser(const uint32& userId);
 				void Update(const float& dt);
-			public:
-				std::mutex									m_Mtx;
-				std::unordered_map<uint32, UserSharedPtr>	m_Users;
+				void BroadcastToAllEnteredUsers(Serializer::ISerializable& value);
+				void KickAllUsers();
+				void UpdateExpFactor(Logic::ILogic* logic);
+				void Clear();
+				void Flush();
+			private:
+				std::mutex m_Mtx;
+				std::unordered_map<uint32, UserSharedPtr> m_Users;
+				uint16 m_MaxCount = 0;
 			};
 		}
 	}

@@ -1,5 +1,5 @@
-﻿#ifndef GameConstants_GUARD
-#define GameConstants_GUARD
+﻿#ifndef GameConstants_H
+#define GameConstants_H
 
 #include "Core.h"
 #include <Core/Utils/DateTime.h>
@@ -2330,7 +2330,7 @@ namespace Lunia {
 
 			//CriticalStatistics::PersonalStatistics PS;
 
-			void* user; // �̸� �˾Ƽ� ����. -0-;
+			std::shared_ptr<void> user;
 
 			PlayerData(CharacterData& character);
 			void operator =(const PlayerData& pc);
@@ -3312,7 +3312,7 @@ namespace Lunia {
 
 		struct Family
 		{
-			typedef int FamilySerial;		///< ���� FamilySerial�̶��� �� ������ Serial�̶��� �Ǿ� �ִ� �ٸ� ������ �ߺ����� �ʱ� ���ؼ��̴�.
+			typedef int FamilySerial;
 			typedef int64 FamilyMemberSerial;
 
 			enum PresentType
@@ -3559,4 +3559,4 @@ namespace Lunia {
 		};
 	} // namespace XRated
 } // namespace Lunia
-#endif // !GameConstants_GUARD
+#endif // !GameConstants_H

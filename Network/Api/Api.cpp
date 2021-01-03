@@ -2,6 +2,31 @@
 #include <Core/Utils/ConfigReader.h>
 namespace Lunia {
     namespace Net {
+        template <> void Api::Append(const std::string& param) { m_Url.push_back(param); }
+        template <> void Api::Append(const std::wstring& param) { m_Url.push_back(StringUtil::ToASCII(param)); }
+
+        template <> void Api::Append(const DateTime& param) { Append(param.ToString()); }
+
+        template <> void Api::Append(const float& param) { Append(StringUtil::ToASCII(param)); }
+        template <> void Api::Append(const double& param) { Append(StringUtil::ToASCII(param)); }
+
+        template <> void Api::Append(const uint64& param) { Append(StringUtil::ToASCII(param)); }
+        template <> void Api::Append(const int64& param) { Append(StringUtil::ToASCII(param)); }
+
+        template <> void Api::Append(const uint32& param) { Append(StringUtil::ToASCII(param)); }
+        template <> void Api::Append(const int32& param) { Append(StringUtil::ToASCII(param)); }
+
+        template <> void Api::Append(const uint16& param) { Append(StringUtil::ToASCII(param)); }
+        template <> void Api::Append(const int16& param) { Append(StringUtil::ToASCII(param)); }
+
+        template <> void Api::Append(const uint8& param) { Append(StringUtil::ToASCII(param)); }
+        template <> void Api::Append(const int8& param) { Append(StringUtil::ToASCII(param)); }
+
+        template <> void Api::Append(const bool& param) { Append(StringUtil::ToASCII(param)); }
+
+        template <> void Api::Append(const char* param) { m_Url.push_back(param); }
+        template <> void Api::Append(const wchar_t* param) { m_Url.push_back(StringUtil::ToASCII(param)); }
+
         std::string Api::ApiUrl = "http://localhost:51542/Lobby";
         Api::Api(const std::string& reqPage) {
             std::string aux = reqPage; // I need it to be a non const lol

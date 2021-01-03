@@ -11,7 +11,6 @@ namespace Lunia {
 			class User;
 			typedef std::shared_ptr<User> UserSharedPtr;
 			struct Guild {
-
 				typedef std::vector< std::pair<Serial, UserSharedPtr> >	MemberList;
 				MemberList					Members;
 				int GuildId;

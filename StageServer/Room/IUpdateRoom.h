@@ -13,9 +13,9 @@ namespace Lunia {
 			public:
 				virtual uint16 GetIndex() = 0;
 				virtual uint16 GetThreadIndex() = 0;
-				virtual void SetThreadIndex(uint16 index) = 0;
+				virtual void SetThreadIndex(const uint16& index) = 0;
 
-				virtual bool Update(float dt) = 0;
+				virtual bool Update(const float& dt) = 0;
 				//virtual void	UpdateExpFactor() = 0;
 				//virtual void	NoticeHolidayEvent(uint32 eventId, bool start) = 0;
 

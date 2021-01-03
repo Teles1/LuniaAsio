@@ -1,7 +1,7 @@
 #pragma once
 #include <StageServer/Room/RoomUpdateManager.h>
-#include <StageServer/Room/Room.h>
 #include <StageServer/Room/RoomUpdater.h>
+#include <StageServer/Room/Room.h>
 #include <StageServer/User/User.h>
 
 namespace Lunia {

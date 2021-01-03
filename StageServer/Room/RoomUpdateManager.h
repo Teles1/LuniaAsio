@@ -33,8 +33,8 @@ namespace Lunia {
 					bool JoinUser(uint16 updaterIndex, RoomSharedPtr room, UserSharedPtr user, const std::string& roomPass);
 					bool PartUser(uint16 updaterIndex, RoomSharedPtr room, UserSharedPtr user);
 
-				protected:
 					uint16 GetProcessorCnt();
+				protected:
 					void InitUpdater(uint16 processorCnt);
 					void DeleteUpdater();
 

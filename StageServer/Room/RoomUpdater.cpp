@@ -5,6 +5,7 @@
 #include <StageServer/Room/RoomUpdateManager.h>
 #include <StageServer/Room/Room.h>
 #include <StageServer/User/User.h>
+//#define DEBUG
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
@@ -38,10 +39,11 @@ namespace Lunia {
 				else
 					Sleep(1);
 				m_PassedTime += m_Dt;
+#ifdef DEBUG
 				if (m_PassedTime > 5.0f) {
-					if(true)
-						Logger::GetInstance().Info("[Info Perfomance] TotalTime={0}, Loop={1}, lps={2}", m_LoopTime, m_UpdateCount, (m_UpdateCount * 1000) / (m_LoopTime == 0 ? 1 : m_LoopTime) );
+					Logger::GetInstance().Info("[Info Perfomance] TotalTime={0}, Loop={1}, lps={2}", m_LoopTime, m_UpdateCount, (m_UpdateCount * 1000) / (m_LoopTime == 0 ? 1 : m_LoopTime));
 				}
+#endif // DEBUG
 			}
 
 			void RoomUpdater::AddRoom(RoomSharedPtr room)

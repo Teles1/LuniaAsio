@@ -2,7 +2,8 @@
 #include "../Core/Utils/InitFunction.h"
 #include <Core/ErrorDefinition.h>
 #include <StageServer/User/UserManager.h>
-#include <StageServer/StageServerProtocol/StageServerProtocol.h>
+#include <StageServer/Protocol/FromServer.h>
+#include <StageServer/Protocol/ToServer.h>
 #include <Network/Api/Api.h>
 #include <timeapi.h>
 #pragma comment(lib, "winmm.lib")
@@ -12,11 +13,11 @@ namespace Lunia {
 		namespace StageServer {
 			void InitHandlers() {
 				fwPacketListener::GetInstance().Connect(
-					[](UserSharedPtr user, StageServer::Protocol::Stage& packet)
+					[](UserSharedPtr user, StageServer::Protocol::ToServer::Stage& packet)
 					{
 						Logger::GetInstance().Info("fwPacketListener::protocol@Stage");
 						if (packet.Version != Lunia::Constants::Version) {
-							Protocol::Error sendPacket;
+							Protocol::FromServer::Error sendPacket;
 							sendPacket.errorcode = XRated::Errors::InvalidClientVersion;
 							user->Send(sendPacket);
 							user->Terminate();
@@ -69,7 +70,7 @@ namespace Lunia {
 
 					});
 				fwPacketListener::GetInstance().Connect(
-					[](UserSharedPtr user, StageServer::Protocol::Join& packet)
+					[](UserSharedPtr user, StageServer::Protocol::ToServer::Join& packet)
 					{
 						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Join", user->GetSerial());
 						//Check if the user is fully authenticated and loaded if not send a big crashadao.
@@ -84,7 +85,7 @@ namespace Lunia {
 						*/
 					});
 				fwPacketListener::GetInstance().Connect(
-					[](UserSharedPtr user, StageServer::Protocol::Alive& packet)
+					[](UserSharedPtr user, StageServer::Protocol::ToServer::Alive& packet)
 					{
 						AutoLock _l(user->mtx);
 						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Alive", user->GetSerial());
@@ -93,13 +94,13 @@ namespace Lunia {
 					});
 
 				fwPacketListener::GetInstance().Connect(
-					[](UserSharedPtr user, StageServer::Protocol::ListItem& packet)
+					[](UserSharedPtr user, StageServer::Protocol::ToServer::ListItem& packet)
 					{
 						//this does literally nothing but i'm handling it so it doesnt bother me.
 						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListItem", user->GetId());
 					});
 				fwPacketListener::GetInstance().Connect(
-					[](UserSharedPtr user, StageServer::Protocol::ListQuickSlot& packet)
+					[](UserSharedPtr user, StageServer::Protocol::ToServer::ListQuickSlot& packet)
 					{
 						//this does literally nothing but i'm handling it so it doesnt bother me.
 						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListQuickSlot", user->GetId());

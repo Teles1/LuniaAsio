@@ -1,5 +1,5 @@
 #include "RoomUserManager.h"
-#include "User.h"
+
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
@@ -14,10 +14,13 @@ namespace Lunia {
 				AutoLock lock(m_Mtx);
 				m_Users.clear();
 			}
-			uint32 RoomUserManager::NowCount()
+			uint16 RoomUserManager::NowCount() const
 			{
-				AutoLock lock(m_Mtx);
-				return (uint32)m_Users.size();
+				return (uint16)m_Users.size();
+			}
+			uint16 RoomUserManager::MaxCount() const
+			{
+				return m_MaxCount;
 			}
 			void RoomUserManager::AddUser(UserSharedPtr user)
 			{
@@ -40,6 +43,12 @@ namespace Lunia {
 				m_Users.erase(userId);
 				return true;
 			}
+			bool RoomUserManager::DelSerialUser(const uint32& serial)
+			{
+				AutoLock lock(m_Mtx);
+				//CashView stuff
+				return true;
+			}
 			UserSharedPtr RoomUserManager::GetUser(const uint32& userId)
 			{
 				AutoLock lock(m_Mtx);
@@ -52,6 +61,45 @@ namespace Lunia {
 				AutoLock lock(m_Mtx);
 				for (auto& user : m_Users)
 					user.second->Update(dt);
+			}
+			void RoomUserManager::BroadcastToAllEnteredUsers(Serializer::ISerializable& value)
+			{
+				AutoLock lock(m_Mtx);
+				for (auto& user : m_Users)
+					user.second->Send(value);
+			}
+			void RoomUserManager::KickAllUsers()
+			{
+				AutoLock lock(m_Mtx);
+				for (auto& user : m_Users)
+					user.second->Close();
+			}
+			void RoomUserManager::Clear()
+			{
+				AutoLock lock(m_Mtx);
+				m_Users.clear();
+			}
+			void RoomUserManager::Flush()
+			{
+				AutoLock lock(m_Mtx);
+				for (auto& user : m_Users)
+					user.second->Flush();
+			}
+			void RoomUserManager::UpdateExpFactor(Logic::ILogic* logic)
+			{
+				AutoLock lock(m_Mtx);
+				for (auto& user : m_Users) {
+					if (user.second == NULL) {
+						LoggerInstance().Warn("RoomUserManager::UpdateExpFactor - Null user in the list");
+						continue;
+					}
+					auto player = user.second->GetPlayer();
+					if (player == NULL) { // how would this even happen?
+						LoggerInstance().Warn("RoomUserManager::UpdateExpFactor - Null player in the list");
+						continue;
+					}
+					logic->SetPlayerExpFactor(player, user.second->GetExpFactor());
+				}
 			}
 		}
 	}

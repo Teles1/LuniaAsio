@@ -111,7 +111,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		void ReleaseScriptEngine( const Ticket& ticket );
 
 	public : // Helper
-		CScriptBuilder builder;
 		inline int GetStageCnt() const { return (int)ASPool.size(); }
 		inline int GetPoolSize(const std::string& name) const { return (int)ASPool.find(name)->second.size(); }
 		int GetAvailablePool(const std::string& name) const;

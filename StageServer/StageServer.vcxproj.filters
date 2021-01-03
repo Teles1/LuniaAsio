@@ -14,9 +14,6 @@
     <ClCompile Include="StageServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StageServerProtocol\StageServerProtocol.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PacketHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -41,9 +38,6 @@
     <ClCompile Include="User\RoomUserManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="User\ExpFactorManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="User\PetData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -53,6 +47,24 @@
     <ClCompile Include="Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Room\Services\Guild.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Services\GuildState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Services\FamilyManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Services\ExpFactorManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Protocol\ToServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Protocol\FromServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -60,9 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StageServer.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="StageServerProtocol\StageServerProtocol.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="fwPacketListener.h">
@@ -95,9 +104,6 @@
     <ClInclude Include="User\RoomUserManager.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="User\ExpFactorManager.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="User\PetData.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -111,6 +117,27 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Common.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Room\Services\Guild.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Services\GuildState.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Services\FamilyManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Services\ExpFactorManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Protocol\Protocol.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Protocol\ToServer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Protocol\FromServer.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
