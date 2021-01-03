@@ -124,21 +124,6 @@ namespace Lunia {
 			{
 				return m_StageGroupInfo->GameType;
 			}
-			Common::ROOMKIND Room::GetRoomKind() const
-			{
-				if (GetRoomType() & Constants::GameTypes::CooperativeGameTypeMask)
-				{
-					return Common::STAGE;
-				}
-				else if (GetRoomType() & Constants::GameTypes::PvpGameTypeMask)
-				{
-					return Common::PVP;
-				}
-				else //if(gametype& AllM::XRated::Constants::GameTypes::PeacefulGameTypeMask) 
-				{
-					return Common::SQUARE;
-				}
-			}
 			const Logic::ILogic::UpdateInfo& Room::GetLogicUpdateInfo()
 			{
 				return m_Logic->GetUpdateInfo();
@@ -201,7 +186,7 @@ namespace Lunia {
 					LoggerInstance().Error("Room({0})::JoinUser() - CapacityCheck() == false", m_RoomIndex);
 					return false;
 				}
-				//user->RoomJoined(shared_from_this(), m_CurrentStage);
+				user->RoomJoined(shared_from_this(), m_CurrentStage);
 				return false;
 			}
 			bool Room::PartUser(UserSharedPtr user)
@@ -307,11 +292,11 @@ namespace Lunia {
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::ProjectileCreated(ObjectData& obj, const float3& targetPos, Serial target, const std::wstring& owner)
+			void Room::ProjectileCreated(ObjectData& obj, const float3& targetPos, Serial target, const String& owner)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::ItemCreated(ObjectData& data, const std::wstring& owner, float dt, uint16 stackCount, bool isPrivateItem)
+			void Room::ItemCreated(ObjectData& data, const String& owner, float dt, uint16 stackCount, bool isPrivateItem)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
@@ -512,11 +497,11 @@ namespace Lunia {
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::DisplayText(Constants::DisplayTextType type, const std::wstring& message)
+			void Room::DisplayText(Constants::DisplayTextType type, const String& message)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::NoticeText(Logic::Player* player, Constants::DisplayTextType type, const std::wstring& message)
+			void Room::NoticeText(Logic::Player* player, Constants::DisplayTextType type, const String& message)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
@@ -528,11 +513,11 @@ namespace Lunia {
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::BroadcastEvent(int eventId, const std::wstring& param)
+			void Room::BroadcastEvent(int eventId, const String& param)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::NoticeEvent(Logic::Player* player, int eventId, const std::wstring& param)
+			void Room::NoticeEvent(Logic::Player* player, int eventId, const String& param)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
@@ -641,7 +626,7 @@ namespace Lunia {
 				LoggerInstance().Exception("Missing implementation");
 				return false;
 			}
-			void Room::PetInfoUpdated(Logic::Player* player, const XRated::Pet& pet, const XRated::Serial petSerial, const std::wstring& petExpression)
+			void Room::PetInfoUpdated(Logic::Player* player, const XRated::Pet& pet, const XRated::Serial petSerial, const String& petExpression)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
@@ -706,7 +691,7 @@ namespace Lunia {
 				LoggerInstance().Exception("Missing implementation");
 			}
 			//PRIVATE METHODS///////////////////////////////////////////////////////////////////////////////
-			bool Room::SetStage(StageLicense& targetStage, const std::string& roomPass, const int64& pActivationSerial, const std::wstring& userName)
+			bool Room::SetStage(StageLicense& targetStage, const std::string& roomPass, const int64& pActivationSerial, const String& userName)
 			{
 				AutoLock lock(m_Mtx);
 				if (m_UserManager.NowCount() != 0)

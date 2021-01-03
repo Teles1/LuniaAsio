@@ -11,7 +11,7 @@
 #include <StageServer/User/Services/ExpFactorManager.h>
 #include <StageServer/User/Services/FamilyManager.h>
 #include <StageServer/User/Services/GuildState.h>
-
+#include <StageServer/Protocol/Protocol.h>
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
@@ -99,7 +99,7 @@ namespace Lunia {
 
 				std::mutex& GetSyncObject();
 			public://Network Related;
-				void Send(Serializer::ISerializable& packet);
+				void Send(Protocol::IPacketSerializable& packet);
 				uint32 Parse(uint8* buffer, size_t size);
 			public:
 				std::mutex 									mtx;

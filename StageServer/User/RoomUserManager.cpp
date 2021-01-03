@@ -62,7 +62,7 @@ namespace Lunia {
 				for (auto& user : m_Users)
 					user.second->Update(dt);
 			}
-			void RoomUserManager::BroadcastToAllEnteredUsers(Serializer::ISerializable& value)
+			void RoomUserManager::BroadcastToAllEnteredUsers(Protocol::IPacketSerializable& value)
 			{
 				AutoLock lock(m_Mtx);
 				for (auto& user : m_Users)

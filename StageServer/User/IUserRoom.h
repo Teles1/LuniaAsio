@@ -21,10 +21,10 @@ namespace Lunia {
 				virtual void SpectatorChat(const std::wstring& characterName, Protocol::ToServer::Chat& chat) = 0;
 				virtual void Chat(const uint64& serial, Protocol::ToServer::Chat& chat) = 0;
 				virtual void Voice(const uint64& serial, Protocol::ToServer::Voice& voice) = 0;
-				virtual void PartyInvite(User* user, const uint64& serial) = 0;
-				virtual void PartyAccept(User* accepter, User* inviter) = 0;
-				virtual void PartyLeave(User* user) = 0;
-				virtual void NotifySpectatorLeft(User* user) = 0;
+				virtual void PartyInvite(UserSharedPtr user, const uint64& serial) = 0;
+				virtual void PartyAccept(UserSharedPtr accepter, UserSharedPtr inviter) = 0;
+				virtual void PartyLeave(UserSharedPtr user) = 0;
+				virtual void NotifySpectatorLeft(UserSharedPtr user) = 0;
 				virtual bool Command(XRated::Logic::Player* player, XRated::Constants::Command command, XRated::Constants::Direction dir) = 0; ///< @reutrn false if the command is invalid
 				virtual void Cast(XRated::Logic::Player* player, uint32 skill) = 0;
 				virtual void LogicSkillPointUp(XRated::Logic::Player* player, Protocol::ToServer::SetSkillLevel& setskilllevel) = 0;
@@ -59,13 +59,13 @@ namespace Lunia {
 				virtual void PetRenaming(Serial playerSerial, const XRated::GlobalSerial petSerial, const std::wstring& newName) = 0;
 				virtual void UnsummonPet(Logic::Player* player, const XRated::Serial playerSerial) = 0;
 
-				virtual void VoteRequest(User* user, Protocol::ToServer::RequestVoting& requestvoting) = 0;
-				virtual void Vote(User* user, Constants::VoteResult vote) = 0;
-				virtual void PersonalVoteRequest(User* user, Protocol::ToServer::RequestPersonalVoting& requestvoting) = 0;
-				virtual void PersonalVoteClear(User* user, Protocol::ToServer::AnswerPersonalVoting& requestvoting) = 0;
+				virtual void VoteRequest(UserSharedPtr user, Protocol::ToServer::RequestVoting& requestvoting) = 0;
+				virtual void Vote(UserSharedPtr user, Constants::VoteResult vote) = 0;
+				virtual void PersonalVoteRequest(UserSharedPtr user, Protocol::ToServer::RequestPersonalVoting& requestvoting) = 0;
+				virtual void PersonalVoteClear(UserSharedPtr user, Protocol::ToServer::AnswerPersonalVoting& requestvoting) = 0;
 				virtual void EnterShop(const uint64& serial, Constants::ShopType shop, uint32 param) = 0;
 				virtual void LeaveShop(const uint64& serial, float3 position, float3 direction) = 0;
-				virtual void JoinEndUser(User* user, float progress) = 0;
+				virtual void JoinEndUser(UserSharedPtr user, float progress) = 0;
 				virtual Common::ROOMKIND GetRoomKind() const = 0;
 				virtual const Database::Info::StageGroup* GetCurrentStageGroupInfo() const = 0;
 				virtual StageLocation GetCurrentStage() const = 0;
@@ -75,7 +75,7 @@ namespace Lunia {
 
 				virtual void ResetSkillPoint(Logic::Player* player, uint32 skillGroupHash) = 0;
 
-				virtual User* GetUser(const uint64& serial) = 0;
+				virtual UserSharedPtr GetUser(const uint64& serial) = 0;
 				virtual void SendToAll(Serializer::ISerializable& packet) = 0;
 
 				virtual void AddExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp, bool withFactor) = 0;
@@ -94,30 +94,30 @@ namespace Lunia {
 				virtual void CreateItem(User& user, const XRated::RewardItem& rewardItem, bool isPrivateItem = false) = 0;
 				virtual int	 GetProprietyLevel() = 0;
 				virtual void ChangeStylePointStateToLogic(Logic::Player* player, XRated::StylePoint::State state) = 0;
-				virtual void CashItemView(User* user, std::pair< uint16, uint16 > flag) = 0;
-				virtual std::pair< uint16, uint16 > GetCashItemViewFlag(const User* user) = 0;
-				virtual void SendReinforcementResult(User* user, ItemPosition itemPos, uint32 hash, int64 oldInstance, int64 newInstance) = 0;
-				virtual void SendLightReinforcementResult(User* user, ItemPosition itemPos, uint32 hash, int64 oldInstance, int64 newInstance) = 0;
+				virtual void CashItemView(UserSharedPtr user, std::pair< uint16, uint16 > flag) = 0;
+				virtual std::pair< uint16, uint16 > GetCashItemViewFlag(const UserSharedPtr user) = 0;
+				virtual void SendReinforcementResult(UserSharedPtr user, ItemPosition itemPos, uint32 hash, int64 oldInstance, int64 newInstance) = 0;
+				virtual void SendLightReinforcementResult(UserSharedPtr user, ItemPosition itemPos, uint32 hash, int64 oldInstance, int64 newInstance) = 0;
 
 				virtual uint32	GetRoomIndex() const = 0;
 				virtual uint16	GetRoomID() const = 0;
 
 				//Fishing
-				virtual void RequestFishingList(User* user) = 0;
+				virtual void RequestFishingList(UserSharedPtr user) = 0;
 				virtual Database::Info::StageInfo* GetStageInfo() const = 0;
-				virtual void FishingInfo(User* user, uint32 hash, uint8 baitCnt, int32 rare) = 0;
+				virtual void FishingInfo(UserSharedPtr user, uint32 hash, uint8 baitCnt, int32 rare) = 0;
 				virtual void AddFishingUser(uint32 serial) = 0;
 				virtual void RemoveFishingUser(uint32 serial) = 0;
 				virtual int GetFishingUserCnt() const = 0;
-				virtual void SendAllFishingUser(User* user) = 0;
+				virtual void SendAllFishingUser(UserSharedPtr user) = 0;
 
-				virtual void StageGiveUpLog(User* user) = 0;
+				virtual void StageGiveUpLog(UserSharedPtr user) = 0;
 
 				//Gamble - SlimeRace
-				virtual void SlimeRaceBet(User* user, Protocol::ToServer::Gamble::SlimeRace::Bet& packet) = 0;
-				virtual void SlimeRaceClearBet(User* user, Protocol::ToServer::Gamble::SlimeRace::ClearBet& packet) = 0;
-				virtual void SlimeRaceRequestBettingState(User* user) = 0;
-				virtual void SlimeRaceRequestRecentResults(User* user) = 0;
+				virtual void SlimeRaceBet(UserSharedPtr user, Protocol::ToServer::Gamble::SlimeRace::Bet& packet) = 0;
+				virtual void SlimeRaceClearBet(UserSharedPtr user, Protocol::ToServer::Gamble::SlimeRace::ClearBet& packet) = 0;
+				virtual void SlimeRaceRequestBettingState(UserSharedPtr user) = 0;
+				virtual void SlimeRaceRequestRecentResults(UserSharedPtr user) = 0;
 
 				virtual void SetPlayTimePenalty(Logic::Player* player, XRated::Constants::PlayTimePenalty::Type flag) = 0;
 

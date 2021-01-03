@@ -19,7 +19,7 @@ namespace Lunia {
 				return std::static_pointer_cast<T>(shared_from_enabled(derived));
 			}
 			template<> std::shared_ptr<User> shared_from_enabled(std::enable_shared_from_this<User>* base);
-			void User::Send(Serializer::ISerializable& packet) {
+			void User::Send(Protocol::IPacketSerializable& packet) {
 				StaticBuffer<2 << 12> buffer;
 				try
 				{
@@ -31,8 +31,7 @@ namespace Lunia {
 					Logger::GetInstance().Error("User@{0} Unable to Parse packet", this->GetSerial());
 					return;
 				}
-
-				Logger::GetInstance().Info("Sending packet[{0:#04x}] to User@{1}", *((HashType*)buffer.GetData() + 2), this->GetSerial());
+				Logger::GetInstance().Info(L"Sending packet[{0}] to User@{1}", packet.GetTypeName(), this->GetSerial());
 				this->SendAsync(reinterpret_cast<uint8*>(buffer.GetData()), buffer.GetLength());
 			}
 			uint32 User::Parse(uint8* buffer, size_t size) {

@@ -19,7 +19,7 @@ namespace Lunia {
 				bool DelSerialUser(const uint32& serial);
 				UserSharedPtr GetUser(const uint32& userId);
 				void Update(const float& dt);
-				void BroadcastToAllEnteredUsers(Serializer::ISerializable& value);
+				void BroadcastToAllEnteredUsers(Protocol::IPacketSerializable& value);
 				void KickAllUsers();
 				void UpdateExpFactor(Logic::ILogic* logic);
 				void Clear();

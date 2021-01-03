@@ -5,6 +5,7 @@
 #include <StageServer/Common.h>
 #include <StageServer/User/RoomUserManager.h>
 #include <StageServer/Room/Services/Guild.h>
+#include <StageServer/User/IUserRoom.h>
 
 namespace Lunia {
 	namespace XRated {
@@ -13,8 +14,10 @@ namespace Lunia {
 			typedef std::shared_ptr<User> UserSharedPtr;
 			class Room
 				: public IUpdateRoom
-				, Logic::ILogic::IEventListener
-				, std::enable_shared_from_this<Room>
+				, public Logic::ILogic::IEventListener
+				, public IUserRoom
+				, public std::enable_shared_from_this<Room>
+
 			{
 			public:
 				Room(const uint16& index);
@@ -33,7 +36,6 @@ namespace Lunia {
 				const Logic::ILogic::UpdateInfo& GetLogicUpdateInfo();
 
 				void CheckLoadingTime(const float& dt);
-				Common::ROOMKIND GetRoomKind() const;
 				Constants::GameTypes GetRoomType() const;
 			public:
 				uint16 UserCount() const;
@@ -45,8 +47,8 @@ namespace Lunia {
 				bool Tamed(Logic::Player* player, Serial familiar, Constants::Familiar::Type type);
 				void StructureCreated(CharacterData& data);
 				void VehicleCreated(CharacterData& data);
-				void ProjectileCreated(ObjectData& obj, const float3& targetPos, Serial target, const std::wstring& owner);
-				void ItemCreated(ObjectData& data, const std::wstring& owner, float dt, uint16 stackCount, bool isPrivateItem);
+				void ProjectileCreated(ObjectData& obj, const float3& targetPos, Serial target, const String& owner);
+				void ItemCreated(ObjectData& data, const String& owner, float dt, uint16 stackCount, bool isPrivateItem);
 				void ObjectCreated(ObjectData& data);
 				void ObjectDestroyed(Serial gameObjectSerial, Constants::ObjectType type, uint32 hash, bool silent, uint8 team = 255, NonPlayerData::NpcType npcType = NonPlayerData::NpcType::Normal);
 
@@ -112,12 +114,12 @@ namespace Lunia {
 				void CheckStateBundleForAchievement(uint32 stateBundleHash);
 				void DisplayTextEvent(Constants::DisplayTextType type, uint16 textId, float param);
 				void NoticeTextEvent(Logic::Player* player, Constants::DisplayTextType type, uint16 textId, float param);
-				void DisplayText(Constants::DisplayTextType type, const std::wstring& message);
-				void NoticeText(Logic::Player* player, Constants::DisplayTextType type, const std::wstring& message);
+				void DisplayText(Constants::DisplayTextType type, const String& message);
+				void NoticeText(Logic::Player* player, Constants::DisplayTextType type, const String& message);
 				void DisplayTimer(Constants::DisplayTimerType timer, float seconds);
 				void MissionClear(bool success, uint8 team, const CriticalStatistics::StageStatistics& SS, uint32 dropCount);
-				void BroadcastEvent(int eventId, const std::wstring& param);
-				void NoticeEvent(Logic::Player* player, int eventId, const std::wstring& param);
+				void BroadcastEvent(int eventId, const String& param);
+				void NoticeEvent(Logic::Player* player, int eventId, const String& param);
 				void NoticeClientStageEvent(Logic::Player* player, int eventId, int eventParam);
 				void TeamChange(Serial object, int team);
 				void AddMinimapPing(int pingId, const float3 position, Constants::MiniMapPingType type);
@@ -159,10 +161,10 @@ namespace Lunia {
 
 				//Single only
 #ifdef _SINGLE
-				void NPCDebugMessage(Serial serial, std::wstring msg);//gui->Chat(serial, Constants::ChatType::Global, msg);				
+				void NPCDebugMessage(Serial serial, String msg);//gui->Chat(serial, Constants::ChatType::Global, msg);				
 #endif
 
-				void PetInfoUpdated(Logic::Player* player, const XRated::Pet& pet, const XRated::Serial petSerial, const std::wstring& petExpression);
+				void PetInfoUpdated(Logic::Player* player, const XRated::Pet& pet, const XRated::Serial petSerial, const String& petExpression);
 				void PetCaredBySchool(Logic::Player* player, const XRated::PetCaredBySchool& caredPet, const XRated::Pet& pet);
 				void PetTakenOutFromSchool(Logic::Player* player, const XRated::PetCaredBySchool& caredPet, const XRated::Pet& pet);
 				void PetRevived(Logic::Player* player);
@@ -179,6 +181,134 @@ namespace Lunia {
 				void ChangeWeatherToRain(const float fadeIntime);
 				void ChangeWeatherToSnow(const float fadeIntime);
 				void ChangeWeatherToAqua(const float fadeIntime);
+			private:
+				bool SetStage(StageLicense& targetStage, const std::string& roomPass, const int64& pActivationSerial, const String& userName);
+				bool SideStageJoinCheck() const;
+				bool CapacityCheck(UserSharedPtr user) const;
+				uint16 GetStageCapcacity() const;
+			public: //IUserRoom
+				void DebugCommand(User& user, const String& msg);
+				void SpectatorChat(const String& characterName, Protocol::ToServer::Chat& chat);
+				void Chat(const uint64& serial, Protocol::ToServer::Chat& chat);
+				void Voice(const uint64& serial, Protocol::ToServer::Voice& voice);
+				void PartyInvite(UserSharedPtr user, const uint64& serial);
+				void PartyAccept(UserSharedPtr accepter, UserSharedPtr inviter);
+				void PartyLeave(UserSharedPtr user);
+				void NotifySpectatorLeft(UserSharedPtr user);
+				bool Command(XRated::Logic::Player* player, XRated::Constants::Command command, XRated::Constants::Direction dir); ///< @reutrn false if the command is invalid
+				void Cast(XRated::Logic::Player* player, uint32 skill);
+				void LogicSkillPointUp(XRated::Logic::Player* player, Protocol::ToServer::SetSkillLevel& setskilllevel);
+				void AddSkillPointPlus(XRated::Logic::Player* player, uint16 skillPointPlus);
+				void Revive(XRated::Logic::Player* player, bool self = true);
+				void DailyRevive(XRated::Logic::Player* player);
+				void InstantCoinRevive(XRated::Logic::Player* player, uint64 orderNumber);
+
+				void CreatePet(XRated::Logic::Player* player, const XRated::Pet& pet);
+				void GivePresentToPet(XRated::Logic::Player* player, XRated::GlobalSerial petSerial, uint32 sellPrice, uint32 count);
+
+				void addminimapping(const uint64& serial, float3 posotion);
+				bool Equip(XRated::Logic::Player* player, const Database::Info::ItemInfo* info, Database::Enchant::EnchantBitfields instance, XRated::Constants::Equipment pos);
+				bool EquipToEquip(Logic::Player* player, XRated::Constants::Equipment from, XRated::Constants::Equipment to);
+				bool SwapEquip(Logic::Player* player, const std::vector< EquippedItem >& newEquipments);
+				bool SwapCashEquip(Logic::Player* player, const std::vector< EquippedItem >& newEquipments);
+				void ValidateEquippedItems(Logic::Player* player);
+				bool Use(XRated::Logic::Player* player, uint32 id, int bag, int pos);
+				void SetLogicUserPvpRank(Logic::Player* player, const uint32 pvpRank);
+
+				bool PetItemUse(XRated::Logic::Player* player, uint32 id, int bag, int pos, XRated::GlobalSerial serial);
+				void DropPetItem(XRated::Logic::Player* player, XRated::GlobalSerial serial);
+				void PetFeed(XRated::Logic::Player* player, const XRated::GlobalSerial& petSerial, const uint32& foodAmount, const uint32& foodCount, bool overFeed = false);
+				void PetLevelDecrease(Logic::Player* player, const GlobalSerial& petSerial, const uint32& downLevel, const bool& onlyMaxLevel);
+				bool PetItemsEquip(Logic::Player* player, XRated::GlobalSerial petSerial, const Database::Info::ItemInfo* info, Database::Enchant::EnchantBitfields instance, uint32 equipPos);
+
+				void TakeCarePetBySchool(Logic::Player* player
+					, const uint32& petItemHash, const XRated::GlobalSerial& petSerial
+					, const Database::Enchant::EnchantBitfields& instance, const uint8& count
+					, const uint32& period, const float& expFactor);
+				void TakeOutCaredPet(Logic::Player* player, const XRated::GlobalSerial& petSerial);
+				void PetRenaming(Serial playerSerial, const XRated::GlobalSerial petSerial, const String& newName);
+				void UnsummonPet(Logic::Player* player, const XRated::Serial playerSerial);
+
+				void VoteRequest(UserSharedPtr user, Protocol::ToServer::RequestVoting& requestvoting);
+				void Vote(UserSharedPtr user, Constants::VoteResult vote);
+				void PersonalVoteRequest(UserSharedPtr user, Protocol::ToServer::RequestPersonalVoting& requestvoting);
+				void PersonalVoteClear(UserSharedPtr user, Protocol::ToServer::AnswerPersonalVoting& requestvoting);
+				void EnterShop(const uint64& serial, Constants::ShopType shop, uint32 param);
+				void LeaveShop(const uint64& serial, float3 position, float3 direction);
+				void JoinEndUser(UserSharedPtr user, float progress);
+				Common::ROOMKIND GetRoomKind() const;
+				const Database::Info::StageGroup* GetCurrentStageGroupInfo() const;
+				StageLocation GetCurrentStage() const;
+				void GiveUpRevive(Logic::Player* player);
+
+				void DecreaseSkillPoint(Logic::Player* player, uint32 skillGroupHash);
+
+				void ResetSkillPoint(Logic::Player* player, uint32 skillGroupHash);
+
+				UserSharedPtr GetUser(const uint64& serial);
+				void SendToAll(Serializer::ISerializable& packet);
+
+				void AddExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp, bool withFactor);
+				void AddPvpExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp);
+				void AddWarExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp);
+				void AddStateBundle(User& user, uint32 hash);
+				void AddPassive(User& uer, uint32 hash);
+				void RemovePassive(User& user, uint32 hash);
+
+				void FamiliarCommand(User& user, uint16 index, XRated::Serial who, Constants::Familiar::Command command);
+				void ChangeFamiliarFormation(User& user, Constants::Familiar::Formation formation);
+
+				bool IsMissionCleared() const;
+				bool IsNowCampfire() const;
+				float GetObjectDistance(User& user, uint32 hash) const;
+				void CreateItem(User& user, const XRated::RewardItem& rewardItem, bool isPrivateItem = false);
+				int	 GetProprietyLevel();
+				void ChangeStylePointStateToLogic(Logic::Player* player, XRated::StylePoint::State state);
+				void CashItemView(UserSharedPtr user, std::pair< uint16, uint16 > flag);
+				std::pair< uint16, uint16 > GetCashItemViewFlag(const UserSharedPtr user);
+				void SendReinforcementResult(UserSharedPtr user, ItemPosition itemPos, uint32 hash, int64 oldInstance, int64 newInstance);
+				void SendLightReinforcementResult(UserSharedPtr user, ItemPosition itemPos, uint32 hash, int64 oldInstance, int64 newInstance);
+
+				uint32	GetRoomIndex() const;
+				uint16	GetRoomID() const;
+
+				//Fishing
+				void RequestFishingList(UserSharedPtr user);
+				Database::Info::StageInfo* GetStageInfo() const;
+				void FishingInfo(UserSharedPtr user, uint32 hash, uint8 baitCnt, int32 rare);
+				void AddFishingUser(uint32 serial);
+				void RemoveFishingUser(uint32 serial);
+				int GetFishingUserCnt() const;
+				void SendAllFishingUser(UserSharedPtr user);
+
+				void StageGiveUpLog(UserSharedPtr user);
+
+				//Gamble - SlimeRace
+				void SlimeRaceBet(UserSharedPtr user, Protocol::ToServer::Gamble::SlimeRace::Bet& packet);
+				void SlimeRaceClearBet(UserSharedPtr user, Protocol::ToServer::Gamble::SlimeRace::ClearBet& packet);
+				void SlimeRaceRequestBettingState(UserSharedPtr user);
+				void SlimeRaceRequestRecentResults(UserSharedPtr user);
+
+				void SetPlayTimePenalty(Logic::Player* player, XRated::Constants::PlayTimePenalty::Type flag);
+
+				void ChangedExpFactorFromItem(User& user, XRated::Constants::ExpFactorCategoryFromItem category, float factor);
+				void ChangedExpFactor(User& user);
+				void AddGuildUser(User& user);
+				void RemoveGuildUser(User& user);
+
+				/// Rebirth
+				bool Rebirth(const User& user, uint32 levelAfterRebirth);
+				bool RebirthRollBack(const User& user);
+				void NotifyRebirth(XRated::Serial serial, uint16 level, uint16 rebirthCount, uint16 storedLevel, uint16 storedSkillPoint, const std::vector<XRated::StageLicense>& updatedLicense, const DateTime& lastRebirthDateTime);
+
+				Protocol::FromServer::Family::InviteResult::Type RequestInviteFamily(XRated::Family::FamilySerial familySerial, DateTime createdDate, XRated::Serial targetSerial, const String& targetName, const String& invter);
+				Protocol::FromServer::Family::InviteResult::Type RequestInviteFamily(XRated::Serial targetSerial, const String& targetName, const String& invter);
+
+
+				bool CompletedQuest(User& user, uint32 questHash);
+				bool AcceptedQuest(User& user, uint32 questHash);
+
+				uint32 ExcuteRoomSerialUsers(IExcuter& excuter);
 			private:
 				bool m_NowCampfire = false;
 				bool m_Active = false;
@@ -234,11 +364,6 @@ namespace Lunia {
 				PvpRoomInfo::BattleGroundInfoType m_BattleGroundInfo;
 				typedef std::vector<Guild> Guilds;
 				Guilds m_Guilds;
-			private:
-				bool SetStage(StageLicense& targetStage, const std::string& roomPass, const int64& pActivationSerial, const std::wstring& userName);
-				bool SideStageJoinCheck() const;
-				bool CapacityCheck(UserSharedPtr user) const;
-				uint16 GetStageCapcacity() const;
 			};
 			typedef std::shared_ptr<Room> RoomSharedPtr;
 		}

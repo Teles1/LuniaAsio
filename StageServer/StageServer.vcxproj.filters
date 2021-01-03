@@ -65,6 +65,9 @@
     <ClCompile Include="Protocol\FromServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Room\IUserRoom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

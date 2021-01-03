@@ -168,6 +168,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Room\IUserRoom.cpp" />
     <ClCompile Include="Room\RoomUpdateManager.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="Room\Services\Guild.cpp" />
