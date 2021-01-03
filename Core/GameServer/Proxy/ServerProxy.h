@@ -42,14 +42,14 @@ namespace Lunia {
 
 					client->OnSocketReadPacket.Connect([clientId = client->GetId(), &PacketHandler, &ClientRegistry](char* buffer, unsigned short& len)
 					{
-						Lunia::Net::StreamReader streamReader(buffer);
-
 						TClientProxyWeakPtr clientWeak = ClientRegistry->GetClientById(clientId);
 
 						auto clientLocked = clientWeak.lock();
 
 						if (clientLocked)
 						{
+							Lunia::Net::StreamReader streamReader(buffer);
+
 							unsigned short* packetNameHashed = reinterpret_cast<unsigned short*>(&buffer[4]);
 
 							PacketHandler->Invoke(clientLocked, (uint16_t)*packetNameHashed, streamReader);

@@ -49,9 +49,15 @@ namespace Lunia {
 
 		inline void DropClient(ClientSharedPtr& client, std::string reason = "")
 		{
+			client->Drop(); /* ClientNetworkIO::Drop */
+
+			client->OnDropped(); /* ClientProxy::fwEvent */
+
+			OnClientDropped(client);
+
 			m_clientIdToClientWeak.erase(client->GetId());
 
-			{
+			// {
 				std::scoped_lock<std::mutex> slock(m_clientsMutex);
 
 				auto it = std::find(m_clients.begin(), m_clients.end(), client);
@@ -60,15 +66,9 @@ namespace Lunia {
 				{
 					m_clients.erase(it);
 				}
-			}
+			// }
 
 			std::cout << "Client:" << client->GetId() << " was disconnected! reason: " << reason << std::endl;
-
-			client->OnDropped();
-
-			OnClientDropped(client);
-
-			client->Drop();
 		}
 
 		inline std::vector<ClientSharedPtr&> GetClients()
