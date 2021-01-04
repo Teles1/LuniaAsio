@@ -29,7 +29,7 @@ namespace Lunia {
 					std::vector<uint8> Buffer;
 					Buffer.resize(4);
 					compressedUpgradeCbf->Read(&Buffer[0], 4);
-					size_t BufferSize = *(int*)&Buffer[0];
+					size_t BufferSize = (size_t)(*(int*)&Buffer[0]);
 
 					Buffer.resize(BufferSize);
 					compressedUpgradeCbf->Read(&Buffer[0], (uint32)BufferSize);
@@ -37,12 +37,14 @@ namespace Lunia {
 
 					/* Unidentified */
 					Buffer.clear();
+					Buffer.resize(4);
 					compressedUpgradeCbf->Read(&Buffer[0], 4);
-					size_t BufferUnidentifiedSize = *(int*)&Buffer[0];
+					size_t BufferUnidentifiedSize = (size_t)(*(int*)&Buffer[0]);
 
 					Buffer.resize(BufferUnidentifiedSize);
 					compressedUpgradeCbf->Read(&Buffer[0], (int)BufferUnidentifiedSize);
 					IndexedNewUpgradeTablesCompressed = Buffer;
+
 				}
 
 				bool CompressedUpgradeTableManager::GetUpgradeTable(const uint32 templateOffset)

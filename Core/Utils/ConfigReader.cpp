@@ -15,24 +15,24 @@ namespace Lunia {
         std::ifstream in(filename);
         json j = json::parse((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
 
-        if (j["Config"].is_null())
+        if (j.at("Config").is_null())
             Logger::GetInstance().Exception("Cannot launch server without settings.");
-        this->m_Config = j["Config"];
-        if (!j["Config"]["LobbyServer"].is_null()) {
+        this->m_Config = j.at("Config");
+        if (!j.at("Config")["LobbyServer"].is_null()) {
             this->m_ServerKind = ServerKind::LobbyKind;
             this->m_BaseStr = "LobbyServer";
-        } else if (!j["Config"]["PvpServer"].is_null()) {
+        } else if (!j.at("Config")["PvpServer"].is_null()) {
             this->m_ServerKind = ServerKind::PVPKind;
             this->m_BaseStr = "PvpServer";
-        }else if (!j["Config"]["SquareServer"].is_null()) {
+        }else if (!j.at("Config")["SquareServer"].is_null()) {
             this->m_ServerKind = ServerKind::SquareKind;
             this->m_BaseStr = "SquareServer";
-        }else if (!j["Config"]["StageServer"].is_null()) {
+        }else if (!j.at("Config")["StageServer"].is_null()) {
             this->m_ServerKind = ServerKind::StageKind;
             this->m_BaseStr = "StageServer";
         }else
             Logger::GetInstance().Exception("Could not find a valid ServerKind");
-        if (m_Config[m_BaseStr].is_null())
+        if (m_Config.at(m_BaseStr).is_null())
             throw;
         m_Config.get_to(Settings);
     }
