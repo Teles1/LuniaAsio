@@ -102,7 +102,7 @@ namespace Lunia {
 					enum ActionClassType {
 						NORMAL = 0, STAND = 1, MOVE = 2, DASH = 3, STUN = 4, ATTACK = 5, DOWNSTART = 6, DOWNAIR = 7, DOWNEND = 8,
 						DOWNFINISH = 9, PHOENIXDOWNAIR = 10, HITAIR = 11, FAINT = 12, GHOSTRISE = 13, SLEEP = 14, STRAFE = 15,
-						MOVINGKNOCKBACK = 16, HEIGHTZERO = 17, PHOENIXDOWN2AIR = 18, CENTERMOVE = 19
+						MOVINGKNOCKBACK = 16, HEIGHTZERO = 17, PHOENIXDOWN2AIR = 18, CENTERMOVE = 19, ALLPLAYER = 20
 					}; // 3.1 by ultimate @Oralce - 01JAN2020 20:03 EST added centermove. maybe be unnecessary
 
 					static const std::wstring& GetActionClassTypeStr(ActionClassType type);
