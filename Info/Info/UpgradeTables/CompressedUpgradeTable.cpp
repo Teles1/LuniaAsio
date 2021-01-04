@@ -36,8 +36,6 @@ namespace Lunia {
 					IndexedUpgradeTablesCompressed = Buffer;
 
 					/* Unidentified */
-					Buffer.clear();
-					Buffer.resize(4);
 					compressedUpgradeCbf->Read(&Buffer[0], 4);
 					size_t BufferUnidentifiedSize = (size_t)(*(int*)&Buffer[0]);
 
