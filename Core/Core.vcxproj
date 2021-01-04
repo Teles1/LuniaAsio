@@ -149,7 +149,7 @@
       <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -173,12 +173,13 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>$(SolutionDir)$(ProjectName)\$(ProjectName).h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <SupportJustMyCode>true</SupportJustMyCode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

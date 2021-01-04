@@ -67,10 +67,10 @@ namespace Lunia {
         }
         template <typename T>
         T Get(const char* name, const T& defaulValue) {
-            if (m_Config.at(m_BaseStr).at(name).is_null()) {
+            if (m_Config.at(m_BaseStr)[name].is_null()) {
                 return defaulValue;
             }
-            return m_Config.at(m_BaseStr).at(name).get<T>();
+            return m_Config.at(m_BaseStr)[name].get<T>();
         }
     private:
         json m_Config;
