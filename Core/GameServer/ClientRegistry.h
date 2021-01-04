@@ -16,7 +16,7 @@ namespace Lunia {
 		typedef std::weak_ptr  <TClientScope> ClientWeakPtr;
 
 	public:
-		ClientRegistry()
+		inline ClientRegistry()
 		{
 			m_pingThread = std::thread([this]
 				{
@@ -24,14 +24,14 @@ namespace Lunia {
 					{
 						this->PingClients();
 
-						std::this_thread::sleep_for(std::chrono::seconds(3));
+						std::this_thread::sleep_for(std::chrono::seconds(15));
 					}
 				});
 		};
 
-		~ClientRegistry() { };
+		inline ~ClientRegistry() { };
 
-		void MakeClient(asio::ip::tcp::socket&& socket)
+		inline void MakeClient(asio::ip::tcp::socket&& socket)
 		{
 			ClientSharedPtr client = std::make_shared<TClientScope>(std::move(socket)); /* WARN socket is moved a shit ton of times here */
 			ClientWeakPtr clientWeak = client;
@@ -49,9 +49,15 @@ namespace Lunia {
 
 		inline void DropClient(ClientSharedPtr& client, std::string reason = "")
 		{
+			client->Drop(); /* ClientNetworkIO::Drop */
+
+			client->OnDropped(); /* ClientProxy::fwEvent */
+
+			OnClientDropped(client);
+
 			m_clientIdToClientWeak.erase(client->GetId());
 
-			{
+			// {
 				std::scoped_lock<std::mutex> slock(m_clientsMutex);
 
 				auto it = std::find(m_clients.begin(), m_clients.end(), client);
@@ -60,15 +66,9 @@ namespace Lunia {
 				{
 					m_clients.erase(it);
 				}
-			}
+			// }
 
 			std::cout << "Client:" << client->GetId() << " was disconnected! reason: " << reason << std::endl;
-
-			client->OnDropped();
-
-			OnClientDropped(client);
-
-			client->Drop();
 		}
 
 		inline std::vector<ClientSharedPtr&> GetClients()
@@ -139,7 +139,7 @@ namespace Lunia {
 					}
 					else
 					{
-						if (client->m_numNonACKPings >= 5)
+						if (client->m_numNonACKPings >= 2)
 						{
 							ClientWeakPtr clientWeak = client;
 
@@ -159,7 +159,7 @@ namespace Lunia {
 				{
 					auto client = clientWeak.lock();
 
-					this->DropClient(client, "didn't acknowledge 5 pings!");
+					this->DropClient(client, "didn't acknowledge 2 pings!");
 				}
 			}
 		}

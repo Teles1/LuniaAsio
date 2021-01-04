@@ -5,7 +5,7 @@
 #include "../NetworkIO.h"
 #include <Network/Crypt/Crypt.h>
 namespace Lunia{
-	struct ClientNetworkIO : std::enable_shared_from_this<ClientNetworkIO> /* TODO Is it necessary? */
+	struct ClientNetworkIO
 	{
 		static const uint16_t READ_BUFFER_LENGTH = 2 << 12;
 		static const uint16_t PACKET_HEADER_SIZE = sizeof(uint16_t) + sizeof(unsigned short);
@@ -13,7 +13,7 @@ namespace Lunia{
 
 		ClientNetworkIO(asio::ip::tcp::socket&& socket);
 
-		~ClientNetworkIO()
+		inline ~ClientNetworkIO()
 		{
 
 		};

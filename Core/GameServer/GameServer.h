@@ -7,7 +7,7 @@ namespace Lunia{
 	class GameServer : public GameServerNetworkIO
 	{
 	public:
-		GameServer(const ServerAddressStruct& serverAddress) : GameServerNetworkIO(serverAddress.ServerIp.c_str(), serverAddress.ServerPort)
+		inline GameServer(const ServerAddressStruct& serverAddress) : GameServerNetworkIO(serverAddress.ServerIp.c_str(), serverAddress.ServerPort)
 		{
 			// Proxy = new TServerProxy();
 
