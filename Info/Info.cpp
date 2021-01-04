@@ -11,7 +11,7 @@ namespace Lunia {
 				InfoCollections.Npcs.Init(xmlLoad);
 				//InfoCollections.Miscs.Init(xmlLoad);
 				//InfoCollections.Projectiles.Init(xmlLoad);
-				//InfoCollections.Skills.Init(xmlLoad);
+				InfoCollections.Skills.Init(xmlLoad);
 				InfoCollections.Stages.Init(xmlLoad);
 				InfoCollections.Statuses.Init(xmlLoad);
 				InfoCollections.StateBundles.Init(xmlLoad);
@@ -47,7 +47,7 @@ namespace Lunia {
 				InfoCollections.NonPlayerModifierInfos.Init(xmlLoad);
 				//InfoCollections.OpenMarketInfos.Init(xmlLoad);
 				//InfoCollections.BagInfos.Init(xmlLoad);
-				//InfoCollections.EpisodeSquareAdventageInfos.Init(xmlLoad);
+				InfoCollections.EpisodeSquareAdventageInfos.Init(xmlLoad);
 
 				// EventQuest
 				//InfoCollections.EventQuests.Init();

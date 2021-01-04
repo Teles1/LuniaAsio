@@ -144,7 +144,7 @@
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
@@ -175,6 +175,8 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <SupportJustMyCode>true</SupportJustMyCode>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -202,6 +204,7 @@
     <ClInclude Include="Info\Enchant\EnchantTable.h" />
     <ClInclude Include="Info\EquipSet\EquipSet.h" />
     <ClInclude Include="Info\EquipSet\EquipSetManager.h" />
+    <ClInclude Include="Info\ETC\EpisodeSquareAdventageManager.h" />
     <ClInclude Include="Info\ETC\StageClearPresentInfo.h" />
     <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.h" />
     <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.h" />
@@ -277,6 +280,7 @@
     <ClCompile Include="Info\Enchant\EnchantTable.cpp" />
     <ClCompile Include="Info\EquipSet\EquipSet.cpp" />
     <ClCompile Include="Info\EquipSet\EquipSetManager.cpp" />
+    <ClCompile Include="Info\ETC\EpisodeSquareAdventageManager.cpp" />
     <ClCompile Include="Info\ETC\StageClearPresentInfo.cpp" />
     <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.cpp" />
     <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.cpp" />

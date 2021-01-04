@@ -32,7 +32,7 @@
 #include <Info/Info/GuildFamily/FamilyInfoManager.h>
 #include <Info/Info/CashShopBarter/CashShopBarterManager.h>
 #include <Info/Info/StageInfo/StageLicenseProvider.h>
-
+#include <Info/Info/ETC/EpisodeSquareAdventageManager.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -69,6 +69,7 @@ namespace Lunia {
 					Info::BarterItemInfoManager BarterItems;
 					Info::FamilyInfoManager FamilyInfos;
 					Info::StageLicenseProvider LicenseProvider;
+					Info::EpisodeSquareAdventageManager EpisodeSquareAdventageInfos;
 				} InfoCollections;
 			};
 			LuniaDatabase& DatabaseInstance();
