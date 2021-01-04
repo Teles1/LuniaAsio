@@ -102,12 +102,13 @@ namespace Lunia{
 					}
 				}
 
+				/* Virtual void implemented on 
 				void NPCInfoManager::LoadBinaryData()
 				{
 					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/NPCInfos.b");
 					reader->Read(L"NPCInfoManager", *this);
 				}
-
+				*/
 				NonPlayerInfo* NPCInfoManager::Retrieve(uint32 hash)
 				{
 					auto it = this->Npcs.find(hash);
@@ -148,7 +149,41 @@ namespace Lunia{
 					in.Read(L"basicResist", basicResist);
 				}
 
-			}
+				void NPCInfoManager::BasicResist::Resist::Serialize(Serializer::IStreamWriter& out) const
+
+				{
+					out.Begin(L"BinaryBufferXRated::Database::Info::NPCInfoManager::BasicResist::Resist");
+					out.Write(L"FIRE", resist[0]);
+					out.Write(L"WATER", resist[1]);
+					out.Write(L"ICE", resist[2]);
+					out.Write(L"LIGHTNING", resist[3]);
+					out.Write(L"LAND", resist[4]);
+					out.Write(L"WIND", resist[5]);
+					out.Write(L"POISON", resist[6]);
+					out.Write(L"LIGHT", resist[7]);
+					out.Write(L"CURSE", resist[8]);
+					out.Write(L"PHYSICAL", resist[9]);
+					out.Write(L"INDEPENDENCE", resist[10]);
+				}
+
+				void NPCInfoManager::BasicResist::Resist::Deserialize(Serializer::IStreamReader& in)
+
+				{
+					in.Begin(L"BinaryBufferXRated::Database::Info::NPCInfoManager::BasicResist::Resist");
+					in.Read(L"FIRE", resist[0]);
+					in.Read(L"WATER", resist[1]);
+					in.Read(L"ICE", resist[2]);
+					in.Read(L"LIGHTNING", resist[3]);
+					in.Read(L"LAND", resist[4]);
+					in.Read(L"WIND", resist[5]);
+					in.Read(L"POISON", resist[6]);
+					in.Read(L"LIGHT", resist[7]);
+					in.Read(L"CURSE", resist[8]);
+					in.Read(L"PHYSICAL", resist[9]);
+					in.Read(L"INDEPENDENCE", resist[10]);
+				}
+
+}
 		}
 	}
 }

@@ -5,7 +5,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
-
+				/*
 				void IndexedNPCInfoManager::LoadBinaryData()
 				{
 					loader = CreateLoader(L"Database/NPCInfos.b");
@@ -66,6 +66,7 @@ namespace Lunia {
 				{
 					return Remove(StringUtil::Hash(id));
 				}
+				*/
 			}
 		}
 	}

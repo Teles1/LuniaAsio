@@ -32,6 +32,8 @@ namespace Lunia {
 					size_t srcSize = (size_t)(*(int*)buffer) + LZMA_PROPS_SIZE;
 					compressedNpcCbf->Read(buffer, 4);
 					uint32 UNCOMPRESSED_SIZE = *(int*)buffer;
+					delete[] buffer;
+
 					buffer = new uint8[srcSize];
 					compressedNpcCbf->Read(buffer, (uint32)srcSize);
 
@@ -55,8 +57,10 @@ namespace Lunia {
 				}
 
 				NonPlayerInfo* CompressedNPCInfoManager::Retrieve(const uint32 hash) {
-					if (compressedNpcs.dataPosition.find(hash) == compressedNpcs.dataPosition.end()) return nullptr;
-					if (this->Npcs.find(hash) != this->Npcs.end()) return &Npcs[hash];
+					if (compressedNpcs.dataPosition.find(hash) == compressedNpcs.dataPosition.end())
+						return nullptr;
+					if (this->Npcs.find(hash) != this->Npcs.end())
+						return &Npcs[hash];
 					GetNPC(compressedNpcs.dataPosition[hash]);
 					return &Npcs[hash];
 				}

@@ -5,6 +5,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
+				/*
 				class IndexedNPCInfoManager : public NPCInfoManager
 				{
 				public: // i perfer this style ( putting public members on top	 )
@@ -25,6 +26,7 @@ namespace Lunia {
 					com_ptr<Loader>			loader;
 					com_ptr<IndexedManagerWithMap>	npcManager;
 				};
+				*/
 			}
 		}
 	}
