@@ -1,34 +1,16 @@
 #pragma once
 #include "CompressedActionsManager.h"
-#include <iostream>
+#include <Core/FileIO/FileStream.h>
+#include <LzmaLib/LzmaLib.h>
+
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
-				std::vector<std::wstring> actionNames;
-				void CompressedActionInfoManager::Actions::Serialize(Serializer::IStreamWriter& out) const
-				{
-					out.Begin(L"AllM::XRated::Database::Info::CompressedActionInfoManager::Actions");
-					out.Write(L"compressedActionMap", compressedActionMap);
-					out.Write(L"reverseMap", reverseMap);
-					out.Write(L"actorList", actorList);
-
-				}
-
-				void CompressedActionInfoManager::Actions::Deserialize(Serializer::IStreamReader& in)
-				{
-					in.Begin(L"AllM::XRated::Database::Info::CompressedActionInfoManager::Actions");
-					in.Read(L"compressedActionMap", compressedActionMap);
-					in.Read(L"reverseMap", reverseMap);
-					in.Read(L"actorList", actorList);
-
-					actionNames.push_back( std::prev( actorList.end() )->first );
-				}
-
 				void CompressedActionInfoManager::SaveXmlData() {
 					Resource::SerializerStreamWriter writer = Resource::ResourceSystemInstance().CreateSerializerXmlStreamWriter(L"CompressedActionsInfos.xml");
 					writer->Begin(L"AllM::XRated::Database::Info::CompressedActionInfoManager::Actions");
-					writer->Write(L"compressedActionMap", compressedActionMap);
+					writer->Write(L"compressedActionMap", actionMap);
 				}
 
 				void CompressedActionInfoManager::Init(bool forceXml)
@@ -39,43 +21,44 @@ namespace Lunia {
 
 				void CompressedActionInfoManager::LoadBinaryData()
 				{
-					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/CompressedActionInfos.b");
-					reader->Read(L"compressedActionMap", compressedActionMap);
-
-					compressedActionsCbf = Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/ActionInfos.cbf");
+					Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/CompressedActionInfos.b")
+						->Read(L"compressedActionMap", actionMap);
 				}
 
 				void CompressedActionInfoManager::LoadCBFInData()
 				{
+					Resource::StreamReader compressedActionsCbf = Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/ActionInfos.cbf");
 					compressedActionsCbf->SetReadCursor(0, Lunia::IStream::Begin);
-					for (int i = 0; i < actionNames.size(); i++) {
-						if (actionNames[i] == L"") {
+					for (auto& itr : actionMap) {
+						if (itr.second.compressedActionMap.size() == 0) {
 							compressedActionsCbf->SetReadCursor(compressedActionsCbf->GetReadCursor() + 4, Lunia::IStream::Begin); 
+							itr.second.compressedData = { 0x0,0x0,0x0,0x0 }; //prevent the missmatch in the size (annoys me plus it's only 4 bytes. come on!)
+							// this might not be needed but i'm doing it anyways.
 							continue;
 						}
-						uint8* SizeNpc = reinterpret_cast<uint8*>(new char[4]);
-						compressedActionsCbf->Read(SizeNpc, 4);
-						uint32 srcSize = *(int*)SizeNpc;
+						uint8* buffer = new uint8[4];
+						compressedActionsCbf->Read(buffer, 4);
+						uint32 srcSize = (size_t)(*(int*)buffer);
 						std::vector<uint8> lReplayBuffer;
 						lReplayBuffer.resize(srcSize);
 						compressedActionsCbf->Read(&lReplayBuffer[0], (uint32)srcSize);
-						IndexedActionsCompressed[i] = lReplayBuffer;
+						itr.second.compressedData = std::move(lReplayBuffer);
 					}
 				}
-
-				void CompressedActionInfoManager::GetData(const uint32 index)
+				void CompressedActionInfoManager::GetData(ActionInfoManager::Actions& actionMap)
 				{
-					compressedActionsCbf = new FileIO::RefCountedMemoryStreamReader(&IndexedActionsCompressed[index][0], (uint32)IndexedActionsCompressed[index].size());
+					Resource::StreamReader reader = new FileIO::RefCountedMemoryStreamReader( &actionMap.compressedData[0], uint32(actionMap.compressedData.size()) );
 
 					std::vector<uint8> Buffer;
 					Buffer.resize(4);
 					size_t COMPRESSED_SIZE = 0;
 					size_t UNCOMPRESSED_SIZE = 0;
 
-					while (compressedActionsCbf->GetSizeLeft() > 0) {
-						compressedActionsCbf->Read(&Buffer[0], 4);
+					while (reader->GetSizeLeft() > 0) {
+						reader->Read(&Buffer[0], 4);
 						COMPRESSED_SIZE = *(int*)&Buffer[0];
-						compressedActionsCbf->Read(&Buffer[0], 4);
+						
+						reader->Read(&Buffer[0], 4);
 						UNCOMPRESSED_SIZE = *(int*)&Buffer[0];
 
 						/* Setting buffer input and output sizes*/
@@ -84,7 +67,7 @@ namespace Lunia {
 						std::vector<uint8> outBuf;
 						outBuf.resize(UNCOMPRESSED_SIZE);
 
-						compressedActionsCbf->Read(inBuf.data(), (uint32)inBuf.size());
+						reader->Read(inBuf.data(), (uint32)inBuf.size());
 
 						/*decoding and decrypting the binary owo*/
 						SRes res = LzmaUncompress(outBuf.data(), &UNCOMPRESSED_SIZE, inBuf.data() + LZMA_PROPS_SIZE, &COMPRESSED_SIZE, inBuf.data(), LZMA_PROPS_SIZE);
@@ -92,10 +75,11 @@ namespace Lunia {
 						Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(
 							new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)UNCOMPRESSED_SIZE)
 						);
-						BlockDecrypted->Read(L"ActionsInfoManager", actions, false);
+						BlockDecrypted->Read(L"ActionsInfoManager", actionMap.actions, false);
 					}
+					actionMap.compressedData.clear();
 				}
-
+				/*
 				ActionInfo* CompressedActionInfoManager::Retrieve(const wchar_t* actionName)
 				{
 					for (int i = 0; i < actionNames.size(); i++) {
@@ -105,6 +89,20 @@ namespace Lunia {
 						}
 					}
 					return nullptr;
+				}*/
+				ActionInfoManager::Actions& CompressedActionInfoManager::Retrieve(const wchar_t* templateName) {
+					auto i = actionMap.find(templateName);
+					
+					if (i != actionMap.end())
+					{
+						//if there is actions in the list but the number of actionsInfo loaded doesn't match it means that we should be reading the cbf.
+						//if not then we just return.
+						if((*i).second.actions.size() != (*i).second.compressedActionMap.size()) 
+							GetData((*i).second); // this clears the compresseddata buffer btw.
+						return (*i).second;
+					}
+					LoggerInstance().Exception(L"Unable to find action by template name({0})", templateName);
+					throw;
 				}
 			}
 		}

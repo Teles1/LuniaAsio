@@ -1,6 +1,7 @@
 #pragma once
 #include "Actions.h"
 #include <Info/Info/Less.h>
+#include <Info/Info/CompressedLoader.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -10,6 +11,10 @@ namespace Lunia {
 					struct Actions : public Serializer::ISerializable {
 						typedef std::map< std::wstring/*unique name(not templateName)*/, std::vector<std::wstring>, Less<std::wstring> > ActorList;
 						typedef std::map<std::wstring, ActionInfo, Less<std::wstring> > ActionList;
+
+						std::map<std::wstring, uint32, Less<std::wstring> > compressedActionMap;
+						std::vector<uint8> compressedData;
+						std::map<uint32, std::wstring> reverseMap;
 
 						ActionList actions;
 						ActorList actorList;
@@ -64,8 +69,7 @@ namespace Lunia {
 					typedef std::map<std::wstring, Actions, Less<std::wstring> > ActionMap;
 					typedef std::vector<AutoAction> AutoActionList;
 					typedef std::map< uint32 /*unique id*/, std::vector<AutoAction> > AutoActionListMap;
-					
-					ActionsMap actions;
+
 					ActionMap actionMap;
 					AutoActionListMap AutoActions;
 

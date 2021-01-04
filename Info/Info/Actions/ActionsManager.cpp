@@ -180,7 +180,7 @@ namespace Lunia {
 					ActionMap::iterator iter = actionMap.find(templateName);
 					if (iter == actionMap.end())
 						return NULL;
-					Actions& actions = (*iter).second;
+					auto& actions = (*iter).second;
 					Actions::ActorList::iterator i = actions.actorList.find(name);
 					if (i != actions.actorList.end())
 						return &(*i).second;
@@ -207,29 +207,31 @@ namespace Lunia {
 
 				void ActionInfoManager::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"XRated::Database::Info::ActionInfoManager");
+					out.Begin(L"AllM::XRated::Database::Info::ActionInfoManager");
 					out.Write(L"actionMap", actionMap);
 					out.Write(L"AutoActions", AutoActions);
 				}
 
 				void ActionInfoManager::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"XRated::Database::Info::ActionInfoManager");
+					in.Begin(L"AllM::XRated::Database::Info::ActionInfoManager");
 					in.Read(L"actionMap", actionMap);
 					in.Read(L"AutoActions", AutoActions, AutoActionListMap());
 				}
 
 				void ActionInfoManager::Actions::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"XRated::Database::Info::ActionInfoManager::Actions");
-					out.Write(L"actions", actions);
+					out.Begin(L"AllM::XRated::Database::Info::CompressedActionInfoManager::Actions");
+					out.Write(L"compressedActionMap", compressedActionMap);
+					out.Write(L"reverseMap", reverseMap);
 					out.Write(L"actorList", actorList);
 				}
 
 				void ActionInfoManager::Actions::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"XRated::Database::Info::ActionInfoManager::Actions");
-					in.Read(L"actions", actions);
+					in.Begin(L"AllM::XRated::Database::Info::CompressedActionInfoManager::Actions");
+					in.Read(L"compressedActionMap", compressedActionMap);
+					in.Read(L"reverseMap", reverseMap);
 					in.Read(L"actorList", actorList);
 				}
 
