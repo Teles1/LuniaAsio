@@ -280,9 +280,6 @@
     <ClCompile Include="Info\Items\ItemManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Info\CompressedLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Info\Items\CompressedItemInfoManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

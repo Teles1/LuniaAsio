@@ -1,6 +1,6 @@
 #include <Info/Info/Items/CompressedItemInfoManager.h>
 #include <Core/FileIO/FileStream.h>
-
+#include <LzmaLib/LzmaLib.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -36,23 +36,24 @@ namespace Lunia {
 				void CompressedItemInfoManager::LoadData()
 				{
 					compressedItemsCBF->SetReadCursor(0, Lunia::IStream::Begin);
+					uint8* Buffer = new uint8[4];
 					/* Items */
-					uint8* BufferItems = reinterpret_cast<uint8*>(new char[4]);
-					compressedItemsCBF->Read(BufferItems, 4);
-					size_t BufferSize = *(int*)BufferItems;
+					compressedItemsCBF->Read(Buffer, 4);
+					size_t BufferSize = *(int*)Buffer;
+
 					std::vector<uint8> IBufferItems;
 					IBufferItems.resize(BufferSize);
 					compressedItemsCBF->Read(&IBufferItems[0], (uint32)BufferSize);
 					IndexedItemsCompressed = IBufferItems;
 
 					/* Unidentified */
-					uint8* BufferUnidentified = reinterpret_cast<uint8*>(new char[4]);
-					compressedItemsCBF->Read(BufferUnidentified, 4);
-					size_t BufferUnidentifiedSize = *(int*)BufferUnidentified;
+					compressedItemsCBF->Read(Buffer, 4);
+					size_t BufferUnidentifiedSize = *(int*)Buffer;
 					std::vector<uint8> IBufferUnidentified;
 					IBufferUnidentified.resize(BufferUnidentifiedSize);
 					compressedItemsCBF->Read(&IBufferUnidentified[0], (uint32)BufferUnidentifiedSize);
 					IndexedUnidentifiedCompressed = IBufferUnidentified;
+					delete[] Buffer;
 				}
 
 				/* Items */

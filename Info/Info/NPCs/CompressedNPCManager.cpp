@@ -1,5 +1,7 @@
 #pragma once
 #include "CompressedNPCManager.h"
+#include <LzmaLib/LzmaLib.h>
+#include <Core/FileIO/FileStream.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -23,21 +25,21 @@ namespace Lunia {
 				{
 					compressedNpcCbf->SetReadCursor(templateOffset + 4, Lunia::IStream::Begin);
 					/* CompressedBlockSizeInBytes */
-					uint8* SizeBlock = reinterpret_cast<uint8*>(new char[4]);
+					uint8* buffer = new uint8[4];
 
 					/* Reading and setting a first block data in ReplayBuffer*/
-					compressedNpcCbf->Read(SizeBlock, 4);
-					size_t srcSize = *(int*)SizeBlock + LZMA_PROPS_SIZE;
-					compressedNpcCbf->Read(SizeBlock, 4);
-					uint32 UNCOMPRESSED_SIZE = *(int*)SizeBlock;
-					uint8* lReplayBuffer = reinterpret_cast<uint8*>(new char[srcSize]);
-					compressedNpcCbf->Read(lReplayBuffer, (uint32)srcSize);
+					compressedNpcCbf->Read(buffer, 4);
+					size_t srcSize = (size_t)(*(int*)buffer) + LZMA_PROPS_SIZE;
+					compressedNpcCbf->Read(buffer, 4);
+					uint32 UNCOMPRESSED_SIZE = *(int*)buffer;
+					buffer = new uint8[srcSize];
+					compressedNpcCbf->Read(buffer, (uint32)srcSize);
 
 					/* Setting buffer input and output sizes*/
 					std::vector<uint8> inBuf(srcSize);
 					std::vector<uint8> outBuf;
 					outBuf.resize(UNCOMPRESSED_SIZE);
-					memcpy(&inBuf[0], lReplayBuffer, srcSize);
+					memcpy(&inBuf[0], buffer, srcSize);
 
 					/*decoding and decrypting the binary owo*/
 					size_t dstLen = outBuf.size();
@@ -48,6 +50,8 @@ namespace Lunia {
 						new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)dstLen)
 					);
 					BlockDecrypted->Read(L"NPCInfoManager", Npcs, false);
+
+					delete[] buffer;
 				}
 
 				NonPlayerInfo* CompressedNPCInfoManager::Retrieve(const uint32 hash) {

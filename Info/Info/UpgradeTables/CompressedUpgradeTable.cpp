@@ -1,5 +1,7 @@
 #pragma once
 #include "CompressedUpgradeTable.h"
+#include <LzmaLib/LzmaLib.h>
+#include <Core/FileIO/FileStream.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -24,22 +26,23 @@ namespace Lunia {
 				{
 					compressedUpgradeCbf->SetReadCursor(0, Lunia::IStream::Begin);
 					/* Items */
-					uint8* BufferUpgradeTables = reinterpret_cast<uint8*>(new char[4]);
-					compressedUpgradeCbf->Read(BufferUpgradeTables, 4);
-					size_t BufferSize = *(int*)BufferUpgradeTables;
-					std::vector<uint8> IBufferUpgradeTables;
-					IBufferUpgradeTables.resize(BufferSize);
-					compressedUpgradeCbf->Read(&IBufferUpgradeTables[0], (uint32)BufferSize);
-					IndexedUpgradeTablesCompressed = IBufferUpgradeTables;
+					std::vector<uint8> Buffer;
+					Buffer.resize(4);
+					compressedUpgradeCbf->Read(&Buffer[0], 4);
+					size_t BufferSize = *(int*)&Buffer[0];
+
+					Buffer.resize(BufferSize);
+					compressedUpgradeCbf->Read(&Buffer[0], (uint32)BufferSize);
+					IndexedUpgradeTablesCompressed = Buffer;
 
 					/* Unidentified */
-					uint8* BufferNewUpgrades = reinterpret_cast<uint8*>(new char[4]);
-					compressedUpgradeCbf->Read(BufferNewUpgrades, 4);
-					size_t BufferUnidentifiedSize = *(int*)BufferNewUpgrades;
-					std::vector<uint8> IBufferNewUpgrades;
-					IBufferNewUpgrades.resize(BufferUnidentifiedSize);
-					compressedUpgradeCbf->Read(&IBufferNewUpgrades[0], (int)BufferUnidentifiedSize);
-					IndexedNewUpgradeTablesCompressed = IBufferNewUpgrades;
+					Buffer.clear();
+					compressedUpgradeCbf->Read(&Buffer[0], 4);
+					size_t BufferUnidentifiedSize = *(int*)&Buffer[0];
+
+					Buffer.resize(BufferUnidentifiedSize);
+					compressedUpgradeCbf->Read(&Buffer[0], (int)BufferUnidentifiedSize);
+					IndexedNewUpgradeTablesCompressed = Buffer;
 				}
 
 				bool CompressedUpgradeTableManager::GetUpgradeTable(const uint32 templateOffset)
@@ -47,21 +50,23 @@ namespace Lunia {
 					compressedUpgradeCbf = new FileIO::RefCountedMemoryStreamReader(IndexedUpgradeTablesCompressed.data(), (uint32)IndexedUpgradeTablesCompressed.size());
 					compressedUpgradeCbf->SetReadCursor(templateOffset, Lunia::IStream::Begin);
 					/* CompressedBlockSizeInBytes */
-					uint8* SizeBlock = reinterpret_cast<uint8*>(new char[4]);
+					uint8* Buffer = new uint8[4];
 
 					/* Reading and setting a first block data in ReplayBuffer*/
-					compressedUpgradeCbf->Read(SizeBlock, 4);
-					size_t srcSize = *(int*)SizeBlock + LZMA_PROPS_SIZE;
-					compressedUpgradeCbf->Read(SizeBlock, 4);
-					uint32 UNCOMPRESSED_SIZE = *(int*)SizeBlock;
-					uint8* lReplayBuffer = reinterpret_cast<uint8*>(new char[srcSize]);
-					compressedUpgradeCbf->Read(lReplayBuffer, (int)srcSize);
+					compressedUpgradeCbf->Read(Buffer, 4);
+					size_t srcSize = (size_t)(*(int*)Buffer) + LZMA_PROPS_SIZE;
+					compressedUpgradeCbf->Read(Buffer, 4);
+					uint32 UNCOMPRESSED_SIZE = *(int*)Buffer;
+					delete[] Buffer;
+
+					Buffer = new uint8[srcSize];
+					compressedUpgradeCbf->Read(Buffer, (int)srcSize);
 
 					/* Setting buffer input and output sizes*/
 					std::vector<uint8> inBuf(srcSize);
 					std::vector<uint8> outBuf;
 					outBuf.resize(UNCOMPRESSED_SIZE);
-					memcpy(&inBuf[0], lReplayBuffer, srcSize);
+					memcpy(&inBuf[0], Buffer, srcSize);
 
 					/*decoding and decrypting the binary owo*/
 					size_t dstLen = outBuf.size();
@@ -70,6 +75,7 @@ namespace Lunia {
 
 					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)dstLen));
 					BlockDecrypted->Read(L"UpgradeTables", UpgradeTables, false);
+					delete[] Buffer;
 					return true;
 				}
 
@@ -78,21 +84,23 @@ namespace Lunia {
 					compressedUpgradeCbf = new FileIO::RefCountedMemoryStreamReader(IndexedNewUpgradeTablesCompressed.data(), (uint32)IndexedNewUpgradeTablesCompressed.size());
 					compressedUpgradeCbf->SetReadCursor(templateOffset, Lunia::IStream::Begin);
 					/* CompressedBlockSizeInBytes */
-					uint8* SizeBlock = reinterpret_cast<uint8*>(new char[4]);
+					uint8* Buffer = new uint8[4];
 
 					/* Reading and setting a first block data in ReplayBuffer*/
-					compressedUpgradeCbf->Read(SizeBlock, 4);
-					size_t srcSize = *(int*)SizeBlock + LZMA_PROPS_SIZE;
-					compressedUpgradeCbf->Read(SizeBlock, 4);
-					uint32 UNCOMPRESSED_SIZE = *(int*)SizeBlock;
-					uint8* lReplayBuffer = reinterpret_cast<uint8*>(new char[srcSize]);
-					compressedUpgradeCbf->Read(lReplayBuffer, (uint32)srcSize);
+					compressedUpgradeCbf->Read(Buffer, 4);
+					size_t srcSize = (size_t)(*(int*)Buffer) + LZMA_PROPS_SIZE;
+					compressedUpgradeCbf->Read(Buffer, 4);
+					uint32 UNCOMPRESSED_SIZE = *(int*)Buffer;
+					delete[] Buffer;
+
+					Buffer = new uint8[srcSize];
+					compressedUpgradeCbf->Read(Buffer, (uint32)srcSize);
 
 					/* Setting buffer input and output sizes*/
 					std::vector<uint8> inBuf(srcSize);
 					std::vector<uint8> outBuf;
 					outBuf.resize(UNCOMPRESSED_SIZE);
-					memcpy(&inBuf[0], lReplayBuffer, srcSize);
+					memcpy(&inBuf[0], Buffer, srcSize);
 
 					/*decoding and decrypting the binary owo*/
 					size_t dstLen = outBuf.size();
@@ -101,6 +109,7 @@ namespace Lunia {
 
 					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)dstLen));
 					BlockDecrypted->Read(L"NewUpgradeTables", NewUpgradeTables, false);
+					delete[] Buffer;
 					return true;
 				}
 

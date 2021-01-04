@@ -5,7 +5,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
-				class CompressedProjectileInfoManager : public ProjectileInfoManager, CompressedLoader
+				class CompressedProjectileInfoManager : public ProjectileInfoManager
 				{
 				public:
 					// allm shits

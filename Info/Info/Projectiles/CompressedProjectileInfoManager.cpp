@@ -1,5 +1,6 @@
 #pragma once
 #include "CompressedProjectileInfoManager.h"
+#include <LzmaLib/LzmaLib.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -27,21 +28,23 @@ namespace Lunia {
 				{
 					compressedProjectileCBF->SetReadCursor(templateOffset + 4, Lunia::IStream::Begin);
 					/* CompressedBlockSizeInBytes */
-					uint8* SizeBlock = reinterpret_cast<uint8*>(new char[4]);
+					uint8* Buffer = new uint8[4];
 
 					/* Reading and setting a first block data in ReplayBuffer*/
-					compressedProjectileCBF->Read(SizeBlock, 4);
-					size_t srcSize = *(int*)SizeBlock + LZMA_PROPS_SIZE;
-					compressedProjectileCBF->Read(SizeBlock, 4);
-					uint32 UNCOMPRESSED_SIZE = *(int*)SizeBlock;
-					uint8* lReplayBuffer = reinterpret_cast<uint8*>(new char[srcSize]);
-					compressedProjectileCBF->Read(lReplayBuffer, (uint32)srcSize);
+					compressedProjectileCBF->Read(Buffer, 4);
+					size_t srcSize = (size_t)(*(int*)Buffer) + LZMA_PROPS_SIZE;
+					compressedProjectileCBF->Read(Buffer, 4);
+					uint32 UNCOMPRESSED_SIZE = *(int*)Buffer;
+					delete[] Buffer;
+
+					Buffer = new uint8[srcSize];
+					compressedProjectileCBF->Read(Buffer, (uint32)srcSize);
 
 					/* Setting buffer input and output sizes*/
 					std::vector<uint8> inBuf(srcSize);
 					std::vector<uint8> outBuf;
 					outBuf.resize(UNCOMPRESSED_SIZE);
-					memcpy(&inBuf[0], lReplayBuffer, srcSize);
+					memcpy(&inBuf[0], Buffer, srcSize);
 
 					/*decoding and decrypting the binary owo*/
 					size_t dstLen = outBuf.size();
@@ -50,6 +53,8 @@ namespace Lunia {
 
 					Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)dstLen));
 					BlockDecrypted->Read(L"ProjectileInfoManager", Projectiles, false);
+
+					delete[] Buffer;
 				}
 
 				ProjectileInfo* CompressedProjectileInfoManager::Retrieve(const uint32 hash) {

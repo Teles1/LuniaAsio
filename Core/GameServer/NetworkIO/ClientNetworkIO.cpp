@@ -14,8 +14,15 @@ namespace Lunia {
 	}
 
 	void ClientNetworkIO::SocketAsyncReadSome(const asio::error_code& ec, size_t size)
-	{
-		if (!ec)
+	{	
+		if (ec)
+		{
+			if (ec == asio::error::eof) {
+				m_socket.release();
+				m_socket.close();
+				// Close the connection gracefully.
+			}
+		} else
 		{
 
 			/*
@@ -83,10 +90,6 @@ namespace Lunia {
 				}
 			}
 		}
-		else
-		{
-			// std::cout << "ClientNetworkIO " << ec << std::endl;
-		}
 	};
 
 	void ClientNetworkIO::MakeSocketAsyncWriteSome(uint8_t* buffer, size_t size)
@@ -102,9 +105,11 @@ namespace Lunia {
 
 	void ClientNetworkIO::Drop()
 	{
-		m_socket.release();
+		m_socket.shutdown(asio::socket_base::shutdown_type::shutdown_both);
 
-		m_socket.close();
+		//m_socket.release();
+
+		//m_socket.close();
 	};
 
 	void ClientNetworkIO::SetEncryptionKey(uint32_t& key)

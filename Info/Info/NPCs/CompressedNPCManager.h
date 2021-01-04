@@ -5,7 +5,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
-				class CompressedNPCInfoManager : public NPCInfoManager, CompressedLoader
+				class CompressedNPCInfoManager : public NPCInfoManager
 				{
 				public:
 					// allm shits

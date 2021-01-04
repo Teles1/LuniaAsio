@@ -6,7 +6,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
-				class CompressedItemInfoManager : public Lunia::XRated::Database::Info::ItemInfoManager, CompressedLoader
+				class CompressedItemInfoManager : public Lunia::XRated::Database::Info::ItemInfoManager
 				{
 				public:
 					typedef PositionData<std::map<uint32, uint32>> PositionDat;
