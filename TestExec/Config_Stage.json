@@ -4,21 +4,24 @@
       "Filename": "square_bulky.txt",
       "LoggingLevel": 0
     },
+    "ServerAddress": {
+      "ServerIp": "127.0.0.1",
+      "ServerPort": 15551
+    },
+    "ApiUrl": "http://localhost:51542/Square",
+    "ServerName": "SquareStageDev",
+    "Capacity": 500,
+    "PingTimeout": 30,
+    "ShowPacket": true,
+    "AchievementAddress": {
+      "ServerIp": "127.0.0.1",
+      "ServerPort": 15000
+    },
     "SquareServer": {
-      "ServerAddress": {
-        "ServerIp": "127.0.0.1",
-        "ServerPort": 15551
-      },
-      "ApiUrl": "http://localhost:51542/Square",
-      "ServerName": "SquareStageDev",
-      "PingTimeout": 30,
-      "ShowPacket": true,
-      "Capacity": 500,
-      "AchievementAddress": {
-        "ServerIp": "127.0.0.1",
-        "ServerPort": 15000
-      },
       "UsableBonusLifeInStage": 2,
+      "RoomSize": 2,
+      "PreloadMovemap": false,
+      "PreloadScripts": false,
       "SquareList": [
         {
           "Name": "01 Square",
@@ -41,9 +44,7 @@
           "OrderNumber": 3,
           "Capacity": 70
         }
-      ],
-	  "PreloadMovemap": false,
-	  "PreloadScripts": false
+      ]
     },
     "StageServer": {
       "NumberOfBossRewardUnidentifiedItem": 2
