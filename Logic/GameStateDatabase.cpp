@@ -1123,7 +1123,55 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			if (CheckAlliance(*pcIter, by, value) && PhysicalFunctions::CheckCollision(targetPos, targetDirection, range, (*pcIter)->GetObjectData() ))
 				l.push_back(*pcIter);
 	}
-	// �簢�� ////////////////////////////////////////////////
+	
+	void GameStateDatabase::GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<Object*>& l)
+	{ 
+		Sector* sector = ChooseSector(2 << 16, object->GetSector()); // I dunno. I eye balled a range here lol
+		Sector::ObjectIterator<Actor> objIter = sector->begin<Actor>();
+		for (; objIter.bEnd; ++objIter)
+			if (CheckAlliance(*objIter, by, value))
+				l.push_back(*objIter);
+		Sector::ObjectIterator<NonPlayer> npcIter = sector->begin<NonPlayer>();
+		for (; npcIter.bEnd; ++npcIter)
+			if (CheckAlliance(*npcIter, by, value))
+				l.push_back(*npcIter);
+		Sector::ObjectIterator<Player> pcIter = sector->begin<Player>();
+		for (; pcIter.bEnd; ++pcIter)
+			if (CheckAlliance(*pcIter, by, value))
+				l.push_back(*pcIter);
+	}
+
+	void GameStateDatabase::GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<Actor*>& l)
+	{
+		Sector* sector = ChooseSector(2 << 16, object->GetSector()); // I dunno. I eye balled a range here lol
+		Sector::ObjectIterator<NonPlayer> npcIter = sector->begin<NonPlayer>();
+		for (; npcIter.bEnd; ++npcIter)
+			if (CheckAlliance(*npcIter, by, value))
+				l.push_back(*npcIter);
+		Sector::ObjectIterator<Player> pcIter = sector->begin<Player>();
+		for (; pcIter.bEnd; ++pcIter)
+			if (CheckAlliance(*pcIter, by, value))
+				l.push_back(*pcIter);
+	}
+
+	void GameStateDatabase::GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<NonPlayer*>& l)
+	{
+		Sector* sector = ChooseSector(2 << 16, object->GetSector()); // I dunno. I eye balled a range here lol
+		Sector::ObjectIterator<NonPlayer> npcIter = sector->begin<NonPlayer>();
+		for (; npcIter.bEnd; ++npcIter)
+			if (CheckAlliance(*npcIter, by, value))
+				l.push_back(*npcIter);
+	}
+
+	void GameStateDatabase::GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<Player*>& l)
+	{
+		Sector* sector = ChooseSector(2 << 16, object->GetSector()); // I dunno. I eye balled a range here lol
+		Sector::ObjectIterator<Player> pcIter = sector->begin<Player>();
+		for (; pcIter.bEnd; ++pcIter)
+			if (CheckAlliance(*pcIter, by, value))
+				l.push_back(*pcIter);
+	}
+
 	void GameStateDatabase::GetAreaObject(const float3& targetPos, const float3& targetDirection, float length, float width, Object* object, std::vector<Object*>& l)
 	{
 		Sector* sector = ChooseSector(max(length, width), object->GetSector());

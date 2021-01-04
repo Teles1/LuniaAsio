@@ -37,27 +37,24 @@ namespace Lunia { namespace XRated { namespace Logic {
 
 	void ActionDB::CreateActionTemplate(const std::wstring& templateName)
 	{
-		/*
-		Info::ActionInfoManager::Actions& actions = info.Retrieve( templateName.c_str() );
-		ActionTemplate& actionTemplate = actionMap[ Lunia::StringUtil::Hash(templateName.c_str()) ]; 
+		Info::ActionInfoManager::Actions& actions = info.Retrieve(templateName.c_str());
+		ActionTemplate& actionTemplate = actionMap[StringUtil::Hash(templateName.c_str())]; 
 
-		Info::ActionInfoManager::Actions::iterator i = actions.begin(), end = actions.end();
-		for (; i != end ; ++i) {
-			actionTemplate.AddAction( *i );
+		for (auto i = actions.begin(); i != actions.end(); ++i) {
+			actionTemplate.AddAction(*i);
 		}
 
-		Info::ActionInfoManager::Actions::ActorList::iterator iActor = actions.actorList.begin();
-		for (; iActor != actions.actorList.end() ; ++iActor) {
-			actionTemplate.AddActor( (*iActor).first, (*iActor).second );
+		auto iActor = actions.actorList.begin();
+		for (; iActor != actions.actorList.end(); ++iActor) {
+			actionTemplate.AddActor((*iActor).first, (*iActor).second);
 		}
-		*/
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Retrieve Functions
 	Action::Action::ActionPtrList* ActionDB::GetActionList(uint32 templateCode, uint32 objCode)
 	{
-		std::map<uint32, ActionTemplate>::iterator i = actionMap.find(templateCode);
+		auto i = actionMap.find(templateCode);
 		if ( i == actionMap.end() ) {
 			Logger::GetInstance().Exception( L"[ActionDB::GetActionList] unable to find action list.[{0}/{1}]", templateCode, objCode);
 		}
@@ -69,23 +66,7 @@ namespace Lunia { namespace XRated { namespace Logic {
 	{
 		uint32 templateCode = StringUtil::Hash(templateName.c_str());
 		uint32 objCode = StringUtil::Hash(obj.c_str());
-#ifdef _SINGLE
-		{
-			std::map<uint32, ActionTemplate>::iterator i = actionMap.find(templateCode);
-			if ( i == actionMap.end() ) {
-				CreateActionTemplate(templateName);
-			}
-			/*
-			Action::Action::ActionPtrList* returnValue = (*i).second.GetActionList(objCode);
-			if (!returnValue) {			
-			}
-			*/
-		}
-			
 
-
-		
-#endif
 		auto i = actionMap.find(templateCode);
 		if ( i == actionMap.end() )
 			throw Exception(( L"[ActionDB::GetActionList] unable to find templateName [%s]", templateName.c_str() ));
@@ -199,7 +180,7 @@ namespace Lunia { namespace XRated { namespace Logic {
 			action = new Action::ActionPhoenixDownAir(actionInfo);
 			break;
 		case Info::ActionInfo::ActionClassType::PHOENIXDOWN2AIR :
-			//action = new Action::ActionPhoenixDown2Air(actionInfo); // @ORACLE 01JAN2020 13:29 EST
+			action = new Action::ActionPhoenixDown2Air(actionInfo); // @ORACLE 01JAN2020 13:29 EST
 			break;
 		case Info::ActionInfo::ActionClassType::HITAIR :
 			action = new Action::ActionHitAir(actionInfo);
@@ -221,6 +202,9 @@ namespace Lunia { namespace XRated { namespace Logic {
 			break;
 		case Info::ActionInfo::ActionClassType::HEIGHTZERO :
 			action = new Action::ActionHeightZero(actionInfo);
+			break;
+		case Info::ActionInfo::ActionClassType::ALLPLAYER:
+			action = new Action::ActionHitAllPlayer(actionInfo);
 			break;
 		default :
 			action = new Action::ActionBase(actionInfo);

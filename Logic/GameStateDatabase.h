@@ -191,6 +191,12 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		void GetAreaObject(const float3& targetPos, const float3& targetDirection, float range, Constants::AllianceType by, uint8 value, Object* object, std::vector<Actor*>& l);
 		void GetAreaObject(const float3& targetPos, const float3& targetDirection, float range, Constants::AllianceType by, uint8 value, Object* object, std::vector<NonPlayer*>& l);
 		void GetAreaObject(const float3& targetPos, const float3& targetDirection, float range, Constants::AllianceType by, uint8 value, Object* object, std::vector<Player*>& l);
+
+		void GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<Object*>& l);
+		void GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<Actor*>& l);
+		void GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<NonPlayer*>& l);
+		void GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<Player*>& l);
+		
 		void GetAreaObject(const float3& targetPos, const float3& targetDirection, float length, float width, Object* object, std::vector<Object*>& l);
 		void GetAreaObject(const float3& targetPos, const float3& targetDirection, float length, float width, Constants::AllianceType by, uint8 value, Object* object, std::vector<Object*>& l);
 		void GetAreaObject(const float3& targetPos, const float3& targetDirection, float length, float width, Constants::AllianceType by, uint8 value, Object* object, std::vector<Actor*>& l);

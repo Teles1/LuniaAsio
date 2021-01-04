@@ -22,6 +22,11 @@ namespace Lunia { namespace XRated { namespace Logic { namespace Action {
 			Action::Initialize(obj, db, param, data);	//should be called.
 		}
 
+		void ActionHitAllPlayer::Initialize(Actor* obj, IGameStateDatabase* db, IActionParam* param, ActionData& data)
+		{
+			Action::Initialize(obj, db, param, data);	//should be called.
+		}
+
 		void ActionDash::Initialize(Actor* obj, IGameStateDatabase* db, IActionParam* param, ActionData& data)
 		{
 			ActionMove::Param* thisParam;

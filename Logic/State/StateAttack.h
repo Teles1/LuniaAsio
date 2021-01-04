@@ -8,7 +8,7 @@ namespace Lunia { namespace XRated { namespace Logic { namespace Stat {
 
 	class Attack : public State<Object> {
 	public :
-		enum Type { Segment=0, Fanshape, Circle, Rectangle };
+		enum Type { Segment=0, Fanshape, Circle, Rectangle, AllPlayer};
 		enum AttackDir {
 			L=0, F=1, R=2, B=3, I=4, O=5
 		};
@@ -131,6 +131,21 @@ namespace Lunia { namespace XRated { namespace Logic { namespace Stat {
 				float3 startPos, float attackRange, bool bAbDmg, float mn, float mx, float knockBack, float airKnockBack,
 				float stunLength, AttackDir attackDir, float width, float amf, float mf, float stop, float heightMax, BackstabInfo backstab);
 		~AttackRectangle() {}
+
+		bool Do(float dt, IGameStateDatabase* db);
+	};
+
+	class AttackAllPlayer : public Attack {
+	public:
+		AttackAllPlayer(Object* owner, StatConstants::AttackEffectType::Type effectType, int targetType, Constants::DamageType dmgType, Constants::AllianceType dmgTo,
+			float3 startPos, float attackRange, bool bAbDmg, float mn, float mx, float knockBack, float airKnockBack,
+			float stunLength, AttackDir attackDir, float amf, float mf, float stop, float heightMax, BackstabInfo backstab)
+			: Attack(owner, effectType, targetType, dmgType, dmgTo, startPos, attackRange, bAbDmg, mn, mx, knockBack, airKnockBack, stunLength, attackDir, amf, mf, stop, heightMax, backstab)
+		{
+			type = Attack::Type::AllPlayer;
+			attackType = Attack::AttackType::NormalAtk;
+		}
+		~AttackAllPlayer() {}
 
 		bool Do(float dt, IGameStateDatabase* db);
 	};

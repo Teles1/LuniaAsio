@@ -141,6 +141,11 @@ namespace Lunia { namespace XRated {
 		virtual void GetAreaObject(const float3& targetPos, const float3& targetDirection, float range, Constants::AllianceType by, uint8 value, Object* object, std::vector<Actor*>& l)=0;
 		virtual void GetAreaObject(const float3& targetPos, const float3& targetDirection, float range, Constants::AllianceType by, uint8 value, Object* object, std::vector<NonPlayer*>& l)=0;
 		virtual void GetAreaObject(const float3& targetPos, const float3& targetDirection, float range, Constants::AllianceType by, uint8 value, Object* object, std::vector<Player*>& l)=0;
+
+		virtual void GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<Object*>& l) = 0;
+		virtual void GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<Actor*>& l) = 0;
+		virtual void GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<NonPlayer*>& l) = 0;
+		virtual void GetAreaObject(Constants::AllianceType by, uint8 value, Object* object, std::vector<Player*>& l) = 0;
 		
 		virtual void GetAreaObject(const float3& targetPos, const float3& targetDirection, float length, float width, Object* object, std::vector<Object*>& l)=0;
 		virtual void GetAreaObject(const float3& targetPos, const float3& targetDirection, float length, float width, Constants::AllianceType by, uint8 value, Object* object, std::vector<Object*>& l)=0;

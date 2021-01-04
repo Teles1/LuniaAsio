@@ -5,7 +5,7 @@
 namespace Lunia { namespace XRated { namespace Logic {
 
 	class ActionDB {
-		Database::Info::ActionInfoManager &info;
+		Database::Info::CompressedActionInfoManager &info;
 
 		class ActionTemplate {
 		public :

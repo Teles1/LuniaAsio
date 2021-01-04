@@ -564,6 +564,42 @@ namespace Lunia
 				{
 					return flag & stunFlag; 
 				}
+				
+				inline uint32 SetIgnoreFreeze(uint32 flag, bool bcopy = false)
+				{
+                    uint32 old = stunFlag; 
+					
+					stunFlags.push_back( flag );
+					stunFlag |= flag;
+
+					return old;
+				}
+				inline uint32 RemoveIgnoreFreeze(uint32 flag, bool bcopy = false)
+				{
+					uint32 old = stunFlag; 
+					for( std::list<uint32>::iterator it = stunFlags.begin(), endIt=stunFlags.end(); it!=endIt; ++it )
+					{
+						if( *it == flag )
+						{
+							stunFlags.erase( it );
+							break;
+						}
+					}
+
+					stunFlag = 0;
+					for( std::list<uint32>::const_iterator it = stunFlags.begin(), endIt=stunFlags.end(); it!=endIt; ++it )
+					{
+						stunFlag |= *it;
+					}
+
+					return old;
+				}
+				inline uint32 IsIgnoreFreeze(uint32 flag) const
+				{
+					return flag & stunFlag; 
+				}
+
+
 
 				inline float GetSpeedFactor() const
 				{

@@ -128,7 +128,7 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <WarningLevel>Level1</WarningLevel>
       <SupportJustMyCode>true</SupportJustMyCode>
       <Optimization>Disabled</Optimization>
@@ -151,6 +151,9 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <SupportJustMyCode>true</SupportJustMyCode>
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
@@ -159,6 +162,7 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Action\ActionCenterMove.h" />
+    <ClInclude Include="Action\ActionHitAllPlayer.h" />
     <ClInclude Include="Action\ActionPhoenixDown2Air.h" />
     <ClInclude Include="Action\_ActionBase.h" />
     <ClInclude Include="Action\Action.h" />
@@ -221,6 +225,7 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     <ClInclude Include="stage\preprocessor\pragma.h" />
     <ClInclude Include="stage\preprocessor\preprocess.h" />
     <ClInclude Include="stage\preprocessor\stream.h" />
+    <ClInclude Include="State\StateIgnoreFreeze.h" />
     <ClInclude Include="State\StateEnableAddDefense.h" />
     <ClInclude Include="State\State.h" />
     <ClInclude Include="State\StateAbsorbToHpMp.h" />
@@ -358,6 +363,7 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     <ClCompile Include="State\StateCondition.cpp" />
     <ClCompile Include="State\StateEnableAddDefense.cpp" />
     <ClCompile Include="State\StateGlobalFunction.cpp" />
+    <ClCompile Include="State\StateIgnoreFreeze.cpp" />
     <ClCompile Include="State\StateIncrease.cpp" />
     <ClCompile Include="State\States.cpp" />
     <ClCompile Include="state\StateBundle\StateBundle.cpp" />

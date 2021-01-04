@@ -251,6 +251,14 @@ namespace Lunia { namespace XRated { namespace Logic { namespace Stat {
         return true;
     }
 
+    bool AttackAllPlayer::Do(float dt, IGameStateDatabase* db)
+    {
+        std::vector<Object*> l;
+        db->GetAreaObject( dmgTo, owner->GetTeam(), owner, l);
+        Attack::Process(l, db);
+        return true;
+    }
+
     bool AttackFanshape::Do(float, IGameStateDatabase* db)
     {
         std::vector<Object*> l;
@@ -837,4 +845,6 @@ namespace Lunia { namespace XRated { namespace Logic { namespace Stat {
         actor->SetAction(Database::Info::HashTable::Actions::Faint, &param, true);
     }
 
-}    }    }    }
+}
+
+}    }    }
