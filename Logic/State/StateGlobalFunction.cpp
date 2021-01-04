@@ -69,9 +69,10 @@
 #include "StateAbsorbToHpMp.h"
 #include "StateInventFame.h"
 #include "StateGoldGain.h"
+#include "StateEnableAddDefense.h" // TELES
 #include "States.h"
 #include <iostream>
-
+#include <cwctype>
 
 #include <Core/Utils/StringUtil.h>
 #include "../Object/NonPlayer.h"
@@ -1279,6 +1280,20 @@ namespace Lunia { namespace XRated {	namespace Logic { namespace Stat {
 
 				return	new Stat::AbsorbToHpMp(owner, convertTo, rate, probability);
 			}
+		case Database::Info::StateInfo::Type::ENABLEADDDEFENCE:
+		{
+			EnableAddDefense::ChargeType chargeType = EnableAddDefense::ChargeType::AMOUNT;
+			float value = 0.0f;
+
+			StateParams::iterator itr = (*params).find(L"rate");
+			if (itr != (*params).end())
+				chargeType = EnableAddDefense::ChargeType::RATE;
+
+			value = To<float>(itr->second.c_str());
+
+			return new EnableAddDefense(owner, chargeType, value);
+		}
+		break;
 		default :
 			IState* returnValue = CreateState(type, (Object*)owner, params, optionalStates);
 			if (returnValue) return returnValue;

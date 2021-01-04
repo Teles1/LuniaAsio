@@ -14,9 +14,16 @@ namespace Lunia {
 				AutoLock lock(m_Mtx);
 				m_Users.clear();
 			}
-			uint16 RoomUserManager::NowCount() const
+			uint16 RoomUserManager::NowCount(const bool& countSpectators) const
 			{
-				return (uint16)m_Users.size();
+				AutoLock lock(m_Mtx);
+				if (countSpectators)
+					return (uint16)m_Users.size();
+				uint16 count = 0;
+				for (auto& user : m_Users)
+					if (!user.second->GetCharacterStateFlags().IsSpectator)
+						count++;
+				return count < 0 ? 0 : count;
 			}
 			uint16 RoomUserManager::MaxCount() const
 			{
@@ -55,6 +62,10 @@ namespace Lunia {
 				if (m_Users.find(userId) == m_Users.end())
 					return NULL;
 				return m_Users[userId];
+			}
+			std::unordered_map<uint32, UserSharedPtr>& RoomUserManager::GetUsers()
+			{
+				return m_Users;
 			}
 			void RoomUserManager::Update(const float& dt)
 			{

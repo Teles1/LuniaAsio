@@ -15,6 +15,18 @@ namespace Lunia {
 				return m_Instance;
 			}
 
+			std::wstring UserManager::GetLastTextBoardMsg() const
+			{
+				return m_LastTextBoardMsg;
+			}
+
+			bool UserManager::IsScriptEventNow(const uint32& eventId) const
+			{
+				if (m_ScriptEventMap.find(eventId) != m_ScriptEventMap.end())
+					return true;
+				return false;
+			}
+
 			UserManager::~UserManager() {}
 
 			UserManager::UserManager() {}
@@ -197,7 +209,7 @@ namespace Lunia {
 			void UserManager::RoomAuth(const UserSharedPtr& user)
 			{
 				if (!RoomManagerInstance().RoomJoin(user->GetRoomIndex(), user, user->GetRoomPass())) {
-					LoggerInstance().Error("user={0} failed to join room={1}",user->GetSerial(),user->GetRoomIndex());
+					LoggerInstance().Error("user={0} failed to join room={1}", user->GetSerial(), user->GetRoomIndex());
 					user->Terminate();
 					return;
 				}

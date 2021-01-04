@@ -68,7 +68,8 @@ namespace Lunia {
 
 				auto itr = m_Rooms.find(room);
 				if (itr != m_Rooms.end())
-					(*itr)->JoinUser(user, roomPass);
+					return (*itr)->JoinUser(user, roomPass);
+				LoggerInstance().Error("RoomUpdater::JoinUser - Unable the specified room");
 				return false;
 			}
 

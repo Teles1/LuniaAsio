@@ -754,7 +754,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		totalDelay = 0;
 		termDelay = 0;
 
-		if ( (uint16)(stageGroup->StageHashes.size()) <= accessLevel ) {
+		if ( stageGroup->StageHashes.size() <= accessLevel ) {
 			Logger::GetInstance().Exception(L"Wrong accesslevel. [{0}/{1}]", stageGroupHash, accessLevel);
 		}
 		stageCode = stageGroup->StageHashes[accessLevel];

@@ -42,10 +42,12 @@ namespace Lunia {
 			}
 			void FamilyManager::Init(const std::wstring& characterName)
 			{
-				AutoLock lock(m_Mtx);
-				Clear();
-				m_MyInfo.CharacterName = characterName;
-				m_ConnectedDate = DateTime::Now();
+				{
+					AutoLock lock(m_Mtx);
+					Clear();
+					m_MyInfo.CharacterName = characterName;
+					m_ConnectedDate = DateTime::Now();
+				}
 				RequestDBFamilyInfoForInit();
 			}
 			void FamilyManager::RequestDBFamilyInfoForInit()
@@ -54,21 +56,48 @@ namespace Lunia {
 				api << m_Owner.GetSerial();
 				api.GetAsync(
 					[&](const Net::Answer& result) {
-						if (result.errorCode == 0) {
+						if (result.errorCode == 0)
 							SetFamilyInfo(result.resultObject);
-						}
 						else
 							Logger::GetInstance().Error(L"Could not parse FamilyInfo for the user@{0}", m_Owner.GetCharacterName());
 					});
 			}
 			void FamilyManager::RequestDBUpdateMemorialDay()
 			{
+				LoggerInstance().Info("FamilyManager::RequestDBUpdateMemorialDay()");
 				//Scopped expectected to be locked by caller.
 				if (IsFamily()) {
 					Net::Api request("Family/UpdateMemorialDay");
 					//familyId|MemorialDate
 					request << m_Info.Serial << m_Condition.MemorialDay;
 					request.GetAsync();
+				}
+			}
+			void FamilyManager::RequestDBFamilyInfoForRefresh()
+			{
+				if (m_MyInfo.CharacterName.empty())
+					return;
+				if (!m_IsWaitingForInfo) {
+					if (!IsFamily())
+						Clear();
+					Net::Api api("Family/JoinedInfo");
+					api << m_Owner.GetSerial();
+					api.GetAsync(
+						[&](const Net::Answer& result) {
+							m_IsWaitingForInfo = false;
+							if (result.errorCode == 0 && !result.resultObject.is_null())
+								SetFamilyInfo(result.resultObject);
+							else if (result.errorCode == 2) {
+								Clear();
+								Protocol::FromServer::Family::RefreshFailed result;
+								result.Result = Protocol::FromServer::Family::RefreshFailed::Type::NotEntredFamily;
+								m_Owner.Send(result);
+								return;
+							}
+							else
+								m_Owner.CriticalError("DBFamilyInfoForRefresh Failed", false);
+						});
+					m_IsWaitingForInfo = true;
 				}
 			}
 			void FamilyManager::RequestDBLeave()
@@ -85,24 +114,24 @@ namespace Lunia {
 			{
 				if (data.is_null())
 					return;
-				auto& self = data["self"];
 				Protocol::FromServer::Family::Info result;
 				{
 					AutoLock lock(m_Mtx);
 					//Populate the members
-					for (auto& member : data["familyMembers"]) {
+					for (auto& member : data.at("members")) {
 						m_Members.push_back(Family::MemberInfo());
 						auto& info = m_Members.back();
-						member["id"].get_to(info.MemberSerial); // familyMember ID NOT CharacterSerial !!!!!!!!!!!!!!!!!!!
-						info.CharacterName = StringUtil::ToUnicode(member["characterName"].get<std::string>());
-						info.Class = static_cast<XRated::Constants::ClassType>(member["classNumber"].get<uint8>());
-						member["stageLevel"].get_to(info.StageLevel);
-						member["pvpLevel"].get_to(info.PvpLevel);
-						member["lastLoggedDate"].get_to(info.LastLoggedDate);
-						member["isGuest"].get_to(info.IsGuest);
-						member["isOnline"].get_to(info.IsOnline);
-						member["playTime"].get_to(info.PlayTime);
-						member["joinedDate"].get_to(info.JoinedDate);
+						member.at("characterName").get_to(info.CharacterName);
+						member.at("id").get_to(info.MemberSerial); // familyMember ID NOT CharacterSerial !!!!!!!!!!!!!!!!!!!
+						info.Class = static_cast<XRated::Constants::ClassType>(member.at("classNumber").get<uint8>());
+						member.at("stageLevel").get_to(info.StageLevel);
+						member.at("pvpLevel").get_to(info.PvpLevel);
+						member.at("lastLoggedDate").get_to(info.LastLoggedDate);
+						member.at("isGuest").get_to(info.IsGuest);
+						member.at("isOnline").get_to(info.IsOnline);
+						member.at("playTime").get_to(info.PlayTime);
+						member.at("joinedDate").get_to(info.JoinedDate);
+						
 						//populate the counts.
 						if (info.IsOnline) {
 							if (info.IsGuest)
@@ -113,11 +142,13 @@ namespace Lunia {
 					}
 					m_IsWaitingForInfo = false;
 					auto now = DateTime::Now();
+
+					auto& self = data.at("self");
 					if (!IsFamily()) {
 						m_ConnectedDate = now;
-						self["playTime"].get_to(m_MyInfo.PlayTime);
+						self.at("playTime").get_to(m_MyInfo.PlayTime);
 						m_Condition.NextPlayTimeForPersonalPlay = Database::DatabaseInstance().InfoCollections.FamilyInfos.GetNextPersonalPlayPresent(m_MyInfo.PlayTime);
-						self["createDate"].get_to(m_Condition.MemorialDay);
+						self.at("memorialDate").get_to(m_Condition.MemorialDay);
 					}
 					else {
 						Protocol::FromServer::Family::TakePresentResult present;
@@ -127,7 +158,7 @@ namespace Lunia {
 						if (present.IsSuccess == true)
 						{
 							present.Condition = m_Condition;
-							m_Owner.Send(present);
+							//m_Owner.Send(present);
 						}
 					}
 
@@ -144,15 +175,15 @@ namespace Lunia {
 						m_MyInfo.PvpLevel = m_Owner.GetPvpLevel();
 					}
 
-					self["familyId"].get_to(m_Info.Serial);
-					self["createDate"].get_to(m_Info.CreatedTime);
+					self.at("familyId").get_to(m_Info.Serial);
+					self.at("createDate").get_to(m_Info.CreatedTime);
 
-					self["accountId"].get_to(m_MyInfo.MemberSerial);
-					self["isGuest"].get_to(m_MyInfo.IsGuest);
-					self["isOnline"].get_to(m_MyInfo.IsOnline);
+					self.at("accountId").get_to(m_MyInfo.MemberSerial);
+					self.at("isGuest").get_to(m_MyInfo.IsGuest);
+					self.at("isOnline").get_to(m_MyInfo.IsOnline);
 					
-					self["expireGroupGift"].get_to(m_Condition.ReceivedDateGroupPlay);
-					self["joinedDate"].get_to(m_JoinedDate);
+					self.at("expireGroupGift").get_to(m_Condition.ReceivedDateGroupPlay);
+					self.at("joinedDate").get_to(m_JoinedDate);
 					if (m_Condition.MemorialDay < m_JoinedDate) {
 						m_Condition.MemorialDay = Database::DatabaseInstance().InfoCollections.FamilyInfos.GetNextMemorialDayPresentDate(m_Info.CreatedTime, m_JoinedDate);
 						RequestDBUpdateMemorialDay();
@@ -169,6 +200,7 @@ namespace Lunia {
 				ResetFamilyPassive();
 				m_Owner.Send(result);
 			}
+
 			bool FamilyManager::SendPlayTimePresent(DateTime now, std::vector<Family::FamilyMemberSerial>& receiveMembers)
 			{
 				return true;

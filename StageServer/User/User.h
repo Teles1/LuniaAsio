@@ -12,6 +12,8 @@
 #include <StageServer/User/Services/FamilyManager.h>
 #include <StageServer/User/Services/GuildState.h>
 #include <StageServer/Protocol/Protocol.h>
+#include <StageServer/Protocol/ToServer.h>
+
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
@@ -39,7 +41,7 @@ namespace Lunia {
 				void RoomParted();
 				void Terminate();
 				void Close();
-				void Error(ErrorLevel error, const String& message); // error handling with different outcome based on severity.
+				void CriticalError(const char* logMessage, const bool& block = false, const uint32& blockDuration = 86400);
 				void SetCharacterName(const String& name);
 				void Update(const float& dt);
 				void RoomJoined(std::shared_ptr<IUserRoom> room, StageLicense& targetStage);
@@ -64,6 +66,9 @@ namespace Lunia {
 				bool IsConnected() const;
 				bool IsAuthenticated() const;
 				bool IsAbleToJoinStage(const StageLicense& targetStage) const; // IsEnableJoinToStage
+				bool IsAuthed() const;
+				bool IsLoaded() const;
+				bool IsItemLocked() const;
 
 				uint8 GetTeamNumber() const;
 
@@ -101,13 +106,17 @@ namespace Lunia {
 			public://Network Related;
 				void Send(Protocol::IPacketSerializable& packet);
 				uint32 Parse(uint8* buffer, size_t size);
+			public://Packet handling coming from PacketHandler
+				void Dispatch(Protocol::ToServer::LoadEnd& packet);
+				void Dispatch(Protocol::ToServer::Family::RefreshInfo& packet);
+				void Dispatch(StageServer::Protocol::ToServer::Join& packet);
 			public:
 				std::mutex 									mtx;
 			private:
 				uint32										m_UserId = 0;
 				uint64										m_UserSerial = 0; //database
 				STATE										m_State;
-				String										m_CharacterName;
+				String										m_CharacterName = L"";
 				PetDatas									m_PetDatas;
 				Logic::Player*								m_Player = nullptr;
 				std::shared_ptr<IUserRoom>					m_Room;
@@ -115,29 +124,32 @@ namespace Lunia {
 				ExpFactorManager							m_ExpFactorManager;
 				FamilyManager								m_FamilyManager;
 			public: //Auth_Publisher
-				std::wstring								m_SecuKey;
-				std::wstring 								m_UsingLocale;
-				std::wstring								m_Name;
-				std::string									m_RoomPass;
-				uint16										m_RoomCapacity;
-				uint32										m_RoomIndex;
-				uint8										m_TeamNumber;
-				int64										m_RoomActivationSerial;
+				std::wstring								m_SecuKey = L"";
+				std::wstring 								m_UsingLocale = L"";
+				std::wstring								m_Name = L"";
+				std::string									m_RoomPass = "";
+				uint16										m_RoomCapacity = 0;
+				uint32										m_RoomIndex = 0;
+				uint8										m_TeamNumber = 0;
+				int64										m_RoomActivationSerial = 0;
 				StageStates									m_StageStateFlags;
 				StageLicense								m_LastStage;
 				StageLicense								m_CurrentStage;
 			public: //Auth
 				Logic::ILogic::PlayerInitialData			m_PlayerInitialData;
 				CharacterStateFlags							m_CharacterStateFlags;
-				DateTime									m_CreateDate;
-				DateTime									m_LastLoggedDate;
-				uint32										m_CharacterLicenses;
-				std::vector<XRated::StageLicense>			m_StageLicenses;
-				std::vector<uint32>							m_SkillLicenses;
+				DateTime									m_CreateDate = DateTime::Infinite;
+				DateTime									m_LastLoggedDate = DateTime::Infinite;
+				uint32										m_CharacterLicenses = 0;
+				std::vector<XRated::StageLicense>			m_StageLicenses = {};
+				std::vector<uint32>							m_SkillLicenses = {};
 				QuickSlot									m_QuickSlot;
-				uint32										m_CurrentStageHash;
+				uint32										m_CurrentStageHash = 0;
+				bool										m_Authed = false;
+				bool										m_LoadEnded = false;
+				bool										m_IsItemLocked = true;
 			public: //Alive
-				DWORD										m_AliveTime;
+				DWORD										m_AliveTime = 0;
 			private:
 				std::shared_ptr<User> shared_from_this();
 			};

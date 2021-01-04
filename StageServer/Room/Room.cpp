@@ -25,7 +25,7 @@ namespace Lunia {
 
 				if (GetRoomKind() != Common::SQUARE)
 				{
-					Net::Api request("StageOver");
+					Net::Api request("StageOver"); // clears the room
 					request << m_RoomIndex;
 					request.GetAsync();
 					//Stage::CoinItemPurchaseManagerInstance().UndoPurchaseCoinItem(GetRoomID());
@@ -84,6 +84,7 @@ namespace Lunia {
 						}
 						assert(m_ThreadIndex != UINT16_MAX);
 						m_Logic->Update(dt);
+						LoggerInstance().Info("Calling Logic Update");
 					}
 				}
 				m_UserManager.Update(dt);
@@ -187,7 +188,18 @@ namespace Lunia {
 					return false;
 				}
 				user->RoomJoined(shared_from_this(), m_CurrentStage);
-				return false;
+
+				if (user->GetCharacterStateFlags().IsSpectator)
+				{
+					Protocol::FromServer::Pvp::NotifySpectatorInOut n;
+					n.CharacterName = user->GetCharacterName();
+					n.Entered = true;
+					m_UserManager.BroadcastToAllEnteredUsers(n);
+				}
+				m_WaitRoomDelete = false;
+				SetStylePointUserCount(m_UserManager.NowCount());
+				//slimeRaceGame.NewPlayerJoin(0.0f, user);
+				return true;
 			}
 			bool Room::PartUser(UserSharedPtr user)
 			{
@@ -251,7 +263,7 @@ namespace Lunia {
 					return;
 				}
 				m_Active = true;
-				m_Loading = true;
+				m_Loading = false;
 
 				LoggerInstance().Info(L"initialized room(index:{0}, threadIndex:{1}) info {2}"\
 					L", waiting:{3}, nowcnt:{4}, maxcnt:{5}, capacity:{6}, active:{7}, loading:{8}, logicloading:{9}"
@@ -623,8 +635,7 @@ namespace Lunia {
 			}
 			bool Room::IsHolidayEventTime(uint32 eventId)
 			{
-				LoggerInstance().Exception("Missing implementation");
-				return false;
+				return UserManagerInstance().IsScriptEventNow(eventId);
 			}
 			void Room::PetInfoUpdated(Logic::Player* player, const XRated::Pet& pet, const XRated::Serial petSerial, const String& petExpression)
 			{
@@ -768,6 +779,12 @@ namespace Lunia {
 			uint16 Room::GetStageCapcacity() const
 			{
 				return m_StageGroupInfo->Capacity;
+			}
+			void Room::SetStylePointUserCount(const uint16& count)
+			{
+				if (GetRoomKind() == Common::STAGE)
+					for(auto& user : m_UserManager.GetUsers())
+						m_Logic->ChangeStylePointPlayerCount(user.second->GetPlayer(), count);
 			}
 			bool Room::SideStageJoinCheck() const
 			{

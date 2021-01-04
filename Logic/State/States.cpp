@@ -1209,7 +1209,6 @@ namespace Lunia { namespace XRated {	namespace Logic { namespace Stat {
 
 	bool IncLife::Do(float , IGameStateDatabase* db)
 	{
-		std::cout << "IncLife::Do(float , IGameStateDatabase* db)" << std::endl;
 		if ( owner->GetType() == Constants::ObjectType::Player ) {
 			Player* player = (Player*)owner;
 			player->IncLife(life);

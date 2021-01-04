@@ -16,9 +16,10 @@ namespace Lunia {
 				void SetFamilyInfo(const json& data);
 				bool SendPlayTimePresent(DateTime now, std::vector<Family::FamilyMemberSerial>& receiveMembers);
 				void Clear();
-			private: //DBRelated
+			public: //DBRelated
 				void RequestDBFamilyInfoForInit();
 				void RequestDBUpdateMemorialDay();
+				void RequestDBFamilyInfoForRefresh();
 				void RequestDBLeave();
 			private:
 				User& m_Owner;

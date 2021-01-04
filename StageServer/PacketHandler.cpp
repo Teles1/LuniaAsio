@@ -73,16 +73,7 @@ namespace Lunia {
 					[](UserSharedPtr user, StageServer::Protocol::ToServer::Join& packet)
 					{
 						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Join", user->GetSerial());
-						//Check if the user is fully authenticated and loaded if not send a big crashadao.
-						/*
-						if( !IsLoadedStage(currentStage) )
-						{
-							Net::Protocol::Stage::FromServer::Error error;
-							error.errorcode   = Errors::InvalidStageCode;
-							DirectSend( error );
-							return;
-						}
-						*/
+						user->Dispatch(packet);
 					});
 				fwPacketListener::GetInstance().Connect(
 					[](UserSharedPtr user, StageServer::Protocol::ToServer::Alive& packet)
@@ -92,7 +83,18 @@ namespace Lunia {
 						user->m_AliveTime = timeGetTime();
 						user->Send(packet);
 					});
-
+				fwPacketListener::GetInstance().Connect(
+					[](UserSharedPtr user, StageServer::Protocol::ToServer::LoadEnd& packet)
+					{
+						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@LoadEnd", user->GetSerial());
+						user->Dispatch(packet);
+					});
+				fwPacketListener::GetInstance().Connect(
+					[](UserSharedPtr user, StageServer::Protocol::ToServer::Family::RefreshInfo& packet) {
+						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Family::RefreshInfo", user->GetSerial());
+						user->Dispatch(packet);
+					}
+				);
 				fwPacketListener::GetInstance().Connect(
 					[](UserSharedPtr user, StageServer::Protocol::ToServer::ListItem& packet)
 					{

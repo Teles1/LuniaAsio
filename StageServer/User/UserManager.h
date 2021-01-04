@@ -15,6 +15,7 @@ namespace Lunia {
 			class UserManager {
 #pragma region Singleton
 			private:
+				~UserManager();
 				UserManager();
 			public:
 				UserManager(const UserManager&) = delete; //anti creation  of a copy
@@ -23,38 +24,30 @@ namespace Lunia {
 				UserManager& operator=(UserManager&&) = delete;
 				static UserManager& GetInstance();
 #pragma endregion Singleton
+			public: 
+				std::wstring GetLastTextBoardMsg() const;
+				bool IsScriptEventNow(const uint32& eventId) const;
 			public:
-				~UserManager();
-
-				UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);
-
 				bool AuthenticateUser(const uint32& userId, const json& result);
-
 				void RoomAuth(const UserSharedPtr& user);
-
 				void RemoveUser(const uint64& userSerial);
-
+				UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);
 				UserSharedPtr GetUserByConnectionId(const uint32& userId);
-
 				UserSharedPtr GetUserBySerial(const uint64& userSerial);
 
 				fwEvent<const UserSharedPtr&>						OnUserConnected;
-
 				fwEvent<const uint64&>								OnUserDisconnected;
-
 				fwEvent<const UserSharedPtr&>						OnUserAuthenticated;
 			private:
 				void RemoveUser(const uint64& userSerial, AutoLock& _l);
 
 				uint32												m_curUserId = 0;
-
 				std::unordered_map<uint32, UserSharedPtr>			m_tempUsers; //temp connection id.
-
 				std::mutex											m_usersMutex;
-
 				std::mutex											m_tempUsersMutex;
-
 				std::unordered_map<uint64, UserSharedPtr>			m_users; //SerialId from the db after being authenticated.
+				std::wstring										m_LastTextBoardMsg = L"";
+				std::map<uint32 /*eventID*/, bool /*IsEventingNow*/>m_ScriptEventMap;
 			};
 
 			UserManager& UserManagerInstance();

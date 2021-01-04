@@ -221,6 +221,7 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     <ClInclude Include="stage\preprocessor\pragma.h" />
     <ClInclude Include="stage\preprocessor\preprocess.h" />
     <ClInclude Include="stage\preprocessor\stream.h" />
+    <ClInclude Include="State\StateEnableAddDefense.h" />
     <ClInclude Include="State\State.h" />
     <ClInclude Include="State\StateAbsorbToHpMp.h" />
     <ClInclude Include="state\StateAddBuff.h" />
@@ -355,6 +356,7 @@ xcopy "$(OutDir)*.lib" "..\..\DllOutput\" /Y
     <ClCompile Include="stage\preprocessor\preprocess.cpp" />
     <ClCompile Include="State\StateAttack.cpp" />
     <ClCompile Include="State\StateCondition.cpp" />
+    <ClCompile Include="State\StateEnableAddDefense.cpp" />
     <ClCompile Include="State\StateGlobalFunction.cpp" />
     <ClCompile Include="State\StateIncrease.cpp" />
     <ClCompile Include="State\States.cpp" />

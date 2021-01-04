@@ -5,20 +5,23 @@
 #include <Network/CommonProtocol/Protocol.h>
 #include <StageServer/Protocol/FromServer.h>
 #include <Info/Info.h>
+#include <StageServer/User/IUserRoom.h>
+#include <Core/ErrorDefinition.h>
 
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer
 		{
-			template <typename T>
-			inline std::shared_ptr<T> shared_from_enabled(std::enable_shared_from_this<T>* base) {
+			template <typename T> inline std::shared_ptr<T> shared_from_enabled(std::enable_shared_from_this<T>* base) {
 				return base->shared_from_this();
 			}
-			template <typename T>
-			inline std::shared_ptr<T> shared_from(T* derived) {
+			
+			template <typename T> inline std::shared_ptr<T> shared_from(T* derived) {
 				return std::static_pointer_cast<T>(shared_from_enabled(derived));
 			}
+			
 			template<> std::shared_ptr<User> shared_from_enabled(std::enable_shared_from_this<User>* base);
+			
 			void User::Send(Protocol::IPacketSerializable& packet) {
 				StaticBuffer<2 << 12> buffer;
 				try
@@ -34,6 +37,7 @@ namespace Lunia {
 				Logger::GetInstance().Info(L"Sending packet[{0}] to User@{1}", packet.GetTypeName(), this->GetSerial());
 				this->SendAsync(reinterpret_cast<uint8*>(buffer.GetData()), buffer.GetLength());
 			}
+			
 			uint32 User::Parse(uint8* buffer, size_t size) {
 				/*
 					We should technically see but i think that if the server doesn't recognize the packet I say we let the client connection dies.
@@ -48,6 +52,44 @@ namespace Lunia {
 					fwPacketListener::GetInstance().Invoke(UserManagerInstance().GetUserBySerial(m_UserSerial), sReader.GetSerializedTypeHash(), sReader);
 				HandleRead();
 				return (uint32)size;
+			}
+
+			void User::Dispatch(Protocol::ToServer::LoadEnd& packet)
+			{
+				AutoLock lock(mtx);
+				if (!IsAuthed()) {
+					LoggerInstance().Error("User({0})::LoadEnd - User Not Authed and sent LoadEnd", GetSerial());
+					return;
+				}
+				if ((packet.progress < 0.0f) || (packet.progress > 1.0f) || IsLoaded()) {
+					LoggerInstance().Error("User({0})::LoadEnd - User sent LoadEnd({1}) and LoadedEnd({2}) not valid", GetSerial(), packet.progress, IsLoaded());
+					return;
+				}
+				if (m_Room == nullptr) {
+					LoggerInstance().Error("User({0})::LoadEnd - User sent LoadEnd({1}) room is nullptr", GetSerial(), packet.progress);
+					return;
+				}
+				if (packet.progress >= 1.0f) {
+					m_LoadEnded = true;
+					m_IsItemLocked = false;
+				}
+				m_Room->JoinEndUser(shared_from_this(), packet.progress);
+			}
+
+			void User::Dispatch(Protocol::ToServer::Family::RefreshInfo& packet)
+			{
+				m_FamilyManager.RequestDBFamilyInfoForRefresh();
+			}
+
+			void User::Dispatch(StageServer::Protocol::ToServer::Join& packet)
+			{
+				AutoLock lock(mtx);
+				if (!IsLoaded()) {
+					LoggerInstance().Error("User({})::Dispatch - Not loaded and sending join", GetSerial());
+					Protocol::FromServer::Error error;
+					error.errorcode = Errors::InvalidStageCode;
+					//Send(error);
+				}
 			}
 
 			User::User(asio::ip::tcp::socket&& socket, const uint32& userId)
@@ -221,8 +263,6 @@ namespace Lunia {
 					if (mPlayerData.at("achievementPoints").is_null())
 						Logger::GetInstance().Exception(L"Could not parse achievementPoint on Auth user = {0}", GetCharacterName());
 					mPlayerData.at("achievementPoints").get_to(m_PlayerInitialData.achievementScore);
-
-					return true;
 				}
 				//Setting the next position if square
 				{
@@ -298,7 +338,7 @@ namespace Lunia {
 				m_ExpFactorManager.SetExtra(m_CharacterStateFlags.IsPcRoom);
 
 				m_PlayerInitialData.Factors.ExpFactor = m_ExpFactorManager.TotalExpFactor();
-
+				m_Authed = true; // This is where we verify if the user has its data all setup and it's allowed to proceed
 				return true;
 			}
 
@@ -549,6 +589,21 @@ namespace Lunia {
 				return false;
 			}
 
+			bool User::IsAuthed() const
+			{
+				return m_Authed;
+			}
+
+			bool User::IsLoaded() const
+			{
+				return m_LoadEnded;
+			}
+
+			bool User::IsItemLocked() const
+			{
+				return m_IsItemLocked;
+			}
+
 			bool User::IsConnected() const
 			{
 				//Gotta figure out a good way to do this return.
@@ -679,7 +734,7 @@ namespace Lunia {
 			bool User::UpdateInitialPlayerData()
 			{
 				AutoLock lock(m_PlayerInitialData.SyncRoot);//Prevent Room from modifying the initial values.
-				if (m_CharacterStateFlags.IsSpectator)
+				if (!IsAuthed() || m_CharacterStateFlags.IsSpectator)
 					return false;
 				if (m_Player == nullptr) {
 					LoggerInstance().Error("User({0})::UpdateInitialPlayerData() m_Player == null", GetSerial());
@@ -733,11 +788,25 @@ namespace Lunia {
 				api.GetAsync();
 				CloseSocket();
 			}
+
 			void User::Close()
 			{
 				if (!IsConnected())
 					return;
 				Terminate();
+			}
+
+			void User::CriticalError(const char* logMessage, const bool& block, const uint32& blockDuration)
+			{
+				LoggerInstance().Error("Critical error detected - {0} : {1}", GetSerial(), logMessage);
+				if (block && GetSerial() != 0)
+				{
+					Net::Api request("Block");
+					request << GetSerial() << blockDuration << logMessage;
+					request.GetAsync();
+				}
+				if (IsAuthed()) // you should not close directly before authorize. it causes serious unexpectable problem.
+					Close();
 			}
 		}
 	}

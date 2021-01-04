@@ -1,4 +1,6 @@
 #include <StageServer/Room/Room.h>
+#include <Core/ErrorDefinition.h>
+#include <StageServer/User/UserManager.h>
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
@@ -173,7 +175,52 @@ namespace Lunia {
 			}
 			void Room::JoinEndUser(UserSharedPtr user, float progress)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				AutoLock lock(m_Mtx);
+				Protocol::FromServer::LoadEnd loadEnd;
+				loadEnd.charName = user->GetCharacterName();
+				loadEnd.progress = progress;
+				if (progress >= 1.0f && m_StageInfo) {
+					if (m_Locked && m_StageInfo->QuitPlayerAfterLockRoom) {
+						LoggerInstance().Error("Room({0})::JoinEndUser - Stage Already Locked", m_RoomIndex);
+						Protocol::FromServer::Error error;
+						error.errorcode = Errors::UnableToJoinStage;
+						user->Send(error);
+						user->Close();
+						return;
+					}
+				}
+				switch (GetRoomKind()) {
+				case Common::STAGE:
+					if (progress >= 1.0f) {
+						m_UserManager.BroadcastToAllEnteredUsers(loadEnd);
+						if (m_Logic->IsLoading()) {
+							m_WaitingUsers.push_back(user);
+							LoggerInstance().Info("Room({0})::JoinEndUser - Adding user:{1} to the waiting list", m_RoomIndex, user->GetSerial());
+						}
+						else
+							m_Logic->Join(user->GetInitialPlayerData(), std::static_pointer_cast<void>(user));
+					}
+					break;
+				case Common::PVP:
+					m_UserManager.BroadcastToAllEnteredUsers(loadEnd);
+					if (progress > 1.0f) {
+						//I skipped this cause too fucking long
+					}
+					break;
+				case Common::SQUARE:
+					user->Send(loadEnd);
+					if (progress >= 1.0f)
+						m_Logic->Join(user->GetInitialPlayerData(), std::static_pointer_cast<void>(user));
+					break;
+				}
+				auto txtBoard = UserManagerInstance().GetLastTextBoardMsg();
+				if (txtBoard != L"") {
+					Protocol::FromServer::Chat noticeChat;
+					noticeChat.playerserial = user->GetSerial();
+					noticeChat.chattype = Constants::ChatTypes::LastTextBoardMsg;
+					noticeChat.message = txtBoard;
+					user->Send(noticeChat);
+				}
 			}
 			Common::ROOMKIND Room::GetRoomKind() const
 			{

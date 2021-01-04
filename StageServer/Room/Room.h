@@ -37,7 +37,7 @@ namespace Lunia {
 
 				void CheckLoadingTime(const float& dt);
 				Constants::GameTypes GetRoomType() const;
-			public:
+
 				uint16 UserCount() const;
 				void Clear();
 			public: // IEventListener implementation which sends information from the Logic.
@@ -186,6 +186,7 @@ namespace Lunia {
 				bool SideStageJoinCheck() const;
 				bool CapacityCheck(UserSharedPtr user) const;
 				uint16 GetStageCapcacity() const;
+				void SetStylePointUserCount(const uint16& count);
 			public: //IUserRoom
 				void DebugCommand(User& user, const String& msg);
 				void SpectatorChat(const String& characterName, Protocol::ToServer::Chat& chat);
