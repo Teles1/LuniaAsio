@@ -25,7 +25,7 @@ namespace Lunia{
 
 				void NPCInfoManager::BasicResist::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"BinaryBufferXRated::Database::Info::NPCInfoManager::BasicResist");
+					out.Begin(L"AllM::XRated::Database::Info::NPCInfoManager::BasicResist");
 					out.Write(L"MONSTER", resist[0]);
 					out.Write(L"ANIMAL", resist[1]);
 					out.Write(L"HUMAN", resist[2]);
@@ -41,12 +41,12 @@ namespace Lunia{
 
 				void NPCInfoManager::BasicResist::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"BinaryBufferXRated::Database::Info::NPCInfoManager::BasicResist");
+					in.Begin(L"AllM::XRated::Database::Info::NPCInfoManager::BasicResist");
 					in.Read(L"MONSTER", resist[0]);
 					in.Read(L"ANIMAL", resist[1]);
 					in.Read(L"HUMAN", resist[2]);
-					in.Read(L"UNDEAD", resist[3]);
-					in.Read(L"DEMON", resist[4]);
+					in.Read(L"DEMON", resist[3]);
+					in.Read(L"UNDEAD", resist[4]);
 					in.Read(L"PLANT", resist[5]);
 					in.Read(L"GIANT", resist[6]);
 					in.Read(L"FAIRY", resist[7]);
@@ -102,7 +102,7 @@ namespace Lunia{
 					}
 				}
 
-				/* Virtual void implemented on 
+				/* Pure virtual
 				void NPCInfoManager::LoadBinaryData()
 				{
 					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/NPCInfos.b");
@@ -137,22 +137,29 @@ namespace Lunia{
 
 				void NPCInfoManager::Serialize(Serializer::IStreamWriter& out) const
 				{
-					out.Begin(L"BinaryBufferXRated::Database::Info::NPCInfoManager");
+					out.Begin(L"AllM::XRated::Database::Info::NPCInfoManager");
 					out.Write(L"Npcs", Npcs);
 					out.Write(L"basicResist", basicResist);
 				}
 
 				void NPCInfoManager::Deserialize(Serializer::IStreamReader& in)
 				{
-					in.Begin(L"BinaryBufferXRated::Database::Info::NPCInfoManager");
+					in.Begin(L"AllM::XRated::Database::Info::NPCInfoManager");
 					in.Read(L"Npcs", Npcs);
 					in.Read(L"basicResist", basicResist);
+				}
+
+				float& NPCInfoManager::BasicResist::Resist::operator[](int a)
+				{
+					if (a < 0 || a >= (sizeof(resist) / sizeof(float)))
+						throw std::invalid_argument("invalid argument range");
+					return resist[a];
 				}
 
 				void NPCInfoManager::BasicResist::Resist::Serialize(Serializer::IStreamWriter& out) const
 
 				{
-					out.Begin(L"BinaryBufferXRated::Database::Info::NPCInfoManager::BasicResist::Resist");
+					out.Begin(L"AllM::XRated::Database::Info::NPCInfoManager::BasicResist::Resist");
 					out.Write(L"FIRE", resist[0]);
 					out.Write(L"WATER", resist[1]);
 					out.Write(L"ICE", resist[2]);
@@ -169,7 +176,7 @@ namespace Lunia{
 				void NPCInfoManager::BasicResist::Resist::Deserialize(Serializer::IStreamReader& in)
 
 				{
-					in.Begin(L"BinaryBufferXRated::Database::Info::NPCInfoManager::BasicResist::Resist");
+					in.Begin(L"AllM::XRated::Database::Info::NPCInfoManager::BasicResist::Resist");
 					in.Read(L"FIRE", resist[0]);
 					in.Read(L"WATER", resist[1]);
 					in.Read(L"ICE", resist[2]);

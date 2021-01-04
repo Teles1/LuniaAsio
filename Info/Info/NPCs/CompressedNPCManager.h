@@ -18,10 +18,10 @@ namespace Lunia {
 
 					void LoadBinaryData();
 					void BinaryToXml();
-					void GetNPC(const uint32 templateOffset);
-					NonPlayerInfo* Retrieve(const uint32 hash);
+					void GetNPC(const uint32& templateOffset);
+					BasicResist::Resist* Retrieve(Database::Info::NonPlayerInfo::Races race); // Not really any different than the base class but we need to overwrite otherwise the enum will be considered as INT. Pretty bad
+					NonPlayerInfo* Retrieve(const uint32& hash);
 					NonPlayerInfo* Retrieve(const wchar_t* name); 
-					NPCInfoManager::BasicResist::Resist* Retrieve(NonPlayerInfo::Races race);
 				};
 			}
 		}

@@ -11,6 +11,7 @@ namespace Lunia {
 					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateSerializerStructuredBinaryStreamReader(L"Database/CompressedNPCInfos.b");
 					reader->Begin(L"AllM::XRated::Database::Info::NPCInfoManager");
 					reader->Read(L"compressedNpcs", compressedNpcs);
+					reader->Read(L"basicResist", basicResist);
 
 					compressedNpcCbf = Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/NPCInfos.cbf");
 
@@ -21,7 +22,7 @@ namespace Lunia {
 					writer->Write(L"compressedNpcs", compressedNpcs);
 				}
 
-				void CompressedNPCInfoManager::GetNPC(const uint32 templateOffset)
+				void CompressedNPCInfoManager::GetNPC(const uint32& templateOffset)
 				{
 					compressedNpcCbf->SetReadCursor(templateOffset + 4, Lunia::IStream::Begin);
 					/* CompressedBlockSizeInBytes */
@@ -56,7 +57,12 @@ namespace Lunia {
 					delete[] buffer;
 				}
 
-				NonPlayerInfo* CompressedNPCInfoManager::Retrieve(const uint32 hash) {
+				NPCInfoManager::BasicResist::Resist* CompressedNPCInfoManager::Retrieve(Database::Info::NonPlayerInfo::Races race)
+				{
+					return NPCInfoManager::Retrieve(race);
+				}
+
+				NonPlayerInfo* CompressedNPCInfoManager::Retrieve(const uint32& hash) {
 					if (compressedNpcs.dataPosition.find(hash) == compressedNpcs.dataPosition.end())
 						return nullptr;
 					if (this->Npcs.find(hash) != this->Npcs.end())
@@ -67,12 +73,6 @@ namespace Lunia {
 
 				NonPlayerInfo* CompressedNPCInfoManager::Retrieve(const wchar_t* name) {
 					return Retrieve(StringUtil::Hash(name));
-				}
-
-				NPCInfoManager::BasicResist::Resist* CompressedNPCInfoManager::Retrieve(NonPlayerInfo::Races race)
-				{
-					if (race < 0 || race > 10) return NULL;
-					return &basicResist.resist[race];
 				}
 			}
 		}
