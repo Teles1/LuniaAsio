@@ -229,6 +229,7 @@
     <ClInclude Include="Info\Items\IndexedItemInfoManager.h" />
     <ClInclude Include="Info\Items\Item.h" />
     <ClInclude Include="Info\Items\ItemManager.h" />
+    <ClInclude Include="Info\Items\LuniaChipInfoManager.h" />
     <ClInclude Include="Info\Less.h" />
     <ClInclude Include="Info\MISCS\IndexedMISCSManager.h" />
     <ClInclude Include="Info\MISCS\MISCS.h" />
@@ -307,6 +308,7 @@
     <ClCompile Include="Info\Items\IndexedItemInfoManager.cpp" />
     <ClCompile Include="Info\Items\Item.cpp" />
     <ClCompile Include="Info\Items\ItemManager.cpp" />
+    <ClCompile Include="Info\Items\LuniaChipInfoManager.cpp" />
     <ClCompile Include="Info\MISCS\IndexedMISCSManager.cpp" />
     <ClCompile Include="Info\MISCS\MISCS.cpp" />
     <ClCompile Include="Info\MISCS\MISCSManager.cpp" />

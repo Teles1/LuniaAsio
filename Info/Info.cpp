@@ -33,7 +33,7 @@ namespace Lunia {
 				InfoCollections.Pets.Init(xmlLoad);
 
 				InfoCollections.LicenseProvider.Init(xmlLoad);
-				//InfoCollections.LuniaChipItems.Init(xmlLoad);
+				InfoCollections.LuniaChipItems.Init(xmlLoad);
 				InfoCollections.GuildInfos.Init(xmlLoad);
 				//InfoCollections.ShopInfos.Init(xmlLoad);
 				//InfoCollections.EventInfoManager.Init(xmlLoad);

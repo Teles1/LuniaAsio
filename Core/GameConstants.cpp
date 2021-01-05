@@ -3808,7 +3808,7 @@ namespace Lunia {
 		{
 			out.Begin(L"XRated::ConfirmTradeInfo::TradeItem");
 			out.Write(L"hash", hash);
-			out.Write(L"instanceEx", instanceEx);
+			out.Write(L"instanceEx", InstanceEx);
 			out.Write(L"count", count);
 			out.Write(L"isPetItem", isPetItem);
 			if (isPetItem)
@@ -3819,7 +3819,7 @@ namespace Lunia {
 		{
 			in.Begin(L"XRated::ConfirmTradeInfo::TradeItem");
 			in.Read(L"hash", hash);
-			in.Read(L"instanceEx", instanceEx);
+			in.Read(L"instanceEx", InstanceEx);
 			in.Read(L"count", count);
 			in.Read(L"isPetItem", isPetItem);
 			if (isPetItem)
@@ -3920,7 +3920,7 @@ namespace Lunia {
 			out.Write(L"RegistrationNumber", RegistrationNumber);
 			out.WriteEnum(L"RegistrationGrade", Grade);
 			out.Write(L"ItemHash", ItemHash);
-			out.Write(L"instanceEx", instanceEx);
+			out.Write(L"instanceEx", InstanceEx);
 			out.Write(L"StackedCount", StackedCount);
 			out.Write(L"Seller", Seller);
 			out.Write(L"ExpirationDate", ExpirationDate);
@@ -3937,7 +3937,7 @@ namespace Lunia {
 			in.Read(L"RegistrationNumber", RegistrationNumber);
 			in.ReadEnum(L"RegistrationGrade", Grade);
 			in.Read(L"ItemHash", ItemHash);
-			in.Read(L"instanceEx", instanceEx);
+			in.Read(L"instanceEx", InstanceEx);
 			in.Read(L"StackedCount", StackedCount);
 			in.Read(L"Seller", Seller);
 			in.Read(L"ExpirationDate", ExpirationDate);
@@ -3961,12 +3961,12 @@ namespace Lunia {
 			out.Write(L"CashEnchant2Index", CashEnchant2Index);
 			out.Write(L"CashEnchant3Index", CashEnchant3Index);
 			out.Write(L"CashEnchant4Index", CashEnchant4Index);
-			out.Write(L"InstanceEx", instanceEx.Instance);
+			out.Write(L"InstanceEx", InstanceEx.Instance);
 			std::wstring temp(L"0");
-			if (instanceEx.ExpireDate == InstanceEx::NoExpiration)
+			if (InstanceEx.ExpireDate == InstanceEx::NoExpiration)
 				temp = L"0";
 			else
-				temp = instanceEx.ExpireDate.ToString();
+				temp = InstanceEx.ExpireDate.ToString();
 			out.Write(L"InstanceEx.ExpireDate", temp);
 		}
 
@@ -3983,13 +3983,13 @@ namespace Lunia {
 			in.Read(L"CashEnchant2Index", CashEnchant2Index, static_cast<uint16>(0));
 			in.Read(L"CashEnchant3Index", CashEnchant3Index, static_cast<uint16>(0));
 			in.Read(L"CashEnchant4Index", CashEnchant4Index, static_cast<uint16>(0));
-			in.Read(L"InstanceEx", instanceEx.Instance, int64(0));
+			in.Read(L"InstanceEx", InstanceEx.Instance, int64(0));
 			std::wstring temp(L"0");
 			in.Read(L"InstanceEx.ExpireDate", temp, std::wstring(L"0"));
 			if (temp == L"0")
-				instanceEx.ExpireDate = InstanceEx::NoExpiration;
+				InstanceEx.ExpireDate = InstanceEx::NoExpiration;
 			else
-				instanceEx.ExpireDate.Parse(temp);
+				InstanceEx.ExpireDate.Parse(temp);
 
 			/* in.Read(L"Instance", Instance, uint64(0));
 			in.Read(L"InstanceExpireDate", InstanceExpireDate, std::wstring(L"0")); */

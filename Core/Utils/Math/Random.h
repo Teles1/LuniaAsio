@@ -74,6 +74,19 @@ namespace Lunia {
 		@return an integer value between half-closed interval of [min..max)
 		*/
 		double RandomHalfClosed(double m);
+
+		/**
+			@return true by probability of the rate.
+			@code
+				if (RandomByRate(0.3f)) // returns 'true' in 30% rate
+				{
+				}
+			@endcode
+		*/
+		inline bool RandomByRate(float rate, float max = 1.0f)
+		{
+			return (RandomHalfClosed(max) < rate);
+		}
 	}
 }
 

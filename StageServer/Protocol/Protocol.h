@@ -9,7 +9,7 @@ namespace Lunia {
 					virtual void Serialize(Serializer::IStreamWriter& out) const = 0;
 					virtual void Deserialize(Serializer::IStreamReader& in) = 0;
 
-					virtual const wchar_t* GetTypeName() = 0;
+					virtual const wchar_t* GetTypeName() const= 0;
 
 					virtual ~IPacketSerializable() {}
 				};

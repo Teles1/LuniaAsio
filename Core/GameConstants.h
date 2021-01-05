@@ -3293,7 +3293,7 @@ namespace Lunia {
 			struct TradeItem
 			{
 				uint32 hash;
-				InstanceEx instanceEx;
+				XRated::InstanceEx InstanceEx;
 				uint16 count;
 				bool isPetItem; 
 				PetToolTipInfo pet; 
@@ -3431,7 +3431,7 @@ namespace Lunia {
 				RegistrationGrade		Grade;
 
 				uint32					ItemHash;
-				InstanceEx				instanceEx;
+				XRated::InstanceEx		InstanceEx;
 				uint16					StackedCount;
 
 				std::wstring			Seller;
@@ -3445,7 +3445,7 @@ namespace Lunia {
 					: RegistrationNumber(0)
 					, Grade(RegistrationGrade::Normal)
 					, ItemHash(0)
-					, instanceEx(0)
+					, InstanceEx(0)
 					, StackedCount(0)
 					, Seller(L"")
 					, ExpirationDate(DateTime::Infinite)
@@ -3459,7 +3459,7 @@ namespace Lunia {
 					: RegistrationNumber(info.RegistrationNumber)
 					, Grade(info.Grade)
 					, ItemHash(info.ItemHash)
-					, instanceEx(info.instanceEx)
+					, InstanceEx(info.InstanceEx)
 					, StackedCount(info.StackedCount)
 					, Seller(info.Seller)
 					, ExpirationDate(info.ExpirationDate)
@@ -3493,7 +3493,7 @@ namespace Lunia {
 				uint16 CashEnchant4Index; 
 
 				/* in case of enchantable item */
-				InstanceEx instanceEx;
+				XRated::InstanceEx InstanceEx;
 
 			public: /* ISerializable implementation */
 				virtual void Serialize(Serializer::IStreamWriter& out) const;

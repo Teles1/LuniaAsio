@@ -7,6 +7,7 @@
 #include <Info/Info/Actions/CompressedActionsManager.h>
 #include <Info/Info/Items/CompressedItemInfoManager.h>
 #include <Info/Info/Items/BagInfos.h>
+#include <Info/Info/Items/LuniaChipInfoManager.h>
 #include "Info/GlobalInfo.h"
 #include "Info/NPCs/CompressedNPCManager.h"
 #include "Info/StateBundles/StateBundlesManager.h"
@@ -74,6 +75,7 @@ namespace Lunia {
 					Info::EpisodeSquareAdventageManager EpisodeSquareAdventageInfos;
 					Info::FishingInfoManager FishigInfos;
 					Info::BagInfos BagInfos;
+					Info::LuniaChipInfoManager LuniaChipItems;
 				} InfoCollections;
 			};
 			LuniaDatabase& DatabaseInstance();
