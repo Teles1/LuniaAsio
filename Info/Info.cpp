@@ -21,7 +21,7 @@ namespace Lunia {
 				//InfoCollections.Quests.Init(xmlLoad);
 				//InfoCollections.Quests.Init(xmlLoad);
 				InfoCollections.StylePoints.Init(xmlLoad);
-				//InfoCollections.FishigInfos.Init(xmlLoad);
+				InfoCollections.FishigInfos.Init(xmlLoad);
 				InfoCollections.EnchantTables.Init(xmlLoad);
 				//InfoCollections.DailyItems.Init(xmlLoad);
 				InfoCollections.StagePlayTimes.Init(xmlLoad);
@@ -46,7 +46,7 @@ namespace Lunia {
 				InfoCollections.FamilyInfos.Init(xmlLoad);
 				InfoCollections.NonPlayerModifierInfos.Init(xmlLoad);
 				//InfoCollections.OpenMarketInfos.Init(xmlLoad);
-				//InfoCollections.BagInfos.Init(xmlLoad);
+				InfoCollections.BagInfos.Init(xmlLoad);
 				InfoCollections.EpisodeSquareAdventageInfos.Init(xmlLoad);
 
 				// EventQuest

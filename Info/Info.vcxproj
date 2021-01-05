@@ -205,7 +205,10 @@
     <ClInclude Include="Info\EquipSet\EquipSet.h" />
     <ClInclude Include="Info\EquipSet\EquipSetManager.h" />
     <ClInclude Include="Info\ETC\EpisodeSquareAdventageManager.h" />
+    <ClInclude Include="Info\ETC\FishingInfoManager.h" />
+    <ClInclude Include="Info\ETC\FishingRodInfo.h" />
     <ClInclude Include="Info\ETC\StageClearPresentInfo.h" />
+    <ClInclude Include="Info\ETC\SwapSetInfo.h" />
     <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.h" />
     <ClInclude Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.h" />
     <ClInclude Include="Info\Event\EventInfo.h" />
@@ -221,6 +224,7 @@
     <ClInclude Include="Info\IndexedInfoManager.h" />
     <ClInclude Include="Info\InfoHelper.h" />
     <ClInclude Include="Info\ItemStageInfo\ItemStageInfo.h" />
+    <ClInclude Include="Info\Items\BagInfos.h" />
     <ClInclude Include="Info\Items\CompressedItemInfoManager.h" />
     <ClInclude Include="Info\Items\IndexedItemInfoManager.h" />
     <ClInclude Include="Info\Items\Item.h" />
@@ -281,7 +285,10 @@
     <ClCompile Include="Info\EquipSet\EquipSet.cpp" />
     <ClCompile Include="Info\EquipSet\EquipSetManager.cpp" />
     <ClCompile Include="Info\ETC\EpisodeSquareAdventageManager.cpp" />
+    <ClCompile Include="Info\ETC\FishingInfoManager.cpp" />
+    <ClCompile Include="Info\ETC\FishingRodInfo.cpp" />
     <ClCompile Include="Info\ETC\StageClearPresentInfo.cpp" />
+    <ClCompile Include="Info\ETC\SwapSetInfo.cpp" />
     <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemList.cpp" />
     <ClCompile Include="Info\EventNonPlayerItemList\EventNonPlayerItemListManager.cpp" />
     <ClCompile Include="Info\Event\EventInfo.cpp" />
@@ -295,6 +302,7 @@
     <ClCompile Include="Info\GuildFamily\GuildInfoManager.cpp" />
     <ClCompile Include="Info\IndexedInfoManager.cpp" />
     <ClCompile Include="Info\ItemStageInfo\ItemStageInfo.cpp" />
+    <ClCompile Include="Info\Items\BagInfos.cpp" />
     <ClCompile Include="Info\Items\CompressedItemInfoManager.cpp" />
     <ClCompile Include="Info\Items\IndexedItemInfoManager.cpp" />
     <ClCompile Include="Info\Items\Item.cpp" />

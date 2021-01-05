@@ -2170,7 +2170,7 @@ namespace Lunia
 
 							enum Results { Ok = 0, NotFishingMode, OutOfRange } Result;
 
-							uint8 Count;
+							uint16 Count;
 						};
 
 						struct List : public IPacketSerializable

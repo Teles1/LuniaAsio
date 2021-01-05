@@ -6,6 +6,7 @@
 #include "./Info/Database.h"
 #include <Info/Info/Actions/CompressedActionsManager.h>
 #include <Info/Info/Items/CompressedItemInfoManager.h>
+#include <Info/Info/Items/BagInfos.h>
 #include "Info/GlobalInfo.h"
 #include "Info/NPCs/CompressedNPCManager.h"
 #include "Info/StateBundles/StateBundlesManager.h"
@@ -33,6 +34,7 @@
 #include <Info/Info/CashShopBarter/CashShopBarterManager.h>
 #include <Info/Info/StageInfo/StageLicenseProvider.h>
 #include <Info/Info/ETC/EpisodeSquareAdventageManager.h>
+#include <Info/Info/ETC/FishingInfoManager.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -70,6 +72,8 @@ namespace Lunia {
 					Info::FamilyInfoManager FamilyInfos;
 					Info::StageLicenseProvider LicenseProvider;
 					Info::EpisodeSquareAdventageManager EpisodeSquareAdventageInfos;
+					Info::FishingInfoManager FishigInfos;
+					Info::BagInfos BagInfos;
 				} InfoCollections;
 			};
 			LuniaDatabase& DatabaseInstance();

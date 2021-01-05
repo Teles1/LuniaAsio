@@ -239,6 +239,18 @@
     <ClInclude Include="Info\ETC\EpisodeSquareAdventageManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\ETC\FishingRodInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\ETC\FishingInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Items\BagInfos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\ETC\SwapSetInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -449,6 +461,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\ETC\EpisodeSquareAdventageManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\ETC\FishingRodInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\ETC\FishingInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\ETC\SwapSetInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Items\BagInfos.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

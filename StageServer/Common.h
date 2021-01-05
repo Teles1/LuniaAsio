@@ -54,16 +54,18 @@ namespace Lunia {
 					// functors for comparing interfaces //////////////////////////////////////////////////
 					class IFindCondition
 					{
-					public: virtual bool operator()(const ItemEx& rhs) const = 0;
+					public: 
+						virtual bool operator()(const ItemEx& rhs) const = 0;
 					};
 					class ICountCondition
 					{
-					public: virtual uint32 operator()(const ItemEx& rhs) const = 0;
+					public: 
+						virtual uint32 operator()(const ItemEx& rhs) const = 0;
 					};
 
 
 					// helper conditions //////////////////////////////////////////////////////////////////
-					class FindCondition /*: public Common::ItemEx::IFindCondition*/
+					class FindCondition : public Common::ItemEx::IFindCondition
 					{
 						uint32 hash;
 					public:
