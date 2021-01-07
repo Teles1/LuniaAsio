@@ -257,6 +257,12 @@
     <ClInclude Include="Info\Items\DailyItemInfoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\Items\MailAwardInfos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Items\AwardInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -485,6 +491,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\Items\DailyItemInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Items\AwardInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Items\MailAwardInfos.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

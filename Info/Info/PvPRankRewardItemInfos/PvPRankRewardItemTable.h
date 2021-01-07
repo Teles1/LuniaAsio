@@ -14,7 +14,7 @@ namespace Lunia {
 				public:
 					bool GetRewardInfo(uint32 pvpRank, Info::PvPRankRewardInfo& rewardInfo);
 
-					void Load(bool xml);
+					void Init(bool xml);
 					void Save(bool xml);
 				};
 			}

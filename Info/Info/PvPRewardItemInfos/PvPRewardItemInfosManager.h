@@ -12,7 +12,7 @@ namespace Lunia {
 				public:
 					bool GetRewardInfo(uint32 stageHash, Info::PvPRewardInfo& rewardInfo);
 
-					void Load(bool xml);
+					void Init(bool xml);
 					void Save(bool xml);
 				};
 			}

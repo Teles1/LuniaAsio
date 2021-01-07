@@ -9,6 +9,7 @@
 #include <Info/Info/Items/BagInfos.h>
 #include <Info/Info/Items/LuniaChipInfoManager.h>
 #include <Info/Info/Items/DailyItemInfoManager.h>
+#include <Info/Info/Items/MailAwardInfos.h>
 #include "Info/GlobalInfo.h"
 #include "Info/NPCs/CompressedNPCManager.h"
 #include "Info/StateBundles/StateBundlesManager.h"
@@ -78,6 +79,7 @@ namespace Lunia {
 					Info::BagInfos BagInfos;
 					Info::LuniaChipInfoManager LuniaChipItems;
 					Info::DailyItemInfoManager DailyItems;
+					Info::MailAwardItemTable MailAwardItemInfos;
 				} InfoCollections;
 			};
 			LuniaDatabase& DatabaseInstance();

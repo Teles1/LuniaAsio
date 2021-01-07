@@ -224,6 +224,7 @@
     <ClInclude Include="Info\IndexedInfoManager.h" />
     <ClInclude Include="Info\InfoHelper.h" />
     <ClInclude Include="Info\ItemStageInfo\ItemStageInfo.h" />
+    <ClInclude Include="Info\Items\AwardInfo.h" />
     <ClInclude Include="Info\Items\BagInfos.h" />
     <ClInclude Include="Info\Items\CompressedItemInfoManager.h" />
     <ClInclude Include="Info\Items\DailyItemInfoManager.h" />
@@ -231,6 +232,7 @@
     <ClInclude Include="Info\Items\Item.h" />
     <ClInclude Include="Info\Items\ItemManager.h" />
     <ClInclude Include="Info\Items\LuniaChipInfoManager.h" />
+    <ClInclude Include="Info\Items\MailAwardInfos.h" />
     <ClInclude Include="Info\Less.h" />
     <ClInclude Include="Info\MISCS\IndexedMISCSManager.h" />
     <ClInclude Include="Info\MISCS\MISCS.h" />
@@ -304,6 +306,7 @@
     <ClCompile Include="Info\GuildFamily\GuildInfoManager.cpp" />
     <ClCompile Include="Info\IndexedInfoManager.cpp" />
     <ClCompile Include="Info\ItemStageInfo\ItemStageInfo.cpp" />
+    <ClCompile Include="Info\Items\AwardInfo.cpp" />
     <ClCompile Include="Info\Items\BagInfos.cpp" />
     <ClCompile Include="Info\Items\CompressedItemInfoManager.cpp" />
     <ClCompile Include="Info\Items\DailyItemInfoManager.cpp" />
@@ -311,6 +314,7 @@
     <ClCompile Include="Info\Items\Item.cpp" />
     <ClCompile Include="Info\Items\ItemManager.cpp" />
     <ClCompile Include="Info\Items\LuniaChipInfoManager.cpp" />
+    <ClCompile Include="Info\Items\MailAwardInfos.cpp" />
     <ClCompile Include="Info\MISCS\IndexedMISCSManager.cpp" />
     <ClCompile Include="Info\MISCS\MISCS.cpp" />
     <ClCompile Include="Info\MISCS\MISCSManager.cpp" />

@@ -15,7 +15,7 @@ namespace Lunia {
 
 					return false;
 				}
-				void PvPRewardItemTable::Load(bool xml)
+				void PvPRewardItemTable::Init(bool xml)
 				{
 					if (xml == true)
 					{

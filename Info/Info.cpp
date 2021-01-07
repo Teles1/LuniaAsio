@@ -40,9 +40,9 @@ namespace Lunia {
 
 				InfoCollections.UpgradeTables.Init(xmlLoad);
 
-				//InfoCollections.PvPRewardItemInfos.Init(xmlLoad);
-				//InfoCollections.PvPRankRewardItemInfos.Init(xmlLoad);
-				//InfoCollections.MailAwardItemInfos.Init(xmlLoad);
+				InfoCollections.PvPRewardItemInfos.Init(xmlLoad);
+				InfoCollections.PvPRankRewardItemInfos.Init(xmlLoad);
+				InfoCollections.MailAwardItemInfos.Init(xmlLoad);
 				InfoCollections.FamilyInfos.Init(xmlLoad);
 				InfoCollections.NonPlayerModifierInfos.Init(xmlLoad);
 				//InfoCollections.OpenMarketInfos.Init(xmlLoad);
