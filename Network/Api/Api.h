@@ -44,8 +44,8 @@ namespace Lunia {
             explicit operator bool() const;
             operator int() const;
             bool operator!() const;
-            friend void to_json(json& j, const Answer& str);
-            friend void from_json(const json& j, Answer& str);
+            friend void to_json(json& j, const Answer& o);
+            friend void from_json(const json& j, Answer& o);
         };
         struct Api {
             static std::string ApiUrl;
@@ -117,7 +117,7 @@ namespace Lunia {
             }
             void PostAsync(const json& value) const;
             template<typename O,typename T>
-            inline void Request( O* obj, void (O::* function)(T&, Answer&), T& param ){
+            inline void GetAsync( O* obj, void (O::* function)(T&, Answer&), T& param ){
                 cpr::GetCallback(
                     [&](const cpr::Response& r) {
                         Logger::GetInstance().Info("Api::GetAsync => status_code = {0}, text = {1}", r.status_code, r.text);
