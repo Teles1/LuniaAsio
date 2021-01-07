@@ -46,7 +46,7 @@ namespace Lunia {
 					operator int64 () const { return reinterpret_cast<const int64&>(*this); }
 					EnchantBitfields& operator =(int64 rhs) { reinterpret_cast<int64&>(*this) = rhs; return *this; }
 					EnchantBitfields() { *this = 0; }
-					EnchantBitfields(InstanceEx rhs) {
+					EnchantBitfields(const InstanceEx& rhs) {
 						*this = rhs.Instance;
 						/*
 							PLEASE. NEVER DO THE SAME FOR NORMALBITFIELD. This conversion is allowed hence there is no expiration for EnchantItens anyways.

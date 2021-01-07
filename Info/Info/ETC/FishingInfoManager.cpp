@@ -169,6 +169,7 @@ namespace Lunia {
 
 					if (findIter != Baits.end())
 						return findIter->second;
+					return 0.0f;
 				}
 
 				void FishingInfoManager::Serialize(Serializer::IStreamWriter& out) const
