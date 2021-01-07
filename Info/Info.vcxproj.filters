@@ -263,6 +263,12 @@
     <ClInclude Include="Info\Items\AwardInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Info\Quests\QuestsInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\Quests\QuestInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
@@ -497,6 +503,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\Items\MailAwardInfos.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Quests\QuestsInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\Quests\QuestInfoManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

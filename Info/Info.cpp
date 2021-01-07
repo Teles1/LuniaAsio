@@ -18,8 +18,7 @@ namespace Lunia {
 				InfoCollections.GeneralInfos.Init(xmlLoad);
 				InfoCollections.StageGroups.Init(xmlLoad);
 				InfoCollections.StageGroups.SetStageInfo(&InfoCollections.Stages);
-				//InfoCollections.Quests.Init(xmlLoad);
-				//InfoCollections.Quests.Init(xmlLoad);
+				InfoCollections.Quests.Init(xmlLoad);
 				InfoCollections.StylePoints.Init(xmlLoad);
 				InfoCollections.FishigInfos.Init(xmlLoad);
 				InfoCollections.EnchantTables.Init(xmlLoad);

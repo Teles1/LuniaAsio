@@ -38,6 +38,7 @@
 #include <Info/Info/StageInfo/StageLicenseProvider.h>
 #include <Info/Info/ETC/EpisodeSquareAdventageManager.h>
 #include <Info/Info/ETC/FishingInfoManager.h>
+#include <Info/Info/Quests/QuestInfoManager.h>
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -80,6 +81,7 @@ namespace Lunia {
 					Info::LuniaChipInfoManager LuniaChipItems;
 					Info::DailyItemInfoManager DailyItems;
 					Info::MailAwardItemTable MailAwardItemInfos;
+					Info::QuestInfoManager Quests;
 				} InfoCollections;
 			};
 			LuniaDatabase& DatabaseInstance();
