@@ -101,5 +101,17 @@ namespace Lunia {
             m_Header.emplace("ServerIp", Config::GetInstance().Settings.ServerAddress.ServerIp);
             m_Header.emplace("Content-Type", "application/json");
         }
-    }
+        Answer::operator bool() const
+        {
+            return this->errorCode == 0 ? true : false;
+        }
+        Answer::operator int() const
+        {
+            return this->errorCode;
+        }
+        bool Answer::operator!() const
+        {
+            return this->errorCode != 0 ? true : false;
+        }
+}
 }

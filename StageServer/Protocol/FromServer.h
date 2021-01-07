@@ -948,7 +948,7 @@ namespace Lunia
 						uint32			money;
 					};
 
-					struct BuyBack : public Serializer::ISerializable
+					struct BuyBack : public IPacketSerializable
 					{
 						NET_SERIALIZABLE;
 
@@ -960,7 +960,7 @@ namespace Lunia
 						uint32 money;
 					};
 
-					struct BuyBarterItem : public Serializer::ISerializable
+					struct BuyBarterItem : public IPacketSerializable
 					{
 						NET_SERIALIZABLE;
 

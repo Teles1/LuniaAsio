@@ -27,9 +27,22 @@ namespace Lunia {
             Answer(const std::string& errorMessage, const uint16& errorCode, const json& jsonAnswer = json())
                 : errorMessage(errorMessage), errorCode(errorCode), resultObject(jsonAnswer){}
             Answer() = delete;
+            const json& at(const char name[]) const {
+                return resultObject.at(name);
+            }
+            template<typename T>
+            void get_to(const char name[], const T& value) const {
+                return resultObject.at(name).get_to(value);
+            }
             std::string errorMessage;
             int16 errorCode;
             json resultObject;
+            explicit operator bool() const;
+            operator int() const;
+            bool operator!() const;
+            void Test() {
+                at("das");
+            }
         };
         struct Api {
             static std::string ApiUrl;
