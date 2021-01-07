@@ -4075,6 +4075,7 @@ namespace Lunia {
 		}
 
 		const DateTime InstanceEx::NoExpiration(L"2050-12-31 00:00:00");
+		const DateTime InstanceEx::Expired(L"2000-01-01 00:00:00");
 		bool InstanceEx::IsExpired(const DateTime& now) const
 		{
 			if (ExpireDate == NoExpiration)
@@ -4104,12 +4105,9 @@ namespace Lunia {
 		{
 			if (*this == NoExpiration)
 				return DateTime::Infinite;
+			this->ExpireDate.Add(DateTime::Unit::Day, day);
 
-			DateTime nowExpiredDate = DateTime::Now(); //NormalBitfields::GetExpiredDate();
-
-			nowExpiredDate = nowExpiredDate.Add(DateTime::Unit::Day, day);
-
-			return nowExpiredDate;
+			return this->ExpireDate;
 		}
 		void InstanceEx::Serialize(Serializer::IStreamWriter& out) const
 		{

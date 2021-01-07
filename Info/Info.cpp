@@ -23,7 +23,7 @@ namespace Lunia {
 				InfoCollections.StylePoints.Init(xmlLoad);
 				InfoCollections.FishigInfos.Init(xmlLoad);
 				InfoCollections.EnchantTables.Init(xmlLoad);
-				//InfoCollections.DailyItems.Init(xmlLoad);
+				InfoCollections.DailyItems.Init(xmlLoad);
 				InfoCollections.StagePlayTimes.Init(xmlLoad);
 				//InfoCollections.BossItems.Init(xmlLoad);
 				//InfoCollections.BonusItems.Init(xmlLoad);

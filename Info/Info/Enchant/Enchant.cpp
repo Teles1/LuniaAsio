@@ -1271,7 +1271,7 @@ namespace Lunia {
 					if (instance.IsExpired(connectDate) == false)
 					{
 						NormalBitfields field(instance);
-						DailyItemLastAcquiredDate date;
+						DailyItemLastAcquiredDate date{};
 						date.Year = field.CashEnchant1;
 						date.Month = (field.CashEnchant2 & 480) >> 5;
 						date.Day = field.CashEnchant2 & 31;

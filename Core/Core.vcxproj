@@ -281,6 +281,7 @@
     <ClInclude Include="Utils\StringUtil\GenericConversion.h" />
     <ClInclude Include="Utils\StringUtil\StaticString.h" />
     <ClInclude Include="Utils\ThreadPool.h" />
+    <ClInclude Include="Utils\TimeSpan.h" />
     <ClInclude Include="Utils\Version.h" />
   </ItemGroup>
   <ItemGroup>
@@ -347,6 +348,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Utils\StringUtil\GenericConversion.cpp" />
+    <ClCompile Include="Utils\TimeSpan.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

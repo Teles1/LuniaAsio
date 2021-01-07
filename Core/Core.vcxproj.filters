@@ -31,6 +31,7 @@
     <ClCompile Include="Packet\PacketBase.cpp" />
     <ClCompile Include="DeltaTimer.cpp" />
     <ClCompile Include="GameServer\OnGameServerInit.cpp" />
+    <ClCompile Include="Utils\TimeSpan.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -123,6 +124,7 @@
     <ClInclude Include="Utils\Math\MinMax.h" />
     <ClInclude Include="Runnable.h" />
     <ClInclude Include="GameServer\OnGameServerInit.h" />
+    <ClInclude Include="Utils\TimeSpan.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

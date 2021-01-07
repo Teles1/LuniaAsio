@@ -1030,6 +1030,7 @@ namespace Lunia {
 		struct InstanceEx : public Serializer::ISerializable
 		{
 			static const DateTime NoExpiration;
+			static const DateTime Expired;
 
 			int64 Instance;
 			DateTime ExpireDate;
@@ -1039,23 +1040,20 @@ namespace Lunia {
 				, ExpireDate(NoExpiration)
 			{}
 
-			InstanceEx(int64 instance) // 2.6 Compatibility constructor
+			InstanceEx(const int64& instance) // 2.6 Compatibility constructor
 				: Instance(instance)
 				, ExpireDate(NoExpiration)
 			{}
 
-			InstanceEx(int64 instance, DateTime expireDate)
-				: Instance(instance),
-				ExpireDate(expireDate)
-			{}
-			InstanceEx(int64 instance, String expireDate)
+			InstanceEx(const int64& instance, const DateTime& expireDate)
+			{
+				Instance = instance;
+				ExpireDate = expireDate;
+			}
+			InstanceEx(const int64& instance, const String& expireDate)
 				: Instance(instance)
 			{
 				ExpireDate.Parse(expireDate.c_str());
-			}
-			InstanceEx(const int64& instance, const DateTime& dateTime) {
-				Instance = instance;
-				ExpireDate = dateTime;
 			}
 			InstanceEx(const int64& instance, const std::string& dateTime) {
 				Instance = instance;

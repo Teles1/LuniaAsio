@@ -226,6 +226,7 @@
     <ClInclude Include="Info\ItemStageInfo\ItemStageInfo.h" />
     <ClInclude Include="Info\Items\BagInfos.h" />
     <ClInclude Include="Info\Items\CompressedItemInfoManager.h" />
+    <ClInclude Include="Info\Items\DailyItemInfoManager.h" />
     <ClInclude Include="Info\Items\IndexedItemInfoManager.h" />
     <ClInclude Include="Info\Items\Item.h" />
     <ClInclude Include="Info\Items\ItemManager.h" />
@@ -305,6 +306,7 @@
     <ClCompile Include="Info\ItemStageInfo\ItemStageInfo.cpp" />
     <ClCompile Include="Info\Items\BagInfos.cpp" />
     <ClCompile Include="Info\Items\CompressedItemInfoManager.cpp" />
+    <ClCompile Include="Info\Items\DailyItemInfoManager.cpp" />
     <ClCompile Include="Info\Items\IndexedItemInfoManager.cpp" />
     <ClCompile Include="Info\Items\Item.cpp" />
     <ClCompile Include="Info\Items\ItemManager.cpp" />
