@@ -41,7 +41,7 @@ namespace Lunia {
         return this->m_ServerKind;
     }
     Config& ConfigInstance(const char* filename) {
-        return Config::GetInstance();
+        return Config::GetInstance(filename);
     }
     void to_json(json& j, const LoggingStruct& o){
         j["Filename"] = o.Filename;

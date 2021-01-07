@@ -21,6 +21,10 @@ namespace nlohmann {
     };
 }
 namespace Lunia {
+    namespace StageServer {
+        class User;
+        typedef std::shared_ptr<User> UserSharedPtr;
+    }
     namespace Net {
         struct Answer {
         public:
@@ -40,9 +44,8 @@ namespace Lunia {
             explicit operator bool() const;
             operator int() const;
             bool operator!() const;
-            void Test() {
-                at("das");
-            }
+            friend void to_json(json& j, const Answer& str);
+            friend void from_json(const json& j, Answer& str);
         };
         struct Api {
             static std::string ApiUrl;
@@ -64,9 +67,9 @@ namespace Lunia {
             std::string BuildUrl() const;
 
             template<typename F>
-            inline void GetAsync(const F& callback)
+            inline void GetAsync(const F& callback) const
             {
-                auto cb = cpr::GetCallback(
+                cpr::GetCallback(
                     [callback](const cpr::Response& r){
                         Logger::GetInstance().Info("Api::GetAsync => status_code = {0}, text = {1}", r.status_code, r.text);
 
@@ -85,11 +88,11 @@ namespace Lunia {
 
                         callback(answ);
 
-                    }, cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ 1000 });
+                    }, cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ m_TimeOut });
             }
-            void GetAsync();
+            void GetAsync() const;
             template<typename F>
-            inline void PostAsync(const F& callback, const json& value)
+            inline void PostAsync(const F& callback, const json& value) const
             {
                 auto cb = cpr::PostCallback(
                     [callback](const cpr::Response& r) {
@@ -110,15 +113,28 @@ namespace Lunia {
 
                         callback(answ);
 
-                    }, cpr::Url(BuildUrl()), cpr::Body{value.dump()}, m_Header, cpr::Timeout{ 1000 });
+                    }, cpr::Url(BuildUrl()), cpr::Body{value.dump()}, m_Header, cpr::Timeout{ m_TimeOut });
             }
-            void PostAsync(const json& value);
+            void PostAsync(const json& value) const;
+            template<typename O,typename T>
+            inline void Request( O* obj, void (O::* function)(T&, Answer&), T& param ){
+                cpr::GetCallback(
+                    [&](const cpr::Response& r) {
+                        Logger::GetInstance().Info("Api::GetAsync => status_code = {0}, text = {1}", r.status_code, r.text);
+                        Answer answer("Whoops!", -1);
+                        if (r.status_code == 200) {
+                            json result = json::parse(r.text);
+                            result.get_to(answer);
+                        }
+                        (obj->*function)(param, answer);
+                    }, cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ m_TimeOut });
+            }
             ~Api() {}
             void AddHeaders();
         private:
             cpr::Header                                     m_Header;
             std::vector<std::string>                        m_Url;
-            json                                            m_Body;
+            uint16                                          m_TimeOut = 1500;
         };
     }
 }

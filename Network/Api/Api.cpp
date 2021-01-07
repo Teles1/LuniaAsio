@@ -77,12 +77,12 @@ namespace Lunia {
             }
             return std::move(Answer("Whoops!", -1));
         }
-        void Api::GetAsync(){
+        void Api::GetAsync() const {
             auto cb = cpr::GetCallback(
                 [](const cpr::Response& r) {},
                 cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ 1000 });
             }
-        void Api::PostAsync(const json& value) {
+        void Api::PostAsync(const json& value) const {
             auto cb = cpr::PostCallback(
                 [](const cpr::Response&) {}, 
                 cpr::Url(BuildUrl()), cpr::Body{ value.dump() }, m_Header, cpr::Timeout{ 1000 });
@@ -94,7 +94,10 @@ namespace Lunia {
                     ret.append("|");
                 ret.append(m_Url[i]);
             }
-            return ApiUrl + "/" + ret;
+            if (ApiUrl[ApiUrl.size() - 1] == '/')
+                return ApiUrl + ret;
+            else 
+                return ApiUrl + '/' + ret;
         }
         void Api::AddHeaders() {
             m_Header.emplace("ServerName", Config::GetInstance().Settings.ServerName);
@@ -112,6 +115,25 @@ namespace Lunia {
         bool Answer::operator!() const
         {
             return this->errorCode != 0 ? true : false;
+        }
+        void to_json(json& j, const Answer& o) {
+            j["errorMessage"] = o.errorMessage;
+            j["errorCode"] = o.errorCode;
+            j["data"] = o.resultObject;
+        }
+        void from_json(const json& j, Answer& o) {
+            j.at("errorMessage").get_to(o.errorMessage);
+            j.at("errorCode").get_to(o.errorCode);
+            o.resultObject = j.at("data");
+        }
+
+        void to_json(json& j, const DateTime& o)
+        {
+            j = o.ToString();
+        }
+        void from_json(const json& j, DateTime& o)
+        {
+            o.Parse(j.get<std::string>());
         }
 }
 }
