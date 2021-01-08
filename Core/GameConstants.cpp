@@ -1407,7 +1407,7 @@ namespace Lunia {
 			out.Write(L"StageGroupHash", StageGroupHash);
 			out.Write(L"Level", Level);
 			out.Write(L"Difficulty", Difficulty);
-			out.Write(L"Tags", Tags); // arcrus. ��±׽ý��.
+			out.Write(L"Tags", Tags);
 		}
 
 		void StageLocation::Deserialize(Serializer::IStreamReader& in)
@@ -1415,8 +1415,8 @@ namespace Lunia {
 			in.Begin(L"XRated::StageLocation");
 			in.Read(L"StageGroupHash", StageGroupHash);
 			in.Read(L"Level", Level);
-			in.Read(L"Difficulty", Difficulty, static_cast<uint8>(1));
-			in.Read(L"Tags", Tags, std::vector< std::wstring >()); // arcrus. ��±׽ý��.
+			in.Read(L"Difficulty", Difficulty, uint8(1));
+			in.Read(L"Tags", Tags, std::vector< std::wstring >());
 		}
 
 		void SquareInfo::Serialize(Serializer::IStreamWriter& out) const

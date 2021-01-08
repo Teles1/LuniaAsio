@@ -1,5 +1,4 @@
 #include <Info/Info/Quests/QuestsInfo.h>
-
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -98,24 +97,6 @@ namespace Lunia {
 						PossibleToShare = false;
 					}
 
-
-					/*
-
-					in.Read(L"ResetWeekSunday",temp,true);
-					ResetWeekField |= 0x01 << DateTime::Week::Sunday;
-					in.Read(L"ResetWeekMonday",temp,true);
-					ResetWeekField |= 0x01 << DateTime::Week::Monday;
-					in.Read(L"ResetWeekTuesday",temp,true);
-					ResetWeekField |= 0x01 << DateTime::Week::Tuesday;
-					in.Read(L"ResetWeekWednesday",temp,true);
-					ResetWeekField |= 0x01 << DateTime::Week::Wednesday;
-					in.Read(L"ResetWeekThursday",temp,true);
-					ResetWeekField |= 0x01 << DateTime::Week::Thursday;
-					in.Read(L"ResetWeekFriday",temp,true);
-					ResetWeekField |= 0x01 << DateTime::Week::Friday;
-					in.Read(L"ResetWeekSaturday",temp,true);
-					ResetWeekField |= 0x01 << DateTime::Week::Saturday;
-					*/
 					in.Read(L"Tags", Tags, std::vector< std::wstring >());
 				}
 
@@ -219,7 +200,6 @@ namespace Lunia {
 				{
 					out.Begin(L"AllM::XRated::Database::Info::QuestInfo::Objective");
 					out.Write(L"Type", Condition->GetType());
-
 					out.Write(L"Condition", *Condition);
 				}
 
@@ -237,7 +217,7 @@ namespace Lunia {
 						Condition = std::make_shared<ProtectNpc>();
 					else
 						throw Exception(L"invalid obective type : [{}]", type.c_str());
-					in.Read(L"Condition", *Condition);
+					in.Read(L"Condition", *Condition.get());
 				}
 
 				uint32 QuestInfo::Objective::Condition::UpdateParameter(const String& conditionName, uint32 oldParameter, uint32 target, int count) const
@@ -299,7 +279,7 @@ namespace Lunia {
 					in.Begin(L"AllM::XRated::Database::Info::QuestInfo::Reward::Item");
 					in.Read(L"ItemHash", ItemHash);
 					in.Read(L"Count", Count);
-					in.Read(L"Instance", Instance);
+					//in.Read(L"Instance", Instance);
 					in.Read(L"TakeAway", TakeAway);
 				}
 

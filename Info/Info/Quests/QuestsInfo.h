@@ -121,8 +121,8 @@ namespace Lunia {
 						struct Item : public Serializer::ISerializable
 						{
 							uint32 ItemHash;
-							uint8 Count;
-							int64 Instance;
+							uint16 Count;
+							InstanceEx Instance;
 							bool TakeAway;				///< true to drop the item from inventory, and Instance will be ignored. you should put condition to make sure that the item exists
 
 							virtual void Serialize(Serializer::IStreamWriter& out) const;
