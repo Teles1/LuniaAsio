@@ -114,10 +114,10 @@ namespace Lunia {
 					const FishingRodInfo::RodInfo* rodInfo = Retrieve(rodHash, stageHash);
 					if (rodInfo == NULL)
 						return NULL;
-					std::vector<FishingRodInfo::ProbabilityTable>::const_iterator i = rodInfo->ProbabilityTables.begin();
-					for (; i != rodInfo->ProbabilityTables.end(); ++i) {
-						if ((*i).ItemHash == itemHash)
-							return &(*i);
+					auto i = rodInfo->ProbabilityTables.begin();
+					for(auto& i : rodInfo->ProbabilityTables){
+						if (i.ItemHash == itemHash)
+							return &i;
 					}
 					return NULL;
 				}

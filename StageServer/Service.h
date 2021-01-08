@@ -1,4 +1,5 @@
 #pragma once
+#include <Core/Serializer/Serializer.h>
 namespace Lunia {
 	namespace XRated {
 		struct StageStates {
@@ -13,5 +14,21 @@ namespace Lunia {
 			inline StageStates() { *this = 0; }
 			~StageStates() {}
 		};
+		namespace Service {
+			struct SquareInfo : public Serializer::ISerializable
+			{
+				std::string		squareName;
+				unsigned int	stageGroupHash;
+				int				accessLevel;
+				int				orderNumber;
+				int				maxPlayerStore;
+				int				maxFishing;
+				int				maxUserCnt;
+				int				slimeRacingIntervalInMin;
+
+				void Serialize(Serializer::IStreamWriter& out) const;
+				void Deserialize(Serializer::IStreamReader& in);
+			};
+		}
 	}
 }

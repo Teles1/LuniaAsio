@@ -4,6 +4,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace Database {
 			namespace Info {
+				const uint32 FishingRodInfo::DefaultStageHash = 0;
 				void FishingRodInfo::Serialize(Serializer::IStreamWriter& out) const
 				{
 					out.Begin(L"AllM::XRated::Database::Info::FishingRodInfo");
