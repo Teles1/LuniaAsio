@@ -28,10 +28,22 @@ namespace Lunia {
 						{
 							if (Database::Enchant::IsEnchantable(Info) == false
 								&& InstanceEx.IsExpired() == true) {
-								if (user != NULL) {
+								if (user) {
 									if (Database::DatabaseInstance().InfoCollections.Pets.IsPetItem(Info->Hash) == true)
 									{
-										Logger::GetInstance().Exception("Missing implementation.");
+										const XRated::Pet* pet = nullptr;
+										AutoLock cs(user->GetPetDatas().GetSyncObject());
+										pet = user->GetPetDatas().GetPetData(Serial);
+										if (pet) {
+											if (pet->Appear == true) {
+												user->CriticalError("invalid trade item - summoned pet");
+												return false;
+											}
+											if (user->IsItemInPetInventory(Serial) == true) {
+												user->CriticalError("invalid trade item - pet is have item(inventory/equipment)");
+												return false;
+											}
+										}
 									}
 									return true;
 								}

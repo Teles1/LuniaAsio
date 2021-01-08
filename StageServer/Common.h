@@ -72,7 +72,7 @@ namespace Lunia {
 						FindCondition(uint32 hash) : hash(hash) {}
 						bool operator()(const Common::ItemEx& rhs) const;
 					};
-					class CountCondition /*: public Common::ItemEx::ICountCondition*/
+					class CountCondition : public Common::ItemEx::ICountCondition
 					{
 						uint32 hash;
 					public:
