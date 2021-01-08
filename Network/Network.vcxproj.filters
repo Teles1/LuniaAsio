@@ -6,6 +6,7 @@
     <ClCompile Include="Api\Api.cpp" />
     <ClCompile Include="NetStream.cpp" />
     <ClCompile Include="CommonProtocol\Protocol.cpp" />
+    <ClCompile Include="Tcp\FloodChecker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypt\Crypt.h" />
@@ -17,6 +18,7 @@
     <ClInclude Include="Api\Api.h" />
     <ClInclude Include="NetStream.h" />
     <ClInclude Include="CommonProtocol\Protocol.h" />
+    <ClInclude Include="Tcp\FloodChecker.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

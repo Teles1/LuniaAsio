@@ -4,25 +4,27 @@
 #include <Core/GameServer/Proxy/ClientProxy.h>
 
 namespace Lunia {
-	struct ClientProxyLobby : public ClientProxy
-	{
-		ClientProxyLobby(asio::ip::tcp::socket&& socket); /* WARN socket is moved a shit ton of times here */
+	namespace XRated {
+		struct ClientProxyLobby : public ClientProxy
+		{
+			ClientProxyLobby(asio::ip::tcp::socket&& socket); /* WARN socket is moved a shit ton of times here */
 
-		void SetAsAuthenticated();
+			void SetAsAuthenticated();
 
-		bool IsAuthenticated() const;
+			bool IsAuthenticated() const;
 
-		void SetHasSecondPasswordAuthentication();
+			void SetHasSecondPasswordAuthentication();
 
-		bool HasSecondPasswordAuthentication() const;
+			bool HasSecondPasswordAuthentication() const;
 
-		bool Ping();
+			bool Ping();
 
-	private:
+		private:
 
-		bool m_isAuthenticated = false;
+			bool m_isAuthenticated = false;
 
-		bool m_hasSecondPasswordAuthentication = false;
-	};
+			bool m_hasSecondPasswordAuthentication = false;
+		};
+	}
 }
 #endif // !ClientProxyLobby_H

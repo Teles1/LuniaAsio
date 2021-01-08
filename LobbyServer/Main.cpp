@@ -5,6 +5,7 @@
 #include <Core/GameServer/OnGameServerInit.h>
 
 using namespace Lunia;
+using namespace Lunia::XRated;
 int main(int argc, char* argv[])
 {
 	//setting log name to be used on the console.

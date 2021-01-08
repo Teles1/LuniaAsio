@@ -1,6 +1,6 @@
 #include "ServerProxyLobby.h"
 
-void Lunia::ServerProxyLobby::Say()
+void Lunia::XRated::ServerProxyLobby::Say()
 {
 	std::cout << "ServerProxyLobby :: Say" << std::endl;
 }

@@ -5,90 +5,92 @@
 #include "../../Serializer/Serializer.h"
 #include <Core/GameConstants.h>
 namespace Lunia {
-	enum class ErrorLevel
-	{
-		Curious,			///< not that critical but it should not happen by normal client.
-		Critical,			///< critical, it's doubtful about a sort of hack.
-		Unexpected,			///< internal wrong situation
-		Pvp
-	};
-
-	struct ClientProxy : public ClientNetworkIO //, TODO? std::enable_shared_from_this<Client>
-	{
-		ClientProxy(asio::ip::tcp::socket&& socket);
-
-		~ClientProxy() { };
-
-		void MakeSocketAsyncWriteSerializable(Lunia::Serializer::ISerializable& packet);
-
-		uint32_t GetId() const;
-
-		void SetId(const uint32_t& id);
-
-		void SetLocale(const std::wstring& locale);
-
-		virtual bool Ping() = 0;
-
-		bool IsWaitingOnPing() const;
-
-		std::wstring GetAccountName() const;
-
-		void SetAccountName(const std::wstring& accountName);
-
-		/* Old name DoesHaveLicense */
-		bool HasLicense(Lunia::XRated::Constants::ClassType classType);
-
-		std::wstring GetCharacterName() const;
-
-		void SetCharacterStateFlags(const Lunia::XRated::CharacterStateFlags& flag);
-
-		Lunia::XRated::CharacterStateFlags GetCharacterStateFlags() const
+	namespace XRated {
+		enum class ErrorLevel
 		{
-			return m_characterStateFlags;
-		}
+			Curious,			///< not that critical but it should not happen by normal client.
+			Critical,			///< critical, it's doubtful about a sort of hack.
+			Unexpected,			///< internal wrong situation
+			Pvp
+		};
 
-		/* Old name IsAValidCharacterName */
-		bool DoesCharacterExist(std::wstring& characterName);
+		struct ClientProxy : public ClientNetworkIO //, TODO? std::enable_shared_from_this<Client>
+		{
+			ClientProxy(asio::ip::tcp::socket&& socket);
 
-		bool DeleteCharacter(std::wstring& characterName);
+			~ClientProxy() { };
 
-		bool SetSelectedCharacter(std::wstring& characterName);
+			void MakeSocketAsyncWriteSerializable(Lunia::Serializer::ISerializable& packet);
 
-		/* IsCharacterSelected */
-		bool HasSelectedACharacter() const;
+			uint32_t GetId() const;
 
-		void Error(ErrorLevel error, const std::wstring& message); // error handling with different outcome based on severity.
+			void SetId(const uint32_t& id);
 
-	public:
-		fwEvent<> OnDropped;
+			void SetLocale(const std::wstring& locale);
 
-	public:
+			virtual bool Ping() = 0;
 
-		bool m_isWaitingOnPing = false;
+			bool IsWaitingOnPing() const;
 
-		uint16_t m_numNonACKPings = 0;
+			std::wstring GetAccountName() const;
 
-		uint8_t m_numOfCharacterSlots;
+			void SetAccountName(const std::wstring& accountName);
 
-		uint32_t m_accountLicense;
+			/* Old name DoesHaveLicense */
+			bool HasLicense(Lunia::XRated::Constants::ClassType classType);
 
-		std::vector<Lunia::XRated::LobbyPlayerInfo> m_characters;
+			std::wstring GetCharacterName() const;
 
-		Lunia::XRated::LobbyPlayerInfo m_selectedCharacter;
+			void SetCharacterStateFlags(const Lunia::XRated::CharacterStateFlags& flag);
 
-		Lunia::XRated::CharacterStateFlags m_characterStateFlags;
+			Lunia::XRated::CharacterStateFlags GetCharacterStateFlags() const
+			{
+				return m_characterStateFlags;
+			}
 
-	private:
+			/* Old name IsAValidCharacterName */
+			bool DoesCharacterExist(std::wstring& characterName);
 
-		uint32_t m_id = 0;
+			bool DeleteCharacter(std::wstring& characterName);
 
-		bool m_isAuthenticated = false;
+			bool SetSelectedCharacter(std::wstring& characterName);
 
-		std::wstring m_locale;
+			/* IsCharacterSelected */
+			bool HasSelectedACharacter() const;
 
-		std::wstring m_accountName;
+			void Error(ErrorLevel error, const std::wstring& message); // error handling with different outcome based on severity.
 
-		std::mutex mtx;
-	};
+		public:
+			fwEvent<> OnDropped;
+
+		public:
+
+			bool m_isWaitingOnPing = false;
+
+			uint16_t m_numNonACKPings = 0;
+
+			uint8_t m_numOfCharacterSlots;
+
+			uint32_t m_accountLicense;
+
+			std::vector<Lunia::XRated::LobbyPlayerInfo> m_characters;
+
+			Lunia::XRated::LobbyPlayerInfo m_selectedCharacter;
+
+			Lunia::XRated::CharacterStateFlags m_characterStateFlags;
+
+		private:
+
+			uint32_t m_id = 0;
+
+			bool m_isAuthenticated = false;
+
+			std::wstring m_locale;
+
+			std::wstring m_accountName;
+
+			std::mutex mtx;
+		};
+	}
 }
 #endif // ! ClientProxy_H

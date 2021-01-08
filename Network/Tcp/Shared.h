@@ -12,13 +12,15 @@
 
 
 namespace Lunia {
-    namespace Shared {
-        using ReceivedCallback = std::function<void(std::vector<uint8>& buffer)>;
-    }
-    namespace Net {
-        using asio::ip::tcp;
-        using error_code = asio::error_code;
-        const uint16 READ_DATA_BUFFER_LENGTH = 2 << 12;
+    namespace XRated {
+        namespace Shared {
+            using ReceivedCallback = std::function<void(std::vector<uint8>& buffer)>;
+        }
+        namespace Net {
+            using asio::ip::tcp;
+            using error_code = asio::error_code;
+            const uint16 READ_DATA_BUFFER_LENGTH = 2 << 12;
+        }
     }
 }
 

@@ -6,7 +6,9 @@
 #include "GameServer/ServerProxy/ServerProxyLobby.h"
 
 namespace Lunia {
-	inline GameServer<ServerProxyLobby>* g_gameServer;
+	namespace XRated {
+		inline GameServer<ServerProxyLobby>* g_gameServer;
+	}
 }
 
 #endif // !Main_H
