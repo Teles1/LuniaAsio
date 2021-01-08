@@ -4109,6 +4109,9 @@ namespace Lunia {
 
 			return this->ExpireDate;
 		}
+		std::wstring InstanceEx::ToString() const {
+			return fmt::format(L"({},{})", Instance, ExpireDate.ToString());
+		}
 		void InstanceEx::Serialize(Serializer::IStreamWriter& out) const
 		{
 			out.Begin(L"InstanceEx");
@@ -4135,6 +4138,14 @@ namespace Lunia {
 				ExpireDate = DateTime::Infinite;
 			else
 				ExpireDate = DateTime(tmp.Year, tmp.Month, tmp.Day, tmp.Hour, tmp.Minute, 0);
+		}
+		void to_json(json& j, const InstanceEx& o) {
+			j = json{ {"instance", o.Instance}, {"expireDate", o.ExpireDate} };
+		}
+
+		void from_json(const json& j, InstanceEx& o) {
+			j.at("instance").get_to(o.Instance);
+			j.at("expireDate").get_to(o.ExpireDate);
 		}
 	}
 }

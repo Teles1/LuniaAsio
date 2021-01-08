@@ -29,7 +29,7 @@ namespace Lunia {
             template <> void Api::Append(const wchar_t* param) { m_Url.push_back(StringUtil::ToASCII(param)); }
 
             std::string Api::ApiUrl = "http://localhost:51542/Lobby";
-            Api::Api(const std::string& reqPage) {
+            Api::Api(const std::string& reqPage, const Methods& method) {
                 std::string aux = reqPage; // I need it to be a non const lol
                 if (aux == "") {
                     Logger::GetInstance().Exception("The requested Procedure shouldn't be empty!");
@@ -43,7 +43,7 @@ namespace Lunia {
                 AddHeaders();
             }
             Answer Api::RequestApi() const {
-                cpr::Response r = cpr::Get(cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ 1000 });
+                cpr::Response r = cpr::Get(cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ m_TimeOut });
                 Logger::GetInstance().Info("Api returned [{0}] =>  {1}", r.status_code, r.text);
                 if (r.status_code == 200) {
                     try {
@@ -61,7 +61,7 @@ namespace Lunia {
                 return std::move(Answer("Whoops!", -1));
             }
             Answer Api::RequestPost(const json& value) const {
-                cpr::Response r = cpr::Post(cpr::Url(BuildUrl()), cpr::Body{ value.dump() }, m_Header, cpr::Timeout{ 1000 });
+                cpr::Response r = cpr::Post(cpr::Url(BuildUrl()), cpr::Body{ value.dump() }, m_Header, cpr::Timeout{ m_TimeOut });
                 Logger::GetInstance().Info("Api returned [{0}] =>  {1}", r.status_code, r.text);
                 if (r.status_code == 200) {
                     try {
@@ -78,15 +78,11 @@ namespace Lunia {
                 }
                 return std::move(Answer("Whoops!", -1));
             }
-            void Api::GetAsync() const {
-                auto cb = cpr::GetCallback(
-                    [](const cpr::Response& r) {},
-                    cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ 1000 });
-            }
-            void Api::PostAsync(const json& value) const {
-                auto cb = cpr::PostCallback(
-                    [](const cpr::Response&) {},
-                    cpr::Url(BuildUrl()), cpr::Body{ value.dump() }, m_Header, cpr::Timeout{ 1000 });
+            void Api::GetAsync(const json& payLoad) const {
+                if(payLoad.is_null())
+                    cpr::GetAsync( cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ m_TimeOut } );
+                else
+                    cpr::PostAsync(cpr::Url(BuildUrl()), cpr::Body{ payLoad.dump() }, m_Header, cpr::Timeout{ m_TimeOut });
             }
             std::string Api::BuildUrl() const {
                 std::string ret;

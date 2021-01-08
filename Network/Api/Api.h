@@ -36,8 +36,8 @@ namespace Lunia {
                     return resultObject.at(name);
                 }
                 template<typename T>
-                void get_to(const char name[], const T& value) const {
-                    return resultObject.at(name).get_to(value);
+                void get_to(const char name[], T& value) const {
+                    resultObject.at(name).get_to(value);
                 }
                 std::string errorMessage;
                 int16 errorCode;
@@ -51,7 +51,11 @@ namespace Lunia {
             struct Api {
                 static std::string ApiUrl;
             public:
-                Api(const std::string& reqPage = "");
+                enum class Methods {
+                    GET,
+                    POST
+                };
+                Api(const std::string& reqPage = "", const Methods& method = Methods::GET);
 
                 template <typename T> inline void Append(const T& param);
                 template <typename T> inline void Append(const T* param);
@@ -63,35 +67,10 @@ namespace Lunia {
                     return *this;
                 }
 
+                std::string BuildUrl() const;
                 Answer RequestApi() const;
                 Answer RequestPost(const json& value) const;
-                std::string BuildUrl() const;
-
-                template<typename F>
-                inline void GetAsync(const F& callback) const
-                {
-                    cpr::GetCallback(
-                        [callback](const cpr::Response& r) {
-                            Logger::GetInstance().Info("Api::GetAsync => status_code = {0}, text = {1}", r.status_code, r.text);
-
-                            Answer answ("Whoops!", -1);
-
-                            if (r.status_code == 200)
-                                try
-                            {
-                                json result = json::parse(r.text);
-                                if (result != NULL && result.is_object())
-                                    answ = Answer(result["errorMessage"].get<std::string>(), result["errorCode"].get<int16>(), result["data"].get<json>());
-                            }
-                            catch (...) {
-                                Logger::GetInstance().Error("Could not parse json!");
-                            }
-
-                            callback(answ);
-
-                        }, cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ m_TimeOut });
-                }
-                void GetAsync() const;
+                void GetAsync(const json& payLoad = json()) const;
                 template<typename F>
                 inline void PostAsync(const F& callback, const json& value) const
                 {
@@ -116,19 +95,21 @@ namespace Lunia {
 
                         }, cpr::Url(BuildUrl()), cpr::Body{ value.dump() }, m_Header, cpr::Timeout{ m_TimeOut });
                 }
-                void PostAsync(const json& value) const;
                 template<typename O, typename T>
-                inline void GetAsync(O* obj, void (O::* function)(T&, Answer&), T& param) {
-                    cpr::GetCallback(
-                        [&](const cpr::Response& r) {
-                            Logger::GetInstance().Info("Api::GetAsync => status_code = {0}, text = {1}", r.status_code, r.text);
-                            Answer answer("Whoops!", -1);
-                            if (r.status_code == 200) {
-                                json result = json::parse(r.text);
-                                result.get_to(answer);
-                            }
-                            (obj->*function)(param, answer);
-                        }, cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ m_TimeOut });
+                inline void GetAsync(O* obj, void (O::* function)(const T&, Answer&), const T& param, const json& payload = json()) {
+                    auto lambda = [&](const cpr::Response& r) {
+                        Logger::GetInstance().Info("Api::GetAsync => status_code = {0}, text = {1}", r.status_code, r.text);
+                        Answer answer("Whoops!", -1);
+                        if (r.status_code == 200) {
+                            json result = json::parse(r.text);
+                            result.get_to(answer);
+                        }
+                        (obj->*function)(param, answer);
+                    };
+                    if(m_Method == Methods::POST)
+                        cpr::PostCallback(lambda, cpr::Url(BuildUrl()), m_Header, cpr::Body{ payload.dump() }, cpr::Timeout{ m_TimeOut });
+                    else
+                        cpr::GetCallback(lambda, cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ m_TimeOut });
                 }
                 ~Api() {}
                 void AddHeaders();
@@ -136,6 +117,7 @@ namespace Lunia {
                 cpr::Header                                     m_Header;
                 std::vector<std::string>                        m_Url;
                 uint16                                          m_TimeOut = 1500;
+                Methods                                         m_Method = Methods::GET;
             };
         }
     }

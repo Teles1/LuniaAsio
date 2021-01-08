@@ -1064,8 +1064,11 @@ namespace Lunia {
 			void MakeUnlimitedPeriod();
 			DateTime GetExpiredDate() const;
 			DateTime ExtensionExpiredDay(uint32 day);
+			std::wstring ToString() const;
 			void Serialize(Serializer::IStreamWriter& out) const;
 			void Deserialize(Serializer::IStreamReader& in);
+			friend void to_json(json& j, const InstanceEx& o);
+			friend void from_json(const json& j, InstanceEx& o);
 
 			bool operator==(const InstanceEx& rhs) const
 			{
@@ -1286,7 +1289,7 @@ namespace Lunia {
 				, ItemSerial(0)
 			{
 			}
-			ItemBasicInfo(uint32 id, int64 inst, GlobalSerial serial, uint16 count)
+			ItemBasicInfo(uint32 id, XRated::InstanceEx inst, GlobalSerial serial, uint16 count)
 				: ItemHash(id)
 				, InstanceEx(inst)
 				, ItemSerial(serial)
