@@ -17,7 +17,7 @@ namespace Lunia {
 				virtual ~IUserRoom() {}
 
 			public:
-				virtual void DebugCommand(User& user, const std::wstring& msg) = 0;
+				virtual void DebugCommand(UserSharedPtr user, const std::wstring& msg) = 0;
 				virtual void SpectatorChat(const std::wstring& characterName, Protocol::ToServer::Chat& chat) = 0;
 				virtual void Chat(const uint64& serial, Protocol::ToServer::Chat& chat) = 0;
 				virtual void Voice(const uint64& serial, Protocol::ToServer::Voice& voice) = 0;
@@ -78,20 +78,20 @@ namespace Lunia {
 				virtual UserSharedPtr GetUser(const uint64& serial) = 0;
 				virtual void SendToAll(Serializer::ISerializable& packet) = 0;
 
-				virtual void AddExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp, bool withFactor) = 0;
-				virtual void AddPvpExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp) = 0;
-				virtual void AddWarExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp) = 0;
-				virtual void AddStateBundle(User& user, uint32 hash) = 0;
-				virtual void AddPassive(User& uer, uint32 hash) = 0;
-				virtual void RemovePassive(User& user, uint32 hash) = 0;
+				virtual void AddExp(XRated::Constants::ExpAcquiredType type, UserSharedPtr user, uint32 exp, bool withFactor) = 0;
+				virtual void AddPvpExp(XRated::Constants::ExpAcquiredType type, UserSharedPtr user, uint32 exp) = 0;
+				virtual void AddWarExp(XRated::Constants::ExpAcquiredType type, UserSharedPtr user, uint32 exp) = 0;
+				virtual void AddStateBundle(UserSharedPtr user, uint32 hash) = 0;
+				virtual void AddPassive(UserSharedPtr user, uint32 hash) = 0;
+				virtual void RemovePassive(UserSharedPtr user, uint32 hash) = 0;
 
-				virtual void FamiliarCommand(User& user, uint16 index, XRated::Serial who, Constants::Familiar::Command command) = 0;
-				virtual void ChangeFamiliarFormation(User& user, Constants::Familiar::Formation formation) = 0;
+				virtual void FamiliarCommand(UserSharedPtr user, uint16 index, XRated::Serial who, Constants::Familiar::Command command) = 0;
+				virtual void ChangeFamiliarFormation(UserSharedPtr user, Constants::Familiar::Formation formation) = 0;
 
 				virtual bool IsMissionCleared() const = 0;
 				virtual bool IsNowCampfire() const = 0;
-				virtual float GetObjectDistance(User& user, uint32 hash) const = 0;
-				virtual void CreateItem(User& user, const XRated::RewardItem& rewardItem, bool isPrivateItem = false) = 0;
+				virtual float GetObjectDistance(UserSharedPtr user, uint32 hash) const = 0;
+				virtual void CreateItem(UserSharedPtr user, const XRated::RewardItem& rewardItem, bool isPrivateItem = false) = 0;
 				virtual int	 GetProprietyLevel() = 0;
 				virtual void ChangeStylePointStateToLogic(Logic::Player* player, XRated::StylePoint::State state) = 0;
 				virtual void CashItemView(UserSharedPtr user, std::pair< uint16, uint16 > flag) = 0;
@@ -121,30 +121,30 @@ namespace Lunia {
 
 				virtual void SetPlayTimePenalty(Logic::Player* player, XRated::Constants::PlayTimePenalty::Type flag) = 0;
 
-				virtual void ChangedExpFactorFromItem(User& user, XRated::Constants::ExpFactorCategoryFromItem category, float factor) = 0;
-				virtual void ChangedExpFactor(User& user) = 0;
-				virtual void AddGuildUser(User& user) = 0;
-				virtual void RemoveGuildUser(User& user) = 0;
+				virtual void ChangedExpFactorFromItem(UserSharedPtr user, XRated::Constants::ExpFactorCategoryFromItem category, float factor) = 0;
+				virtual void ChangedExpFactor(UserSharedPtr user) = 0;
+				virtual void AddGuildUser(UserSharedPtr user) = 0;
+				virtual void RemoveGuildUser(UserSharedPtr user) = 0;
 
 				/// Rebirth
-				virtual bool Rebirth(const User& user, uint32 levelAfterRebirth) = 0;
-				virtual bool RebirthRollBack(const User& user) = 0;
+				virtual bool Rebirth(const UserSharedPtr user, uint32 levelAfterRebirth) = 0;
+				virtual bool RebirthRollBack(const UserSharedPtr user) = 0;
 				virtual void NotifyRebirth(XRated::Serial serial, uint16 level, uint16 rebirthCount, uint16 storedLevel, uint16 storedSkillPoint, const std::vector<XRated::StageLicense>& updatedLicense, const DateTime& lastRebirthDateTime) = 0;
 
 				virtual Protocol::FromServer::Family::InviteResult::Type RequestInviteFamily(XRated::Family::FamilySerial familySerial, DateTime createdDate, XRated::Serial targetSerial, const std::wstring& targetName, const std::wstring& invter) = 0;
 				virtual Protocol::FromServer::Family::InviteResult::Type RequestInviteFamily(XRated::Serial targetSerial, const std::wstring& targetName, const std::wstring& invter) = 0;
 
 
-				virtual bool CompletedQuest(User& user, uint32 questHash) = 0;
-				virtual bool AcceptedQuest(User& user, uint32 questHash) = 0;
+				virtual bool CompletedQuest(UserSharedPtr user, uint32 questHash) = 0;
+				virtual bool AcceptedQuest(UserSharedPtr user, uint32 questHash) = 0;
 
 			public:
 				class IExcuter
 				{
 				public:
-					virtual bool Excute(User& in) = 0;
+					virtual bool Excute(UserSharedPtr in) = 0;
 				};
-				virtual uint32 ExcuteRoomSerialUsers(IExcuter& excuter) = 0;
+				virtual uint32 ExcuteRoomSerialUsers(const IExcuter& excuter) = 0;
 			};
 		}
 	}

@@ -97,6 +97,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeaderOutputFile />
+      <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -116,6 +118,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeaderOutputFile />
+      <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,10 +138,12 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <PrecompiledHeaderOutputFile>$(SolutionDir)Phcs\$(TargetName).pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>
+      </PrecompiledHeaderOutputFile>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,6 +163,8 @@
       <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeaderOutputFile />
+      <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -174,6 +182,18 @@
     <ClCompile Include="Room\Services\Guild.cpp" />
     <ClCompile Include="Protocol\FromServer.cpp" />
     <ClCompile Include="Protocol\ToServer.cpp" />
+    <ClCompile Include="Services\ItemSerial.cpp" />
+    <ClCompile Include="User\Items\Bag.cpp" />
+    <ClCompile Include="User\Items\Enchanter.cpp" />
+    <ClCompile Include="User\Items\Equip.cpp" />
+    <ClCompile Include="User\Items\Inventory.cpp" />
+    <ClCompile Include="User\Items\ItemEx.cpp" />
+    <ClCompile Include="User\Items\ItemRequirementQueue.cpp" />
+    <ClCompile Include="User\Items\Items.cpp" />
+    <ClCompile Include="User\Items\NoLogicItems.cpp" />
+    <ClCompile Include="User\Items\PassiveItemManager.cpp" />
+    <ClCompile Include="User\Items\PetInventory.cpp" />
+    <ClCompile Include="User\Items\Slot.cpp" />
     <ClCompile Include="User\Services\ExpFactorManager.cpp" />
     <ClCompile Include="PacketHandler.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
@@ -184,7 +204,14 @@
     <ClCompile Include="User\PetData.cpp" />
     <ClCompile Include="User\RoomUserManager.cpp" />
     <ClCompile Include="User\Services\FamilyManager.cpp" />
+    <ClCompile Include="User\Services\GuildManager.cpp" />
     <ClCompile Include="User\Services\GuildState.cpp" />
+    <ClCompile Include="User\Services\FishingManager.cpp" />
+    <ClCompile Include="User\Services\MailBoxManager.cpp" />
+    <ClCompile Include="User\Services\PlayerStoreManager.cpp" />
+    <ClCompile Include="User\Services\QuestManager.cpp" />
+    <ClCompile Include="User\Services\Service.cpp" />
+    <ClCompile Include="User\Services\TradeManager.cpp" />
     <ClCompile Include="User\UserManager.cpp" />
     <ClCompile Include="User\User.cpp" />
   </ItemGroup>
@@ -196,6 +223,18 @@
     <ClInclude Include="Protocol\FromServer.h" />
     <ClInclude Include="Protocol\Protocol.h" />
     <ClInclude Include="Protocol\ToServer.h" />
+    <ClInclude Include="Services\ItemSerial.h" />
+    <ClInclude Include="User\Items\Bag.h" />
+    <ClInclude Include="User\Items\Enchanter.h" />
+    <ClInclude Include="User\Items\Equip.h" />
+    <ClInclude Include="User\Items\Inventory.h" />
+    <ClInclude Include="User\Items\ItemEx.h" />
+    <ClInclude Include="User\Items\ItemRequirementQueue.h" />
+    <ClInclude Include="User\Items\Items.h" />
+    <ClInclude Include="User\Items\NoLogicItems.h" />
+    <ClInclude Include="User\Items\PassiveItemManager.h" />
+    <ClInclude Include="User\Items\PetInventory.h" />
+    <ClInclude Include="User\Items\Slot.h" />
     <ClInclude Include="User\Services\ExpFactorManager.h" />
     <ClInclude Include="fwPacketListener.h" />
     <ClInclude Include="QuickSlot.h" />
@@ -209,7 +248,13 @@
     <ClInclude Include="User\PetData.h" />
     <ClInclude Include="User\RoomUserManager.h" />
     <ClInclude Include="User\Services\FamilyManager.h" />
+    <ClInclude Include="User\Services\GuildManager.h" />
     <ClInclude Include="User\Services\GuildState.h" />
+    <ClInclude Include="User\Services\FishingManager.h" />
+    <ClInclude Include="User\Services\MailBoxManager.h" />
+    <ClInclude Include="User\Services\PlayerStoreManager.h" />
+    <ClInclude Include="User\Services\QuestManager.h" />
+    <ClInclude Include="User\Services\TradeManager.h" />
     <ClInclude Include="User\UserManager.h" />
     <ClInclude Include="User\User.h" />
   </ItemGroup>

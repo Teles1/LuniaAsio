@@ -32,40 +32,7 @@ namespace Lunia {
 							Logger::GetInstance().Info("A connection with (Ip: {0}) is authorizing", user->GetPeerAddress());
 							Net::Api api("AuthConnection");
 							api << user->m_SecuKey;
-							api.GetAsync(
-								[&](const Net::Answer& result) {
-									if (result.errorCode == 0) {
-										if (!result.resultObject.is_null()) {
-											if (!UserManagerInstance().AuthenticateUser(user->GetId(), result.resultObject)) {
-												Logger::GetInstance().Error("UserManager::AuthenticateUser() Could not Authenticate user");
-												user->Terminate();
-											}
-											else {
-												Logger::GetInstance().Info("Authed {0},{1},{2}", user->m_CurrentStage.StageGroupHash, user->m_CurrentStage.Level, user->m_CurrentStage.Difficulty);
-												Net::Api api("Auth");
-												api << user->GetCharacterName();
-												api.GetAsync(
-													[&user = user](const Net::Answer& result) {
-													if (result.errorCode == 0 && !result.resultObject.is_null()) {
-														if (user->Auth(result.resultObject)) {
-															UserManagerInstance().RoomAuth(user);
-															return;
-														}
-														else
-															Logger::GetInstance().Warn(L"Could not authenticate user={0}", user->GetSerial());
-													}
-													else
-														Logger::GetInstance().Warn(L"Could not handle the call api to Auth user = {0}", user->GetSerial());
-													user->Terminate();
-												});
-											}
-										}
-										else
-											Logger::GetInstance().Warn("Result code is 0 but the data is empty.");
-									}
-									else
-										user->Terminate();
-								});
+							api.GetAsync(&UserManagerInstance(),&UserManager::AuthedConnection, user);
 						}
 
 					});
@@ -78,7 +45,6 @@ namespace Lunia {
 				fwPacketListener::GetInstance().Connect(
 					[](UserSharedPtr user, StageServer::Protocol::ToServer::Alive& packet)
 					{
-						AutoLock _l(user->mtx);
 						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Alive", user->GetSerial());
 						user->m_AliveTime = timeGetTime();
 						user->Send(packet);

@@ -21,11 +21,12 @@ namespace Lunia {
 			{
 			public:
 				Room(const uint16& index);
-			public: //IUpdateRoom
+			public:
 				uint16 GetIndex();
 				uint16 GetThreadIndex();
 				void SetThreadIndex(const uint16& i);
 
+				void SendAllObject(UserSharedPtr target);
 				bool Update(const float& dt);
 				void UpdateExpFactor();
 				void NoticeHolidayEvent(const uint32& eventId, bool start);
@@ -40,6 +41,8 @@ namespace Lunia {
 
 				uint16 UserCount() const;
 				void Clear();
+				bool IsBoss(const NonPlayerData::NpcType& type) const;
+				bool IsEnableStylePoint() const;
 			public: // IEventListener implementation which sends information from the Logic.
 				void Initialized(Database::Info::StageInfo* info, uint16 uniqueId);
 				std::mutex& GetSyncRoom();
@@ -188,7 +191,7 @@ namespace Lunia {
 				uint16 GetStageCapcacity() const;
 				void SetStylePointUserCount(const uint16& count);
 			public: //IUserRoom
-				void DebugCommand(User& user, const String& msg);
+				void DebugCommand(UserSharedPtr user, const String& msg);
 				void SpectatorChat(const String& characterName, Protocol::ToServer::Chat& chat);
 				void Chat(const uint64& serial, Protocol::ToServer::Chat& chat);
 				void Voice(const uint64& serial, Protocol::ToServer::Voice& voice);
@@ -249,20 +252,20 @@ namespace Lunia {
 				UserSharedPtr GetUser(const uint64& serial);
 				void SendToAll(Serializer::ISerializable& packet);
 
-				void AddExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp, bool withFactor);
-				void AddPvpExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp);
-				void AddWarExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp);
-				void AddStateBundle(User& user, uint32 hash);
-				void AddPassive(User& uer, uint32 hash);
-				void RemovePassive(User& user, uint32 hash);
+				void AddExp(XRated::Constants::ExpAcquiredType type, UserSharedPtr user, uint32 exp, bool withFactor);
+				void AddPvpExp(XRated::Constants::ExpAcquiredType type, UserSharedPtr user, uint32 exp);
+				void AddWarExp(XRated::Constants::ExpAcquiredType type, UserSharedPtr user, uint32 exp);
+				void AddStateBundle(UserSharedPtr user, uint32 hash);
+				void AddPassive(UserSharedPtr user, uint32 hash);
+				void RemovePassive(UserSharedPtr user, uint32 hash);
 
-				void FamiliarCommand(User& user, uint16 index, XRated::Serial who, Constants::Familiar::Command command);
-				void ChangeFamiliarFormation(User& user, Constants::Familiar::Formation formation);
+				void FamiliarCommand(UserSharedPtr user, uint16 index, XRated::Serial who, Constants::Familiar::Command command);
+				void ChangeFamiliarFormation(UserSharedPtr user, Constants::Familiar::Formation formation);
 
 				bool IsMissionCleared() const;
 				bool IsNowCampfire() const;
-				float GetObjectDistance(User& user, uint32 hash) const;
-				void CreateItem(User& user, const XRated::RewardItem& rewardItem, bool isPrivateItem = false);
+				float GetObjectDistance(UserSharedPtr user, uint32 hash) const;
+				void CreateItem(UserSharedPtr user, const XRated::RewardItem& rewardItem, bool isPrivateItem = false);
 				int	 GetProprietyLevel();
 				void ChangeStylePointStateToLogic(Logic::Player* player, XRated::StylePoint::State state);
 				void CashItemView(UserSharedPtr user, std::pair< uint16, uint16 > flag);
@@ -292,24 +295,24 @@ namespace Lunia {
 
 				void SetPlayTimePenalty(Logic::Player* player, XRated::Constants::PlayTimePenalty::Type flag);
 
-				void ChangedExpFactorFromItem(User& user, XRated::Constants::ExpFactorCategoryFromItem category, float factor);
-				void ChangedExpFactor(User& user);
-				void AddGuildUser(User& user);
-				void RemoveGuildUser(User& user);
+				void ChangedExpFactorFromItem(UserSharedPtr user, XRated::Constants::ExpFactorCategoryFromItem category, float factor);
+				void ChangedExpFactor(UserSharedPtr user);
+				void AddGuildUser(UserSharedPtr user);
+				void RemoveGuildUser(UserSharedPtr user);
 
 				/// Rebirth
-				bool Rebirth(const User& user, uint32 levelAfterRebirth);
-				bool RebirthRollBack(const User& user);
+				bool Rebirth(const UserSharedPtr user, uint32 levelAfterRebirth);
+				bool RebirthRollBack(const UserSharedPtr user);
 				void NotifyRebirth(XRated::Serial serial, uint16 level, uint16 rebirthCount, uint16 storedLevel, uint16 storedSkillPoint, const std::vector<XRated::StageLicense>& updatedLicense, const DateTime& lastRebirthDateTime);
 
 				Protocol::FromServer::Family::InviteResult::Type RequestInviteFamily(XRated::Family::FamilySerial familySerial, DateTime createdDate, XRated::Serial targetSerial, const String& targetName, const String& invter);
 				Protocol::FromServer::Family::InviteResult::Type RequestInviteFamily(XRated::Serial targetSerial, const String& targetName, const String& invter);
 
 
-				bool CompletedQuest(User& user, uint32 questHash);
-				bool AcceptedQuest(User& user, uint32 questHash);
+				bool CompletedQuest(UserSharedPtr user, uint32 questHash);
+				bool AcceptedQuest(UserSharedPtr user, uint32 questHash);
 
-				uint32 ExcuteRoomSerialUsers(IExcuter& excuter);
+				uint32 ExcuteRoomSerialUsers(const IExcuter& excuter);
 			private:
 				bool m_NowCampfire = false;
 				bool m_Active = false;

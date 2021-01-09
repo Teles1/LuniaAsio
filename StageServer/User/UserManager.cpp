@@ -1,6 +1,5 @@
 #include <StageServer/User/UserManager.h>
 #include <Info/Info.h>
-#include <Network/Api/Api.h>
 #include <StageServer/User/User.h>
 #include <StageServer/Room/RoomManager.h>
 #include <StageServer/Room/Room.h>
@@ -15,6 +14,55 @@ namespace Lunia {
 				return m_Instance;
 			}
 
+			bool UserManager::IsEventQuestPeriod(const uint8& eventType)
+			{
+				auto iter = m_QuestEventStates.find(eventType);
+				if (iter != m_QuestEventStates.end())
+				{
+					return m_QuestEventStates[eventType];
+				}
+
+				return false;
+			}
+
+			void UserManager::CheckAllEventQuestPeriod(UserSharedPtr user)
+			{
+				for (auto& qEvent : m_QuestEventStates) {
+					if (qEvent.second) {
+						Protocol::FromServer::QuestEvent::EnableQuestEvent sendPacket;
+						sendPacket.EventQuestID = qEvent.first;
+						sendPacket.Enable = true;
+						sendPacket.EventExplain = L"Ala viado, nao tem implementacao :(";
+						/*QuestEventExplains::const_iterator explainIter = questEventExplains.find(iter->first);
+						if (explainIter != questEventExplains.end())
+						{
+							sendPacket.EventExplain = ServerLocale::ServerLocaleLoader::Instance().GetLocalizedText(explainIter->second.c_str(), user.GetUserLocale());
+						}
+						*/
+						user->Send(sendPacket);
+					}
+				}
+			}
+
+			void UserManager::CheckAllNpcDropEventPeriod(UserSharedPtr user)
+			{
+				for (auto& nEvent : m_NpcDropEventStates) {
+					if (nEvent.second) {
+						Protocol::FromServer::NpcDropEvent::EnableNpcDropEvent sendPacket;
+						sendPacket.EventID = nEvent.first;
+						sendPacket.Enable = true;
+						sendPacket.EventExplain = L"Teles, Implementa isso aqui cara";
+						/*QuestEventExplains::const_iterator explainIter = questEventExplains.find(iter->first);
+						if (explainIter != questEventExplains.end())
+						{
+							sendPacket.EventExplain = ServerLocale::ServerLocaleLoader::Instance().GetLocalizedText(explainIter->second.c_str(), user.GetUserLocale());
+						}
+						*/
+						user->Send(sendPacket);
+					}
+				}
+			}
+
 			std::wstring UserManager::GetLastTextBoardMsg() const
 			{
 				return m_LastTextBoardMsg;
@@ -25,6 +73,18 @@ namespace Lunia {
 				if (m_ScriptEventMap.find(eventId) != m_ScriptEventMap.end())
 					return true;
 				return false;
+			}
+
+			bool UserManager::DoesExist(const UserSharedPtr& user) const
+			{
+				AutoLock lock(m_usersMutex);
+				if (m_users.find(user->GetSerial()) != m_users.end())
+					return true;
+				return false;
+			}
+
+			void UserManager::SendCurrentStageEvents(const UserSharedPtr& user) const
+			{
 			}
 
 			UserManager::~UserManager() {}
@@ -60,6 +120,15 @@ namespace Lunia {
 				return nullptr;
 			}
 
+			UserSharedPtr UserManager::GetUserByName(const std::wstring& name)
+			{
+				AutoLock _l(m_usersMutex);
+				for(auto& user : m_users)
+					if(user.second->GetCharacterName() == name)
+						return user.second;
+				return nullptr;
+			}
+
 			void UserManager::RemoveUser(const uint64& userSerial, AutoLock& _l) {
 
 				//AutoLock lock(m_usersMutex);
@@ -71,7 +140,7 @@ namespace Lunia {
 					Logger::GetInstance().Error("User={0} not found", userSerial);
 					return;
 				}
-				AutoLock lock(m_users[userSerial]->mtx);//Lock the user to make sure it's sync.
+				AutoLock lock(m_users[userSerial]->GetSyncObject());//Lock the user to make sure it's sync.
 				m_users[userSerial]->CloseSocket();
 				OnUserDisconnected(userSerial);
 				m_users.erase(userSerial);
@@ -199,11 +268,48 @@ namespace Lunia {
 					return false;
 				}
 				{
-					AutoLock lock(m_tempUsers[userId]->mtx); // making sure the user will remain sync while we work on it.
+					AutoLock lock(m_tempUsers[userId]->GetSyncObject()); // making sure the user will remain sync while we work on it.
 					m_users[userSerial] = std::move(m_tempUsers[userId]); m_tempUsers.erase(userId);
 					m_users[userSerial]->SetSerial(userSerial);
 				}
 				return m_users[userSerial]->AuthConnection(result);
+			}
+
+			void UserManager::AuthedConnection(const UserSharedPtr& user, Net::Answer& answer)
+			{
+				if (answer.errorCode == 0) {
+					if (!answer.resultObject.is_null()) {
+						if (!UserManagerInstance().AuthenticateUser(user->GetId(), answer.resultObject)) {
+							Logger::GetInstance().Error("UserManager::AuthenticateUser() Could not Authenticate user");
+							user->Terminate();
+						}
+						else {
+							Logger::GetInstance().Info("Authed {0},{1},{2}", user->m_CurrentStage.StageGroupHash, user->m_CurrentStage.Level, user->m_CurrentStage.Difficulty);
+							Net::Api api("Auth");
+							api << user->GetCharacterName();
+							api.GetAsync(this, &UserManager::Authed, user);
+						}
+					}
+					else
+						Logger::GetInstance().Warn("Result code is 0 but the data is empty.");
+				}
+				else
+					user->Terminate();
+			}
+
+			void UserManager::Authed(const UserSharedPtr& user, Net::Answer& answer)
+			{
+				if (answer.errorCode == 0 && !answer.resultObject.is_null()) {
+					if (user->Auth(answer.resultObject)) {
+						UserManagerInstance().RoomAuth(user);
+						return;
+					}
+					else
+						Logger::GetInstance().Warn(L"Could not authenticate user={0}", user->GetSerial());
+				}
+				else
+					Logger::GetInstance().Warn(L"Could not handle the call api to Auth user = {0}", user->GetSerial());
+				user->Terminate();
 			}
 
 			void UserManager::RoomAuth(const UserSharedPtr& user)
@@ -217,13 +323,69 @@ namespace Lunia {
 					user->Terminate();
 				Net::Api request("Market.GetExpired"); //missing implementation
 				request << user->GetCharacterName();
-				//request.GetAsync();
+				request.GetAsync();
+			}
+
+			void UserManager::CurrentEvent::SendCurrentStageEvents(UserSharedPtr& user)
+			{
+				AutoLock lock(cs);
+
+				for (CurrentEventInfos::const_iterator iter = infos.begin(); iter != infos.end(); ++iter)
+				{
+					uint32 stageGroupHash = StringUtil::ToInt(iter->second.first[0].c_str());
+					uint16 level = StringUtil::ToInt(iter->second.first[1].c_str());
+
+					StageLocation stageLocation(stageGroupHash, level);
+					Database::Info::StageGroup* stageGroup = Database::DatabaseInstance().InfoCollections.StageGroups.Retrieve(stageLocation.StageGroupHash);
+					if (!stageGroup)
+					{
+						LoggerInstance().Warn("UserManager::CurrentEvent::SendCurrentStageEvents - Invalid StageGroup : {}", stageGroupHash);
+						return;
+					}
+
+					if (stageGroup->Stages.size() <= stageLocation.Level)
+					{
+						LoggerInstance().Warn("UserManager::CurrentEvent::SendCurrentStageEvents - Invalid StageInfo : {}, {}", stageGroupHash, level);
+						return;
+					}
+
+					Database::Info::StageInfo* stageInfo = stageGroup->Stages[stageLocation.Level];
+					if (!stageInfo)
+					{
+						LoggerInstance().Warn("UserManager::CurrentEvent::SendCurrentStageEvents - Invalid StageInfo : {}, {}", stageGroupHash, level);
+						return;
+					}
+
+					uint32 lowRank = 0;
+					uint32 highRank = 0;
+					if (stageGroup->GuildStage)
+					{
+						lowRank = stageInfo->lowGuildRank;
+						highRank = stageInfo->highGuildRank;
+					}
+
+					user->RaiseEvent(iter->second.first, lowRank, highRank, iter->second.second);
+				}
+			}
+
+			void UserManager::CurrentEvent::AddCurrentEvent(const uint32& key, const Database::Info::EventUnit::ParamContainer& eventInfo, const DateTime& endTime)
+			{
+				AutoLock lock(cs);
+
+				infos[key] = std::make_pair(eventInfo, endTime);
+			}
+
+			void UserManager::CurrentEvent::EraseEvent(const uint32& key)
+			{
+				AutoLock lock(cs);
+
+				infos.erase(key);
 			}
 
 			//Global Singleton
 			UserManager& UserManagerInstance() {
 				return UserManager::GetInstance();
 			};
-		}
+}
 	}
 }

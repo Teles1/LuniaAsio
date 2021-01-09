@@ -62,6 +62,267 @@ namespace Lunia {
 				m_DieCountSerial.clear();
 				m_KillCountSerial.clear();
 			}
+			bool Room::IsEnableStylePoint() const
+			{
+				if (GetRoomType() & Constants::PvpGameTypeMask) return false;	//pvp
+				if (GetRoomType() & Constants::PeacefulGameTypeMask) return false;	//square
+				return true;
+			}
+
+			bool Room::IsBoss(const NonPlayerData::NpcType& type) const
+			{
+				if (!IsEnableStylePoint()) return false;
+
+				if (type == NonPlayerData::NpcType::EpisodeBoss ||
+					type == NonPlayerData::NpcType::SemiBoss ||
+					type == NonPlayerData::NpcType::StageBoss)
+					return true;
+
+				return false;
+			}
+			void Room::SendAllObject(UserSharedPtr target)
+			{
+				std::vector<PlayerData*> players(m_Logic->GetPlayerList());
+				/* local player information should be sent first to initialize the client */
+				for (std::vector<PlayerData*>::iterator i = players.begin(); i != players.end(); ++i)
+				{
+					if ((*i)->user == target)
+					{ // should be place at first
+						PlayerData* tmp = *i;
+						(*i) = players[0];
+						players[0] = tmp;
+						LoggerInstance().Error("Room::SendAllObject. There is a targeted playerinfo in playerlist.");
+						break;
+					}
+				}
+
+				//Players
+				for (auto& pPlayerData : players)
+				{
+					Protocol::FromServer::CreatePlayer createplayer;
+					createplayer.playerserial = pPlayerData->BaseCharacter.BaseObject.GameObjectSerial;
+					createplayer.classtype = pPlayerData->Job;
+					createplayer.charactername = pPlayerData->BaseCharacter.BaseObject.Name;
+					createplayer.level = pPlayerData->BaseCharacter.Level;
+					createplayer.pvpLevel = pPlayerData->PvpLevel;
+					createplayer.warLevel = pPlayerData->WarLevel;
+					createplayer.storedLevel = pPlayerData->StoredLevel;
+					createplayer.rebirthCount = pPlayerData->RebirthCount;
+					createplayer.ladderPoint = pPlayerData->LadderPoint;
+					createplayer.ladderMatchCount = pPlayerData->LadderMatchCount;
+					createplayer.ladderWinCount = pPlayerData->LadderWinCount;
+					createplayer.ladderLoseCount = pPlayerData->LadderLoseCount;
+					createplayer.achievementScore = pPlayerData->achievementScore; // 3.1 by Robotex
+					createplayer.addedSkillPointByRebirth = pPlayerData->StoredSkillPoint;
+					createplayer.position = pPlayerData->BaseCharacter.BaseObject.Position;
+					createplayer.direction = pPlayerData->BaseCharacter.BaseObject.Direction;
+					createplayer.hp = pPlayerData->BaseCharacter.Hp;
+					createplayer.team = pPlayerData->BaseCharacter.Team;
+
+					createplayer.lives = static_cast<uint8>(pPlayerData->Life);
+					createplayer.bonusLife = static_cast<uint8>(pPlayerData->BonusLife);
+					createplayer.stateflags = pPlayerData->BaseCharacter.States;
+					createplayer.lastRebirthDateTime = pPlayerData->LastRebirthDateTime;
+					createplayer.partyChannelName = m_PartyChannelName;
+					createplayer.eventExpFactor = ConfigInstance().Get("BaseExp", 1.0f);
+
+					auto tmpUser = m_UserManager.GetPlayer(pPlayerData->BaseCharacter.BaseObject.GameObjectSerial);
+
+					if (tmpUser != NULL)
+					{
+						AutoLock lock(tmpUser->GetSyncObject()); // equipment can be changed while this loop
+
+						/* calculating equipment - position, item hash and instance */
+						for (uint16 i = 0; i < XRated::Constants::Equipment::Cnt; ++i)
+						{
+							std::pair<uint32, int64> equipped = tmpUser->GetEquipment(i);
+							if (equipped.first == 0 || tmpUser == target) continue; // dont wanna send to the user hisown equipment again.
+							const Database::Info::ItemInfo* info = Database::DatabaseInstance().InfoCollections.Items.Retrieve(equipped.first);
+							if (info == NULL) continue;
+							if (info->Attributes.Attr & (1 << 8)/*Database::Info::ItemInfo::ATTRIBUTES::STAGEITEM*/)
+								continue;
+
+							Protocol::FromServer::CreatePlayer::Equipment equipment;
+							equipment.Position = i;
+							equipment.ItemHash = equipped.first;
+							equipment.instanceEx = equipped.second;
+							createplayer.Equipments.push_back(equipment);
+						}
+
+						/* retrieve passive item */
+						tmpUser->GetActivatedPassiveItems(createplayer.PassiveItems);
+
+						if (tmpUser->GetState() != User::STATE::SHOP)
+							createplayer.shopping = 1;
+						else
+							createplayer.shopping = 0;
+
+						/* don't send license info at square to reduce packets. now, license info is communicating via chat server */
+						if (GetRoomKind() != Common::SQUARE || tmpUser == target)
+							createplayer.stageLicenses = tmpUser->GetStageLicenses();
+						else
+							createplayer.stageLicenses.clear();
+
+						createplayer.CharacterStateFlags = tmpUser->GetCharacterStateFlags();
+
+						target->Send(createplayer); // sending the joining user to the user in the room
+
+						/* send guild information */
+						if (tmpUser->IsPartOfGuild())
+						{
+							switch (Constants::LocaleSpecificSetting::GUILDTYPE)
+							{
+							case Constants::LocaleSpecificSetting::GuildType::AllMGuild:
+								Protocol::FromServer::AllMGuild::SetPlayer packet;
+								packet.Serial = tmpUser->GetSerial();
+								packet.GuildInfo = tmpUser->GetGuildInfo();
+								/*unsigned short packetSize = AllM::Net::StreamWriter::EstimateSize(packet);
+								if (packetSize > ConfigInfoInstance().ServerInfo.maxPacketSize)
+								{
+									ALLM_EXCEPTION((L"packetSize(%d) > %d ", packetSize, ConfigInfoInstance().ServerInfo.maxPacketSize));
+									ALLM_EXCEPTION((L"[packet size overflow] Serial : %d", packet.Serial));
+									ALLM_EXCEPTION((L"[packet size overflow] GuildInfo::CreatedDate - size:%d, data:%s", packet.GuildInfo.CreatedDate.size(), packet.GuildInfo.CreatedDate.c_str()));
+									ALLM_EXCEPTION((L"[packet size overflow] GuildInfo::GuildName - size:%d, data:%s", packet.GuildInfo.GuildName.size(), packet.GuildInfo.GuildName.c_str()));
+									ALLM_EXCEPTION((L"[packet size overflow] GuildInfo::MasterName - size:%d, data:%s", packet.GuildInfo.MasterName.size(), packet.GuildInfo.MasterName.c_str()));
+									ALLM_EXCEPTION((L"[packet size overflow] GuildInfo::GuildId - data:%d", packet.GuildInfo.GuildId));
+									ALLM_EXCEPTION((L"[packet size overflow] GuildInfo::GuildLevel - data:%d", packet.GuildInfo.GuildLevel));
+									ALLM_EXCEPTION((L"[packet size overflow] GuildInfo::GuildMemberId - data:%d", packet.GuildInfo.GuildMemberId));
+									ALLM_EXCEPTION((L"[packet size overflow] GuildInfo::MemberCount - data:%d", packet.GuildInfo.MemberCount));
+									ALLM_EXCEPTION((L"[packet size overflow] GuildInfo::MyGrade - data:%d", packet.GuildInfo.MyGrade));
+									std::wstring guildInfoText;
+									for (int i = 0; i < packet.GuildInfo.Grade.size(); ++i)
+									{
+										guildInfoText += AllM::StringUtil::Format(L"auth:%d, gradeNameSize:%d, gradeName:%s ", packet.GuildInfo.Grade[i].Authority, packet.GuildInfo.Grade[i].GradeName.size(), packet.GuildInfo.Grade[i].GradeName.c_str());
+									}
+									ALLM_EXCEPTION((L"[packet size overflow] GuildInfo::Grade - %s", guildInfoText.c_str()));
+									break;
+								}*/
+								target->Send(packet);
+								break;
+							}
+						}
+
+						Protocol::FromServer::ChangeStatus changeStatus;
+
+						changeStatus.objectserial = pPlayerData->BaseCharacter.BaseObject.GameObjectSerial;
+						changeStatus.position = pPlayerData->BaseCharacter.BaseObject.Position;
+						changeStatus.direction = pPlayerData->BaseCharacter.BaseObject.Direction;
+						changeStatus.hp = pPlayerData->BaseCharacter.Hp;
+						changeStatus.mp = pPlayerData->BaseCharacter.Mp;
+						changeStatus.bywhom = pPlayerData->BaseCharacter.BaseObject.GameObjectSerial;
+						changeStatus.bywhat = 0;
+						changeStatus.flag = Constants::StatusFlag::NoDisplay;
+						changeStatus.airComboCount = 0;
+
+						target->Send(changeStatus);
+
+						if (pPlayerData->bDead == true && (GetRoomType() & XRated::Constants::GameTypes::PvpGameTypeMask) == false)
+						{
+							Protocol::FromServer::PlayerDied playerdied;
+							playerdied.playerserial = pPlayerData->BaseCharacter.BaseObject.GameObjectSerial;
+							target->Send(playerdied);
+						}
+					}
+					else
+					{
+						LoggerInstance().Error("tmpUser = NULL, Serial = {0}", createplayer.playerserial);
+					}
+				}
+
+				// NonPlayerObject
+				std::vector<NonPlayerData*> nonPlayers(m_Logic->GetNonPlayerList());
+				std::vector<NonPlayerData*>::iterator nonPlayer;
+				for (auto& pNonPlayer : m_Logic->GetNonPlayerList()) {
+					Protocol::FromServer::CreateNonPlayer createnonplayer;
+					createnonplayer.objectserial = pNonPlayer->BaseCharacter.BaseObject.GameObjectSerial;
+					createnonplayer.charactername = pNonPlayer->BaseCharacter.BaseObject.NameHash;
+					createnonplayer.level = pNonPlayer->BaseCharacter.Level;
+					createnonplayer.position = pNonPlayer->BaseCharacter.BaseObject.Position;
+					createnonplayer.direction = pNonPlayer->BaseCharacter.BaseObject.Direction;
+					createnonplayer.hp = pNonPlayer->BaseCharacter.Hp;
+					createnonplayer.team = pNonPlayer->BaseCharacter.Team;
+					createnonplayer.playerCntWhenCreated = pNonPlayer->partyCntWhenCreated;
+					if (IsBoss(pNonPlayer->Npc)) NoticeStylePointStateToAllUser(XRated::StylePoint::State::Stop, pNonPlayer->BaseCharacter.Team); // style Point 
+				}
+
+				//Pets
+				{
+					Protocol::FromServer::Tame packet;
+					packet.TamedName.clear();
+
+					std::vector<Logic::ILogic::TamingInfo> tamed;
+					m_Logic->GetTamingList(tamed);
+					for (std::vector<Logic::ILogic::TamingInfo>::const_iterator i = tamed.begin(), end = tamed.end(); i != end; ++i)
+					{
+						if (i->type == Constants::Familiar::Type::Pet)
+						{
+							auto user = m_UserManager.GetPlayer(i->owner);
+							Logic::Player* player = NULL;
+							if (user != NULL) {
+								player = user->GetPlayer();
+							}
+							else {
+								LoggerInstance().Warn(L"SendAllObject can not found user {0}", i->owner);
+							}
+							if (player != NULL)
+							{
+								Logic::Player::Pets& pets = player->GetPlayerPetData();
+								Logic::Player::PetsIter it = find_if(pets.begin(), pets.end(), Logic::Player::PetWithSummonInfoFinder::ByPetNPCSerial(i->tamed));
+
+								if (it != pets.end())
+								{
+
+									Protocol::FromServer::PetTame tame;
+									tame.FamiliarType = i->type;
+									tame.OwnerSerial = i->owner;
+									tame.TamedSerial = i->tamed;
+									tame.TamedName = it->Pet.PetName;
+									tame.PetInfo = it->Pet;
+									tame.Equipments = it->Pet.Equipments;
+
+									target->Send(tame);
+								}
+							}
+						}
+						else {
+							packet.FamiliarType = i->type;
+							packet.OwnerSerial = i->owner;
+							packet.TamedSerial = i->tamed;
+							packet.TamedName = L"";
+							target->Send(packet);
+						}
+					}
+				}
+
+				//Items
+				{
+					for (auto& pObjectData : m_Logic->GetObjectList())
+					{
+						Protocol::FromServer::CreateStaticObject createstaticobject;
+						createstaticobject.objectserial = pObjectData->GameObjectSerial;
+						createstaticobject.objectname = pObjectData->NameHash;
+						createstaticobject.type = pObjectData->Type;
+						createstaticobject.position = pObjectData->Position;
+						createstaticobject.direction = pObjectData->Direction;
+
+						target->Send(createstaticobject);
+					}
+					for (auto& pData : m_Logic->GetItemList())
+					{
+						Protocol::FromServer::CreateItem createitem;
+						createitem.objectserial = pData->BaseObject.GameObjectSerial;
+						createitem.itemname = pData->BaseObject.NameHash;
+						createitem.position = pData->BaseObject.Position;
+						createitem.direction = pData->BaseObject.Direction;
+						createitem.owner = pData->OwnerId;
+						createitem.stackCount = pData->StackCount;
+						createitem.isPrivateItem = pData->PrivateItem;
+
+						target->Send(createitem);
+					}
+				}
+
+			}
 			bool Room::Update(const float& dt)
 			{
 				if(m_WaitRoomDelete){
@@ -194,7 +455,7 @@ namespace Lunia {
 					Protocol::FromServer::Pvp::NotifySpectatorInOut n;
 					n.CharacterName = user->GetCharacterName();
 					n.Entered = true;
-					m_UserManager.BroadcastToAllEnteredUsers(n);
+					m_UserManager.BroadcastToUsers(n);
 				}
 				m_WaitRoomDelete = false;
 				SetStylePointUserCount(m_UserManager.NowCount());
@@ -205,7 +466,7 @@ namespace Lunia {
 			{
 				if (user->GetPlayer() != NULL) {
 					m_Logic->Part(user->GetPlayer());
-					m_UserManager.DelSerialUser(user->GetSerial());
+					m_UserManager.RemoveUser(user->GetSerial());
 				}
 				/*
 				if (user->GetPartyIndex() >= 0)
@@ -234,7 +495,7 @@ namespace Lunia {
 						Protocol::FromServer::Error error;
 						error.errorcode = Errors::Unexpected;
 						error.errorstring = fmt::format(L"{0}- failed to join", user->GetSerial()).c_str();
-						m_UserManager.BroadcastToAllEnteredUsers(error);
+						m_UserManager.BroadcastToUsers(error);
 						m_UserManager.KickAllUsers();
 					}
 				}
@@ -368,8 +629,122 @@ namespace Lunia {
 			}
 			bool Room::PlayerCreated(Logic::Player* player)
 			{
-				LoggerInstance().Exception("Missing implementation");
-				return false;
+				if (player == NULL)
+				{
+					LoggerInstance().Error("Room::PlayerCreated() - player == NULL");
+					return false;
+				}
+
+				XRated::PlayerData& data = player->GetPlayerData();
+
+				UserSharedPtr user = std::static_pointer_cast<User>(data.user);
+				if (user == NULL)
+				{
+					LoggerInstance().Error("Room::PlayerCreated - user == NULL");
+					return false;
+				}
+
+				if (!m_UserManager.DoesExist(user))
+				{
+					LoggerInstance().Error("Room::PlayerCreated - DoesExist({}) == false", user->GetSerial());
+					return false;
+				}
+
+				AutoLock lock(user->GetSyncObject()); // Locking USER only.
+				user->PlayerCreated(player);
+
+				user->SetState(User::STATE::ACTIVE);
+
+				Protocol::FromServer::CreatePlayer createplayer;
+				createplayer.playerserial = data.BaseCharacter.BaseObject.GameObjectSerial;
+				createplayer.classtype = data.Job;
+				createplayer.charactername = data.BaseCharacter.BaseObject.Name;
+				createplayer.level = data.BaseCharacter.Level;
+				createplayer.pvpLevel = data.PvpLevel;
+				createplayer.warLevel = data.WarLevel;
+				createplayer.storedLevel = data.StoredLevel;
+				createplayer.rebirthCount = data.RebirthCount;
+				createplayer.ladderPoint = data.LadderPoint;
+				createplayer.ladderMatchCount = data.LadderMatchCount;
+				createplayer.ladderWinCount = data.LadderWinCount;
+				createplayer.ladderLoseCount = data.LadderLoseCount;
+				createplayer.addedSkillPointByRebirth = data.StoredSkillPoint;
+				createplayer.position = data.BaseCharacter.BaseObject.Position;
+				createplayer.direction = data.BaseCharacter.BaseObject.Direction;
+				createplayer.hp = data.BaseCharacter.Hp;
+
+				createplayer.team = data.BaseCharacter.Team;
+				createplayer.lastRebirthDateTime = user->GetLastRebirthDate();
+				createplayer.partyChannelName = m_PartyChannelName;
+				createplayer.eventExpFactor = ConfigInstance().Get("BaseExp", 1.0f);
+
+				/* calculating equipment - position, item hash and instance */
+				for (uint16 i = 0; i < XRated::Constants::Equipment::Cnt; ++i)
+				{
+					std::pair<uint32, int64> equipped = user->GetEquipment(i);
+					if (equipped.first == 0) continue;
+					const Database::Info::ItemInfo* info = Database::DatabaseInstance().InfoCollections.Items.Retrieve(equipped.first);
+					if (info == NULL) continue;
+
+					/* exclude stage item in equipment, really stupid code for put this through, even CreatePlayer will be sent in SendAllObject function... */
+					if (info->Attributes.Attr & (1 << 8)/*Database::Info::ItemInfo::ATTRIBUTES::STAGEITEM*/)
+						continue;
+
+					Protocol::FromServer::CreatePlayer::Equipment equipment;
+					equipment.Position = i;
+					equipment.ItemHash = equipped.first;
+					equipment.instanceEx = equipped.second;
+					createplayer.Equipments.push_back(equipment);
+				}
+
+				/* retrieve passive item */
+				user->GetActivatedPassiveItems(createplayer.PassiveItems);
+
+				createplayer.lives = (uint8)data.Life;
+				createplayer.stateflags = data.BaseCharacter.States;
+				createplayer.shopping = 0;
+				/* don't send license info at square to reduce packets. now, license info is communicating via chat server */
+				if (GetRoomKind() != Common::SQUARE)
+					createplayer.stageLicenses = user->GetStageLicenses();
+				else
+					createplayer.stageLicenses.clear();
+
+				createplayer.CharacterStateFlags = user->GetCharacterStateFlags();
+
+				m_UserManager.BroadcastToPlayers(createplayer);
+
+				m_UserManager.AddPlayer(data.BaseCharacter.BaseObject.GameObjectSerial, user);
+				SendAllObject(user);
+				
+				//UserManagerInstance().JoinCompleted(*user); // notice completion of join process to user manager
+
+				SendAllFishingUser(user);
+
+				//m_UserManager.SendCashItemViewInfo(user);
+				// stage item processing
+				user->RemoveStageItem();
+
+				user->ClearCharacterRewardStateFlags();
+				// Style Point Start
+				if (!m_NowCampfire && m_Locked && IsEnableStylePoint())
+				{
+
+					user->NoticeStylePointState(XRated::StylePoint::State::Start);
+					ChangeStylePointStateToLogic(user->GetPlayer(), XRated::StylePoint::State::Start);
+
+					SetStylePointUserCount(m_UserManager.NowCount(false));
+				}
+
+				const Common::ItemEx* petItem = user->GetItem(ItemPosition(0, XRated::Constants::Equipment::Pet));
+
+				if (petItem != NULL && petItem->Info != NULL)
+					user->SummonPet(petItem->Serial, 0, XRated::Constants::Equipment::Pet);
+
+				m_UserManager.CheckMailAlaram(user);
+				UserManagerInstance().CheckAllEventQuestPeriod(user);
+				UserManagerInstance().CheckAllNpcDropEventPeriod(user);
+
+				return true;
 			}
 			void Room::JoinFailed(std::shared_ptr<void> user)
 			{

@@ -5,7 +5,7 @@ namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
 			//IUserRoom Implementation
-			void Room::DebugCommand(User& user, const String& msg)
+			void Room::DebugCommand(UserSharedPtr user, const String& msg)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
@@ -52,6 +52,7 @@ namespace Lunia {
 			}
 			void Room::AddSkillPointPlus(XRated::Logic::Player* player, uint16 skillPointPlus)
 			{
+				player->GetPlayerData().AddedSkillPointPlus += skillPointPlus;
 				LoggerInstance().Exception("Missing implementation");
 			}
 			void Room::Revive(XRated::Logic::Player* player, bool self)
@@ -192,7 +193,7 @@ namespace Lunia {
 				switch (GetRoomKind()) {
 				case Common::STAGE:
 					if (progress >= 1.0f) {
-						m_UserManager.BroadcastToAllEnteredUsers(loadEnd);
+						m_UserManager.BroadcastToUsers(loadEnd);
 						if (m_Logic->IsLoading()) {
 							m_WaitingUsers.push_back(user);
 							LoggerInstance().Info("Room({0})::JoinEndUser - Adding user:{1} to the waiting list", m_RoomIndex, user->GetSerial());
@@ -202,7 +203,7 @@ namespace Lunia {
 					}
 					break;
 				case Common::PVP:
-					m_UserManager.BroadcastToAllEnteredUsers(loadEnd);
+					m_UserManager.BroadcastToUsers(loadEnd);
 					if (progress > 1.0f) {
 						//I skipped this cause too fucking long
 					}
@@ -268,35 +269,35 @@ namespace Lunia {
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::AddExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp, bool withFactor)
+			void Room::AddExp(XRated::Constants::ExpAcquiredType type, UserSharedPtr user, uint32 exp, bool withFactor)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::AddPvpExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp)
+			void Room::AddPvpExp(XRated::Constants::ExpAcquiredType type, UserSharedPtr user, uint32 exp)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::AddWarExp(XRated::Constants::ExpAcquiredType type, User& user, uint32 exp)
+			void Room::AddWarExp(XRated::Constants::ExpAcquiredType type, UserSharedPtr user, uint32 exp)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::AddStateBundle(User& user, uint32 hash)
+			void Room::AddStateBundle(UserSharedPtr user, uint32 hash)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::AddPassive(User& uer, uint32 hash)
+			void Room::AddPassive(UserSharedPtr user, uint32 hash)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::RemovePassive(User& user, uint32 hash)
+			void Room::RemovePassive(UserSharedPtr user, uint32 hash)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::FamiliarCommand(User& user, uint16 index, XRated::Serial who, Constants::Familiar::Command command)
+			void Room::FamiliarCommand(UserSharedPtr user, uint16 index, XRated::Serial who, Constants::Familiar::Command command)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::ChangeFamiliarFormation(User& user, Constants::Familiar::Formation formation)
+			void Room::ChangeFamiliarFormation(UserSharedPtr user, Constants::Familiar::Formation formation)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
@@ -310,12 +311,12 @@ namespace Lunia {
 				LoggerInstance().Exception("Missing implementation");
 				return false;
 			}
-			float Room::GetObjectDistance(User& user, uint32 hash) const
+			float Room::GetObjectDistance(UserSharedPtr user, uint32 hash) const
 			{
 				LoggerInstance().Exception("Missing implementation");
 				return 0.0f;
 			}
-			void Room::CreateItem(User& user, const XRated::RewardItem& rewardItem, bool isPrivateItem)
+			void Room::CreateItem(UserSharedPtr user, const XRated::RewardItem& rewardItem, bool isPrivateItem)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
@@ -326,7 +327,7 @@ namespace Lunia {
 			}
 			void Room::ChangeStylePointStateToLogic(Logic::Player* player, XRated::StylePoint::State state)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				m_Logic->ChangeStylePointState(player, state);
 			}
 			void Room::CashItemView(UserSharedPtr user, std::pair<uint16, uint16> flag)
 			{
@@ -383,7 +384,7 @@ namespace Lunia {
 			}
 			void Room::SendAllFishingUser(UserSharedPtr user)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				//LoggerInstance().Exception("Missing implementation");
 			}
 			void Room::StageGiveUpLog(UserSharedPtr user)
 			{
@@ -409,28 +410,28 @@ namespace Lunia {
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::ChangedExpFactorFromItem(User& user, XRated::Constants::ExpFactorCategoryFromItem category, float factor)
+			void Room::ChangedExpFactorFromItem(UserSharedPtr user, XRated::Constants::ExpFactorCategoryFromItem category, float factor)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::ChangedExpFactor(User& user)
+			void Room::ChangedExpFactor(UserSharedPtr user)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::AddGuildUser(User& user)
+			void Room::AddGuildUser(UserSharedPtr user)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			void Room::RemoveGuildUser(User& user)
+			void Room::RemoveGuildUser(UserSharedPtr user)
 			{
 				LoggerInstance().Exception("Missing implementation");
 			}
-			bool Room::Rebirth(const User& user, uint32 levelAfterRebirth)
+			bool Room::Rebirth(const UserSharedPtr user, uint32 levelAfterRebirth)
 			{
 				LoggerInstance().Exception("Missing implementation");
 				return false;
 			}
-			bool Room::RebirthRollBack(const User& user)
+			bool Room::RebirthRollBack(const UserSharedPtr user)
 			{
 				LoggerInstance().Exception("Missing implementation");
 				return false;
@@ -449,17 +450,17 @@ namespace Lunia {
 				LoggerInstance().Exception("Missing implementation");
 				return Protocol::FromServer::Family::InviteResult::Type();
 			}
-			bool Room::CompletedQuest(User& user, uint32 questHash)
+			bool Room::CompletedQuest(UserSharedPtr user, uint32 questHash)
 			{
 				LoggerInstance().Exception("Missing implementation");
 				return false;
 			}
-			bool Room::AcceptedQuest(User& user, uint32 questHash)
+			bool Room::AcceptedQuest(UserSharedPtr user, uint32 questHash)
 			{
 				LoggerInstance().Exception("Missing implementation");
 				return false;
 			}
-			uint32 Room::ExcuteRoomSerialUsers(IExcuter& excuter)
+			uint32 Room::ExcuteRoomSerialUsers(const IExcuter& excuter)
 			{
 				return uint32();
 			}

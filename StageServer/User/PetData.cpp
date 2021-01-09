@@ -65,6 +65,33 @@ namespace Lunia {
 			{
 				return m_Mtx;
 			}
-        }
+			bool PetOrigin::operator!=(const Pet& in) const
+			{
+				if (PetSerial != in.PetSerial) return true;
+				if (Level != in.Level) return true;
+				if (Exp != in.Exp) return true;
+				if (Full != in.Full) return true;
+				if (PetName != in.PetName) return true;
+				if (RareProbability != in.RareProbability) return true;
+				if (FullSum != in.FullSum) return true;
+				if (LevelUpPeriod != in.LevelUpPeriod) return true;
+				return false;
+			}
+			PetOrigin& PetOrigin::operator=(const Pet& in)
+			{
+				PetSerial = in.PetSerial;
+				Level = in.Level;
+				Exp = in.Exp;
+				Full = in.Full;
+				PetName = in.PetName;
+				RareProbability = in.RareProbability;
+				FullSum = in.FullSum;
+				LevelUpPeriod = in.LevelUpPeriod;
+				isDeleted = false;
+				return *this;
+			}
+			PetOrigin::PetOrigin() : isDeleted(false), needChangeOwner(false) {}
+			PetOrigin::PetOrigin(const XRated::Pet& in): XRated::Pet(in), isDeleted(false), needChangeOwner(false) {}
+		}
     }
 }

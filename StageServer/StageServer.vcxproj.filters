@@ -68,6 +68,63 @@
     <ClCompile Include="Room\IUserRoom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="User\Services\FishingManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Services\ItemSerial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Items\Bag.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Items\Enchanter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Items\Equip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Items\Inventory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Items\ItemEx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Items\ItemRequirementQueue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Items\Items.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Items\NoLogicItems.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Items\PassiveItemManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Items\PetInventory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Items\Slot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Services\TradeManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Services\GuildManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Services\QuestManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Services\PlayerStoreManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Services\Service.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Services\MailBoxManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -141,6 +198,60 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Protocol\FromServer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Services\FishingManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\ItemSerial.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Items\Bag.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Items\Enchanter.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Items\Equip.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Items\Inventory.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Items\ItemEx.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Items\ItemRequirementQueue.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Items\Items.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Items\NoLogicItems.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Items\PassiveItemManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Items\PetInventory.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Items\Slot.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Services\TradeManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Services\GuildManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Services\QuestManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Services\PlayerStoreManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Services\MailBoxManager.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

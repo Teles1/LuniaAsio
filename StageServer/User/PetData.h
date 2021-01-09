@@ -23,6 +23,19 @@ namespace Lunia {
 				PetDatas();
 				virtual ~PetDatas();
 			};
+
+			class PetOrigin : public XRated::Pet
+			{
+			public:
+				bool operator !=(const Pet& in) const;
+				PetOrigin& operator =(const Pet& in);
+			public:
+				bool needChangeOwner;
+				bool isDeleted;
+
+				PetOrigin();
+				PetOrigin(const XRated::Pet& in);
+			};
 		}
 	}
 }

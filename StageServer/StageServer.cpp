@@ -35,7 +35,7 @@ namespace Lunia {
 			void StageServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
 			{
 				auto user = UserManagerInstance().MakeUser(socket);
-				AutoLock lock(user->mtx);
+				AutoLock lock(user->GetSyncObject());
 				user->HandleRead();
 				user->Init();
 				Logger::GetInstance().Info("Connection handled by StageServer");
