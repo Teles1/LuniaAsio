@@ -235,7 +235,6 @@ namespace Lunia {
 			void FamilyManager::Clear()
 			{
 				{
-					AutoLock lock(cs);
 					DateTime defaultDate = DateTime::Infinite;
 
 					isFamilyInfoWait = false;
@@ -645,7 +644,6 @@ namespace Lunia {
 			//db request.
 			void FamilyManager::RequestDBFamilyInfoForInit()
 			{
-				AutoLock lock(cs);
 				Net::Api packet("Family.JoinedInfo");
 				packet << myInfo.CharacterName;
 				packet.GetAsync(this, &FamilyManager::DBFamilyInfoForInit, owner.shared_from_this());
