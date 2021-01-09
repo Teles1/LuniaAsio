@@ -25,12 +25,8 @@
     <ClCompile Include="Serializer\Binary\BinaryStream.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Resource\BinaryLoader.cpp" />
-    <ClCompile Include="GameServer\NetworkIO\GameServerNetworkIO.cpp" />
-    <ClCompile Include="GameServer\NetworkIO\ClientNetworkIO.cpp" />
-    <ClCompile Include="GameServer\Proxy\ClientProxy.cpp" />
     <ClCompile Include="Packet\PacketBase.cpp" />
     <ClCompile Include="DeltaTimer.cpp" />
-    <ClCompile Include="GameServer\OnGameServerInit.cpp" />
     <ClCompile Include="Utils\TimeSpan.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -110,20 +106,11 @@
     <ClInclude Include="CriticalSection.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="Resource\BinaryLoader.h" />
-    <ClInclude Include="GameServer\GameServer.h" />
-    <ClInclude Include="GameServer\NetworkIO\GameServerNetworkIO.h" />
-    <ClInclude Include="GameServer\NetworkIO\ClientNetworkIO.h" />
-    <ClInclude Include="GameServer\ClientRegistry.h" />
-    <ClInclude Include="GameServer\NetworkIO.h" />
-    <ClInclude Include="GameServer\Proxy\ServerProxy.h" />
-    <ClInclude Include="GameServer\Proxy\ClientProxy.h" />
-    <ClInclude Include="GameServer\fwPacketHandler.h" />
     <ClInclude Include="Packet\PacketBase.h" />
     <ClInclude Include="ErrorDefinition.h" />
     <ClInclude Include="DeltaTimer.h" />
     <ClInclude Include="Utils\Math\MinMax.h" />
     <ClInclude Include="Runnable.h" />
-    <ClInclude Include="GameServer\OnGameServerInit.h" />
     <ClInclude Include="Utils\TimeSpan.h" />
   </ItemGroup>
   <ItemGroup>

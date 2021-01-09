@@ -87,7 +87,7 @@ namespace Lunia {
 			}
 		}
 
-		bool ClientProxy::DoesCharacterExist(std::wstring& characterName)
+		bool ClientProxy::DoesCharacterExist( const std::wstring& characterName)
 		{
 			std::scoped_lock<std::mutex> slock(mtx);
 

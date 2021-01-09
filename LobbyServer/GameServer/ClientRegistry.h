@@ -3,7 +3,7 @@
 #pragma once
 
 #include <asio.hpp>
-#include "../fwEvent.h"
+#include <Core/fwEvent.h>
 #include <algorithm> // std::find
 #include <iostream>
 
@@ -89,7 +89,7 @@ namespace Lunia {
 			throw; //shutup compiler!
 		}
 
-		inline void AuthenticateClient(ClientSharedPtr& client)
+		inline void AuthenticateClient(const ClientSharedPtr& client)
 		{
 			client->SetAsAuthenticated();
 

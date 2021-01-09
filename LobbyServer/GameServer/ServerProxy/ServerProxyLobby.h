@@ -1,7 +1,7 @@
 #ifndef ServerProxyLobby_H
 #define ServerProxyLobby_H
 #pragma once
-#include <Core/GameServer/Proxy/ServerProxy.h>
+#include <LobbyServer/GameServer/Proxy/ServerProxy.h>
 #include "../ClientProxy/ClientProxyLobby.h"
 namespace Lunia {
 	namespace XRated {

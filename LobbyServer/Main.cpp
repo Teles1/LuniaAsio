@@ -2,7 +2,7 @@
 #include "Network/Api/Api.h"
 #include "PacketHandlers.h"
 
-#include <Core/GameServer/OnGameServerInit.h>
+#include <LobbyServer/GameServer/OnGameServerInit.h>
 
 using namespace Lunia;
 using namespace Lunia::XRated;

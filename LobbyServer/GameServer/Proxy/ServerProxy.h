@@ -2,7 +2,7 @@
 #define ServerProxy_H
 #pragma once
 #include "../ClientRegistry.h"
-#include <Core/GameServer/fwPacketHandler.h>
+#include <LobbyServer/GameServer/fwPacketHandler.h>
 #include <iostream>
 namespace Lunia {
 	namespace XRated {

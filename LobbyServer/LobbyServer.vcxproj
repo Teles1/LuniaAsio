@@ -188,6 +188,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameServer\ClientProxy\ClientProxyLobby.cpp" />
+    <ClCompile Include="GameServer\NetworkIO\ClientNetworkIO.cpp" />
+    <ClCompile Include="GameServer\NetworkIO\GameServerNetworkIO.cpp" />
+    <ClCompile Include="GameServer\OnGameServerInit.cpp" />
+    <ClCompile Include="GameServer\Proxy\ClientProxy.cpp" />
     <ClCompile Include="LobbyProtocol\LobbyProtocol.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Packet\Head\PacketHead.cpp" />
@@ -205,6 +209,15 @@
   <ItemGroup>
     <ClInclude Include="GameServer\ClientProxy\ClientProxyLobby.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="GameServer\ClientRegistry.h" />
+    <ClInclude Include="GameServer\fwPacketHandler.h" />
+    <ClInclude Include="GameServer\GameServer.h" />
+    <ClInclude Include="GameServer\NetworkIO.h" />
+    <ClInclude Include="GameServer\NetworkIO\ClientNetworkIO.h" />
+    <ClInclude Include="GameServer\NetworkIO\GameServerNetworkIO.h" />
+    <ClInclude Include="GameServer\OnGameServerInit.h" />
+    <ClInclude Include="GameServer\Proxy\ClientProxy.h" />
+    <ClInclude Include="GameServer\Proxy\ServerProxy.h" />
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h" />
     <ClInclude Include="GameServer\ServerProxy\ServerProxyLobby.h" />
     <ClInclude Include="Main.h" />

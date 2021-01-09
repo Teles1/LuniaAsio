@@ -2,7 +2,7 @@
 #define Main_H
 
 #pragma once
-#include <Core/GameServer/GameServer.h>
+#include <LobbyServer/GameServer/GameServer.h>
 #include "GameServer/ServerProxy/ServerProxyLobby.h"
 
 namespace Lunia {

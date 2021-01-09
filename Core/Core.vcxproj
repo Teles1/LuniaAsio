@@ -192,13 +192,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="GameServer\OnGameServerInit.h" />
     <ClInclude Include="Buffer.h" />
-    <ClInclude Include="GameServer\fwPacketHandler.h" />
-    <ClInclude Include="GameServer\Proxy\ClientProxy.h" />
-    <ClInclude Include="GameServer\NetworkIO.h" />
-    <ClInclude Include="GameServer\NetworkIO\ClientNetworkIO.h" />
-    <ClInclude Include="GameServer\ClientRegistry.h" />
     <ClInclude Include="com_ptr.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Base.h" />
@@ -213,7 +207,6 @@
     <ClInclude Include="FileIO\FileHelper.h" />
     <ClInclude Include="FileIO\FileIO.h" />
     <ClInclude Include="FileIO\FileStream.h" />
-    <ClInclude Include="GameServer\NetworkIO\GameServerNetworkIO.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="FileIO\IFile.h" />
     <ClInclude Include="FileIO\MemoryStream.h" />
@@ -251,7 +244,6 @@
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader2.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamWriter2.h" />
-    <ClInclude Include="GameServer\Proxy\ServerProxy.h" />
     <ClInclude Include="ServiceHelper\LobbyService.h" />
     <ClInclude Include="Utils\ConfigReader.h" />
     <ClInclude Include="Utils\Math\Color.h" />
@@ -269,7 +261,6 @@
     <ClInclude Include="Serializer\Serializer_old.h" />
     <ClInclude Include="Utils\Buffer.h" />
     <ClInclude Include="Utils\DateTime.h" />
-    <ClInclude Include="GameServer\GameServer.h" />
     <ClInclude Include="Utils\InitFunction.h" />
     <ClInclude Include="Utils\Locator.h" />
     <ClInclude Include="Utils\Logger.h" />
@@ -285,15 +276,11 @@
     <ClInclude Include="Utils\Version.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameServer\OnGameServerInit.cpp" />
     <ClCompile Include="Buffer.cpp" />
-    <ClCompile Include="GameServer\Proxy\ClientProxy.cpp" />
-    <ClCompile Include="GameServer\NetworkIO\ClientNetworkIO.cpp" />
     <ClCompile Include="DeltaTimer.cpp" />
     <ClCompile Include="FileIO\Directory.cpp" />
     <ClCompile Include="FileIO\File.cpp" />
     <ClCompile Include="FileIO\FileHelper.cpp" />
-    <ClCompile Include="GameServer\NetworkIO\GameServerNetworkIO.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="GameConstants.cpp" />
     <ClCompile Include="Packet\PacketBase.cpp" />

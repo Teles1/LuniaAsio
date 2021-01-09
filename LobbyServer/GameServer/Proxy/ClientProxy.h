@@ -2,7 +2,7 @@
 #define ClientProxy_H
 #pragma once
 #include "../NetworkIO/ClientNetworkIO.h"
-#include "../../Serializer/Serializer.h"
+#include <Core/Serializer/Serializer.h>
 #include <Core/GameConstants.h>
 namespace Lunia {
 	namespace XRated {
@@ -49,7 +49,7 @@ namespace Lunia {
 			}
 
 			/* Old name IsAValidCharacterName */
-			bool DoesCharacterExist(std::wstring& characterName);
+			bool DoesCharacterExist(const std::wstring& characterName);
 
 			bool DeleteCharacter(std::wstring& characterName);
 
@@ -89,7 +89,7 @@ namespace Lunia {
 
 			std::wstring m_accountName;
 
-			std::mutex mtx;
+			mutable std::mutex mtx;
 		};
 	}
 }

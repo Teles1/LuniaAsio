@@ -45,6 +45,18 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="GameServer\NetworkIO\ClientNetworkIO.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameServer\NetworkIO\GameServerNetworkIO.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameServer\Proxy\ClientProxy.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameServer\OnGameServerInit.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h">
@@ -63,6 +75,33 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="PacketHandlers.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer\NetworkIO\ClientNetworkIO.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer\NetworkIO\GameServerNetworkIO.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer\Proxy\ClientProxy.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer\Proxy\ServerProxy.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer\ClientRegistry.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer\fwPacketHandler.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer\GameServer.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer\NetworkIO.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer\OnGameServerInit.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
