@@ -1,5 +1,6 @@
 #include "Api.h"
 #include <Core/Utils/ConfigReader.h>
+#include <Core/Utils/DateTime.h>
 namespace Lunia {
     namespace XRated {
         namespace Net {
@@ -29,7 +30,7 @@ namespace Lunia {
             template <> void Api::Append(const wchar_t* param) { m_Url.push_back(StringUtil::ToASCII(param)); }
 
             std::string Api::ApiUrl = "http://localhost:51542/Lobby";
-            Api::Api(const std::string& reqPage, const Methods& method) {
+            Api::Api(const std::string& reqPage, const Methods& method) : m_Method(method){
                 std::string aux = reqPage; // I need it to be a non const lol
                 if (aux == "") {
                     Logger::GetInstance().Exception("The requested Procedure shouldn't be empty!");

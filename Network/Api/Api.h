@@ -2,10 +2,9 @@
 #define Api_GUARD
 #pragma warning(disable : 4996)
 #pragma once
-#include "./Core/Core.h"
 #include <cpr/cpr.h>
 #include "Json.hpp"
-#include <Core/Utils/DateTime.h>
+#include <Core/Utils/ThreadPool.h>
 // for convenience
 using json = nlohmann::json;
 namespace nlohmann {
@@ -71,52 +70,30 @@ namespace Lunia {
                 Answer RequestApi() const;
                 Answer RequestPost(const json& value) const;
                 void GetAsync(const json& payLoad = json()) const;
-                template<typename F>
-                inline void PostAsync(const F& callback, const json& value) const
-                {
-                    auto cb = cpr::PostCallback(
-                        [callback](const cpr::Response& r) {
-                            Logger::GetInstance().Info("Api::PostAsync => status_code = {0}, text = {1}", r.status_code, r.text);
-
-                            Answer answ("Whoops!", -1);
-
-                            if (r.status_code == 200)
-                                try
-                            {
-                                json result = json::parse(r.text);
-                                if (result != NULL && result.is_object())
-                                    answ = Answer(result["errorMessage"].get<std::string>(), result["errorCode"].get<int16>(), result["data"].get<json>());
-                            }
-                            catch (...) {
-                                Logger::GetInstance().Error("Could not parse json!");
-                            }
-
-                            callback(answ);
-
-                        }, cpr::Url(BuildUrl()), cpr::Body{ value.dump() }, m_Header, cpr::Timeout{ m_TimeOut });
-                }
                 template<typename O, typename T>
-                inline void GetAsync(O* obj, void (O::* function)(const T&, Answer&), const T& param, const json& payload = json()) {
-                    auto lambda = [&](const cpr::Response& r) {
-                        Logger::GetInstance().Info("Api::GetAsync => status_code = {0}, text = {1}", r.status_code, r.text);
-                        Answer answer("Whoops!", -1);
-                        if (r.status_code == 200) {
-                            json result = json::parse(r.text);
-                            result.get_to(answer);
-                        }
-                        (obj->*function)(param, answer);
-                    };
-                    if(m_Method == Methods::POST)
-                        cpr::PostCallback(lambda, cpr::Url(BuildUrl()), m_Header, cpr::Body{ payload.dump() }, cpr::Timeout{ m_TimeOut });
-                    else
-                        cpr::GetCallback(lambda, cpr::Url(BuildUrl()), m_Header, cpr::Timeout{ m_TimeOut });
+                inline void GetAsync(O* inObj, void (O::* inFunction)(const T&, const Answer&), const T& inParam, const json& inPayload = json()) {
+                    Utils::thread_pool::GetInstance().push(
+                        [function = inFunction, &param = inParam, obj = inObj]
+                        (const int& id, const Methods& method, const cpr::Url& url, const cpr::Header& header, const cpr::Timeout& timeout, const json& payload) {
+                            cpr::Response r;
+                            if (method == Methods::GET)  r = cpr::Get(url, header, timeout);
+                            else r = cpr::Post(url, header, cpr::Body{ payload.dump() }, timeout);
+                            if (obj != nullptr) {
+                                Logger::GetInstance().Info("Api::GetAsync({0}) => status_code = {1}, text = {2}",id , r.status_code, r.text);
+                                Answer answer("Whoops!", -1);
+                                if (r.status_code == 200) {
+                                    json::parse(r.text).get_to(answer);
+                                }
+                                (obj->*function)(param, answer);
+                            }
+                        }, m_Method, cpr::Url{ BuildUrl() }, m_Header, cpr::Timeout(m_TimeOut), inPayload);
                 }
                 ~Api() {}
                 void AddHeaders();
             private:
                 cpr::Header                                     m_Header;
                 std::vector<std::string>                        m_Url;
-                uint16                                          m_TimeOut = 1500;
+                uint16                                          m_TimeOut = 5000;
                 Methods                                         m_Method = Methods::GET;
             };
         }
