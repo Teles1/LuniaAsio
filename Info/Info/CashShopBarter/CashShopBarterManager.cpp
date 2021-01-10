@@ -75,7 +75,8 @@ namespace Lunia {
 
 				void BarterItemInfoManager::LoadBinaryData()
 				{
-					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateSerializerBinaryStreamReader(L"Database/BarterItemInfos.b");
+					Resource::SerializerStreamReader reader = Resource::ResourceSystemInstance().CreateSerializerStructuredBinaryStreamReader(L"Database/BarterItemInfos.b");
+					//reader->Begin(L"AllM::XRated::Database::Info::BarterItemInfoManager");
 					reader->Read(L"barterItemInfos", BarterItems);
 				}
 

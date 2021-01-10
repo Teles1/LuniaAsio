@@ -4,6 +4,7 @@
 #ifndef Serializer_H
 #include <Core/Serializer/Serializer.h>
 #endif // !Serializer_H
+
 namespace Lunia {
 	namespace XRated {
 		namespace Database {

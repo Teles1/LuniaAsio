@@ -56,7 +56,7 @@ namespace Lunia {
 
 				class BarterItemInfoManager
 				{
-					std::vector<BarterItemInfo> BarterItems;
+					std::map<uint32, BarterItemInfo> BarterItems;
 				public:
 					void Init(bool bForceXml);
 					void LoadXmlData();
