@@ -203,7 +203,9 @@ namespace Lunia {
 
 						client->MakeSocketAsyncWriteSerializable(sendPacket);
 
-						g_gameServer->Proxy.ClientRegistry.DropClient(client, "Terminate");
+						{
+							g_gameServer->Proxy.ClientRegistry.DropClient(client, "Terminate");
+						}
 					});
 
 				g_gameServer->Proxy.PacketHandler.Connect([](std::shared_ptr<ClientProxyLobby>& client, Lobby::Protocol::CreateCharacter& packet)
@@ -226,17 +228,17 @@ namespace Lunia {
 
 						if (result.errorCode == 0)
 						{
-							sendPacket.CharacterInfo.CharacterName = StringUtil::ToUnicode(result.resultObject["characterName"].get<std::string>());
-							sendPacket.CharacterInfo.CharacterSerial = result.resultObject["id"].get<int64>();
-							sendPacket.CharacterInfo.VirtualIdCode = result.resultObject["id"].get<uint32>();
-							sendPacket.CharacterInfo.ClassType = static_cast<XRated::Constants::ClassType>(result.resultObject["classNumber"].get<int>());
-							sendPacket.CharacterInfo.Level = result.resultObject["stageLevel"].get<uint16>();
-							sendPacket.CharacterInfo.Exp = result.resultObject["stageExp"].get<uint32>();
-							sendPacket.CharacterInfo.PvpLevel = result.resultObject["pvpLevel"].get<uint16>();
-							sendPacket.CharacterInfo.PvpExp = result.resultObject["pvpExp"].get<uint32>();
-							sendPacket.CharacterInfo.WarLevel = result.resultObject["warLevel"].get<uint16>();
-							sendPacket.CharacterInfo.WarExp = result.resultObject["warExp"].get<uint32>();
-							sendPacket.CharacterInfo.StateFlags = static_cast<XRated::CharacterStateFlags>(result.resultObject["instantStateFlag"].get<int>());
+							sendPacket.CharacterInfo.CharacterName = StringUtil::ToUnicode(result.resultObject["character"]["characterName"].get<std::string>());
+							sendPacket.CharacterInfo.CharacterSerial = result.resultObject["character"]["id"].get<int64>();
+							sendPacket.CharacterInfo.VirtualIdCode = result.resultObject["character"]["id"].get<uint32>();
+							sendPacket.CharacterInfo.ClassType = static_cast<XRated::Constants::ClassType>(result.resultObject["character"]["classNumber"].get<int>());
+							sendPacket.CharacterInfo.Level = result.resultObject["character"]["stageLevel"].get<uint16>();
+							sendPacket.CharacterInfo.Exp = result.resultObject["character"]["stageExp"].get<uint32>();
+							sendPacket.CharacterInfo.PvpLevel = result.resultObject["character"]["pvpLevel"].get<uint16>();
+							sendPacket.CharacterInfo.PvpExp = result.resultObject["character"]["pvpExp"].get<uint32>();
+							sendPacket.CharacterInfo.WarLevel = result.resultObject["character"]["warLevel"].get<uint16>();
+							sendPacket.CharacterInfo.WarExp = result.resultObject["character"]["warExp"].get<uint32>();
+							sendPacket.CharacterInfo.StateFlags = static_cast<XRated::CharacterStateFlags>(result.resultObject["character"]["instantStateFlag"].get<int>());
 							sendPacket.CharacterInfo.RebirthCount = result.resultObject["characterRebirth"]["rebirthCount"].get<uint16>();
 							sendPacket.CharacterInfo.StoredLevel = result.resultObject["characterRebirth"]["storedLevel"].get<uint16>();
 
