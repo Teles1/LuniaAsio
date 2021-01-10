@@ -54,13 +54,13 @@ namespace Lunia {
 					uint32 SetQuestParameter(UserSharedPtr user, uint32 questHash, uint8 paramIndex, uint32 newValue);
 
 				private: // db response
-					void CompletedQuestList(const UserSharedPtr& user, Net::Answer& answer);
-					void WorkingQuestList(const UserSharedPtr& user, Net::Answer& answer);
-					//void Accepted(const UserSharedPtr& user, Net::Answer& answer);
-					//void Completed(const UserSharedPtr& user, Net::Answer& answer);
-					void ActiveItemQuestInfo(const UserSharedPtr& user, Net::Answer& answer);
+					void CompletedQuestList(const UserSharedPtr& user, const Net::Answer& answer);
+					void WorkingQuestList(const UserSharedPtr& user, const Net::Answer& answer);
+					//void Accepted(const UserSharedPtr& user, const Net::Answer& answer);
+					//void Completed(const UserSharedPtr& user, const Net::Answer& answer);
+					void ActiveItemQuestInfo(const UserSharedPtr& user, const Net::Answer& answer);
 
-					void CompletedQuestCountWIthShare(const UserSharedPtr& user, Net::Answer& answer);
+					void CompletedQuestCountWIthShare(const UserSharedPtr& user, const Net::Answer& answer);
 				private: // helpers
 				public:
 					struct Quest : public XRated::Quest

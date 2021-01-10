@@ -106,7 +106,24 @@ namespace Lunia {
 				}
 			}
 
-			void User::LicenseAquired(const UserSharedPtr& user, Net::Answer& answer)
+			void User::Dispatch(Protocol::ToServer::Command& packet)
+			{
+				AutoLock lock(m_UserMtx);
+				AutoLock playerLock(m_PlayerMtx);
+				if (!m_Room || !m_Player)
+					return;
+				if (m_State == LOAD || m_State == NONE)
+					return;
+				if (m_FishingManager.IsFishing())
+					return;
+				if (!m_Room->Command(m_Player, (Constants::Command)packet.command, packet.direction)) {
+					// invalid command like an action in square
+					LoggerInstance().Error("closing an user by wrong command (modified client or its data) : {}", GetSerial());
+					Close();
+				}
+			}
+
+			void User::LicenseAquired(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				Protocol::FromServer::AcquireCharacterLicense response;
 				if (answer.errorCode == 0)
@@ -115,7 +132,7 @@ namespace Lunia {
 				Send(response);
 			}
 
-			void User::PetCreated(const UserSharedPtr& user, Net::Answer& answer)
+			void User::PetCreated(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (answer.errorCode != 0) {
 					Protocol::FromServer::Error error;
@@ -413,6 +430,7 @@ namespace Lunia {
 				m_LastDataSavedTime = m_ConnectTime = m_AliveTime = timeGetTime();
 				Protocol::FromServer::Way way;
 				way.EncryptKey = Math::Random();
+				m_FishingManager.Init();
 				SetCryptoKey(way.EncryptKey);
 				Send(way);
 			}
@@ -421,8 +439,8 @@ namespace Lunia {
 			{
 				if (!IsConnected())
 					return;
-				LoggerInstance().Info("Flushing user:{0}", GetSerial());
-				CloseSocket();
+				//LoggerInstance().Info("Flushing user:{0}", GetSerial());
+				//CloseSocket();
 			}
 
 			bool User::AuthConnection(const json& result)
@@ -1064,7 +1082,7 @@ namespace Lunia {
 			{
 				AutoLock playerLock(m_PlayerMtx);
 				this->m_Player = player;
-				//items.SetPlayer(player);
+				m_Items.SetPlayer(player);
 				m_ExpFactorManager.SetGuild(false);
 				m_ExpFactorManager.ClearItemExpFactor();
 				m_ExpFactorManager.ClearGuildExpFactor();
@@ -1078,7 +1096,7 @@ namespace Lunia {
 					;//passiveItems.Use(items.GetPassiveItems());
 				else
 					;//passiveItems.Use(std::vector<const Database::Info::ItemInfo*>()); // empty passive
-				//m_Quest.RefreshCompletedQuests(this, currentStage);
+				m_QuestManager.RefreshCompletedQuests(shared_from_this(), m_CurrentStage);
 				m_Player->InitAirAttackComboCnt();
 
 				UpdatePlayerInfoByUserData();
@@ -1227,7 +1245,6 @@ namespace Lunia {
 
 			void User::ClearCharacterRewardStateFlags()
 			{
-				AutoLock lock(m_UserMtx);
 				m_CharacterRewardStateFlags = 0;
 			}
 
@@ -1245,7 +1262,7 @@ namespace Lunia {
 			void User::AutoSaveUserInfo(const DWORD& nowTime, const uint32& synchronizePlayerDataInMs)
 			{
 				if (IsAuthed() && nowTime - m_LastDataSavedTime > synchronizePlayerDataInMs) {
-					LoggerInstance().Info("Auto saving user:{0} at {1} ms", nowTime - m_ConnectTime);
+					LoggerInstance().Info("Auto saving user:{0} at {1} ms", GetSerial(), nowTime - m_ConnectTime);
 					m_LastDataSavedTime = nowTime;
 					SavePlayerData();
 				}
@@ -1415,7 +1432,6 @@ namespace Lunia {
 
 			void User::SetState(const STATE& state)
 			{
-				AutoLock lock(m_UserMtx);
 				m_State = state;
 			}
 

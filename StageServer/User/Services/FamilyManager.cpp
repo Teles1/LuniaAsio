@@ -57,6 +57,7 @@ namespace Lunia {
 
 				Clear();
 				myInfo.CharacterName = characterName;
+				myInfo.MemberSerial = owner.GetSerial();
 				connectedDate = DateTime::Now();
 				RequestDBFamilyInfoForInit();
 			}
@@ -284,7 +285,6 @@ namespace Lunia {
 
 			bool FamilyManager::SendPlayTimePresent(DateTime now, std::vector< XRated::Family::FamilyMemberSerial >& receiveMembers)
 			{
-				AutoLock lock(cs);
 				if (IsFamily() == true)
 				{
 					if (connectedDate == DateTime::Infinite)
@@ -327,7 +327,6 @@ namespace Lunia {
 
 			uint32 FamilyManager::SendMemorialDayPresent(DateTime now, std::vector<XRated::Family::FamilyMemberSerial>& receiveMembers)
 			{
-				AutoLock lock(cs);
 				if (IsFamily() == true)
 				{
 					uint32 dayTemp = info.CreatedTime.GetDate().GetCumulatedDay();
@@ -581,7 +580,7 @@ namespace Lunia {
 					if (condition.ReceivedDateGroupPlay.GetDate() != now.GetDate())
 					{
 						condition.ReceivedDateGroupPlay = now;
-						Net::Api expireUpdatePacket("Family.UpdateExpire_Gift1");
+						Net::Api expireUpdatePacket("Family/UpdateExpire_Gift1");
 						expireUpdatePacket << myInfo.CharacterName << myInfo.MemberSerial << condition.ReceivedDateGroupPlay.ToString();
 						expireUpdatePacket.GetAsync();
 						SendPresentMail(groupPlayTimeLogName, Database::DatabaseInstance().InfoCollections.FamilyInfos.GetGroupPlayPresent(), result.receiveMembers);
@@ -595,11 +594,17 @@ namespace Lunia {
 				}
 				break;
 				case XRated::Family::PersonalPlay:
+				{
+					AutoLock lock(cs);
 					result.IsSuccess = SendPlayTimePresent(now, result.receiveMembers);
+				}
 					break;
 				case XRated::Family::FamilyMemorialDay:
+				{
+					AutoLock lock(cs);
 					result.Param = SendMemorialDayPresent(now, result.receiveMembers);
 					result.IsSuccess = result.Param ? true : false;
+				}
 					break;
 				default:
 					owner.CriticalError(fmt::format("Wrong Request : RequestPresent : {}", static_cast<int>(packet.Type)).c_str());
@@ -629,7 +634,7 @@ namespace Lunia {
 						return;
 					}
 
-					Net::Api kickPacket("Family.Kick");
+					Net::Api kickPacket("Family/Kick");
 					kickPacket << myInfo.CharacterName << myInfo.MemberSerial << iter->CharacterName << iter->MemberSerial;
 					kickPacket.GetAsync(this, &FamilyManager::DBKicked, owner.shared_from_this());
 				}
@@ -644,8 +649,8 @@ namespace Lunia {
 			//db request.
 			void FamilyManager::RequestDBFamilyInfoForInit()
 			{
-				Net::Api packet("Family.JoinedInfo");
-				packet << myInfo.CharacterName;
+				Net::Api packet("Family/JoinedInfo");
+				packet << myInfo.MemberSerial;
 				packet.GetAsync(this, &FamilyManager::DBFamilyInfoForInit, owner.shared_from_this());
 			}
 
@@ -663,8 +668,8 @@ namespace Lunia {
 					{
 						Clear();
 					}
-					Net::Api packet("Family.JoinedInfo");
-					packet << myInfo.CharacterName;
+					Net::Api packet("Family/JoinedInfo");
+					packet << myInfo.MemberSerial;
 					packet.GetAsync(this, &FamilyManager::DBFamilyInfoForRefresh, owner.shared_from_this());
 					isFamilyInfoWait = true;
 				}
@@ -691,8 +696,8 @@ namespace Lunia {
 								inviteFamilyCreatedDate = now;
 							}
 							DateTime memorialDate = XRated::Database::DatabaseInstance().InfoCollections.FamilyInfos.GetNextMemorialDayPresentDate(inviteFamilyCreatedDate, now);
-							Net::Api packet("Family.Join");
-							packet << myInfo.CharacterName << inviteFamilyId << memorialDate.ToString();
+							Net::Api packet("Family/Join");
+							packet << myInfo.MemberSerial << inviteFamilyId << memorialDate.ToString();
 							packet.GetAsync(this, &FamilyManager::DBJoined, owner.shared_from_this());
 							return;
 						}
@@ -701,7 +706,7 @@ namespace Lunia {
 							if (inviteOwnerName.empty() == false)
 							{
 								DateTime memorialDate = XRated::Database::DatabaseInstance().InfoCollections.FamilyInfos.GetNextMemorialDayPresentDate(now, now);
-								Net::Api packet("Family.Create");
+								Net::Api packet("Family/Create");
 								packet << myInfo.CharacterName << inviteOwnerName << memorialDate.ToString();
 								packet.GetAsync(this, &FamilyManager::DBCreated, owner.shared_from_this());
 								return;
@@ -722,7 +727,7 @@ namespace Lunia {
 				AutoLock lock(cs);
 				if (IsFamily() == true)
 				{
-					Net::Api packet("Family.Leave");
+					Net::Api packet("Family/Leave");
 					int temp = isPenalty ? 1 : 0;
 					packet << myInfo.CharacterName << myInfo.MemberSerial << temp;
 					packet.GetAsync(this, &FamilyManager::DBLeaved, owner.shared_from_this());
@@ -738,21 +743,24 @@ namespace Lunia {
 				AutoLock lock(cs);
 
 				if (IsFamily() == true) {
-					Net::Api packet("Family.Terminate");
+					Net::Api packet("Family/Terminate");
 					DateTime now = DateTime::Now();
 					std::vector< XRated::Family::FamilyMemberSerial > receiveMembers;
 					SendPlayTimePresent(now, receiveMembers);
-					packet << myInfo.CharacterName << myInfo.PlayTime;
+					packet << owner.GetSerial() << myInfo.PlayTime;
 					packet.GetAsync();
 				}
 			}
 
 			//db response
-			void FamilyManager::DBFamilyInfoForInit(const UserSharedPtr& user, Net::Answer& answer)
+			void FamilyManager::DBFamilyInfoForInit(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				SetFamilyInfo(answer, false);
 				Protocol::FromServer::Family::TakePresentResult result;
-				result.Param = SendMemorialDayPresent(DateTime::Now(), result.receiveMembers);
+				{
+					AutoLock lock(cs);
+					result.Param = SendMemorialDayPresent(DateTime::Now(), result.receiveMembers);
+				}
 				if (result.Param != 0)
 				{
 					result.IsSuccess = true;
@@ -763,7 +771,7 @@ namespace Lunia {
 				
 			}
 
-			void FamilyManager::DBFamilyInfoForRefresh(const UserSharedPtr& user, Net::Answer& answer)
+			void FamilyManager::DBFamilyInfoForRefresh(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				isFamilyInfoWait = false;
 				if (answer.errorCode != 0) {
@@ -785,17 +793,15 @@ namespace Lunia {
 
 			void FamilyManager::RequestDBUpdateMemorialDay()
 			{
-				AutoLock lock(cs);
-
 				if (IsFamily() == true)
 				{
-					Net::Api packet("Family.UpdateMemorialDay");
+					Net::Api packet("Family/UpdateMemorialDay");
 					packet << myInfo.CharacterName << myInfo.MemberSerial << condition.MemorialDay.ToString();
 					packet.GetAsync();
 				}
 			}
 
-			void FamilyManager::SetFamilyInfo(Net::Answer& answer, bool isRefresh)
+			void FamilyManager::SetFamilyInfo(const Net::Answer& answer, bool isRefresh)
 			{
 				// familyId,createDate,familyMemberId,isGuest,isOnline,playTime,expire_gift1,memorialDay,joinedDate,
 				// {familyMemberId,characterName,classsNumber,stageLevel,pvpLevel,isGuest,isOnline,playTime,joinedDate,lastLoggedDate}
@@ -812,7 +818,7 @@ namespace Lunia {
 						answer.get_to("playTime", myInfo.PlayTime);
 						condition.NextPlayTimeForPersonalPlay = XRated::Database::DatabaseInstance().InfoCollections.FamilyInfos.GetNextPersonalPlayPresent(myInfo.PlayTime);
 
-						answer.get_to("memorialDay", condition.MemorialDay);
+						answer.get_to("memorialDate", condition.MemorialDay);
 					}
 					else
 					{
@@ -846,11 +852,11 @@ namespace Lunia {
 
 					//familyId,createDate,familyMemberId,isGuest,isOnline,playTime,expire_gift1,memorialDay,joinedDate
 					//,{familyMemberId,characterName,classsNumber,stageLevel,pvpLevel,isGuest,isOnline,playTime}
-					answer.get_to("familyId", info.Serial);
-					answer.get_to("createDate", info.CreatedTime);
 					answer.get_to("id", myInfo.MemberSerial);
 					answer.get_to("isGuest", myInfo.IsGuest);
 					answer.get_to("isOnline", myInfo.IsOnline);
+					answer.get_to("familyId", info.Serial);
+					answer.get_to("createDate", info.CreatedTime);
 					answer.get_to("expireGroupGift", condition.ReceivedDateGroupPlay);
 					answer.get_to("joinedDate", joinedDate);
 
@@ -905,7 +911,7 @@ namespace Lunia {
 				owner.Send(result);
 			}
 
-			void FamilyManager::DBCreated(const UserSharedPtr& user, Net::Answer& answer)
+			void FamilyManager::DBCreated(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				Protocol::FromServer::Family::JoineResult result;
 				if (!answer)
@@ -974,7 +980,7 @@ namespace Lunia {
 				owner.Send(result);
 			}
 
-			void FamilyManager::DBJoined(const UserSharedPtr& user, Net::Answer& answer)
+			void FamilyManager::DBJoined(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				Protocol::FromServer::Family::JoineResult result;
 				if (!answer)
@@ -1022,7 +1028,7 @@ namespace Lunia {
 				owner.Send(result);
 			}
 
-			void FamilyManager::DBLeaved(const UserSharedPtr& user, Net::Answer& answer)
+			void FamilyManager::DBLeaved(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				Protocol::FromServer::Family::LeavedResult result;
 				if (!answer)
@@ -1059,7 +1065,7 @@ namespace Lunia {
 				owner.Send(result);
 			}
 
-			void FamilyManager::DBKicked(const UserSharedPtr& user, Net::Answer& answer)
+			void FamilyManager::DBKicked(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				Protocol::FromServer::Family::KickResult result;
 				if (!answer)

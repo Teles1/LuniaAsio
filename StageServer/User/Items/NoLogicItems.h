@@ -189,7 +189,7 @@ namespace Lunia {
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private: /* DB response */
-				void Extended(const UserSharedPtr& user, Net::Answer& answer);
+				void Extended(const UserSharedPtr& user, const Net::Answer& answer);
 
 			private:
 				User& user;
@@ -477,7 +477,7 @@ namespace Lunia {
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private: /* DB response */
-				void Renamed(const UserSharedPtr& user, Net::Answer& answer);
+				void Renamed(const UserSharedPtr& user, const Net::Answer& answer);
 
 			private:
 				User& user;

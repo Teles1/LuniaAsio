@@ -34,8 +34,8 @@ namespace Lunia {
 				void SendCurrentStageEvents(const UserSharedPtr& user) const;
 			public:
 				bool AuthenticateUser(const uint32& userId, const json& result);
-				void AuthedConnection(const UserSharedPtr& user, Net::Answer& answer);
-				void Authed(const UserSharedPtr& user, Net::Answer& answer);
+				void AuthedConnection(const UserSharedPtr& user, const Net::Answer& answer);
+				void Authed(const UserSharedPtr& user, const Net::Answer& answer);
 				void RoomAuth(const UserSharedPtr& user);
 				void RemoveUser(const uint64& userSerial);
 				UserSharedPtr MakeUser(asio::ip::tcp::socket& socket);

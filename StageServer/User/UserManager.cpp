@@ -275,7 +275,7 @@ namespace Lunia {
 				return m_users[userSerial]->AuthConnection(result);
 			}
 
-			void UserManager::AuthedConnection(const UserSharedPtr& user, Net::Answer& answer)
+			void UserManager::AuthedConnection(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (answer.errorCode == 0) {
 					if (!answer.resultObject.is_null()) {
@@ -297,7 +297,7 @@ namespace Lunia {
 					user->Terminate();
 			}
 
-			void UserManager::Authed(const UserSharedPtr& user, Net::Answer& answer)
+			void UserManager::Authed(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (answer.errorCode == 0 && !answer.resultObject.is_null()) {
 					if (user->Auth(answer.resultObject)) {

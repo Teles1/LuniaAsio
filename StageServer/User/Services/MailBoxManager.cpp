@@ -438,7 +438,7 @@ namespace Lunia {
 
 
 			// Packet handlers (Server-DB)
-			void MailboxManager::DBDisposeMail(const UserSharedPtr& user, Net::Answer& answer)
+			void MailboxManager::DBDisposeMail(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -495,7 +495,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void MailboxManager::DBDisposeReadMails(const UserSharedPtr& user, Net::Answer& answer)
+			void MailboxManager::DBDisposeReadMails(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -559,7 +559,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void MailboxManager::DBReadMail(const UserSharedPtr& user, Net::Answer& answer)
+			void MailboxManager::DBReadMail(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -710,7 +710,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void MailboxManager::DBRequestMailList(const UserSharedPtr& user, Net::Answer& answer)
+			void MailboxManager::DBRequestMailList(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -774,7 +774,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void MailboxManager::DBRetrieveAttached(const UserSharedPtr& user, Net::Answer& answer)
+			void MailboxManager::DBRetrieveAttached(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -944,7 +944,7 @@ namespace Lunia {
 				user->LockItems(false);
 			}
 
-			void MailboxManager::DBSendMail(const UserSharedPtr& user, Net::Answer& answer)
+			void MailboxManager::DBSendMail(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1102,7 +1102,7 @@ namespace Lunia {
 				user->LockItems(false);
 			}
 
-			void MailboxManager::DBRollback(const UserSharedPtr& user, Net::Answer& answer)
+			void MailboxManager::DBRollback(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1328,7 +1328,7 @@ namespace Lunia {
 				}
 			}
 
-			void MailboxManager::DBNotifyMailDispoition(const UserSharedPtr& user, Net::Answer& answer)
+			void MailboxManager::DBNotifyMailDispoition(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{

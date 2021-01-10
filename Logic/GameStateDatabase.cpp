@@ -1959,7 +1959,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		if ( misc ) {
 			CreateObject(misc);
 
-			//object�� �ִ� ��ġ�� player, npc���� �ֺ����� �о� ����.
 			std::vector<Actor*> l;
 			GetAreaObject(misc->GetPosition(), misc->GetRadius(), Constants::AllianceType::AnyObjects, 0, misc, l);
 			for(std::vector<Actor*>::iterator i = l.begin() ; i != l.end() ; ++i) {

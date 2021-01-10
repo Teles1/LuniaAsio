@@ -61,13 +61,13 @@ namespace Lunia {
 				void Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::SendMail& packet);
 
 				// Packet handlers (Server-DB)
-				void DBDisposeMail(const UserSharedPtr& user, Net::Answer& answer);
-				void DBDisposeReadMails(const UserSharedPtr& user, Net::Answer& answer);
-				void DBReadMail(const UserSharedPtr& user, Net::Answer& answer);
-				void DBRequestMailList(const UserSharedPtr& user, Net::Answer& answer);
-				void DBRetrieveAttached(const UserSharedPtr& user, Net::Answer& answer);
-				void DBSendMail(const UserSharedPtr& user, Net::Answer& answer);
-				void DBRollback(const UserSharedPtr& user, Net::Answer& answer);
+				void DBDisposeMail(const UserSharedPtr& user, const Net::Answer& answer);
+				void DBDisposeReadMails(const UserSharedPtr& user, const Net::Answer& answer);
+				void DBReadMail(const UserSharedPtr& user, const Net::Answer& answer);
+				void DBRequestMailList(const UserSharedPtr& user, const Net::Answer& answer);
+				void DBRetrieveAttached(const UserSharedPtr& user, const Net::Answer& answer);
+				void DBSendMail(const UserSharedPtr& user, const Net::Answer& answer);
+				void DBRollback(const UserSharedPtr& user, const Net::Answer& answer);
 
 				void SendMailSelf(UserSharedPtr user, const std::wstring& title, const std::wstring& text, const uint32 attachedMoney, const std::vector<XRated::ItemBasicInfo>& sendItems, const std::wstring sender = L"", const XRated::Mail::HeaderInfo::FlagType flag = XRated::Mail::HeaderInfo::FlagType::None); 
 
@@ -76,7 +76,7 @@ namespace Lunia {
 				// TODO : Reserved
 				//void MailAlarm();
 				void NotifyMailDisposition(UserSharedPtr user, const std::wstring& to, const std::wstring& title);
-				void DBNotifyMailDispoition(const UserSharedPtr& user, Net::Answer& answer);
+				void DBNotifyMailDispoition(const UserSharedPtr& user, const Net::Answer& answer);
 
 				// Constuctor/Destructor
 				MailboxManager();

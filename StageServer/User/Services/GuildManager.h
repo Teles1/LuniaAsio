@@ -143,7 +143,7 @@ namespace Lunia {
 				void InitCumulativeTax();
 				void SaveTax(float tax);
 				void UpdateTaxToDB(UserSharedPtr user);
-				void TaxUpdated(const UserSharedPtr& user, Net::Answer& answer);
+				void TaxUpdated(const UserSharedPtr& user, const Net::Answer& answer);
 
 			private:
 				void RequestGuildInfo(UserSharedPtr user, uint32 guildOid);
@@ -152,33 +152,33 @@ namespace Lunia {
 				void ListGuildShopItemParse(const Net::Answer& answer, std::vector<XRated::GuildShopItem>& guildItems);
 
 			private: // db response
-				void Created(const UserSharedPtr& user, Net::Answer& answer);
-				void Joined(const UserSharedPtr& user, Net::Answer& answer);
-				void Left(const UserSharedPtr& user, Net::Answer& answer);
-				void Kicked(const UserSharedPtr& user, Net::Answer& answer);
-				void Removed(const UserSharedPtr& user, Net::Answer& answer);
-				void MemberListed(const UserSharedPtr& user, Net::Answer& answer);
-				void NameValidated(const UserSharedPtr& user, Net::Answer& answer);
-				void AliasValidated(const UserSharedPtr& user, Net::Answer& answer);
-				void AddedGuildPoint(const UserSharedPtr& user, Net::Answer& answer);
-				void ReflashedGuildLevel(const UserSharedPtr& user, Net::Answer& answer);
-				void GuildRankingListed(const UserSharedPtr& user, Net::Answer& answer);
-				void TaxGained(const UserSharedPtr& user, Net::Answer& answer);
-				void ReflashedListGuildShopItem(const UserSharedPtr& user, Net::Answer& answer);
-				void SetPlayer(const UserSharedPtr& user, Net::Answer& answer);
-				void MessageChanged(const UserSharedPtr& user, Net::Answer& answer);
-				void GradeChanged(const UserSharedPtr& user, Net::Answer& answer);
-				void GradeNameChanged(const UserSharedPtr& user, Net::Answer& answer);
-				void GradeAuthChanged(const UserSharedPtr& user, Net::Answer& answer);
-				void GuildMasterChanged(const UserSharedPtr& user, Net::Answer& answer);
-				void MyInfoVaild(const UserSharedPtr& user, Net::Answer& answer);
-				void ReflashedGuildProfitDate(const UserSharedPtr& user, Net::Answer& answer);
-				void AddedGuildExpByItem(const UserSharedPtr& user, Net::Answer& answer);
-				void MyInfoRefreshed(const UserSharedPtr& user, Net::Answer& answer);
-				void AddedGuildExp(const UserSharedPtr& user, Net::Answer& answer);
-				void IncresedGuildRankPointByItem(const UserSharedPtr& user, Net::Answer& answer);
-				void AddedItemToGuildShop(const UserSharedPtr& user, Net::Answer& answer);
-				void ListGuildShopItem(const UserSharedPtr& user, Net::Answer& answer);
+				void Created(const UserSharedPtr& user, const Net::Answer& answer);
+				void Joined(const UserSharedPtr& user, const Net::Answer& answer);
+				void Left(const UserSharedPtr& user, const Net::Answer& answer);
+				void Kicked(const UserSharedPtr& user, const Net::Answer& answer);
+				void Removed(const UserSharedPtr& user, const Net::Answer& answer);
+				void MemberListed(const UserSharedPtr& user, const Net::Answer& answer);
+				void NameValidated(const UserSharedPtr& user, const Net::Answer& answer);
+				void AliasValidated(const UserSharedPtr& user, const Net::Answer& answer);
+				void AddedGuildPoint(const UserSharedPtr& user, const Net::Answer& answer);
+				void ReflashedGuildLevel(const UserSharedPtr& user, const Net::Answer& answer);
+				void GuildRankingListed(const UserSharedPtr& user, const Net::Answer& answer);
+				void TaxGained(const UserSharedPtr& user, const Net::Answer& answer);
+				void ReflashedListGuildShopItem(const UserSharedPtr& user, const Net::Answer& answer);
+				void SetPlayer(const UserSharedPtr& user, const Net::Answer& answer);
+				void MessageChanged(const UserSharedPtr& user, const Net::Answer& answer);
+				void GradeChanged(const UserSharedPtr& user, const Net::Answer& answer);
+				void GradeNameChanged(const UserSharedPtr& user, const Net::Answer& answer);
+				void GradeAuthChanged(const UserSharedPtr& user, const Net::Answer& answer);
+				void GuildMasterChanged(const UserSharedPtr& user, const Net::Answer& answer);
+				void MyInfoVaild(const UserSharedPtr& user, const Net::Answer& answer);
+				void ReflashedGuildProfitDate(const UserSharedPtr& user, const Net::Answer& answer);
+				void AddedGuildExpByItem(const UserSharedPtr& user, const Net::Answer& answer);
+				void MyInfoRefreshed(const UserSharedPtr& user, const Net::Answer& answer);
+				void AddedGuildExp(const UserSharedPtr& user, const Net::Answer& answer);
+				void IncresedGuildRankPointByItem(const UserSharedPtr& user, const Net::Answer& answer);
+				void AddedItemToGuildShop(const UserSharedPtr& user, const Net::Answer& answer);
+				void ListGuildShopItem(const UserSharedPtr& user, const Net::Answer& answer);
 			private:
 
 			private:

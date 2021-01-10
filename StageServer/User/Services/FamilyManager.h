@@ -52,14 +52,14 @@ namespace Lunia {
 
 			private:
 				//DB Response
-				void DBFamilyInfoForInit(const UserSharedPtr& user, Net::Answer& answer);
-				void DBFamilyInfoForRefresh(const UserSharedPtr& user, Net::Answer& answer);
-				void DBCreated(const UserSharedPtr& user, Net::Answer& answer);
-				void DBJoined(const UserSharedPtr& user, Net::Answer& answer);
-				void DBLeaved(const UserSharedPtr& user, Net::Answer& answer);
-				void DBKicked(const UserSharedPtr& user, Net::Answer& answer);
+				void DBFamilyInfoForInit(const UserSharedPtr& user, const Net::Answer& answer);
+				void DBFamilyInfoForRefresh(const UserSharedPtr& user, const Net::Answer& answer);
+				void DBCreated(const UserSharedPtr& user, const Net::Answer& answer);
+				void DBJoined(const UserSharedPtr& user, const Net::Answer& answer);
+				void DBLeaved(const UserSharedPtr& user, const Net::Answer& answer);
+				void DBKicked(const UserSharedPtr& user, const Net::Answer& answer);
 
-				void SetFamilyInfo(Net::Answer& answer, bool isRefresh);
+				void SetFamilyInfo(const Net::Answer& answer, bool isRefresh);
 			private:
 				void Clear();
 

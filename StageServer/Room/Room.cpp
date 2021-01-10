@@ -91,7 +91,7 @@ namespace Lunia {
 						PlayerData* tmp = *i;
 						(*i) = players[0];
 						players[0] = tmp;
-						LoggerInstance().Error("Room::SendAllObject. There is a targeted playerinfo in playerlist.");
+						LoggerInstance().Info("Room::SendAllObject. There is a targeted playerinfo in playerlist.");
 						break;
 					}
 				}
@@ -126,11 +126,11 @@ namespace Lunia {
 					createplayer.partyChannelName = m_PartyChannelName;
 					createplayer.eventExpFactor = ConfigInstance().Get("BaseExp", 1.0f);
 
-					auto tmpUser = m_UserManager.GetPlayer(pPlayerData->BaseCharacter.BaseObject.GameObjectSerial);
+					auto tmpUser = m_UserManager.GetUser(target->GetSerial());//(pPlayerData->BaseCharacter.BaseObject.GameObjectSerial);
 
 					if (tmpUser != NULL)
 					{
-						AutoLock lock(tmpUser->GetSyncObject()); // equipment can be changed while this loop
+						//AutoLock lock(tmpUser->GetSyncObject()); // equipment can be changed while this loop
 
 						/* calculating equipment - position, item hash and instance */
 						for (uint16 i = 0; i < XRated::Constants::Equipment::Cnt; ++i)
@@ -256,7 +256,7 @@ namespace Lunia {
 					{
 						if (i->type == Constants::Familiar::Type::Pet)
 						{
-							auto user = m_UserManager.GetPlayer(i->owner);
+							auto user = m_UserManager.GetUser(i->owner);
 							Logic::Player* player = NULL;
 							if (user != NULL) {
 								player = user->GetPlayer();
@@ -345,7 +345,7 @@ namespace Lunia {
 						}
 						assert(m_ThreadIndex != UINT16_MAX);
 						m_Logic->Update(dt);
-						LoggerInstance().Info("Calling Logic Update");
+						//LoggerInstance().Info("Calling Logic Update");
 					}
 				}
 				m_UserManager.Update(dt);
@@ -449,6 +449,8 @@ namespace Lunia {
 					return false;
 				}
 				user->RoomJoined(shared_from_this(), m_CurrentStage);
+
+				m_UserManager.AddUser(user);
 
 				if (user->GetCharacterStateFlags().IsSpectator)
 				{
@@ -575,7 +577,15 @@ namespace Lunia {
 			}
 			void Room::ObjectCreated(ObjectData& data)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				Protocol::FromServer::CreateStaticObject createstaticobject;
+
+				createstaticobject.objectserial = data.GameObjectSerial;
+				createstaticobject.objectname = data.NameHash;
+				createstaticobject.type = data.Type;
+				createstaticobject.position = data.Position;
+				createstaticobject.direction = data.Direction;
+
+				m_UserManager.BroadcastToPlayers(createstaticobject);
 			}
 			void Room::ObjectDestroyed(Serial gameObjectSerial, Constants::ObjectType type, uint32 hash, bool silent, uint8 team, NonPlayerData::NpcType npcType)
 			{
@@ -600,11 +610,23 @@ namespace Lunia {
 			}
 			void Room::AnimationChanged(Serial gameObjectSerial, uint32 animation, const float3& position, const float3& direction, const float param)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				Protocol::FromServer::ChangeAction changeaction;
+				changeaction.objectserial = gameObjectSerial;
+				changeaction.animation = animation;
+				changeaction.position = position;
+				changeaction.direction = direction;
+				changeaction.param = param;
+
+				m_UserManager.BroadcastToPlayers(changeaction);
 			}
 			void Room::CollisionStateChanged(Serial gameObjectSerial, bool collision, const float3& position)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				Protocol::FromServer::ChangeColState changecolstate;
+				changecolstate.objectserial = gameObjectSerial;
+				changecolstate.collision = collision;
+				changecolstate.position = position;
+
+				m_UserManager.BroadcastToPlayers(changecolstate);
 			}
 			void Room::XpGained(Logic::Player* player, XRated::Constants::ExpAcquiredType type, uint64 storyXp, int32 pvpXp, int32 warXp, Serial beKilledNpc)
 			{
@@ -792,7 +814,17 @@ namespace Lunia {
 			}
 			void Room::StatusChanged(Serial gameObjectSerial, float3 pos, float3 dir, float hp, float mp, Serial byWhom, uint32 byWhat, uint32 sFlag, uint32 airComboCount)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				Protocol::FromServer::ChangeStatus changestatus;
+				changestatus.objectserial = gameObjectSerial;
+				changestatus.position = pos;
+				changestatus.direction = dir;
+				changestatus.hp = hp;
+				changestatus.mp = mp;
+				changestatus.bywhom = byWhom;
+				changestatus.bywhat = byWhat;
+				changestatus.flag = sFlag;
+				changestatus.airComboCount = airComboCount;
+				m_UserManager.BroadcastToPlayers(changestatus);
 			}
 			bool Room::AddItem(Logic::Player* player, uint32 id, Serial gameObjectSerial, int cnt)
 			{
@@ -958,7 +990,7 @@ namespace Lunia {
 			}
 			void Room::SectorChanged(Serial serial, Logic::Sector* sector, Constants::Direction direction)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				//
 			}
 			const PvpRoomInfo::BattleGroundInfoType& Room::GetBattleGroundInfo() const
 			{
