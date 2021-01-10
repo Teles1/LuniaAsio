@@ -2,7 +2,6 @@
 #include "CompressedActionsManager.h"
 #include <Core/FileIO/FileStream.h>
 #include <LzmaLib/LzmaLib.h>
-
 namespace Lunia {
 	namespace XRated {
 		namespace Database {
@@ -21,8 +20,9 @@ namespace Lunia {
 
 				void CompressedActionInfoManager::LoadBinaryData()
 				{
-					Resource::ResourceSystemInstance().CreateDefaultDeserializer(L"Database/CompressedActionInfos.b")
-						->Read(L"compressedActionMap", actionMap);
+					auto reader = Resource::ResourceSystemInstance().CreateSerializerBinaryStreamReader(L"Database/CompressedActionInfos.b");
+					reader->Read(L"compressedActionMap", actionMap);
+					reader->Read(L"AutoActions", AutoActions);
 				}
 
 				void CompressedActionInfoManager::LoadCBFInData()
@@ -48,6 +48,7 @@ namespace Lunia {
 						reader = new FileIO::RefCountedMemoryStreamReader(&lReplayBuffer[0], uint32(lReplayBuffer.size()));
 						GetData(reader, itr.second);
 					}
+					std::cout << compressedActionsCbf->GetReadCursor() << std::endl;
 					delete[] buffer;
 				}
 				void CompressedActionInfoManager::GetData(Resource::StreamReader& reader, ActionInfoManager::Actions& actionMap) {

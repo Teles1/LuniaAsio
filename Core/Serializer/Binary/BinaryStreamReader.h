@@ -63,7 +63,9 @@ namespace Lunia {
 			virtual size_t inline GetCount(const wchar_t* /*type*/) const {
 				throw Exception(L"not implemented");
 			}
-
+			virtual int inline GetReadCursor() const {
+				return stream->GetReadCursor();
+			}
 			virtual void inline Read(const wchar_t* name, Locator& value) {
 				std::wstring path;
 				Read(name, path);

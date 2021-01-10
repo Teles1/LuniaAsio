@@ -102,6 +102,9 @@ namespace Lunia {
 				return Type::Structured;
 			}
 
+			virtual int inline GetReadCursor() const {
+				return stream->GetReadCursor();
+			}
 
 			virtual void inline Begin(const wchar_t* type, int* majorVersionOut, int* minorVersionOut) {
 			   //if (tree.back().type !=type) throw Exception(ALLM_EXCEPTION((L"class type name is not same in the file, type=%s|%s", type, tree.back().type.c_str())));

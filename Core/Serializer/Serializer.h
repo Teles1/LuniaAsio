@@ -145,6 +145,8 @@ namespace Lunia {
 				Flat,		//binary
 			};
 
+			virtual int GetReadCursor() const = 0;
+
 			virtual Type GetType() const = 0;
 
 			virtual size_t GetCount(const wchar_t* type) const = 0;

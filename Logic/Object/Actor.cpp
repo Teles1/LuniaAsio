@@ -517,6 +517,7 @@ namespace Lunia
 
 			bool Actor::Command( Action::Action::CommandType state, uint32 param )
 			{
+				LoggerInstance().Info("Actor::Command() - ({},{})", (uint16)state, param);
 				switch ( state ) 
 				{
 				case Action::Action::CommandType::MOVE :

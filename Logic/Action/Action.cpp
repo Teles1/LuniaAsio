@@ -453,9 +453,9 @@ namespace Lunia
 					Action* action = GetAction( name );
 					if ( !action ) 
 					{
-#ifdef _SINGLE
+
 						Logger::GetInstance().Info( L"[ActionManager::SetAction] [{0}] action [{1}] not found.", object->GetName().c_str(), name );
-#endif
+
 						return false;
 					}
 
@@ -968,6 +968,7 @@ namespace Lunia
 
 					if ( actionInfo ) 
 					{
+						LoggerInstance().Info(L"ActionHash: {}", actionInfo->hash);
 						actionName = actionInfo->hash;
 
 						if ( atkRate > 1.0f )
