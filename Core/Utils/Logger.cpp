@@ -13,7 +13,7 @@ namespace Lunia {
 			sink->set_level(spdlog::level::level_enum::err);
 		}
 		{
-			sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/log.txt", true));
+			sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/log.log", true));
 			auto& sink = sinks.back();
 			sink->set_pattern("[%X %^%l%$] => %v");
 			sink->set_level(spdlog::level::level_enum::trace);
