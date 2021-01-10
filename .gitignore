@@ -45,3 +45,4 @@
 *.vcpkg.props
 *packages/*
 Debug/
+*/logs/log.txt
