@@ -5,10 +5,8 @@
 #define FMT_HEADER_ONLY
 #include <fmt/format.h>
 #define SPDLOG_WCHAR_TO_UTF8_SUPPORT
+#define SPDLOG_LEVEL_NAMES { "TRACE", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", "OFF" }
 #include <spdlog/spdlog.h>
-#include "spdlog/sinks/stdout_color_sinks.h"
-
-#include <memory>
 namespace Lunia {
 	struct Logger {
 	public:
@@ -141,11 +139,8 @@ namespace Lunia {
 		}
 
 	private:
-		inline Logger(const std::string& name) {
-			m_logger = spdlog::stdout_color_mt(name);
-			m_logger->set_pattern("[%X %^%l%$] => %v");
-		}
-		std::shared_ptr<spdlog::logger>					m_logger; //spd_logger sharedpointer
+		Logger(const std::string& name);
+		std::shared_ptr<spdlog::logger> m_logger; //spd_logger sharedpointer
 #pragma region Sigleton
 	public:
 		Logger(Logger&&) = delete;
