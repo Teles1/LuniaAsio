@@ -71,7 +71,7 @@ namespace Lunia {
                 Answer RequestPost(const json& value) const;
                 void GetAsync(const json& payLoad = json()) const;
                 template<typename O, typename T>
-                inline void GetAsync(O* inObj, void (O::* inFunction)(const T&, const Answer&), const T& inParam, const json& inPayload = json()) {
+                inline void GetAsync(O* inObj, void (O::* inFunction)(const T&, const Answer&), const T& inParam = NULL, const json& inPayload = json()) {
                     Utils::thread_pool::GetInstance().push(
                         [function = inFunction, param = inParam, obj = inObj]
                         (const int& id, const Methods& method, const cpr::Url& url, const cpr::Header& header, const cpr::Timeout& timeout, const json& payload) {

@@ -17,7 +17,7 @@ namespace Lunia {
 			}
 			uint16 Room::UserCount() const
 			{
-				return m_UserManager.NowCount();
+				return m_UserManager.CountCurrent();
 			}
 			void Room::Clear()
 			{
@@ -62,6 +62,7 @@ namespace Lunia {
 				m_DieCountSerial.clear();
 				m_KillCountSerial.clear();
 			}
+
 			bool Room::IsEnableStylePoint() const
 			{
 				if (GetRoomType() & Constants::PvpGameTypeMask) return false;	//pvp
@@ -126,7 +127,7 @@ namespace Lunia {
 					createplayer.partyChannelName = m_PartyChannelName;
 					createplayer.eventExpFactor = ConfigInstance().Get("BaseExp", 1.0f);
 
-					auto tmpUser = m_UserManager.GetUser(target->GetSerial());//(pPlayerData->BaseCharacter.BaseObject.GameObjectSerial);
+					auto tmpUser = m_UserManager.GetUser(pPlayerData->BaseCharacter.BaseObject.GameObjectSerial);
 
 					if (tmpUser != NULL)
 					{
@@ -450,17 +451,17 @@ namespace Lunia {
 				}
 				user->RoomJoined(shared_from_this(), m_CurrentStage);
 
-				m_UserManager.AddUser(user);
+				m_UserManager.AddNameUser(user->GetCharacterName(), user);
 
 				if (user->GetCharacterStateFlags().IsSpectator)
 				{
 					Protocol::FromServer::Pvp::NotifySpectatorInOut n;
 					n.CharacterName = user->GetCharacterName();
 					n.Entered = true;
-					m_UserManager.BroadcastToUsers(n);
+					m_UserManager.BroadcastToAllEnteredUsers(n);
 				}
 				m_WaitRoomDelete = false;
-				SetStylePointUserCount(m_UserManager.NowCount());
+				SetStylePointUserCount(m_UserManager.CountCurrent(false));
 				//slimeRaceGame.NewPlayerJoin(0.0f, user);
 				return true;
 			}
@@ -468,7 +469,7 @@ namespace Lunia {
 			{
 				if (user->GetPlayer() != NULL) {
 					m_Logic->Part(user->GetPlayer());
-					m_UserManager.RemoveUser(user->GetSerial());
+					m_UserManager.DelSerialUser(user->GetSerial());
 				}
 				/*
 				if (user->GetPartyIndex() >= 0)
@@ -478,7 +479,7 @@ namespace Lunia {
 					RemoveFishingUser(user->GetSerial());
 				*/
 				user->RoomParted();
-				if (m_UserManager.NowCount() == 0) {
+				if (m_UserManager.CountCurrent() == 0) {
 					m_WaitRoomDelete = true;
 					m_WaitRoomDeleteTime = fixedWaitRoomDeleteTime;
 				}
@@ -487,7 +488,7 @@ namespace Lunia {
 				}
 				switch (GetRoomKind()) {
 				case Common::ROOMKIND::SQUARE:
-					if (m_UserManager.NowCount() == 0)
+					if (m_UserManager.CountCurrent() == 0)
 						m_Locked = false; // if the room was private it was "locked" previously?
 					break;
 				case Common::ROOMKIND::PVP:
@@ -497,7 +498,7 @@ namespace Lunia {
 						Protocol::FromServer::Error error;
 						error.errorcode = Errors::Unexpected;
 						error.errorstring = fmt::format(L"{0}- failed to join", user->GetSerial()).c_str();
-						m_UserManager.BroadcastToUsers(error);
+						m_UserManager.BroadcastToAllEnteredUsers(error);
 						m_UserManager.KickAllUsers();
 					}
 				}
@@ -531,7 +532,7 @@ namespace Lunia {
 				LoggerInstance().Info(L"initialized room(index:{0}, threadIndex:{1}) info {2}"\
 					L", waiting:{3}, nowcnt:{4}, maxcnt:{5}, capacity:{6}, active:{7}, loading:{8}, logicloading:{9}"
 					, m_RoomIndex, m_ThreadIndex, (m_StageInfo ? m_StageInfo->Id : fmt::format(L"(null:{0},{1})", m_CurrentStage.StageGroupHash, m_CurrentStage.Level))
-					, m_WaitingUsers.size(), m_UserManager.NowCount(), m_UserManager.MaxCount(), GetStageCapcacity(), m_Active, m_Loading, m_Logic->IsLoading()
+					, m_WaitingUsers.size(), m_UserManager.CountCurrent(), m_UserManager.MaxCnt(), GetStageCapcacity(), m_Active, m_Loading, m_Logic->IsLoading()
 				);
 				while (!m_WaitingUsers.empty()) {
 					auto& user = m_WaitingUsers.front();
@@ -585,7 +586,7 @@ namespace Lunia {
 				createstaticobject.position = data.Position;
 				createstaticobject.direction = data.Direction;
 
-				m_UserManager.BroadcastToPlayers(createstaticobject);
+				m_UserManager.BroadcastToSerialUsers(createstaticobject);
 			}
 			void Room::ObjectDestroyed(Serial gameObjectSerial, Constants::ObjectType type, uint32 hash, bool silent, uint8 team, NonPlayerData::NpcType npcType)
 			{
@@ -617,7 +618,7 @@ namespace Lunia {
 				changeaction.direction = direction;
 				changeaction.param = param;
 
-				m_UserManager.BroadcastToPlayers(changeaction);
+				m_UserManager.BroadcastToSerialUsers(changeaction);
 			}
 			void Room::CollisionStateChanged(Serial gameObjectSerial, bool collision, const float3& position)
 			{
@@ -626,7 +627,7 @@ namespace Lunia {
 				changecolstate.collision = collision;
 				changecolstate.position = position;
 
-				m_UserManager.BroadcastToPlayers(changecolstate);
+				m_UserManager.BroadcastToSerialUsers(changecolstate);
 			}
 			void Room::XpGained(Logic::Player* player, XRated::Constants::ExpAcquiredType type, uint64 storyXp, int32 pvpXp, int32 warXp, Serial beKilledNpc)
 			{
@@ -666,7 +667,7 @@ namespace Lunia {
 					return false;
 				}
 
-				if (!m_UserManager.DoesExist(user))
+				if (!m_UserManager.IsExist(user))
 				{
 					LoggerInstance().Error("Room::PlayerCreated - DoesExist({}) == false", user->GetSerial());
 					return false;
@@ -733,9 +734,9 @@ namespace Lunia {
 
 				createplayer.CharacterStateFlags = user->GetCharacterStateFlags();
 
-				m_UserManager.BroadcastToPlayers(createplayer);
+				m_UserManager.BroadcastToSerialUsers(createplayer);
 
-				m_UserManager.AddPlayer(data.BaseCharacter.BaseObject.GameObjectSerial, user);
+				m_UserManager.AddSerialUser(data.BaseCharacter.BaseObject.GameObjectSerial, user);
 				SendAllObject(user);
 				
 				//UserManagerInstance().JoinCompleted(*user); // notice completion of join process to user manager
@@ -754,7 +755,7 @@ namespace Lunia {
 					user->NoticeStylePointState(XRated::StylePoint::State::Start);
 					ChangeStylePointStateToLogic(user->GetPlayer(), XRated::StylePoint::State::Start);
 
-					SetStylePointUserCount(m_UserManager.NowCount(false));
+					SetStylePointUserCount(m_UserManager.CountCurrent(false));
 				}
 
 				const Common::ItemEx* petItem = user->GetItem(ItemPosition(0, XRated::Constants::Equipment::Pet));
@@ -824,7 +825,7 @@ namespace Lunia {
 				changestatus.bywhat = byWhat;
 				changestatus.flag = sFlag;
 				changestatus.airComboCount = airComboCount;
-				m_UserManager.BroadcastToPlayers(changestatus);
+				m_UserManager.BroadcastToSerialUsers(changestatus);
 			}
 			bool Room::AddItem(Logic::Player* player, uint32 id, Serial gameObjectSerial, int cnt)
 			{
@@ -1112,7 +1113,7 @@ namespace Lunia {
 			bool Room::SetStage(StageLicense& targetStage, const std::string& roomPass, const int64& pActivationSerial, const String& userName)
 			{
 				AutoLock lock(m_Mtx);
-				if (m_UserManager.NowCount() != 0)
+				if (m_UserManager.NowCnt() != 0)
 					return true;
 				if (m_Logic->IsLoading()) {
 					LoggerInstance().Error("Room::SetStage Failed - Already loading");
@@ -1190,7 +1191,7 @@ namespace Lunia {
 			void Room::SetStylePointUserCount(const uint16& count)
 			{
 				if (GetRoomKind() == Common::STAGE)
-					for(auto& user : m_UserManager.GetUsers())
+					for(auto& user : m_UserManager.GetSerialUsers())
 						m_Logic->ChangeStylePointPlayerCount(user.second->GetPlayer(), count);
 			}
 			bool Room::SideStageJoinCheck() const
@@ -1213,18 +1214,18 @@ namespace Lunia {
 				case Common::STAGE:
 					if (m_Logic->IsLoading())
 					{
-						if (m_UserManager.NowCount() >= user->GetRoomCapacity())
+						if (m_UserManager.NowCnt() >= user->GetRoomCapacity())
 						{
-							LoggerInstance().Error(L"Room({0})::CapacityCheck() - invalid number(%d/%d) of users in stage(%s)", m_RoomIndex, m_UserManager.NowCount(), user->GetRoomCapacity(), m_StageInfo ? m_StageInfo->Id.c_str() : L"blank");
+							LoggerInstance().Error(L"Room({0})::CapacityCheck() - invalid number(%d/%d) of users in stage(%s)", m_RoomIndex, m_UserManager.NowCnt(), user->GetRoomCapacity(), m_StageInfo ? m_StageInfo->Id.c_str() : L"blank");
 							Protocol::FromServer::Error error;
 							error.errorcode = Errors::StageFulled;
 							user->Send(error);
 							return false;
 						}
 					}
-					else if (m_UserManager.NowCount() >= GetStageCapcacity())
+					else if (m_UserManager.NowCnt() >= GetStageCapcacity())
 					{
-						LoggerInstance().Info("Room({0})::CapacityCheck() - Error: [STAGE] m_UserManager.NowCount({1}) >= GetStageCapcacity({2})", m_RoomIndex, m_UserManager.NowCount(), GetStageCapcacity());
+						LoggerInstance().Info("Room({0})::CapacityCheck() - Error: [STAGE] m_UserManager.NowCount({1}) >= GetStageCapcacity({2})", m_RoomIndex, m_UserManager.NowCnt(), GetStageCapcacity());
 						Protocol::FromServer::Error error;
 						error.errorcode = Errors::StageFulled;
 						user->Send(error);
@@ -1236,9 +1237,9 @@ namespace Lunia {
 					{
 
 					}
-					else if (m_UserManager.NowCount() >= user->GetRoomCapacity())
+					else if (m_UserManager.CountCurrent(false) >= user->GetRoomCapacity())
 					{
-						LoggerInstance().Error("Room({0})::CapacityCheck() - Error: [PVP] m_UserManager.NowCount({1}) >= user->GetRoomCapacity({2})", m_RoomIndex, m_UserManager.NowCount(), user->GetRoomCapacity());
+						LoggerInstance().Error("Room({0})::CapacityCheck() - Error: [PVP] m_UserManager.NowCount({1}) >= user->GetRoomCapacity({2})", m_RoomIndex, m_UserManager.CountCurrent(false), user->GetRoomCapacity());
 						Protocol::FromServer::Error error;
 						error.errorcode = Errors::StageFulled;
 						user->Send(error);
@@ -1253,9 +1254,9 @@ namespace Lunia {
 					if (m_RoomIndex >= 0 && m_RoomIndex < squareInfos.size())
 						capacity = squareInfos[m_RoomIndex].Capacity;
 
-					if (m_UserManager.NowCount() >= capacity)
+					if (m_UserManager.NowCnt() >= capacity)
 					{
-						LoggerInstance().Info("Room({0})::CapacityCheck() - Error: [SQUARE] m_UserManager.NowCnt({1}) >= {2}", m_RoomIndex, m_UserManager.NowCount(), capacity);
+						LoggerInstance().Info("Room({0})::CapacityCheck() - Error: [SQUARE] m_UserManager.NowCnt({1}) >= {2}", m_RoomIndex, m_UserManager.NowCnt(), capacity);
 						Protocol::FromServer::Error error;
 						error.errorcode = Errors::ServerIsFull;
 						user->Send(error);

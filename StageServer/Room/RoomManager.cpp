@@ -3,7 +3,7 @@
 #include <StageServer/Room/Room.h>
 #include <StageServer/Room/RoomUpdateManager.h>
 #include <Logic/Stage/ScriptLoadThread.h>
-
+#include <StageServer/User/User.h>
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {

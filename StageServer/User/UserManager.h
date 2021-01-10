@@ -32,6 +32,7 @@ namespace Lunia {
 				bool IsScriptEventNow(const uint32& eventId) const;
 				bool DoesExist(const UserSharedPtr& user) const;
 				void SendCurrentStageEvents(const UserSharedPtr& user) const;
+				void StageChanged(UserSharedPtr user); // right before the room logic is changed. actually, right after the voting to change the stage is completed.
 			public:
 				bool AuthenticateUser(const uint32& userId, const json& result);
 				void AuthedConnection(const UserSharedPtr& user, const Net::Answer& answer);

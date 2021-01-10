@@ -1,6 +1,7 @@
 #include <StageServer/Room/Room.h>
 #include <Core/ErrorDefinition.h>
 #include <StageServer/User/UserManager.h>
+#include <StageServer/User/User.h>
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
@@ -206,7 +207,7 @@ namespace Lunia {
 				switch (GetRoomKind()) {
 				case Common::STAGE:
 					if (progress >= 1.0f) {
-						m_UserManager.BroadcastToUsers(loadEnd);
+						m_UserManager.BroadcastToAllEnteredUsers(loadEnd);
 						if (m_Logic->IsLoading()) {
 							m_WaitingUsers.push_back(user);
 							LoggerInstance().Info("Room({0})::JoinEndUser - Adding user:{1} to the waiting list", m_RoomIndex, user->GetSerial());
@@ -216,7 +217,7 @@ namespace Lunia {
 					}
 					break;
 				case Common::PVP:
-					m_UserManager.BroadcastToUsers(loadEnd);
+					m_UserManager.BroadcastToAllEnteredUsers(loadEnd);
 					if (progress > 1.0f) {
 						//I skipped this cause too fucking long
 					}
@@ -387,7 +388,7 @@ namespace Lunia {
 			}
 			void Room::RemoveFishingUser(uint32 serial)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				LoggerInstance().Info("RemoveFishingUser Missing implementation");
 			}
 			int Room::GetFishingUserCnt() const
 			{

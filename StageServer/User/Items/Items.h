@@ -118,6 +118,7 @@ namespace Lunia {
 				~Items();
 
 				void SetPlayer(Logic::Player* player);
+				void DeletePlayer();
 				void Clear();
 
 			public:

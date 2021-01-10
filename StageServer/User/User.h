@@ -41,7 +41,6 @@ namespace Lunia {
 
 				void Init();
 				void Flush();
-				void SetSerial(const uint64& userSerial);
 				void RoomParted();
 				void Terminate();
 				void Close();
@@ -53,9 +52,16 @@ namespace Lunia {
 				void AutoSaveUserInfo(const DWORD& nowTime, const uint32& synchronizePlayerDataInMs);
 				void SavePlayerData();
 				void RebirthCharacter(const XRated::ItemPosition& itemPosition);
-				
-
+				void UpdateExpFactor();
+				void LoadStage(const StageLicense& targetStage);
+				void MissionClear(const bool& success, Database::Info::StageGroup* group, const uint16& accessLevel);
+				void ObjectDestroyed(const uint32& id, const uint8& team);
+				void CheckExpiredItems();
+				void MailAlarmed();
+				void RemoveFishingUser();
+				void PlayerDeleted();
 				//Setters
+				void SetSerial(const uint64& userSerial);
 				void SetCurrentStage(const StageLicense& targetStage);
 				void SetState(const STATE& state);
 				
@@ -64,9 +70,13 @@ namespace Lunia {
 				bool AddStageLicense(const StageLicense& stageLicense, bool initial = false);
 				void SetExpFactorFromItem(XRated::Constants::ExpFactorCategoryFromItem category, const float& factor);
 				void SetFamilyExpFactor(const float& factor);
+				void SetPenaltyExpFactor(const bool& penalty);
 				void AddSkillPointPlus(const uint16& point);
 				void AddSkillLicense(const uint32& hash);
-				
+				void SetPlayerInitLife(const uint16& initLife);
+				void SetPlayerStylePointState(const StylePoint::State& state);
+				void SetUltimateSkillFlag(bool used);
+
 				void RaiseEvent(const std::vector<std::wstring>& eventInfo, const uint32& lowRank, const uint32& highRank, const DateTime& endTime);
 
 				bool UpdateInitialPlayerData();
@@ -83,7 +93,6 @@ namespace Lunia {
 				Protocol::FromServer::Family::InviteResult::Type RequestedInviteFamily(const std::wstring& ownerName);
 
 				
-				bool PlayerDeleted();
 				bool HasCharacterLicense(const Constants::ClassType& classType) const;
 				bool HasSkillLicense(const uint32& hash);
 
@@ -137,6 +146,8 @@ namespace Lunia {
 				const int64&	GetActivationSerial() const;
 				const uint64&	GetSerial() const;
 				float			GetExpFactor();
+				float			GetExtraExpFactor();
+				std::wstring	GetExtraExpString();
 				std::string		GetRoomPass() const;
 				String			GetCharacterName() const;
 				std::shared_ptr<IUserRoom>					GetRoom() const;
@@ -279,11 +290,13 @@ namespace Lunia {
 				void SendRewardMailByGuildContibutedUp();
 				void SendRewardMailByGainStageLicense(const XRated::StageLicense& license);
 				void SendMailSelf(const std::wstring& title, const std::wstring& text, const uint32& attachedMoney, const std::vector<XRated::ItemBasicInfo>& sendItems, const std::wstring& sender = L"");
+				uint16 GetMailCnt() const;
 			private:
 				FishingManager								m_FishingManager;
 			public://Network Related;
 				bool IsAdmitable(const uint32& receivedBytes, const float& costFactor = 1.0f);
 				void Send(const Protocol::IPacketSerializable& packet);
+				void Send(const Serializer::ISerializable& packet);
 				uint32 Parse(uint8* buffer, size_t size);
 				void SendToAll(Protocol::IPacketSerializable& packet);
 			public://Packet handling coming from PacketHandler
@@ -301,6 +314,7 @@ namespace Lunia {
 				uint32										m_UserId = 0;
 				uint64										m_UserSerial = 0; //database
 				STATE										m_State;
+				Constants::ShopType							m_EnterShop;
 				String										m_CharacterName = L"";
 				PetDatas									m_PetDatas;
 				std::vector<PetOrigin>						m_OriginPets;
@@ -343,6 +357,7 @@ namespace Lunia {
 				bool										m_IsEnableToJoinNextLicense = false;
 				bool										m_DoesHaveGuildInfo = false;
 				bool										m_RequestedInitGuildInfoToDB = false;
+				bool										m_UsedUltimateSkill = false;
 				AllMGuildInfo								m_AllMGuildInfo = AllMGuildInfo();
 				CharacterRewardStateFlags					m_CharacterRewardStateFlags = 0;
 				DWORD										m_LastDataSavedTime = 0;

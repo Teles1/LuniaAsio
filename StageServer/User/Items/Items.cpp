@@ -57,7 +57,14 @@ namespace Lunia {
 
 				itemRequirement.Clear();
 
-				if (player == NULL) return;
+			}
+
+			void Items::DeletePlayer()
+			{
+				AutoLock lock(cs);
+				//delete player; not needed since this is being deleted by the caller.
+				this->player = nullptr;
+				itemRequirement.Clear();
 			}
 
 

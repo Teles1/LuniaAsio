@@ -1,67 +1,77 @@
 #pragma once
-#include "User.h"
+#include <Core/GameConstants.h>
+#include <Logic/Logic.h>
+#include <Network/Api/Api.h>
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
 			class User;
-			struct RoomUserManager {
-				typedef std::shared_ptr<User> UserSharedPtr;
+			typedef std::shared_ptr<User> UserSharedPtr;
+
+			typedef std::map<const std::wstring, UserSharedPtr>	stringUserMap;
+			typedef std::map<unsigned int, UserSharedPtr>		serialUserMap;
+
+
+			class RoomUserManager
+			{
 			public:
 				RoomUserManager();
 				RoomUserManager(const RoomUserManager&);
 				~RoomUserManager();
+
 			public:
-				uint16 NowCount(const bool& countSpectators = true) const;
-				uint16 MaxCount() const;
+				void AddNameUser(const std::wstring& name, UserSharedPtr user);
+				void AddSerialUser(unsigned int serial, UserSharedPtr user);
+				bool DelNameUser(const std::wstring& name);
+				bool DelSerialUser(unsigned int serial);
 
-				void AddUser(UserSharedPtr user);
-				void AddPlayer(const uint64& serial, UserSharedPtr user);
+				void Clear();
+				void ClearNameUser();
+				void ClearSerialUser();
 
-				bool RemoveUser(const uint64& userId);
-				bool RemovePlayer(const uint64& serial);
+				UserSharedPtr GetUser(const std::wstring& name);
+				UserSharedPtr GetUser(unsigned int serial);
 
-				UserSharedPtr GetUser(const uint32& userId);
-				UserSharedPtr GetPlayer(const uint64& serial);
-
-				std::unordered_map<uint64, UserSharedPtr>& GetUsers();
-				std::unordered_map<uint64, UserSharedPtr>& GetPlayers();
-
-				bool DoesExist(UserSharedPtr user) const; // User
-				bool DoesExist(const uint64& userId) const; // User
+				bool IsExist(UserSharedPtr user);
+				bool IsExist(const std::wstring& userName);
 
 				bool IsEnableStage(const StageLicense& targetStage);
 				bool IsJoinningUser();
 
-				void Update(const float& dt);
-				void GetSpectatorNames(std::vector<std::wstring>& names);
-				void BroadcastToSpectators(Protocol::IPacketSerializable& value);
-				void BroadcastToSpectators(Protocol::IPacketSerializable& value, const String& ignoreUserName);
+				void Update(float dt);
+				void UpdateMailAlarm(float dt);
+				void GetSpectatorNames(std::vector< std::wstring >& names);
+				void BroadcastToSpectators(Serializer::ISerializable& value);
+				void BroadcastToSpectators(Serializer::ISerializable& value, const std::wstring& ignoreUserName);
 
-				void BroadcastToPlayers(Protocol::IPacketSerializable& value);
-				void BroadcastToUsers(Protocol::IPacketSerializable& value);
+				void BroadcastToSerialUsers(Serializer::ISerializable& value);
+				void BroadcastToSerialUsers(Serializer::ISerializable& value, unsigned int ignoreUserSerial, const std::wstring& ignoreUserName);
 
-				void BroadcastToTeam(const uint16& teamNo, Protocol::IPacketSerializable& value);
-				void BroadcastFishingInfo(const bool& fishing, Protocol::IPacketSerializable& value);
+				void BroadcastToAchivementUsers(Serializer::ISerializable& value);
+				void BroadcastToAllEnteredUsers(Serializer::ISerializable& value);
 
-				void KickVoteBroadCasting(Protocol::IPacketSerializable& value, const String& targetName);
+				void BroadcastToTeam(int teamNo, Serializer::ISerializable& value);
+				void BroadcastFishingInfo(bool fishing, Serializer::ISerializable& value);
+				void Flush();
 
+				void KickVoteBroadCasting(Serializer::ISerializable& value, std::wstring& targetName);
 				void KickAllUsers();
-				void KickTeam(const int teamNo);
-
+				void KickTeam(int teamNo);
+				//void SetExpFactor(float factor);
 				void SetExpPanelty();
 				void UpdateExpFactor(Logic::ILogic* logic);
-				void LoadStage(const XRated::StageLicense& targetStage);
+				void LoadStage(const StageLicense& targetStage);
 				void StageLifeInit(const Database::Info::StageGroup* info, bool forceToInitialize = false);
+				void SendCashItemViewInfo(UserSharedPtr user);
 
-				void SendCashItemViewInfo(const UserSharedPtr user);
-				void CashItemView(const UserSharedPtr user, std::pair< uint16, uint16 > flag);
-				std::pair<uint16,uint16> GetCashItemViewFlag(const UserSharedPtr user);
+				void CashItemView(UserSharedPtr user, std::pair< uint16, uint16 > flag);
+				std::pair< uint16, uint16 > GetCashItemViewFlag(const UserSharedPtr user);
 				int GetCashItemViewCnt() const;
 				void ClearCashItemViewList();
 
 				int GetTeamCnt(int teamNo);
 
-				void MissionClear(bool success, Database::Info::StageGroup* stageGroup, uint16 accessLevel);
+				void MissionClear(bool success,Database::Info::StageGroup* stageGroup, uint16 accessLevel);
 
 				/* quest events */
 				void ObjectDestroyed(uint32 id, uint8 team);
@@ -72,32 +82,49 @@ namespace Lunia {
 				void GetUserNames(std::vector<std::wstring>& userNames); // param is output
 				void GetTeamNames(int teamNo, std::vector<std::wstring>& userNames); // param is output
 
-				uint16 TotalCnt() const;
-				uint16 MaxCnt() const;
-				uint16 NowCnt() const;
+				///
+				stringUserMap& GetNameUsers();
+				serialUserMap& GetSerialUsers();
 
-				uint16 CountCurrent(bool includeSpectator = true) const;
+				int TotalCnt() const;
+				int MaxCnt() const;
+				int NowCnt() const;
 
-				void Flush();
-				void Clear();
-			public: // mail related
+				int	CountCurrent(bool includeSpectator = true)	const;
 				void CheckMailAlaram(UserSharedPtr user);
-			private:
-				void ClearPlayers();
-				void ClearUsers();
-				struct MailAlarm {
-					std::map<std::wstring, bool> m_UserList;
-					void Init();
-				} m_MailAlarm;
-			private:
-				mutable std::mutex m_Mtx;
-				std::unordered_map<uint64, UserSharedPtr> m_Users; //kind of temporary in a sense. This is before the Player gets created. NamedUsers
 
-				mutable std::mutex m_PlayersMtx;
-				std::unordered_map<uint64, UserSharedPtr> m_Players;//serial users
-				uint16 m_MaxCount = 0;
-				const uint32 SaveTimeInMs;
+			private:
+				struct UserFinder {
+					String userName;
+					UserFinder(const String& name);
+					bool operator()(std::map<const std::wstring, UserSharedPtr>::value_type& i);
+				};
+
+			private:
+				stringUserMap nameUsers;	// All of users on room
+				serialUserMap serialUsers;	// Active users on logic
+
+				std::map< XRated::Serial /*player serial*/, std::pair< uint16, uint16 > /*cash item flag*/> cashItemViewList; 
+				uint32 SaveTimeInMs;
+				size_t totalCnt;
+				size_t maxCnt; // This may be significant at Square
+
+				mutable std::mutex cs;
+
+				mutable std::mutex updateCS;
+
+			private: //Mail
+				struct MailAlarm {
+					float INTERVAL;
+					float elapsedTime;
+					std::map<std::wstring, bool >	userlist;
+					void Init();
+					bool Update(float dt);
+				} mailAlarm;
+			public:
+				void MailAlarmed(const UserSharedPtr&, const Net::Answer& answer);
 			};
+
 		}
 	}
 }

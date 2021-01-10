@@ -87,6 +87,16 @@ namespace Lunia {
 			{
 			}
 
+			void UserManager::StageChanged(UserSharedPtr user)
+			{
+				//communicators.PlayerStore.Close(user);
+				//communicators.Trader.Cancel(user);
+				if (user->IsFishing())
+				{
+					user->RemoveFishingUser();
+				}
+			}
+
 			UserManager::~UserManager() {}
 
 			UserManager::UserManager() {}

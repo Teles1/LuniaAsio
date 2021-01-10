@@ -45,6 +45,11 @@ namespace Lunia {
 				Logger::GetInstance().Info(L"Sending packet[{0}] to User@{1}", packet.GetTypeName(), this->GetSerial());
 				this->SendAsync(reinterpret_cast<uint8*>(buffer.GetData()), buffer.GetLength());
 			}
+
+			void User::Send(const Serializer::ISerializable& packet)
+			{
+				Send(*(Protocol::IPacketSerializable*)(&packet));
+			}
 			
 			uint32 User::Parse(uint8* buffer, size_t size) {
 				/*
@@ -854,6 +859,12 @@ namespace Lunia {
 				m_UserSerial = userSerial;
 			}
 
+			void User::RemoveFishingUser()
+			{
+				if (m_Room)
+					m_Room->RemoveFishingUser(GetSerial());
+			}
+
 			const int64& User::GetActivationSerial() const
 			{
 				return m_RoomActivationSerial;
@@ -1065,6 +1076,12 @@ namespace Lunia {
 				//Update the user with the time.
 			}
 
+			void User::SetPlayerStylePointState(const StylePoint::State& state)
+			{
+				if (m_Player)
+					m_Room->ChangeStylePointStateToLogic(m_Player, state);
+			}
+
 			void User::RoomJoined(std::shared_ptr<IUserRoom> room, StageLicense& targetStage)
 			{
 				this->m_Room = room;
@@ -1164,6 +1181,11 @@ namespace Lunia {
 					}
 					m_Player->SetGainNormalExp(0);
 				}
+			}
+
+			void User::SetUltimateSkillFlag(bool used)
+			{
+				m_UsedUltimateSkill = used;
 			}
 
 			void User::UpdateStackedPlayTime(const float& dt)
@@ -1333,6 +1355,52 @@ namespace Lunia {
 
 			}
 
+			void User::UpdateExpFactor()
+			{
+				AutoLock lock(m_PlayerInitialData.SyncRoot);
+				m_PlayerInitialData.Factors.ExpFactor = m_ExpFactorManager.TotalExpFactor();
+
+				Protocol::FromServer::ChangeBaseExpFactor packet;
+				packet.ExpFactor = ConfigInstance().Get("BaseExp", 1.0f);
+				Send(packet);
+			}
+
+			void User::LoadStage(const StageLicense& targetStage)
+			{
+				SavePlayerData(); 
+				m_ExpFactorManager.SetGuild(false);
+
+
+				PlayerDeleted();
+				{
+					AutoLock lock(m_PlayerInitialData.SyncRoot);
+					for(auto& pet: m_PlayerInitialData.pets)
+						pet.Appear = false;
+				}
+				m_ExpFactorManager.ClearItemExpFactor();
+				m_ExpFactorManager.ClearGuildExpFactor();
+				m_ExpFactorManager.ClearDifficultyExpFactor();
+
+				m_EnterShop = XRated::Constants::ShopType::Decorative;
+				m_State = LOAD;
+				SetCurrentStage(targetStage);
+
+				m_Items.ResetExpiredBag();
+
+				Protocol::FromServer::Stage stage;
+				stage.charactername = GetCharacterName();
+				stage.targetStage = targetStage;
+				Send(stage);
+
+				m_LoadEnded = false;
+			}
+
+			void User::MissionClear(const bool& success, Database::Info::StageGroup* group, const uint16& accessLevel)
+			{
+				if (m_Room && m_Player)
+					m_FamilyManager.MissionClear(success, group, accessLevel);
+			}
+
 			void User::RemoveGuildAdvantage()
 			{
 				AutoLock lock(m_UserMtx);
@@ -1361,6 +1429,11 @@ namespace Lunia {
 			void User::SendMailSelf(const std::wstring& title, const std::wstring& text, const uint32& attachedMoney, const std::vector<XRated::ItemBasicInfo>& sendItems, const std::wstring& sender)
 			{
 				//m_MailBoxManager.SendMailSelf(this, title, text, attachedMoney, sendItems, sender);
+			}
+
+			uint16 User::GetMailCnt() const
+			{
+				return m_MailBoxManager.GetMailCnt();
 			}
 
 			void User::LockItems(bool state)
@@ -1430,9 +1503,31 @@ namespace Lunia {
 					m_IsEnableToJoinNextLicense = false;
 			}
 
+			void User::ObjectDestroyed(const uint32& id, const uint8& team)
+			{
+				m_QuestManager.ObjectDestroyed(shared_from_this(), id, team);
+				/*if (achievement.IsConnected()) {
+					Net::Protocol::Achievement::ServerProtocol::KilledNpc packet;
+					packet.characterName = GetName();
+					packet.npcHashes.push_back(id);
+					achievement.Send(packet);
+				}*/
+			}
+
 			void User::SetState(const STATE& state)
 			{
 				m_State = state;
+			}
+
+			void User::CheckExpiredItems()
+			{
+				if (m_Items.IsExpiredItem())
+					m_ItemsChanged = true;
+			}
+
+			void User::MailAlarmed()
+			{
+				m_MailBoxManager.MailAlarmed();
 			}
 
 			void User::SetGuildInfo(const AllMGuildInfo& info)
@@ -1523,6 +1618,12 @@ namespace Lunia {
 				m_Room->ChangedExpFactor(shared_from_this());
 			}
 
+			void User::SetPenaltyExpFactor(const bool& penalty)
+			{
+				m_ExpFactorManager.SetPenal(penalty);
+				UpdateExpFactor();
+			}
+
 			void User::AddSkillPointPlus(const uint16& point)
 			{
 				m_Room->AddSkillPointPlus(m_Player, point);
@@ -1534,6 +1635,12 @@ namespace Lunia {
 				Net::Api request("AddSkillLicense");
 				request << GetSerial() << hash;
 				request.GetAsync();
+			}
+
+			void User::SetPlayerInitLife(const uint16& initLife)
+			{
+				AutoLock lock(m_PlayerInitialData.SyncRoot);
+				m_PlayerInitialData.life = initLife;
 			}
 
 			void User::SetRequestedInitGuildInfo(bool request)
@@ -2344,6 +2451,33 @@ namespace Lunia {
 				return m_ExpFactorManager.TotalExpFactor();
 			}
 
+			float User::GetExtraExpFactor()
+			{
+				return m_ExpFactorManager.ExtraExpFactor();
+			}
+
+			std::wstring User::GetExtraExpString()
+			{
+				float fExtraExpFactor = m_ExpFactorManager.ExtraExpFactor();
+				int iExtraExpFactor = static_cast<int>(m_ExpFactorManager.ExtraExpFactor());
+
+				if ((fExtraExpFactor / 1.0f) == iExtraExpFactor)
+					return StringUtil::ToUnicode(iExtraExpFactor);
+
+				else
+				{
+					float fResult = fExtraExpFactor - iExtraExpFactor;
+
+					int iResult = static_cast<int>(fResult / 0.1f);
+
+					std::wstring result = StringUtil::ToUnicode(iExtraExpFactor);
+					result += L".";
+					result += StringUtil::ToUnicode(iResult);
+
+					return result;
+				}
+			}
+
 			void User::RoomParted()
 			{
 				UpdateInitialPlayerData();
@@ -2464,10 +2598,11 @@ namespace Lunia {
 				}
 			}
 
-			bool User::PlayerDeleted()
+			void User::PlayerDeleted()
 			{
-				LoggerInstance().Warn("User({0})::PlayerDeleted - NotImplemented", GetSerial());
-				return true;
+				AutoLock playerLock(m_PlayerMtx);
+				delete m_Player;
+				m_Items.DeletePlayer();
 			}
 
 			bool User::HasCharacterLicense(const  Constants::ClassType& classType) const
