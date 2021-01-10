@@ -7,9 +7,9 @@ namespace Lunia {
 			const bool xmlLoad = false;
 			void LuniaDatabase::Init() {
 				InfoCollections.Actions.Init(xmlLoad);
-				//InfoCollections.Items.Init(xmlLoad);
+				InfoCollections.Items.Init(xmlLoad);
 				InfoCollections.Npcs.Init(xmlLoad);
-				//InfoCollections.Miscs.Init(xmlLoad);
+				InfoCollections.Miscs.Init(xmlLoad);
 				//InfoCollections.Projectiles.Init(xmlLoad);
 				InfoCollections.Skills.Init(xmlLoad);
 				InfoCollections.Stages.Init(xmlLoad);
