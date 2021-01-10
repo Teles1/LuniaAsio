@@ -49,7 +49,6 @@ namespace Lunia {
 						reader = new FileIO::RefCountedMemoryStreamReader(&lReplayBuffer[0], uint32(lReplayBuffer.size()));
 						GetData(reader, itr.second);
 					}
-					std::cout << compressedActionsCbf->GetReadCursor() << std::endl;
 					delete[] buffer;
 				}
 				void CompressedActionInfoManager::GetData(Resource::StreamReader& reader, ActionInfoManager::Actions& actionMap) {

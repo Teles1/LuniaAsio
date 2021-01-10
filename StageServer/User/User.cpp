@@ -1,4 +1,8 @@
 #pragma once
+#include <functional>
+#include <mmsystem.h>
+#include <algorithm>
+#pragma comment( lib, "Winmm.lib" )
 #include <StageServer/User/UserManager.h>
 #include <Network/NetStream.h>
 #include <Network/CommonProtocol/Protocol.h>
@@ -7,8 +11,6 @@
 #include <StageServer/User/IUserRoom.h>
 #include <Core/ErrorDefinition.h>
 #include <StageServer/Services/ItemSerial.h>
-#include <mmsystem.h>
-#pragma comment( lib, "Winmm.lib" )
 #include <StageServer/User/Items/Enchanter.h>
 #include "User.h"
 namespace Lunia {
@@ -2715,6 +2717,66 @@ namespace Lunia {
 
 			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::Chat& packet)
 			{
+				AutoLock lock(m_UserMtx);
+
+				if (!m_Room)
+					return;
+
+				if (packet.message.size() > 0 && packet.message[0] == L'&' && m_CharacterStateFlags.IsAdmin) // kind of hack
+				{
+					std::vector<String> parsed;
+					StringUtil::Split(packet.message.begin() + 1, packet.message.end(), L' ', parsed);
+
+					// parse each command
+					if (parsed[0] == L"item") // give an item
+					{
+						/* parameters : item_hash [stacked_count=1] [instance=0] */
+
+						uint32 itemHash(0);
+						uint16 stackedCount(1);
+						InstanceEx instance(0);
+
+						switch (parsed.size())
+						{
+						case 1: return; // no effects;
+						case 4: instance = StringUtil::ToInt64(parsed[3]);
+						case 3: stackedCount = StringUtil::ToInt(parsed[2]); if (stackedCount == 0) stackedCount = 1;
+						case 2: itemHash = StringUtil::ToInt(parsed[1]);
+							break;
+						default:
+							return;
+						}
+
+						ItemAdd(itemHash, 0, stackedCount, instance);
+					}
+					else if (parsed[0] == L"swap")
+					{
+						Protocol::ToServer::EquipSwap packet;
+						packet.Set = StringUtil::ToInt(parsed[1]);
+						Dispatch(shared_from_this(), packet);
+					}
+					else // assume logic commands
+					{
+						m_Room->DebugCommand(shared_from_this(), packet.message.c_str() + 1);
+					}
+				}
+				else if (!m_Player && m_CharacterStateFlags.IsSpectator)
+				{
+					m_Room->SpectatorChat(m_CharacterName, packet);
+				}
+				else if (m_Player)
+				{
+					m_Room->Chat(m_Player->GetSerial(), packet);
+				}
+				/* 'chat.message' should not be used after logging because chat.message replaced by filter */
+				//std::replace_if(packet.message.begin(), packet.message.end(), std::bind(std::equal_to<wchar_t>(), L','), L'.');
+				//Logger().Write(IAdmLogger::ChatLogger, "chat", name, Service::Http::Logger::Parameter() << static_cast<int>(chat.chattype) << chat.message);
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::EquipSwap& packet)
+			{
+				AutoLock lock(m_UserMtx);
+				m_Items.SwapEquipment(packet.Set);
 			}
 
 			int User::GetRequiredSlotCount(const std::vector<std::pair<uint32, uint32>>& toRemove, const std::vector<std::pair<uint32, uint32>>& toAdd, const uint32& availablecount) const

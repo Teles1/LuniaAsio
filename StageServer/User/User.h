@@ -312,6 +312,7 @@ namespace Lunia {
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Chat& packet);
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::ListItem& packet);
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::ListQuickSlot& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::EquipSwap& packet);
 			public://Db callbacks
 				void LicenseAquired(const UserSharedPtr& user, const Net::Answer& answer);
 				void PetCreated(const UserSharedPtr& user, const Net::Answer& answer);

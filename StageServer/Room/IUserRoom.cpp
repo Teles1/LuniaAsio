@@ -12,11 +12,43 @@ namespace Lunia {
 			}
 			void Room::SpectatorChat(const String& characterName, Protocol::ToServer::Chat& chat)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				Protocol::FromServer::SpectatorChat sendchat;
+				sendchat.characterName = characterName;
+				sendchat.chattype = chat.chattype;
+				sendchat.message = chat.message;
+
+				switch (chat.chattype)
+				{
+				case XRated::Constants::ChatTypes::TeamChat:
+				{
+					m_UserManager.BroadcastToSpectators(sendchat);
+				}
+				break;
+				}
 			}
 			void Room::Chat(const uint64& serial, Protocol::ToServer::Chat& chat)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				UserSharedPtr user = m_UserManager.GetUser(serial);
+				if (!user)
+					return;
+
+				Protocol::FromServer::Chat sendchat;
+				sendchat.playerserial = serial;
+				sendchat.chattype = chat.chattype;
+				sendchat.message = chat.message;
+
+				switch (chat.chattype)
+				{
+				case XRated::Constants::ChatTypes::TeamChat:
+				{
+					m_UserManager.BroadcastToTeam(user->GetTeamNumber(), sendchat);
+				}
+				break;
+
+				default:
+					m_UserManager.BroadcastToSerialUsers(sendchat);
+					break;
+				}
 			}
 			void Room::Voice(const uint64& serial, Protocol::ToServer::Voice& voice)
 			{
