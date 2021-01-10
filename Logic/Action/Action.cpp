@@ -968,7 +968,7 @@ namespace Lunia
 
 					if ( actionInfo ) 
 					{
-						LoggerInstance().Info(L"ActionHash: {}", actionInfo->hash);
+						//LoggerInstance().Info(L"ActionHash: {}", actionInfo->hash);
 						actionName = actionInfo->hash;
 
 						if ( atkRate > 1.0f )

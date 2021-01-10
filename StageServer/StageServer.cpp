@@ -2,7 +2,6 @@
 #include "Network/Api/Api.h"
 #include "StageServer.h"
 #include <StageServer/User/UserManager.h>
-#include <StageServer/PacketHandler.h>
 #include <Info/Info.h>
 
 namespace Lunia {
@@ -50,7 +49,6 @@ int main(int argc, char* argv[])
 	//setting log name to be used on the console.
 	Lunia::Logger::GetInstance("StageServer");
 	Lunia::Config::GetInstance( "Config_Stage.json" );
-	InitHandlers();
 	Lunia::Resource::ResourceSystemInstance().AddPath(L"../x64/Debug/");
 	DatabaseInstance().Init();
 	//Load Config

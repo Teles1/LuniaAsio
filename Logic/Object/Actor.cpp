@@ -502,7 +502,6 @@ namespace Lunia
 				actions.Pause( dt );
 				pauseTime = dt;
 
-				//현재 상태 stack 에 들어 있는 상태들을 처리 허자고.
 				std::list< Stat::IState* >::iterator iter;
 				for ( iter = stateBuffers.state_ordinary.begin(); iter != stateBuffers.state_ordinary.end(); ++iter )
 				{
@@ -517,7 +516,7 @@ namespace Lunia
 
 			bool Actor::Command( Action::Action::CommandType state, uint32 param )
 			{
-				LoggerInstance().Info("Actor::Command() - ({},{})", (uint16)state, param);
+				//LoggerInstance().Info("Actor::Command() - ({},{})", (uint16)state, param);
 				switch ( state ) 
 				{
 				case Action::Action::CommandType::MOVE :

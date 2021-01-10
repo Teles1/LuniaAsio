@@ -285,43 +285,6 @@ namespace Lunia {
 				return m_users[userSerial]->AuthConnection(result);
 			}
 
-			void UserManager::AuthedConnection(const UserSharedPtr& user, const Net::Answer& answer)
-			{
-				if (answer.errorCode == 0) {
-					if (!answer.resultObject.is_null()) {
-						if (!UserManagerInstance().AuthenticateUser(user->GetId(), answer.resultObject)) {
-							Logger::GetInstance().Error("UserManager::AuthenticateUser() Could not Authenticate user");
-							user->Terminate();
-						}
-						else {
-							Logger::GetInstance().Info("Authed {0},{1},{2}", user->m_CurrentStage.StageGroupHash, user->m_CurrentStage.Level, user->m_CurrentStage.Difficulty);
-							Net::Api api("Auth");
-							api << user->GetCharacterName();
-							api.GetAsync(this, &UserManager::Authed, user);
-						}
-					}
-					else
-						Logger::GetInstance().Warn("Result code is 0 but the data is empty.");
-				}
-				else
-					user->Terminate();
-			}
-
-			void UserManager::Authed(const UserSharedPtr& user, const Net::Answer& answer)
-			{
-				if (answer.errorCode == 0 && !answer.resultObject.is_null()) {
-					if (user->Auth(answer.resultObject)) {
-						UserManagerInstance().RoomAuth(user);
-						return;
-					}
-					else
-						Logger::GetInstance().Warn(L"Could not authenticate user={0}", user->GetSerial());
-				}
-				else
-					Logger::GetInstance().Warn(L"Could not handle the call api to Auth user = {0}", user->GetSerial());
-				user->Terminate();
-			}
-
 			void UserManager::RoomAuth(const UserSharedPtr& user)
 			{
 				if (!RoomManagerInstance().RoomJoin(user->GetRoomIndex(), user, user->GetRoomPass())) {
