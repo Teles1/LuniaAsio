@@ -27,7 +27,11 @@ namespace Lunia {
 
 				void CompressedActionInfoManager::LoadCBFInData()
 				{
+					Resource::StreamReader reader;
+					uint8* buffer = new uint8[4];
+
 					Resource::StreamReader compressedActionsCbf = Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/ActionInfos.cbf");
+					std::vector<uint8> lReplayBuffer;
 					compressedActionsCbf->SetReadCursor(0, Lunia::IStream::Begin);
 					for (auto& itr : actionMap) {
 						if (itr.second.compressedActionMap.size() == 0) {
@@ -36,13 +40,44 @@ namespace Lunia {
 							// this might not be needed but i'm doing it anyways.
 							continue;
 						}
-						uint8* buffer = new uint8[4];
 						compressedActionsCbf->Read(buffer, 4);
 						uint32 srcSize = (size_t)(*(int*)buffer);
-						std::vector<uint8> lReplayBuffer;
 						lReplayBuffer.resize(srcSize);
 						compressedActionsCbf->Read(&lReplayBuffer[0], (uint32)srcSize);
-						itr.second.compressedData = std::move(lReplayBuffer);
+						//itr.second.compressedData = std::move(lReplayBuffer);
+						reader = new FileIO::RefCountedMemoryStreamReader(&lReplayBuffer[0], uint32(lReplayBuffer.size()));
+						GetData(reader, itr.second);
+					}
+					delete[] buffer;
+				}
+				void CompressedActionInfoManager::GetData(Resource::StreamReader& reader, ActionInfoManager::Actions& actionMap) {
+					std::vector<uint8> Buffer;
+					Buffer.resize(4);
+					size_t COMPRESSED_SIZE = 0;
+					size_t UNCOMPRESSED_SIZE = 0;
+					std::vector<uint8> inBuf;
+					std::vector<uint8> outBuf;
+
+					while (reader->GetSizeLeft() > 0) {
+						reader->Read(&Buffer[0], 4);
+						COMPRESSED_SIZE = *(int*)&Buffer[0];
+
+						reader->Read(&Buffer[0], 4);
+						UNCOMPRESSED_SIZE = *(int*)&Buffer[0];
+
+						/* Setting buffer input and output sizes*/
+						inBuf.resize(COMPRESSED_SIZE + LZMA_PROPS_SIZE);
+						outBuf.resize(UNCOMPRESSED_SIZE);
+
+						reader->Read(inBuf.data(), (uint32)inBuf.size());
+
+						/*decoding and decrypting the binary owo*/
+						SRes res = LzmaUncompress(outBuf.data(), &UNCOMPRESSED_SIZE, inBuf.data() + LZMA_PROPS_SIZE, &COMPRESSED_SIZE, inBuf.data(), LZMA_PROPS_SIZE);
+
+						Resource::SerializerStreamReader BlockDecrypted = Serializer::CreateBinaryStreamReader(
+							new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)UNCOMPRESSED_SIZE)
+						);
+						BlockDecrypted->Read(L"ActionsInfoManager", actionMap.actions, false);
 					}
 				}
 				void CompressedActionInfoManager::GetData(ActionInfoManager::Actions& actionMap)
@@ -78,6 +113,7 @@ namespace Lunia {
 						BlockDecrypted->Read(L"ActionsInfoManager", actionMap.actions, false);
 					}
 					actionMap.compressedData.clear();
+					delete &reader;
 				}
 				/*
 				ActionInfo* CompressedActionInfoManager::Retrieve(const wchar_t* actionName)
@@ -92,7 +128,6 @@ namespace Lunia {
 				}*/
 				ActionInfoManager::Actions& CompressedActionInfoManager::Retrieve(const wchar_t* templateName) {
 					auto i = actionMap.find(templateName);
-					
 					if (i != actionMap.end())
 					{
 						//if there is actions in the list but the number of actionsInfo loaded doesn't match it means that we should be reading the cbf.

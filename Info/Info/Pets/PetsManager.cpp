@@ -326,7 +326,7 @@ namespace Lunia {
 						petNpcData.HashcodeName = StringUtil::Hash(petNpcData.Name.c_str());
 						petNpcData.DefaultMeshs = itr->second.DefaultMeshs;
 
-						if (DatabaseInstance().InfoCollections.Npcs.Retrieve(petNpcData.Name.c_str()) == NULL) {
+						if (DatabaseInstance().InfoCollections.Npcs.Retrieve(petNpcData.Name.c_str()) == nullptr) {
 							DatabaseInstance().InfoCollections.Npcs.Add(petNpcData);
 						}
 						else

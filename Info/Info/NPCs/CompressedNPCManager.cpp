@@ -63,12 +63,10 @@ namespace Lunia {
 				}
 
 				NonPlayerInfo* CompressedNPCInfoManager::Retrieve(const uint32& hash) {
-					if (compressedNpcs.dataPosition.find(hash) == compressedNpcs.dataPosition.end())
-						return nullptr;
 					if (this->Npcs.find(hash) != this->Npcs.end())
 						return &Npcs[hash];
 					GetNPC(compressedNpcs.dataPosition[hash]);
-					return &Npcs[hash];
+					return Npcs[hash].Name != L"" ? &Npcs[hash] : nullptr;
 				}
 
 				NonPlayerInfo* CompressedNPCInfoManager::Retrieve(const wchar_t* name) {
