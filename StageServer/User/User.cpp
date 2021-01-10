@@ -79,7 +79,8 @@ namespace Lunia {
 				, playTimeEventCheckIntervalInSec(ConfigInstance().Get("PlayTimeCheckIntervalInSec", 60.0f))
 			{
 				Logger::GetInstance().Info("User :: Hey, I was created!", GetId());
-				StartBind();
+				
+				BindPackets();
 			}
 
 			void User::Init() {
@@ -91,7 +92,7 @@ namespace Lunia {
 				Send(way);
 			}
 
-			void User::StartBind()
+			void User::BindPackets()
 			{
 				m_Parser.Bind<Protocol::ToServer::Stage>(*this, &User::Dispatch);
 				m_Parser.Bind<Protocol::ToServer::Alive>(*this, &User::Dispatch);

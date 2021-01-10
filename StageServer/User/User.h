@@ -41,7 +41,7 @@ namespace Lunia {
 				std::shared_ptr<User> shared_from_this();
 
 				void Init();
-				void StartBind();
+				void BindPackets();
 				void Flush();
 				void RoomParted();
 				void Terminate();
