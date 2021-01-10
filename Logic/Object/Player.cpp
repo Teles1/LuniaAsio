@@ -1064,7 +1064,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 		RemoveState(stateBuffers.state_defence, Info::StateInfo::Type::GHOST);
 		SetAction( Info::HashTable::Actions::Stand, NULL, true);
-		//���⿡ ����ġ�� ���� �۾��ϸ�ȴ�. ��Ȱ�׼�
 		if ( stageData->GetStageGroupInfo()->GameType & XRated::Constants::GameTypes::PvpGameTypeMask )
 		{
 			if( characterStateFlags.IsInvincibleAfterRevive == 1 )
@@ -1182,7 +1181,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 				else if( ghostRule == Constants::GhostRules::Type::AutoTimeRevive_Sec5 )
 				{
 					if ( tGhost > Constants::GhostRules::tGhostWhenAutoTimeRevive_Sec5 ) {
-						//StageInfo���� respawn point�� ���ͼ� ��ġ�� �Ű�����.
 						float3 respawnPos;
 						if ( stageData->GetRespawnPos(characterData.Team, respawnPos) )
 							SetPosition(respawnPos);
@@ -1192,7 +1190,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 				else if( ghostRule == Constants::GhostRules::Type::AutoTimeRevive_Sec3 )
 				{
 					if ( tGhost > Constants::GhostRules::tGhostWhenAutoTimeRevive_Sec3 ) {
-						//StageInfo���� respawn point�� ���ͼ� ��ġ�� �Ű�����.
 						float3 respawnPos;
 						if ( stageData->GetRespawnPos(characterData.Team, respawnPos) )
 							SetPosition(respawnPos);
@@ -1202,15 +1199,12 @@ namespace Lunia { namespace XRated {	namespace Logic {
 				break;
 			case Constants::GhostRules::Type::InstantPop :
 				tGhost += dt;
-				//3�ʰ� ������ �������.
 				if ( tGhost > Constants::GhostRules::tGhostWhenInstantPop )
 					Revive( ReviveStatus::None, true);
 				break;
 			case Constants::GhostRules::Type::InstantPopAtWill :
 				tGhost += dt;
-				//5�ʰ� ������ �������.
 				if ( tGhost > Constants::GhostRules::tGhostWhenInstantPop ) {
-					//StageInfo���� respawn point�� ���ͼ� ��ġ�� �Ű�����.
 					float3 respawnPos;
 					if ( stageData->GetRespawnPos(characterData.Team, respawnPos) )
 						SetPosition(respawnPos);
@@ -1219,8 +1213,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 				break;
 			}
 		} else if ( CheckState(Database::Info::StateInfo::Type::MORPH) ) {
-			//TODO : ���̻����� �� �Ź� ȣ�����ִ� ���� ��ȿ��. ���� �����غ���. by jiff100
-			autoActionManager.Init(); //���εƴٸ� ���̻� �ڵ��׼��� �̾����� �ʴ´�.
+			autoActionManager.Init(); 
 
 			if ( GetHP() <= 0 ) 
 			{
@@ -1253,7 +1246,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			skillManager.CoolDown(dt);
 		}
 
-		// ��ȯ�Ǿ� �ִ� Pet ����ġ ������Ʈ : Pet ���� ���Ŀ� Player ������ �Űܼ� dt�� �Բ� ���
 		PetUpdate(dt);
 
 		UpdateAutoLinkAction(dt);
@@ -1283,7 +1275,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 	void Player::XpGained(XRated::Constants::ExpAcquiredType type, uint64 xp, bool bUsingExpFactor, bool bUsingWeightValue, Serial beKilledNpc)
 	{
-		if ( GetPlayTimePenalty() & XRated::Constants::PlayTimePenalty::Exp ) { //�����ߵ������ý��� ������
+		if ( GetPlayTimePenalty() & XRated::Constants::PlayTimePenalty::Exp ) { 
 			return;
 		}
 		if ( characterData.Level >= Constants::PlayerMaxLevel )
@@ -1293,7 +1285,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			xp = (uint64)((float)xp * playerData.expFactor);
 		}
 
-		//���� ����ġ �ǳʽ��� �ش�
 		if (GetLevel() >= 70)
 			xp = (uint64)((float)xp * ExpFunctions::Stage::GetAddExpFactorByRebirthCount(GetRebirthCount() ) );
 		
@@ -1369,13 +1360,11 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			}
 		
 		if (bUsingWeightValue) {
-			xp = (uint64)((float)xp * ExpFunctions::Stage::GetWeightValue(GetLevel() ) ); //���� ����ġ�� ��������
+			xp = (uint64)((float)xp * ExpFunctions::Stage::GetWeightValue(GetLevel() ) ); 
 		}
 
-		///	�������� Ŭ���� ����ġ�� �����ѵ�
 		if(type == XRated::Constants::ExpRank)
             clearXp += xp;
-		/// ����Ʈ�� ������ ��� ����ġ�� �����Ѵ�.
 		else if(type != XRated::Constants::ExpQuest)
 			stageXp += xp;
 
@@ -1405,14 +1394,13 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 	uint16 Player::PvpLevelUp(XRated::Constants::ExpAcquiredType type, int xp, uint32 xpPvp)
 	{
-		if ( GetPlayTimePenalty() & XRated::Constants::PlayTimePenalty::Exp ) { //�����ߵ������ý��� ������
+		if ( GetPlayTimePenalty() & XRated::Constants::PlayTimePenalty::Exp ) { 
 			return playerData.PvpLevel;
 		}
 
 		if ( xp > 0 )
 			xp = (int32)((float)xp * playerData.expFactor);
 
-		//playerData.PS.Xp = xp;
 
 		stageData->XpGained(this, type, 0, xp);
 
@@ -1424,7 +1412,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 				stageData->LevelUp(this, XRated::Constants::ExpType::Pvp, playerData.PvpLevel, playerData.StoredLevel);
 			}
 		} else {
-			// �ϴ� �����ٿ��� �Ͼ�� �ʰ� ���´�.
 			int currentXp = (int)playerData.PvpXp + xp;
 			if ( currentXp < 0 )
 				playerData.PvpXp = 0;
@@ -1472,7 +1459,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 				stageData->LevelUp(this, XRated::Constants::ExpType::War, playerData.WarLevel, playerData.StoredLevel);
 			}
 		} else {
-			// �ϴ� �����ٿ��� �Ͼ�� �ʰ� ���´�.
 			int currentXp = (int)playerData.WarXp + xp;
 			if ( currentXp < 0 )
 				playerData.WarXp = 0;
@@ -1497,8 +1483,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 		playerData.SkillPoint += ( characterData.Level % 4 ) ? 1 : 2;
 
-		//status�� �������ش�.
-		//�⺻���ȵ��� ���� ����
 		//RemoveDamage(playerStatus.info->MinDmg, playerStatus.info->MaxDmg);
 		status.Str -= playerStatus.info->Strength;
 		status.Dex -= playerStatus.info->Dextrity;
@@ -1506,7 +1490,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		status.Vit -= playerStatus.info->Vitality;
 		status.dmg.str = status.GetStr();
 		status.dmg.dex = status.GetDex();
-		//���� ������ �⺻ ������ ���Ѵ�.
 		playerStatus.info = DatabaseInstance().InfoCollections.Statuses.Retrieve(characterData.Level, Constants::GetClassStr(playerData.Job));
 		//AddDamage(playerStatus.info->MinDmg, playerStatus.info->MaxDmg);
 
@@ -1541,11 +1524,9 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 		status.dmg.str = status.GetStr();
 		status.dmg.dex = status.GetDex();
-		//������ �������� 2�� ������ ���ȵ��� �ٽ� ����Ѵ�.
 		RecalculateStatus();
 		ResetAllFamiliarStatusByPlayerStat();
 
-		//Hp, Mp ä���ش�. ���� �����϶��� ����
 		if ( !CheckState(Info::StateInfo::Type::GHOST) ) {
 			status.Mp = status.MaxMp;
 			status.Hp = status.MaxHp;
@@ -1553,7 +1534,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 		RemoveState(Info::StateInfo::Sort::ORDINARYSTATE, regenHPId);
 		RemoveState(Info::StateInfo::Sort::ORDINARYSTATE, regenMPId);
-		//���� regen rate�� hp�� 0�ϰ�� ���̻� regen���� �ʴ´�.
 		regenHP = new Stat::RegenHp(this, Stat::RegenHp::ChargeType::AMOUNT, playerStatus.regenHp, false);
 		AddState(regenHP);
 		regenHPId = regenHP->GetId();
@@ -1570,11 +1550,9 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 	bool Player::Tamed(Constants::Familiar::Type type, NonPlayer* object)
 	{
-		//���� ��ȯ���� �־ �������ȴ�.
 		RemoveSameFamiliar(object, type);
 		
 		{ 
-			//��ȯ���� �ִ� ���� �� �ִ� ��ġ�� �ʰ��ϸ� ó���� ��ȯ�� �༮����� �����ش�.
 			int familiarCount = 0;
 			std::list<Familiar>::iterator it = familiars.begin();
 			std::list<Familiar>::iterator firstItem = familiars.end();
@@ -1632,8 +1610,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 	void Player::FamiliarDestroyed(NonPlayer* object)
 	{
-		//�÷��̾��� ��Ʈ�ѿ� ���ؼ� familiar�� �����Ǵ� ���̽����� familiars�� �����Ƿ� ó���� �� ����.
-		//�÷��̾ �Ҹ��� ������ ���� �̹� ����Ʈ���� ������ �� �� �� �ִ�.
 		for (std::list<Familiar>::iterator i =  familiars.begin() ; i != familiars.end() ; ++i ) {
 			if ( (*i) == object ) {
 				if( object->IsPetType() == true ) {
@@ -1667,7 +1643,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 				petArray.push_back((*i).object);
 		}
 
-		if ( bSacrifice && petArray.size() > 0 ) // bSacrifice �÷��׸� �̷��� ����ϸ� �ȵǱ� ���ٵ� =��= ��.. �̰� �÷��̾ �׾������� üũ�ϴ� ����
+		if ( bSacrifice && petArray.size() > 0 )
 		{
 			petUnsummonedAfterDie = true;
 		}
@@ -1789,7 +1765,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 			NonPlayer* npc = stageData->RetrieveNPC( appearPetsTemp.at(i) );
 			if( npc != NULL ) {
 				PetUnsummon( npc );
-				//���� ���� ���� �Ѵ�.
 				stageData->ObjectDestroyed(npc , npc->GetType(), true);				
 			}else {
 				Logger::GetInstance().Error( L"ClearFamiliar : can not foudn pet npc : {0}", appearPetsTemp.at(i));
@@ -1979,7 +1954,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		autoActionManager.elapsedTime += dt;
 		if ( autoActionManager.elapsedTime >= (*autoActionManager.info)[autoActionManager.currentStep].startTime ) {
 			autoActionManager.elapsedTime -= (*autoActionManager.info)[autoActionManager.currentStep].startTime;
-			if ( autoActionManager.info->size() > autoActionManager.currentStep+1 ) {//���� �ܰ谡 ���Ҵ�. ���� �ܰ��
+			if ( autoActionManager.info->size() > autoActionManager.currentStep+1 ) {
 				++autoActionManager.currentStep;
 				if (DoAutoLinkAction() == false) {
 					autoActionManager.Init();
@@ -2015,7 +1990,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		size_t i;
 		for(i = 0; i < myPets.size(); ++i)
 		{
-			/// ��...�̷� ������....
 			//if(object->GetNPCInfo()->HashcodeName == myPets[i].PetHash)
 			if(myPets[i].Pet.Appear == true)
 			{
@@ -2046,7 +2020,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		myPets[i].PetNPCSerial = object->GetSerial();
 		AddPetEffectState(myPets[i].Pet, object);
 
-		//���� Equipments�� �ִ� ��� ���� ó�� ����.
 		const std::vector< XRated::Item > equipment( myPets[i].Pet.Equipments );				
 		myPets[i].Pet.AllUnEquipment();
 		std::vector< XRated::Item >::const_iterator iter = equipment.begin();
@@ -2207,14 +2180,12 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		{		
 			if(itr->Pet.Appear == true) {
 				if(itr->Pet.Full <= 0.0f) {
-					// ��ȯ���� �ϴ� ���� �ƴ� ������ ������� �Ѵ�
 					//PetUnsummon(itr->Pet);
 					//RemovePetEffectState( itr->Pet );
 				}
 				else {
 					if(stageData->IsSquare() == false)
 					{
-						//TODO : find�� �ʹ� ����. ����ȭ�� �ؾ� ���� ������ ���� �ȴ�.
 						{
 
 							if( itr->Pet.EffectStateDelayTime > XRated::Pet::AddEffectStateTime ) {
@@ -2224,7 +2195,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 								{
 									const wchar_t* buff = NULL;
 
-									// ������ Pet ��θ��� 0�� �ƴ� ��쿡 �ɾ��ش�.
 									if( itr->Pet.IsRarePet == true ) 
 									{
 										effectStates = Database::DatabaseInstance().InfoCollections.Pets.GetRarePetEffectBuff( itr->Pet.PetHash, playerData.Job );
@@ -2283,7 +2253,7 @@ namespace Lunia { namespace XRated {	namespace Logic {
 						if( petLevelUp )
 						{
 							// Client�� Broadcasting
-							// EffectState Delay Time ������ ������ ��Ŷ�� ������ ������ ������.. ��.. ���� ����� ������?						
+							// EffectState Delay Time						
 							NonPlayer* npcPlayer = stageData->RetrieveNPC(itr->PetNPCSerial);
 							if( npcPlayer != NULL ) {
 								RemovePetEffectState( itr->Pet );

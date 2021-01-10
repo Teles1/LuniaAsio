@@ -39,8 +39,21 @@ namespace Lunia {
 			}
 			bool Room::Command(XRated::Logic::Player* player, XRated::Constants::Command command, XRated::Constants::Direction dir)
 			{
-				LoggerInstance().Exception("Missing implementation");
-				return false;
+				if (GetRoomKind() == Common::SQUARE)
+				{
+					switch (command)
+					{
+					case Constants::Command::Move:
+					case Constants::Command::Dash:
+					case Constants::Command::Stop:
+						break;
+					default:
+						return false; // unable to use other commands
+					}
+				}
+
+				m_Logic->Command(player, command, dir);
+				return true;
 			}
 			void Room::Cast(XRated::Logic::Player* player, uint32 skill)
 			{
@@ -362,8 +375,7 @@ namespace Lunia {
 			}
 			Database::Info::StageInfo* Room::GetStageInfo() const
 			{
-				LoggerInstance().Exception("Missing implementation");
-				return nullptr;
+				return m_StageInfo;
 			}
 			void Room::FishingInfo(UserSharedPtr user, uint32 hash, uint8 baitCnt, int32 rare)
 			{
@@ -416,7 +428,10 @@ namespace Lunia {
 			}
 			void Room::ChangedExpFactor(UserSharedPtr user)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				Logic::Player* player = user->GetPlayer();
+				if (player) {
+					m_Logic->SetPlayerExpFactor(player, user->GetExpFactor());
+				}
 			}
 			void Room::AddGuildUser(UserSharedPtr user)
 			{

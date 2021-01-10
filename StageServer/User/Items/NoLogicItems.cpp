@@ -616,7 +616,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		packet << user.GetName() << slots;
 		packet.GetAsync(this, &CharacterSlot::Extended, user.shared_from_this());
 	}
-	void CharacterSlot::Extended(const UserSharedPtr& user, Net::Answer& answer)
+	void CharacterSlot::Extended(const UserSharedPtr& user, const Net::Answer& answer)
 	{
 		if (answer.errorCode == 0)
 		{
@@ -1456,7 +1456,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		prevTime = DateTime::Now();
 		prevCharacterName = user.GetName();
 	}
-	void CharacterRenaming::Renamed(const UserSharedPtr& user, Net::Answer& answer)
+	void CharacterRenaming::Renamed(const UserSharedPtr& user, const Net::Answer& answer)
 	{
 		//CharacterRenaming::Renamed
 		if (answer.errorCode == 0) // ok

@@ -8,7 +8,7 @@
 #include <list>
 
 
-namespace Lunia { namespace XRated {	namespace Logic {
+namespace Lunia { namespace XRated { namespace Logic {
 
 	class Player : public Actor 
 	{
@@ -44,8 +44,8 @@ namespace Lunia { namespace XRated {	namespace Logic {
 		};
 		//SetItem
 		struct SetItem { 
-			std::wstring Id; // SetItem ID
-            uint32 Count; // ���� SetItem ����
+			std::wstring Id;
+            uint32 Count;
 			struct Reward {
 				std::vector<Stat::IState*> states;
 				std::vector<Database::Info::StateBundleInfo*> stateBundles;
@@ -123,7 +123,6 @@ namespace Lunia { namespace XRated {	namespace Logic {
 
 		StatusCharacter playerStatus;
 
-		//�׾����� ���� ������.
 		bool bDead;
 		bool isEnableNextLicense;
 		bool isGainNormal;

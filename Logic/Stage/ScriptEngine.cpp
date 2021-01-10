@@ -7,7 +7,11 @@ using namespace Lunia::StringUtil;
 #include <iostream>
 using namespace std;
 
-#define PREPARE_CONTEXT(func) if (PrepareContext(asModule->GetFunctionByName(func), func, __FUNCTION__)==false) return
+#define PREPARE_CONTEXT(func) if (PrepareContext(asModule->GetFunctionByName(func), func, __FUNCTION__)==false)\
+{\
+	LoggerInstance().Warn("{} could not be prepared",func);\
+	return;\
+}
 
 namespace Lunia 
 {
@@ -30,9 +34,6 @@ namespace Lunia
 
 			void ScriptEngine::Clear()
 			{
-				// �̷��� �ص� ������ �Ʒ� ticket�� vector�� ����Ǳⶫ�� �̹� create ticket�� �տ� �ִ°��
-				// this�� �Ҹ�� ���Ŀ� create ticket�̳� release ticket�� ������ ȣ��� �� �ִ�.
-				// caspian 07.12.27
 
 				engine = NULL; // should not call release() because to make return to pool.
 				context = NULL;
@@ -72,15 +73,10 @@ namespace Lunia
 				Logger::GetInstance().Info( "script loaded({0}). (stagename:{1}, hash:{2}, unique:{3})"
 					, bLoading, moduleName.c_str(), stageScript->GetStageId(), uniqueId);
 
-				//Regist stageScript instance
-				auto* func = asModule->GetFunctionByName("SetInstance");
-				if (PrepareContext(func, "SetInstance", __FUNCTION__)==false)
-					throw;
-
-				//PrepareContext(engine->GetFunctionIDByName(0/*moduleName.c_str()*/, "SetInstance"));
+				PREPARE_CONTEXT("SetInstance");
 				context->SetArgObject(0, (void*)this);
 				int r = context->Execute();
-				if (r<0) throw;
+				if (r < 0) LoggerInstance().Exception("Could not execute SetInstance");
 
 				stageScript->Initialized(uniqueId);
 				bLoading = false;
@@ -732,7 +728,7 @@ namespace Lunia
 #pragma warning(disable:4189)
 			void ScriptEngine::TimerAlarmed(int timer)
 			{
-				volatile uint32 stageHash=stageScript->GetStageId(); // debugging buffer
+				//volatile uint32 stageHash=stageScript->GetStageId(); // debugging buffer
 				PREPARE_CONTEXT("TimerAlarmed");
 				context->SetArgDWord(0, timer);
 				context->Execute();

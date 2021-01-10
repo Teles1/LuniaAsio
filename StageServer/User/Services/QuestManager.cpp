@@ -790,7 +790,7 @@ namespace Lunia {
 			void QuestManager::RefreshCompletedQuests(UserSharedPtr user, const StageLocation& location)
 			{
 				//' request  : character name, stage group hash, stage level
-				Net::Api request("Quest.CompletedList");
+				Net::Api request("Quest/CompletedList");
 				request << user->GetSerial() << location.StageGroupHash << location.Level;
 				request.GetAsync(this, &QuestManager::CompletedQuestList, user);
 			}
@@ -798,7 +798,7 @@ namespace Lunia {
 			void QuestManager::RefreshWorkingQuests(UserSharedPtr user)
 			{
 				//' request  : character name		
-				Net::Api request("Quest.WorkingList");
+				Net::Api request("Quest/WorkingList");
 				request << user->GetSerial();
 				request.GetAsync(this, &QuestManager::WorkingQuestList, user);
 			}
@@ -867,7 +867,7 @@ namespace Lunia {
 				}
 			}
 
-			void QuestManager::CompletedQuestList(const UserSharedPtr& user, Net::Answer& answer)
+			void QuestManager::CompletedQuestList(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (!user->IsConnected()) return;
 
@@ -926,12 +926,12 @@ namespace Lunia {
 				}
 				else
 				{
-					user->CriticalError(fmt::format("CompletedQuestList Error DB Response Quest List").c_str());
+					//user->CriticalError(fmt::format("CompletedQuestList Error DB Response Quest List").c_str());
 					return;
 				}
 			}
 
-			void QuestManager::WorkingQuestList(const UserSharedPtr& user, Net::Answer& answer)
+			void QuestManager::WorkingQuestList(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (!user->IsConnected()) return;
 
@@ -1099,11 +1099,11 @@ namespace Lunia {
 				}
 
 				dbRequestCompletCount.push_back(std::pair<uint32, std::wstring>(questHash, shareOwner));
-				Net::Api request("Quest.GetCompletedCount");
+				Net::Api request("Quest/GetCompletedCount");
 				request << user->GetSerial() << questHash;
 				request.GetAsync(this, &QuestManager::CompletedQuestCountWIthShare, user);
 			}
-			void QuestManager::CompletedQuestCountWIthShare(const UserSharedPtr& user, Net::Answer& answer)
+			void QuestManager::CompletedQuestCountWIthShare(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (answer && user->IsConnected())
 				{
@@ -1597,7 +1597,7 @@ namespace Lunia {
 
 					dbRequested.insert(user);
 					//' request  : character name, quest hashs
-					Net::Api request("Quest.ActivityItem");
+					Net::Api request("Quest/ActivityItem");
 
 					//Add Basic ActiveItemQuestInfo
 					LoggerInstance().Info("Request active item({}) info to DB", packet.QuestHash);
@@ -1625,7 +1625,7 @@ namespace Lunia {
 				LoggerInstance().Error("invalid quest({})-activityitem requested", packet.QuestHash);
 			}
 
-			void QuestManager::ActiveItemQuestInfo(const UserSharedPtr& user, Net::Answer& answer)
+			void QuestManager::ActiveItemQuestInfo(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				AutoLock lock(cs);
 				dbRequested.erase(user);

@@ -290,9 +290,10 @@ namespace Lunia {
 				void Dispatch(Protocol::ToServer::LoadEnd& packet);
 				void Dispatch(Protocol::ToServer::Family::RefreshInfo& packet);
 				void Dispatch(Protocol::ToServer::Join& packet);
+				void Dispatch(Protocol::ToServer::Command& packet);
 			public://Db callbacks
-				void LicenseAquired(const UserSharedPtr& user, Net::Answer& answer);
-				void PetCreated(const UserSharedPtr& user, Net::Answer& answer);
+				void LicenseAquired(const UserSharedPtr& user, const Net::Answer& answer);
+				void PetCreated(const UserSharedPtr& user, const Net::Answer& answer);
 			public:
 				mutable std::mutex 							m_UserMtx;
 				mutable std::mutex 							m_PlayerMtx;

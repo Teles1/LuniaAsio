@@ -73,7 +73,7 @@ namespace Lunia {
                 template<typename O, typename T>
                 inline void GetAsync(O* inObj, void (O::* inFunction)(const T&, const Answer&), const T& inParam, const json& inPayload = json()) {
                     Utils::thread_pool::GetInstance().push(
-                        [function = inFunction, &param = inParam, obj = inObj]
+                        [function = inFunction, param = inParam, obj = inObj]
                         (const int& id, const Methods& method, const cpr::Url& url, const cpr::Header& header, const cpr::Timeout& timeout, const json& payload) {
                             cpr::Response r;
                             if (method == Methods::GET)  r = cpr::Get(url, header, timeout);

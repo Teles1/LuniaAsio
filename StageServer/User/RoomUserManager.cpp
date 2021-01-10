@@ -38,14 +38,14 @@ namespace Lunia {
 			{
 				return m_MaxCount;
 			}
-			void RoomUserManager::AddPlayer(const Serial& serial, UserSharedPtr user)
+			void RoomUserManager::AddPlayer(const uint64& serial, UserSharedPtr user)
 			{
 				AutoLock lock(m_PlayersMtx);
 				if (m_Players.find(serial) != m_Players.end())
 					LoggerInstance().Exception("Serial duplicated.");
 				m_Players.emplace(serial, std::move(user) );
 			}
-			bool RoomUserManager::RemovePlayer(const Serial& serial)
+			bool RoomUserManager::RemovePlayer(const uint64& serial)
 			{
 				AutoLock lock(m_PlayersMtx);
 				if (m_Players.find(serial) == m_Players.end())
@@ -53,23 +53,23 @@ namespace Lunia {
 				m_Players.erase(serial);
 				return true;
 			}
-			UserSharedPtr RoomUserManager::GetPlayer(const Serial& serial)
+			UserSharedPtr RoomUserManager::GetPlayer(const uint64& serial)
 			{
 				AutoLock lock(m_PlayersMtx);
 				if (m_Players.find(serial) == m_Players.end())
 					LoggerInstance().Exception("Player not found.");
 				return m_Players[serial];
 			}
-			std::unordered_map<uint32, UserSharedPtr>& RoomUserManager::GetPlayers()
+			std::unordered_map<uint64, UserSharedPtr>& RoomUserManager::GetPlayers()
 			{
 				return m_Players;
 			}
 			void RoomUserManager::AddUser(UserSharedPtr user)
 			{
 				AutoLock lock(m_Mtx);
-				m_Users.emplace(user->GetId(), user);
+				m_Users.emplace(user->GetSerial(), user);
 			}
-			bool RoomUserManager::RemoveUser(const uint32& userId)
+			bool RoomUserManager::RemoveUser(const uint64& userId)
 			{
 				AutoLock lock(m_Mtx);
 				if (m_Users.find(userId) == m_Users.end())
@@ -79,18 +79,13 @@ namespace Lunia {
 			}
 			bool RoomUserManager::DoesExist(UserSharedPtr user) const
 			{
-				AutoLock lock(m_Mtx);
-				for (auto& pUser : m_Users)
-					if (pUser.second == user)
-						return true;
-				return false;
+				return DoesExist(user->GetSerial());
 			}
-			bool RoomUserManager::DoesExist(const uint32& userId) const
+			bool RoomUserManager::DoesExist(const uint64& userId) const
 			{
 				AutoLock lock(m_Mtx);
-				for (auto& pUser : m_Users)
-					if (pUser.first == userId)
-						return true;
+				if (m_Users.find(userId) != m_Users.end())
+					return true;
 				return false;
 			}
 			bool RoomUserManager::IsEnableStage(const StageLicense& targetStage)
@@ -114,7 +109,7 @@ namespace Lunia {
 					return NULL;
 				return m_Users[userId];
 			}
-			std::unordered_map<uint32, UserSharedPtr>& RoomUserManager::GetUsers()
+			std::unordered_map<uint64, UserSharedPtr>& RoomUserManager::GetUsers()
 			{
 				return m_Users;
 			}
@@ -139,6 +134,7 @@ namespace Lunia {
 			}
 			void RoomUserManager::BroadcastToPlayers(Protocol::IPacketSerializable& value)
 			{
+				LoggerInstance().Info(L"Sending {} to players", value.GetTypeName());
 				AutoLock lock(m_PlayersMtx);
 				for (auto& user : m_Players)
 					user.second->Send(value);

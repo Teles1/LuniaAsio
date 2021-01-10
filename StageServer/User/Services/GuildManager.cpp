@@ -843,7 +843,7 @@ namespace Lunia {
 				CumulativeTax = 0;
 			}
 			
-			void GuildManager::TaxUpdated(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::TaxUpdated(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -899,7 +899,7 @@ namespace Lunia {
 			}
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			// AllM guild DB response
-			void GuildManager::Created(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::Created(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 					return;
@@ -931,7 +931,7 @@ namespace Lunia {
 				}*/
 			}
 
-			void GuildManager::Joined(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::Joined(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -960,7 +960,7 @@ namespace Lunia {
 				}*/
 			}
 
-			void GuildManager::Left(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::Left(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1019,7 +1019,7 @@ namespace Lunia {
 				
 			}
 
-			void GuildManager::Kicked(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::Kicked(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				//' response : kicked
 				if (!answer)
@@ -1074,7 +1074,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Removed(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::Removed(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 					return;
@@ -1129,7 +1129,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void GuildManager::MemberListed(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::MemberListed(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 					return;
@@ -1179,7 +1179,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void GuildManager::NameValidated(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::NameValidated(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				Protocol::FromServer::AllMGuild::ValidateName response;
 				if (answer)
@@ -1190,7 +1190,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 			
-			void GuildManager::AliasValidated(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::AliasValidated(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				Protocol::FromServer::AllMGuild::ValidateAlias response;
 				if (answer)
@@ -1200,18 +1200,18 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void GuildManager::MyInfoRefreshed(const UserSharedPtr& user, Net::Answer& anwser)
+			void GuildManager::MyInfoRefreshed(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 					return;
 
 				Protocol::FromServer::AllMGuild::SetPlayer response;
-				if (anwser)
+				if (answer)
 				{
 					size_t i = 0;
 					GuildInfo& info = response.GuildInfo;
 
-					JoinedInfoParse(anwser, info);
+					JoinedInfoParse(answer, info);
 					{
 						AutoLock lock(user->GetSyncObject());
 						if (user->IsPartOfGuild() == true) {
@@ -1231,14 +1231,14 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::AddedGuildExp(const UserSharedPtr& user, Net::Answer& anwser)
+			void GuildManager::AddedGuildExp(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
 					return;
 				}
 
-				if (!anwser) {
+				if (!answer) {
 					AutoLock lock(user->GetSyncObject());
 					LoggerInstance().Error("Guild : DBRequest AddMaintenancePoint Failed User[{}]", user->GetSerial());
 
@@ -1261,16 +1261,16 @@ namespace Lunia {
 						return;
 					}
 					//guild->GuildLevel = static_cast<uint8>( StringUtil::To<int>( (*packet)[0] ) );
-					anwser.get_to("Point", user->GetGuildInfo().Point);
-					anwser.get_to("shopOpenDate", user->GetGuildInfo().ShopOpenDate);
-					anwser.get_to("shopCloseDate", user->GetGuildInfo().ShopCloseDate);
+					answer.get_to("Point", user->GetGuildInfo().Point);
+					answer.get_to("shopOpenDate", user->GetGuildInfo().ShopOpenDate);
+					answer.get_to("shopCloseDate", user->GetGuildInfo().ShopCloseDate);
 
 					Protocol::FromServer::AllMGuild::AddedGuildMaintenancePoint response;
 					response.Result = Protocol::FromServer::AllMGuild::AddedGuildMaintenancePoint::Results::Ok;
 					response.GuildMaintenacePoint = user->GetGuildInfo().Point;
 					response.ShopOpenDate = user->GetGuildInfo().ShopOpenDate;
 					response.ShopCloseDate = user->GetGuildInfo().ShopCloseDate;
-					anwser.get_to("increasePoint", response.IncreasePoint);
+					answer.get_to("increasePoint", response.IncreasePoint);
 					user->Send(response);
 
 					//logging 
@@ -1281,7 +1281,7 @@ namespace Lunia {
 				
 			}
 
-			void GuildManager::AddedGuildExpByItem(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::AddedGuildExpByItem(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1361,7 +1361,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::IncresedGuildRankPointByItem(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::IncresedGuildRankPointByItem(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1394,7 +1394,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::AddedGuildPoint(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::AddedGuildPoint(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1439,7 +1439,7 @@ namespace Lunia {
 				}
 			}
 			
-			void GuildManager::AddedItemToGuildShop(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::AddedItemToGuildShop(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1472,7 +1472,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::ReflashedGuildLevel(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::ReflashedGuildLevel(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1497,7 +1497,7 @@ namespace Lunia {
 				}
 			}
 			
-			void GuildManager::ReflashedGuildProfitDate(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::ReflashedGuildProfitDate(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1518,7 +1518,7 @@ namespace Lunia {
 				}
 			}
 			
-			void GuildManager::ListGuildShopItem(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::ListGuildShopItem(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1548,7 +1548,7 @@ namespace Lunia {
 				}
 			}
 			
-			void GuildManager::ReflashedListGuildShopItem(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::ReflashedListGuildShopItem(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1574,7 +1574,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::GuildRankingListed(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::GuildRankingListed(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1626,7 +1626,7 @@ namespace Lunia {
 				}
 			}
 			
-			void GuildManager::TaxGained(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::TaxGained(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1665,7 +1665,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::SetPlayer(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::SetPlayer(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1734,7 +1734,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::MyInfoVaild(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::MyInfoVaild(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1778,7 +1778,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::MessageChanged(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::MessageChanged(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1802,7 +1802,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void GuildManager::GradeChanged(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::GradeChanged(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1825,7 +1825,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void GuildManager::GradeNameChanged(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::GradeNameChanged(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1848,7 +1848,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void GuildManager::GradeAuthChanged(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::GradeAuthChanged(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -1871,7 +1871,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void GuildManager::GuildMasterChanged(const UserSharedPtr& user, Net::Answer& answer)
+			void GuildManager::GuildMasterChanged(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{

@@ -73,6 +73,13 @@ namespace Lunia {
 						//this does literally nothing but i'm handling it so it doesnt bother me.
 						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@ListQuickSlot", user->GetId());
 					});
+
+				fwPacketListener::GetInstance().Connect(
+					[](UserSharedPtr user, StageServer::Protocol::ToServer::Command& packet) {
+						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@Command", user->GetSerial());
+						user->Dispatch(packet);
+					}
+				);
 			}
 		}
 	}

@@ -15,19 +15,19 @@ namespace Lunia {
 				uint16 MaxCount() const;
 
 				void AddUser(UserSharedPtr user);
-				void AddPlayer(const Serial& serial, UserSharedPtr user);
+				void AddPlayer(const uint64& serial, UserSharedPtr user);
 
-				bool RemoveUser(const uint32& userId);
-				bool RemovePlayer(const Serial& serial);
+				bool RemoveUser(const uint64& userId);
+				bool RemovePlayer(const uint64& serial);
 
 				UserSharedPtr GetUser(const uint32& userId);
-				UserSharedPtr GetPlayer(const Serial& serial);
+				UserSharedPtr GetPlayer(const uint64& serial);
 
-				std::unordered_map<uint32, UserSharedPtr>& GetUsers();
-				std::unordered_map<uint32, UserSharedPtr>& GetPlayers();
+				std::unordered_map<uint64, UserSharedPtr>& GetUsers();
+				std::unordered_map<uint64, UserSharedPtr>& GetPlayers();
 
 				bool DoesExist(UserSharedPtr user) const; // User
-				bool DoesExist(const uint32& userId) const; // User
+				bool DoesExist(const uint64& userId) const; // User
 
 				bool IsEnableStage(const StageLicense& targetStage);
 				bool IsJoinningUser();
@@ -91,10 +91,10 @@ namespace Lunia {
 				} m_MailAlarm;
 			private:
 				mutable std::mutex m_Mtx;
-				std::unordered_map<uint32, UserSharedPtr> m_Users; //kind of temporary in a sense. This is before the Player gets created. NamedUsers
+				std::unordered_map<uint64, UserSharedPtr> m_Users; //kind of temporary in a sense. This is before the Player gets created. NamedUsers
 
 				mutable std::mutex m_PlayersMtx;
-				std::unordered_map<uint32, UserSharedPtr> m_Players;//serial users
+				std::unordered_map<uint64, UserSharedPtr> m_Players;//serial users
 				uint16 m_MaxCount = 0;
 				const uint32 SaveTimeInMs;
 			};
