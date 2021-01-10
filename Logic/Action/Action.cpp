@@ -116,7 +116,7 @@ namespace Lunia
 
 				const Database::Info::ActionInfo* Action::GetLinkedAction( Actor* actor, unsigned int key, float dt, bool &reserved, float& changeTime, bool bHit )
 				{
-					const Database::Info::ActionInfo* returnValue = NULL;
+					const Database::Info::ActionInfo* returnValue = nullptr;
 
 					Info::ActionInfo::ActionList::iterator iter;
 					Info::ActionInfo::ActionList::iterator iterEnd;

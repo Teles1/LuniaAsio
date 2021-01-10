@@ -16,6 +16,7 @@ namespace Lunia {
 				{
 					LoadBinaryData();
 					LoadCBFInData();
+					MakeLinkedActionLink();
 				}
 
 				void CompressedActionInfoManager::LoadBinaryData()
@@ -30,7 +31,7 @@ namespace Lunia {
 					Resource::StreamReader reader;
 					uint8* buffer = new uint8[4];
 
-					Resource::StreamReader compressedActionsCbf = Resource::ResourceSystemInstance().CreateStreamReader(L"./Database/ActionInfos.cbf");
+					Resource::StreamReader compressedActionsCbf = Resource::ResourceSystemInstance().CreateStreamReader(L"Database/ActionInfos.cbf");
 					std::vector<uint8> lReplayBuffer;
 					compressedActionsCbf->SetReadCursor(0, Lunia::IStream::Begin);
 					for (auto& itr : actionMap) {
