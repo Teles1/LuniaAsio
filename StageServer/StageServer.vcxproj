@@ -195,7 +195,6 @@
     <ClCompile Include="User\Items\PetInventory.cpp" />
     <ClCompile Include="User\Items\Slot.cpp" />
     <ClCompile Include="User\Services\ExpFactorManager.cpp" />
-    <ClCompile Include="PacketHandler.cpp" />
     <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="Room\Room.cpp" />
     <ClCompile Include="Room\RoomManager.cpp" />
@@ -235,15 +234,14 @@
     <ClInclude Include="User\Items\PassiveItemManager.h" />
     <ClInclude Include="User\Items\PetInventory.h" />
     <ClInclude Include="User\Items\Slot.h" />
+    <ClInclude Include="DynamicParser.h" />
     <ClInclude Include="User\Services\ExpFactorManager.h" />
-    <ClInclude Include="fwPacketListener.h" />
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="Room\Room.h" />
     <ClInclude Include="Room\RoomManager.h" />
     <ClInclude Include="Room\RoomUpdater.h" />
     <ClInclude Include="StageServer.h" />
     <ClInclude Include="Service.h" />
-    <ClInclude Include="PacketHandler.h" />
     <ClInclude Include="User\IUserRoom.h" />
     <ClInclude Include="User\PetData.h" />
     <ClInclude Include="User\RoomUserManager.h" />

@@ -1,5 +1,6 @@
 #include "ItemSerial.h"
 #include <mmsystem.h>
+#pragma comment( lib, "Winmm.lib" )
 #include <Core/Utils/ConfigReader.h>
 
 namespace Lunia {

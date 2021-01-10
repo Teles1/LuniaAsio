@@ -755,6 +755,7 @@ namespace Lunia {
 			//db response
 			void FamilyManager::DBFamilyInfoForInit(const UserSharedPtr& user, const Net::Answer& answer)
 			{
+				if (!answer) return;
 				SetFamilyInfo(answer, false);
 				Protocol::FromServer::Family::TakePresentResult result;
 				{
@@ -774,17 +775,11 @@ namespace Lunia {
 			void FamilyManager::DBFamilyInfoForRefresh(const UserSharedPtr& user, const Net::Answer& answer)
 			{
 				isFamilyInfoWait = false;
-				if (answer.errorCode != 0) {
+				if (!answer) {
 					Clear();
 					Protocol::FromServer::Family::RefreshFailed result;
 					result.Result = Protocol::FromServer::Family::RefreshFailed::Type::NotEntredFamily;
 					owner.Send(result);
-				}
-				if (!answer)
-				{
-					// nothing to do
-					LoggerInstance().Error(L"DBFamilyInfo Failed : Error Number : {}", answer.errorCode);
-					owner.CriticalError("DBFamilyInfoForRefresh Failed", false);
 					return;
 				}
 				SetFamilyInfo(answer, true);

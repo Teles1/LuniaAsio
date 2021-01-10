@@ -18,6 +18,7 @@
 #include <StageServer/Protocol/ToServer.h>
 #include <StageServer/Common.h>
 #include <StageServer/User/Items/Items.h>
+#include <StageServer/DynamicParser.h>
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
@@ -40,6 +41,7 @@ namespace Lunia {
 				std::shared_ptr<User> shared_from_this();
 
 				void Init();
+				void BindPackets();
 				void Flush();
 				void RoomParted();
 				void Terminate();
@@ -97,6 +99,8 @@ namespace Lunia {
 				bool HasSkillLicense(const uint32& hash);
 
 				bool AuthConnection(const json& result);
+				void AuthedConnection(const UserSharedPtr& user, const Net::Answer& answer);
+				void Authed(const UserSharedPtr& user, const Net::Answer& answer);
 				bool Auth(const json& result);
 				bool Auth_CharacterInfos(const json& characterinfo);
 				bool Auth_CharacterLicenses(const json& licenses);
@@ -300,10 +304,14 @@ namespace Lunia {
 				uint32 Parse(uint8* buffer, size_t size);
 				void SendToAll(Protocol::IPacketSerializable& packet);
 			public://Packet handling coming from PacketHandler
-				void Dispatch(Protocol::ToServer::LoadEnd& packet);
-				void Dispatch(Protocol::ToServer::Family::RefreshInfo& packet);
-				void Dispatch(Protocol::ToServer::Join& packet);
-				void Dispatch(Protocol::ToServer::Command& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Stage& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Alive& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::LoadEnd& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Join& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Command& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Chat& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::ListItem& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::ListQuickSlot& packet);
 			public://Db callbacks
 				void LicenseAquired(const UserSharedPtr& user, const Net::Answer& answer);
 				void PetCreated(const UserSharedPtr& user, const Net::Answer& answer);
@@ -369,6 +377,7 @@ namespace Lunia {
 			public: //Alive
 				DWORD										m_AliveTime = 0;
 			private:
+				DynamicParser<std::shared_ptr<User>>		m_Parser;
 			};
 			typedef std::shared_ptr<User> UserSharedPtr;
 			typedef std::weak_ptr<User> UserWeakPtr;

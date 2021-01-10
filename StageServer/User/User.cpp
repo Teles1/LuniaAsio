@@ -1,5 +1,4 @@
 #pragma once
-#include <StageServer/fwPacketListener.h>
 #include <StageServer/User/UserManager.h>
 #include <Network/NetStream.h>
 #include <Network/CommonProtocol/Protocol.h>
@@ -9,6 +8,7 @@
 #include <Core/ErrorDefinition.h>
 #include <StageServer/Services/ItemSerial.h>
 #include <mmsystem.h>
+#pragma comment( lib, "Winmm.lib" )
 #include <StageServer/User/Items/Enchanter.h>
 #include "User.h"
 namespace Lunia {
@@ -59,10 +59,7 @@ namespace Lunia {
 				*/
 
 				Net::StreamReader sReader(buffer);
-				if (!IsAuthenticated())
-					fwPacketListener::GetInstance().Invoke(UserManagerInstance().GetUserByConnectionId(m_UserId), sReader.GetSerializedTypeHash(), sReader);
-				else
-					fwPacketListener::GetInstance().Invoke(UserManagerInstance().GetUserBySerial(m_UserSerial), sReader.GetSerializedTypeHash(), sReader);
+				m_Parser.Invoke(shared_from_this(), sReader);
 				HandleRead();
 				return (uint32)size;
 			}
@@ -73,59 +70,39 @@ namespace Lunia {
 					m_Room->SendToAll(packet);
 			}
 
-			void User::Dispatch(Protocol::ToServer::LoadEnd& packet)
+			User::User(asio::ip::tcp::socket&& socket, const uint32& userId)
+				: ClientTcp(std::move(socket))
+				, m_UserId(userId)
+				, m_GuildState(*this)
+				, m_FamilyManager(*this)
+				, m_Items(*this)
+				, playTimeEventCheckIntervalInSec(ConfigInstance().Get("PlayTimeCheckIntervalInSec", 60.0f))
 			{
-				AutoLock lock(m_UserMtx);
-				if (!IsAuthed()) {
-					LoggerInstance().Error("User({0})::LoadEnd - User Not Authed and sent LoadEnd", GetSerial());
-					return;
-				}
-				if ((packet.progress < 0.0f) || (packet.progress > 1.0f) || IsLoaded()) {
-					LoggerInstance().Error("User({0})::LoadEnd - User sent LoadEnd({1}) and LoadedEnd({2}) not valid", GetSerial(), packet.progress, IsLoaded());
-					return;
-				}
-				if (m_Room == nullptr) {
-					LoggerInstance().Error("User({0})::LoadEnd - User sent LoadEnd({1}) room is nullptr", GetSerial(), packet.progress);
-					return;
-				}
-				if (packet.progress >= 1.0f) {
-					m_LoadEnded = true;
-					m_IsItemLocked = false;
-				}
-				m_Room->JoinEndUser(shared_from_this(), packet.progress);
+				Logger::GetInstance().Info("User :: Hey, I was created!", GetId());
+				
+				BindPackets();
 			}
 
-			void User::Dispatch(Protocol::ToServer::Family::RefreshInfo& packet)
-			{
-				m_FamilyManager.Dispatch(shared_from_this(), packet);
+			void User::Init() {
+				m_LastDataSavedTime = m_ConnectTime = m_AliveTime = timeGetTime();
+				Protocol::FromServer::Way way;
+				way.EncryptKey = Math::Random();
+				m_FishingManager.Init();
+				SetCryptoKey(way.EncryptKey);
+				Send(way);
 			}
 
-			void User::Dispatch(StageServer::Protocol::ToServer::Join& packet)
+			void User::BindPackets()
 			{
-				AutoLock lock(m_UserMtx);
-				if (!IsLoaded()) {
-					LoggerInstance().Error("User({})::Dispatch - Not loaded and sending join", GetSerial());
-					Protocol::FromServer::Error error;
-					error.errorcode = Errors::InvalidStageCode;
-					//Send(error);
-				}
-			}
-
-			void User::Dispatch(Protocol::ToServer::Command& packet)
-			{
-				AutoLock lock(m_UserMtx);
-				AutoLock playerLock(m_PlayerMtx);
-				if (!m_Room || !m_Player)
-					return;
-				if (m_State == LOAD || m_State == NONE)
-					return;
-				if (m_FishingManager.IsFishing())
-					return;
-				if (!m_Room->Command(m_Player, (Constants::Command)packet.command, packet.direction)) {
-					// invalid command like an action in square
-					LoggerInstance().Error("closing an user by wrong command (modified client or its data) : {}", GetSerial());
-					Close();
-				}
+				m_Parser.Bind<Protocol::ToServer::Stage>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Alive>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::LoadEnd>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Join>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Command>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Chat>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::ListItem>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::ListQuickSlot>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Family::RefreshInfo>(m_FamilyManager, &FamilyManager::Dispatch);
 			}
 
 			void User::LicenseAquired(const UserSharedPtr& user, const Net::Answer& answer)
@@ -211,17 +188,6 @@ namespace Lunia {
 					Send(response);
 
 				}
-			}
-
-			User::User(asio::ip::tcp::socket&& socket, const uint32& userId)
-				: ClientTcp(std::move(socket))
-				, m_UserId(userId)
-				, m_GuildState(*this)
-				, m_FamilyManager(*this)
-				, m_Items(*this)
-				, playTimeEventCheckIntervalInSec(ConfigInstance().Get("PlayTimeCheckIntervalInSec", 60.0f))
-			{
-				Logger::GetInstance().Info("User :: Hey, I was created!", GetId());
 			}
 
 			void User::AddTradedPet(const XRated::Pet& pet)
@@ -429,15 +395,6 @@ namespace Lunia {
 					return;
 				}
 				m_Room->PetRenaming(GetSerial(), petSerial, newName);
-			}
-
-			void User::Init() {
-				m_LastDataSavedTime = m_ConnectTime = m_AliveTime = timeGetTime();
-				Protocol::FromServer::Way way;
-				way.EncryptKey = Math::Random();
-				m_FishingManager.Init();
-				SetCryptoKey(way.EncryptKey);
-				Send(way);
 			}
 
 			void User::Flush()
@@ -808,6 +765,42 @@ namespace Lunia {
 				}
 				Send(sendPacket);
 				return true;
+			}
+
+			void User::AuthedConnection(const UserSharedPtr& user, const Net::Answer& answer)
+			{
+				if (answer.errorCode == 0 && user->GetSerial() == GetSerial()) {
+					if (!answer.resultObject.is_null()) {
+						if (!UserManagerInstance().AuthenticateUser(user->GetId(), answer.resultObject)) {
+							Logger::GetInstance().Error("UserManager::AuthenticateUser() Could not Authenticate user");
+							Terminate();
+						}
+						else {
+							Logger::GetInstance().Info("Authed {0},{1},{2}", user->m_CurrentStage.StageGroupHash, user->m_CurrentStage.Level, user->m_CurrentStage.Difficulty);
+							Net::Api api("Auth");
+							api << user->GetCharacterName();
+							api.GetAsync(this, &User::Authed, user);
+						}
+					}
+					else
+						Logger::GetInstance().Warn("Result code is 0 but the data is empty.");
+				}
+				else
+					user->Terminate();
+			}
+
+			void User::Authed(const UserSharedPtr& user, const Net::Answer& answer) {
+				if (answer.errorCode == 0 && !answer.resultObject.is_null()) {
+					if (Auth(answer.resultObject)) {
+						UserManagerInstance().RoomAuth(user);
+						return;
+					}
+					else
+						Logger::GetInstance().Warn(L"Could not authenticate user={0}", GetSerial());
+				}
+				else
+					Logger::GetInstance().Warn(L"Could not handle the call api to Auth user = {0}", GetSerial());
+				Terminate();
 			}
 
 			bool User::Auth_PetsItems(const json& petsitems)
@@ -2631,6 +2624,97 @@ namespace Lunia {
 					return true;
 				}
 				return false;
+			}
+
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::LoadEnd& packet)
+			{
+				AutoLock lock(m_UserMtx);
+				if (!IsAuthed()) {
+					LoggerInstance().Error("User({0})::LoadEnd - User Not Authed and sent LoadEnd", GetSerial());
+					return;
+				}
+				if ((packet.progress < 0.0f) || (packet.progress > 1.0f) || IsLoaded()) {
+					LoggerInstance().Error("User({0})::LoadEnd - User sent LoadEnd({1}) and LoadedEnd({2}) not valid", GetSerial(), packet.progress, IsLoaded());
+					return;
+				}
+				if (m_Room == nullptr) {
+					LoggerInstance().Error("User({0})::LoadEnd - User sent LoadEnd({1}) room is nullptr", GetSerial(), packet.progress);
+					return;
+				}
+				if (packet.progress >= 1.0f) {
+					m_LoadEnded = true;
+					m_IsItemLocked = false;
+				}
+				m_Room->JoinEndUser(shared_from_this(), packet.progress);
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::Stage& packet) {
+
+				Logger::GetInstance().Info("fwPacketListener::protocol@Stage");
+				if (packet.Version != Lunia::Constants::Version) {
+					Protocol::FromServer::Error sendPacket;
+					sendPacket.errorcode = XRated::Errors::InvalidClientVersion;
+					Send(sendPacket);
+					Terminate();
+					UserManagerInstance().RemoveUser(user->GetSerial());
+					return;
+				}
+
+				user->m_SecuKey = packet.secukey;
+				user->m_UsingLocale = packet.Locale.c_str();
+
+				{
+					Logger::GetInstance().Info("A connection with (Ip: {0}) is authorizing", user->GetPeerAddress());
+					Net::Api api("AuthConnection");
+					api << user->m_SecuKey;
+					api.GetAsync(this, &User::AuthedConnection, user);
+				}
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::Alive& packet) {
+				m_AliveTime = timeGetTime();
+				user->Send(packet);
+			}
+
+			void User::Dispatch(const UserSharedPtr user, StageServer::Protocol::ToServer::Join& packet)
+			{
+				AutoLock lock(m_UserMtx);
+				if (!IsLoaded()) {
+					LoggerInstance().Error("User({})::Dispatch - Not loaded and sending join", GetSerial());
+					Protocol::FromServer::Error error;
+					error.errorcode = Errors::InvalidStageCode;
+					//Send(error);
+				}
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::Command& packet)
+			{
+				AutoLock lock(m_UserMtx);
+				AutoLock playerLock(m_PlayerMtx);
+				if (!m_Room || !m_Player)
+					return;
+				if (m_State == LOAD || m_State == NONE)
+					return;
+				if (m_FishingManager.IsFishing())
+					return;
+				if (!m_Room->Command(m_Player, (Constants::Command)packet.command, packet.direction)) {
+					// invalid command like an action in square
+					LoggerInstance().Error("closing an user by wrong command (modified client or its data) : {}", GetSerial());
+					Close();
+				}
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::ListItem& packet)
+			{
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::ListQuickSlot& packet)
+			{
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::Chat& packet)
+			{
 			}
 
 			int User::GetRequiredSlotCount(const std::vector<std::pair<uint32, uint32>>& toRemove, const std::vector<std::pair<uint32, uint32>>& toAdd, const uint32& availablecount) const

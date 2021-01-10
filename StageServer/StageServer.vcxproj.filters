@@ -14,9 +14,6 @@
     <ClCompile Include="StageServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PacketHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="User\User.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -134,16 +131,10 @@
     <ClInclude Include="StageServer.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="fwPacketListener.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="User\User.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Service.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="PacketHandler.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="User\UserManager.h">
@@ -252,6 +243,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="User\Services\MailBoxManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicParser.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -187,6 +187,11 @@ namespace Lunia {
                 return 0;
             }
 
+            int StreamReader::GetReadCursor() const {
+                Logger::GetInstance().Exception("unsurppoted method in flat stream");
+                return 0;
+            }
+
             void StreamReader::Read(Serializer::ISerializable& value) {
                 working = (char*)buffer;  // buffer size should be checked before using this method
                 working += sizeof(LengthType);  // skip length information of NetStream

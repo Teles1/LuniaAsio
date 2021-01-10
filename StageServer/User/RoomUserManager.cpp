@@ -2,6 +2,7 @@
 #include <StageServer/User/User.h>
 #include <Core/Utils/ConfigReader.h>
 #include <mmsystem.h>
+#pragma comment( lib, "Winmm.lib" )
 #include <StageServer/User/UserManager.h>
 namespace Lunia {
 	namespace XRated {

@@ -93,6 +93,9 @@ namespace Lunia {
 				return Type::Structured;
 			}
 
+			virtual int inline GetReadCursor() const {
+				return stream->GetReadCursor();
+			}
 
 			virtual void inline Begin(const wchar_t* name, int* majorVersionOut, int* minorVersionOut)
 			{

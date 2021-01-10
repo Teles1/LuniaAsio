@@ -82,9 +82,9 @@ namespace Lunia {
                 virtual bool IsNetStream();
                 virtual int GetNetStreamSize();
                 virtual void Read(Serializer::ISerializable& value);
-
             protected:  // Serializer::IStreamWriter implementation
                 virtual Serializer::IStreamReader::Type GetType() const;
+                virtual int GetReadCursor() const;
                 virtual size_t GetCount(const wchar_t* type) const;
                 virtual void Begin(const wchar_t* type, int* majorVersionOut, int* minorVersionOut);
                 virtual bool Exists(const wchar_t* name) const;

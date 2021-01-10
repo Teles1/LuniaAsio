@@ -2,6 +2,7 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
+#include <Core/Utils/ConfigReader.h>
 namespace Lunia {
 	Logger::Logger(const std::string& name)
 	{
@@ -13,7 +14,7 @@ namespace Lunia {
 			sink->set_level(spdlog::level::level_enum::err);
 		}
 		{
-			sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/log.log", true));
+			sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/" + name + ".log", true));
 			auto& sink = sinks.back();
 			sink->set_pattern("[%X %^%l%$] => %v");
 			sink->set_level(spdlog::level::level_enum::trace);

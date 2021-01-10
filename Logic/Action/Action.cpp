@@ -116,7 +116,7 @@ namespace Lunia
 
 				const Database::Info::ActionInfo* Action::GetLinkedAction( Actor* actor, unsigned int key, float dt, bool &reserved, float& changeTime, bool bHit )
 				{
-					const Database::Info::ActionInfo* returnValue = NULL;
+					const Database::Info::ActionInfo* returnValue = nullptr;
 
 					Info::ActionInfo::ActionList::iterator iter;
 					Info::ActionInfo::ActionList::iterator iterEnd;
@@ -453,9 +453,9 @@ namespace Lunia
 					Action* action = GetAction( name );
 					if ( !action ) 
 					{
-#ifdef _SINGLE
+
 						Logger::GetInstance().Info( L"[ActionManager::SetAction] [{0}] action [{1}] not found.", object->GetName().c_str(), name );
-#endif
+
 						return false;
 					}
 
@@ -968,6 +968,7 @@ namespace Lunia
 
 					if ( actionInfo ) 
 					{
+						//LoggerInstance().Info(L"ActionHash: {}", actionInfo->hash);
 						actionName = actionInfo->hash;
 
 						if ( atkRate > 1.0f )
