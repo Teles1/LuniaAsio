@@ -23,9 +23,11 @@ namespace Lunia {
 
 			bool Ping();
 
-			void CharacterListed(const ClientProxyLobbySharedPtr& user, Net::Answer& answer);
+			void CharacterListed(const ClientProxyLobbySharedPtr& user, const Net::Answer& answer);
 
-			void AchivementServerFound(const ClientProxyLobbySharedPtr& user, Net::Answer& answer);
+			void AchivementServerFound(const ClientProxyLobbySharedPtr& user, const Net::Answer& answer);
+
+			void JoinedSquare(const ClientProxyLobbySharedPtr& user, const Net::Answer& answer);
 		private:
 
 			bool m_isAuthenticated = false;

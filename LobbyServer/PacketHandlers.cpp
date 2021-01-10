@@ -462,28 +462,11 @@ namespace Lunia {
 						Logger::GetInstance().Info("fwPacketListener :: userId@{0} :: protocol@JoinSquare", client->GetId());
 						if (client->IsAuthenticated() && client->HasSelectedACharacter())
 						{
-							Lobby::Protocol::Join sendPacket;
-							sendPacket.Result = Lobby::Protocol::Join::Results::NoResponse;
-							Net::Api api("JoinSquare");
+							Net::Api api("JoinSquare", Net::Api::Methods::POST);
 							json j;
 							j["characterName"] = StringUtil::ToASCII(client->GetCharacterName());
 							j["squareName"] = StringUtil::ToASCII(packet.SquareName);
-							api.PostAsync([&](Net::Answer& answer)
-								{
-									sendPacket.Result = static_cast<Lobby::Protocol::Join::Results>(answer.errorCode);
-									if (answer.errorCode == 0 && !answer.resultObject.is_null()) {
-										sendPacket.KeyCode = std::to_string(answer.resultObject["reservationSerial"].get<int>());
-										sendPacket.Port = answer.resultObject["serverPort"].get<uint16>();
-										sendPacket.ServerIp = answer.resultObject["serverAddress"].get<std::string>();
-									}
-									else
-									{
-										Logger::GetInstance().Info("User[{0}] JoinSquare call failed.", client->GetId());
-									}
-
-								}, j);
-
-							client->MakeSocketAsyncWriteSerializable(sendPacket);
+							api.GetAsync(client.get(), &ClientProxyLobby::JoinedSquare, client, j);
 						}
 						else
 						{

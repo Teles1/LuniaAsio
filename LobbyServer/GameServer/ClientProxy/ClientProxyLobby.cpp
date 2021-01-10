@@ -47,7 +47,7 @@ namespace Lunia {
 
 			return true;
 		}
-		void ClientProxyLobby::CharacterListed(const ClientProxyLobbySharedPtr& client, Net::Answer& answer)
+		void ClientProxyLobby::CharacterListed(const ClientProxyLobbySharedPtr& client, const Net::Answer& answer)
 		{
 			if (answer.errorCode == 0) {
 				//AccountInfo
@@ -132,7 +132,7 @@ namespace Lunia {
 				Logger::GetInstance().Warn("[{}] Error requesting for the user's character list", client->GetId());
 			}
 		}
-		void ClientProxyLobby::AchivementServerFound(const ClientProxyLobbySharedPtr& client, Net::Answer& answer)
+		void ClientProxyLobby::AchivementServerFound(const ClientProxyLobbySharedPtr& client, const Net::Answer& answer)
 		{
 			Lobby::Protocol::AchievementServerAssigned packetAchievement;
 			packetAchievement.Result = Lobby::Protocol::AchievementServerAssigned::Result::Ok;
@@ -147,6 +147,21 @@ namespace Lunia {
 				}
 				client->MakeSocketAsyncWriteSerializable(packetAchievement);
 			}
+		}
+		void ClientProxyLobby::JoinedSquare(const ClientProxyLobbySharedPtr& user, const Net::Answer& answer)
+		{
+			Lobby::Protocol::Join sendPacket;
+			sendPacket.Result = static_cast<Lobby::Protocol::Join::Results>(answer.errorCode);
+			if (answer.errorCode == 0 && !answer.resultObject.is_null()) {
+				sendPacket.KeyCode = std::to_string(answer.resultObject["reservationSerial"].get<int>());
+				sendPacket.Port = answer.resultObject["serverPort"].get<uint16>();
+				sendPacket.ServerIp = answer.resultObject["serverAddress"].get<std::string>();
+			}
+			else
+			{
+				Logger::GetInstance().Info("User[{0}] JoinSquare call failed.", GetId());
+			}
+			MakeSocketAsyncWriteSerializable(sendPacket);
 		}
 	}
 }
