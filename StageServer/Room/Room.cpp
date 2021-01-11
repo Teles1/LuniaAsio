@@ -783,7 +783,37 @@ namespace Lunia {
 			}
 			void Room::ItemEquipped(bool bequipped, Logic::Player* player, uint32 itemId, Database::Enchant::EnchantBitfields fields, uint32 itemOldId)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				auto user = m_UserManager.GetUser(player->GetSerial());
+				if (user)
+				{
+					AutoLock lock(user->GetSyncObject());
+					uint16 pos = user->ItemEquiped(bequipped);
+
+					if (pos != Items::Constants::InvalidPosition && bequipped)
+					{
+						Protocol::FromServer::EquipItem packet;
+						packet.PlayerSerial = player->GetSerial();
+						packet.ItemHash = itemId;
+
+						/* find the position and instance */
+						packet.Position = pos;
+						packet.instanceEx = user->GetEquipment(pos).second; // instance should be updated as new values because of HasEquipped flag
+
+						m_UserManager.BroadcastToSerialUsers(packet);
+
+						if (pos == XRated::Constants::Equipment::Pet)
+						{
+							const Common::ItemEx* petItem = user->GetItem(ItemPosition(0, pos));
+
+							if (petItem != NULL && petItem->Info != NULL)
+								user->SummonPet(petItem->Serial, 0, pos);
+							else
+								user->UnsummonPet();
+						}
+					}
+					/* error logged an user->ItemEquiped() */
+
+				}
 			}
 			void Room::EquipementSwapped(bool bequipped, Logic::Player* player, const std::vector<EquippedItem>& newEquipments)
 			{

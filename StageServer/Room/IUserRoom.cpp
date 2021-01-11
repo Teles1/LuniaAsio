@@ -52,7 +52,26 @@ namespace Lunia {
 			}
 			void Room::Voice(const uint64& serial, Protocol::ToServer::Voice& voice)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				Protocol::FromServer::Voice sendvoice;
+				sendvoice.playerserial = serial;
+				sendvoice.chattype = voice.chattype;
+				sendvoice.messageid = voice.messageid;
+
+				auto user= m_UserManager.GetUser(serial);
+
+				switch (GetRoomKind())
+				{
+				case Common::STAGE:
+					m_UserManager.BroadcastToSerialUsers(sendvoice);
+					break;
+				case Common::SQUARE:
+					m_UserManager.BroadcastToSerialUsers(sendvoice); // TELES TEMPORARY
+					//partyMgr.BroadCasting(user->GetPartyIndex(), sendvoice);
+					break;
+				case Common::PVP:
+					m_UserManager.BroadcastToTeam(user->GetTeamNumber(), sendvoice);
+					break;
+				}
 			}
 			void Room::PartyInvite(UserSharedPtr user, const uint64& serial)
 			{
@@ -90,16 +109,68 @@ namespace Lunia {
 			}
 			void Room::Cast(XRated::Logic::Player* player, uint32 skill)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				if (!player) {
+					LoggerInstance().Error("Room::Cast() - player == NULL");
+					return;
+				}
+				PlayerData& data = player->GetPlayerData();
+				UserSharedPtr user = std::static_pointer_cast<User>(data.user);
+				uint32 classHash = XRated::Constants::GetClassHash(user->GetClassType());
+
+				Database::Info::SkillInfoList::SkillGroup* skillGroup = Database::DatabaseInstance().InfoCollections.Skills.GetSkillGroupInfo(classHash, skill);
+				if (!skillGroup)
+				{
+					LoggerInstance().Error("Room::Cast() - SkillGroup == NULL");
+					return;
+				}
+
+				if (skillGroup->SKillType == Database::Info::SkillInfoList::SkillGroup::Type::Produce)
+				{
+					if (!user->IsEnoughSlotCountByProduceSkill(skill))
+					{
+						Protocol::FromServer::Cast cast;
+						cast.result = Protocol::FromServer::Cast::Result::NotEnoughSlot;
+						cast.playerserial = player->GetPlayerData().BaseCharacter.BaseObject.GameObjectSerial;
+						cast.skillgroupid = 0;
+						cast.skilllevel = 0;
+						user->Send(cast);
+						return;
+					}
+				}
+				else
+				{
+					if (GetRoomKind() == Common::SQUARE)
+						return;
+
+					if (m_StageInfo)
+					{
+						if (m_StageInfo->isSkillAvailable == false)
+						{
+							return;
+						}
+					}
+				}
+
+				m_Logic->Cast(player, skill);
 			}
 			void Room::LogicSkillPointUp(XRated::Logic::Player* player, Protocol::ToServer::SetSkillLevel& setskilllevel)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				if (!player) {
+					LoggerInstance().Error("Room::LogicSkillPointUp() - player == NULL");
+					return;
+				}
+				if (setskilllevel.delta > 0)
+					m_Logic->IncreaseSkillPoint(player, setskilllevel.skillgroupid);
+				else
+					m_Logic->DecreaseSkillPoint(player, setskilllevel.skillgroupid);
 			}
 			void Room::AddSkillPointPlus(XRated::Logic::Player* player, uint16 skillPointPlus)
 			{
-				player->GetPlayerData().AddedSkillPointPlus += skillPointPlus;
-				LoggerInstance().Exception("Missing implementation");
+				if (!player) {
+					LoggerInstance().Error("Room::AddSkillPointPlus() - player == NULL");
+					return;
+				}
+				m_Logic->AddSkillPointPlus(player, skillPointPlus);
 			}
 			void Room::Revive(XRated::Logic::Player* player, bool self)
 			{
@@ -107,7 +178,11 @@ namespace Lunia {
 			}
 			void Room::DailyRevive(XRated::Logic::Player* player)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				if (!player) {
+					LoggerInstance().Error("Room::DailyRevive() - player == NULL");
+					return;
+				}
+				m_Logic->DailyRevive(player);
 			}
 			void Room::InstantCoinRevive(XRated::Logic::Player* player, uint64 orderNumber)
 			{
@@ -115,44 +190,98 @@ namespace Lunia {
 			}
 			void Room::CreatePet(XRated::Logic::Player* player, const XRated::Pet& pet)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				if (!player) {
+					LoggerInstance().Error("Room::CreatePet() - player == NULL");
+					return;
+				}
+				m_Logic->CreatePet(player, pet);
 			}
 			void Room::GivePresentToPet(XRated::Logic::Player* player, XRated::GlobalSerial petSerial, uint32 sellPrice, uint32 count)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				if (!player) {
+					LoggerInstance().Error("Room::GivePresentToPet() - player == NULL");
+					return;
+				}
+				m_Logic->GivePresentToPet(player, petSerial, sellPrice, count);
 			}
-			void Room::addminimapping(const uint64& serial, float3 posotion)
+			void Room::addminimapping(const uint64& serial, float3 position)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				Protocol::FromServer::AddMinimapPing minimapping;
+				minimapping.pingid = serial;
+				minimapping.position = position;
+				minimapping.type = Constants::MiniMapPingType::PingPlayerEvent;
+
+				UserSharedPtr user = m_UserManager.GetUser(serial);
+
+				switch (GetRoomKind())
+				{
+				case Common::STAGE:
+					m_UserManager.BroadcastToSerialUsers(minimapping);
+					break;
+				case Common::SQUARE:
+					m_UserManager.BroadcastToSerialUsers(minimapping); // TELES
+					//m_PartyManager.BroadCasting(user->GetPartyIndex(), minimapping);
+					break;
+				case Common::PVP:
+					m_UserManager.BroadcastToTeam(user->GetTeamNumber(), minimapping);
+					break;
+				}
 			}
 			bool Room::Equip(XRated::Logic::Player* player, const Database::Info::ItemInfo* info, Database::Enchant::EnchantBitfields instance, XRated::Constants::Equipment pos)
 			{
-				LoggerInstance().Exception("Missing implementation");
-				return false;
+				if (!player) {
+					LoggerInstance().Error("Room::Equip() - player == NULL");
+					return false;
+				}
+				return m_Logic->Equip(player, info, instance, pos);
 			}
 			bool Room::EquipToEquip(Logic::Player* player, XRated::Constants::Equipment from, XRated::Constants::Equipment to)
 			{
-				LoggerInstance().Exception("Missing implementation");
-				return false;
+				if (!player) {
+					LoggerInstance().Error("Room::EquipToEquip() - player == NULL");
+					return false;
+				}
+				return m_Logic->ChangeEquipToEquip(player, from, to);
 			}
 			bool Room::SwapEquip(Logic::Player* player, const std::vector<EquippedItem>& newEquipments)
 			{
-				LoggerInstance().Exception("Missing implementation");
-				return false;
+				if (!player) {
+					LoggerInstance().Error("Room::SwapEquip() - player == NULL");
+					return false;
+				}
+				return m_Logic->SwapEquip(player, newEquipments);
 			}
 			bool Room::SwapCashEquip(Logic::Player* player, const std::vector<EquippedItem>& newEquipments)
 			{
-				LoggerInstance().Exception("Missing implementation");
-				return false;
+				if (!player) {
+					LoggerInstance().Error("Room::SwapCashEquip() - player == NULL");
+					return false;
+				}
+				return m_Logic->SwapCashEquip(player, newEquipments);
 			}
 			void Room::ValidateEquippedItems(Logic::Player* player)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				if (!player)
+				{
+					LoggerInstance().Error("Room::ValidateEquippedItems() - Error : player == NULL");
+					return;
+				}
+
+				m_Logic->ValidateEquippedItems(player);
 			}
 			bool Room::Use(XRated::Logic::Player* player, uint32 id, int bag, int pos)
 			{
-				LoggerInstance().Exception("Missing implementation");
-				return false;
+				if (!player) {
+					LoggerInstance().Error("Room::Use() - player == NULL");
+					return false;
+				}
+				Database::Info::ItemInfo* info = Database::DatabaseInstance().InfoCollections.Items.Retrieve(id);
+				if (!info)
+				{
+					LoggerInstance().Error("Room::Use() - info == NULL");
+					return false;
+				}
+				return m_Logic->Use(player, info, bag, pos);
 			}
 			void Room::SetLogicUserPvpRank(Logic::Player* player, const uint32 pvpRank)
 			{
@@ -160,8 +289,17 @@ namespace Lunia {
 			}
 			bool Room::PetItemUse(XRated::Logic::Player* player, uint32 id, int bag, int pos, XRated::GlobalSerial serial)
 			{
-				LoggerInstance().Exception("Missing implementation");
-				return false;
+				if (!player) {
+					LoggerInstance().Error("Room::PetItemUse() - player == NULL");
+					return false;
+				}
+				Database::Info::ItemInfo* info = Database::DatabaseInstance().InfoCollections.Items.Retrieve(id);
+				if (!info)
+				{
+					LoggerInstance().Error("Room::PetItemUse() - info == NULL");
+					return false;
+				}
+				return m_Logic->PetItemUse(player, info, bag, pos, serial);
 			}
 			void Room::DropPetItem(XRated::Logic::Player* player, XRated::GlobalSerial serial)
 			{
@@ -169,11 +307,19 @@ namespace Lunia {
 			}
 			void Room::PetFeed(XRated::Logic::Player* player, const XRated::GlobalSerial& petSerial, const uint32& foodAmount, const uint32& foodCount, bool overFeed)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				if (!player) {
+					LoggerInstance().Error("Room::PetFeed() - player == NULL");
+					return;
+				}
+				return m_Logic->PetFeed(player, petSerial, foodAmount, foodCount, overFeed);
 			}
 			void Room::PetLevelDecrease(Logic::Player* player, const GlobalSerial& petSerial, const uint32& downLevel, const bool& onlyMaxLevel)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				if (!player) {
+					LoggerInstance().Error("Room::PetLevelDecrease() - player == NULL");
+					return;
+				}
+				m_Logic->PetLevelDecrease(player, petSerial, downLevel, onlyMaxLevel);
 			}
 			bool Room::PetItemsEquip(Logic::Player* player, XRated::GlobalSerial petSerial, const Database::Info::ItemInfo* info, Database::Enchant::EnchantBitfields instance, uint32 equipPos)
 			{

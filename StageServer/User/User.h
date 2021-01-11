@@ -122,6 +122,7 @@ namespace Lunia {
 				bool IsLoaded() const;
 				bool IsItemLocked() const;
 				bool IsFishing() const;
+				bool IsEnoughSlotCountByProduceSkill(const uint32& skill);
 
 				//Getters
 				uint8			GetTeamNumber() const;
@@ -225,7 +226,7 @@ namespace Lunia {
 				void PetRename(const XRated::GlobalSerial petSerial, const std::wstring& newName);
 			public: //Item Related.
 				void LockItems(bool state);
-				
+				uint16 ItemEquiped(bool succeed);
 				int GetRequiredSlotCount(const std::vector< std::pair<uint32/*item hash*/, uint32/*count*/> >& toRemove, const std::vector< std::pair<uint32/*item hash*/, uint32/*count*/> >& toAdd, const uint32& availablecount = 1) const; ///<@ return negative value if the removing item slot is more than the adding item slot
 
 				uint32 GetRemainStackatbleItem(const Database::Info::ItemInfo* info, const InstanceEx& instance, const uint32& count) const;
@@ -313,6 +314,9 @@ namespace Lunia {
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::ListItem& packet);
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::ListQuickSlot& packet);
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::EquipSwap& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Use& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::MoveItem& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Voice& packet);
 			public://Db callbacks
 				void LicenseAquired(const UserSharedPtr& user, const Net::Answer& answer);
 				void PetCreated(const UserSharedPtr& user, const Net::Answer& answer);

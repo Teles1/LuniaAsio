@@ -606,10 +606,13 @@ namespace Lunia { namespace XRated {	namespace Logic {
 	{
 		bool returnValue = inventory.Equip(info, fields, where, equipmentOld, this, bForce, stageData->GetStageInfo()->RebirthCountEquipLimit);
 		if ( returnValue ) {
-			if (info)
-				playerData.Equipments.at(where).Id = info->Hash;
+			if (playerData.Equipments.size() >= where)
+				if (info)
+					playerData.Equipments.at(where).Id = info->Hash;
+				else
+					playerData.Equipments.at(where).Id = 0; //��������
 			else
-				playerData.Equipments.at(where).Id = 0; //��������
+				return false;
 		}
 		return returnValue;
 	}

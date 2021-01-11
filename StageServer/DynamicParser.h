@@ -34,7 +34,6 @@ namespace Lunia {
                         }
                     }
                 }
-
                 void Invoke(const SenderType user, Net::StreamReader& reader) {
                     AutoLock lock(cs);
                     auto itr = events.find(reader.GetSerializedTypeHash());

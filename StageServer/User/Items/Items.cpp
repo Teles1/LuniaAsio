@@ -1036,14 +1036,12 @@ namespace Lunia {
 					return false;
 				}
 
-				// ������ ��û�� ť�� ����
 				if (!itemRequirement.RequireItemUse(bag, pos))
 				{
 					ALLM_ERROR((L"Items::UseItem() - Error : RequireItemUse() == false"));
 					return false;
 				}
 
-				// ������ ��û
 				if (!event.ItemsUse(item->Info->Hash, bag, pos))
 				{
 					ALLM_ERROR((L"Items::UseItem() - Error : event.ItemsUse() == false"));
@@ -1289,14 +1287,12 @@ namespace Lunia {
 					return RequirePutOnEquip(invenBag, invenPos, equipPos);
 				}
 
-				// ������ ��û�� ť�� ����
 				if (!itemRequirement.RequireMoveEquip(false, equipItem->Info->Hash, equipPos, 0, invenPos, invenBag))
 				{
 					ALLM_ERROR((L"Items::RequireTakeOffEquip() - Error : RequireMoveEquip() == false"));
 					return false;
 				}
 
-				// ������ ��û
 				if (!event.ItemsEquip(NULL, 0, equipPos))
 				{
 					ALLM_ERROR((L"Items::TakeOffEquip() - Error : event.ItemsEquip() == false"));

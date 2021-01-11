@@ -104,6 +104,9 @@ namespace Lunia {
 				m_Parser.Bind<Protocol::ToServer::Chat>(*this, &User::Dispatch);
 				m_Parser.Bind<Protocol::ToServer::ListItem>(*this, &User::Dispatch);
 				m_Parser.Bind<Protocol::ToServer::ListQuickSlot>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Use>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::MoveItem>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Voice>(*this, &User::Dispatch);
 				m_Parser.Bind<Protocol::ToServer::Family::RefreshInfo>(m_FamilyManager, &FamilyManager::Dispatch);
 			}
 
@@ -1720,7 +1723,25 @@ namespace Lunia {
 
 			bool User::ItemsEquip(const Database::Info::ItemInfo* info, const Database::Enchant::EnchantBitfields& instance, const uint32& equipPos)
 			{
-				return false;
+				if (!m_Room || !m_Player)
+				{
+					LoggerInstance().Error("User::ItemsEquip() room == NULL || player == NULL");
+					return false;
+				}
+				//if (achievement.IsConnected() && info != NULL) {
+				//	std::wcout << L"ItemsEquip[" << info->Id << L"]" << std::endl;
+				//	Net::Protocol::Achievement::ServerProtocol::ItemAcquired packet;
+				//	packet.characterName = GetName();
+				//	packet.count = Net::Protocol::Achievement::ServerProtocol::ItemAcquired::Wear;
+				//	packet.equipPart = info->EquipParts;
+				//	packet.addItemType = 0xffffffff/* info->ItemType */;
+				//	packet.equipPart = info->EquipParts == 0 ? uint32(-1) : info->EquipParts;
+				//	packet.rarity = info->EquipLv;
+				//	packet.itemHash = info->Hash;
+				//	packet.isEquip = 1;
+				//	achievement.Send(packet);
+				//}
+				return m_Room->Equip(m_Player, info, instance, static_cast<XRated::Constants::Equipment>(equipPos));
 			}
 
 			bool User::ItemsEquipToEquip(const uint32& from, const uint32& to)
@@ -2008,10 +2029,12 @@ namespace Lunia {
 
 			void User::ItemsSend(Protocol::IPacketSerializable& packet)
 			{
+				Send(packet);
 			}
 
 			void User::ItemsSendToAll(Protocol::IPacketSerializable& packet)
 			{
+				SendToAll(packet);
 			}
 
 			void User::ItemsDirectSend(Protocol::IPacketSerializable& packet)
@@ -2021,16 +2044,29 @@ namespace Lunia {
 
 			bool User::ItemsUse(const uint32& itemHash, const uint32& bag, const uint32& pos)
 			{
-				return false;
+				if (!m_Room || !m_Player)
+				{
+					LoggerInstance().Error("User::ItemsUse({}) - Error : room == NULL || player == NULL", GetSerial());
+					return false;
+				}
+
+				return m_Room->Use(m_Player, itemHash, bag, pos);
 			}
 
 			bool User::PetItemUse(const uint32& itemHash, const uint32& bag, const uint32& pos, GlobalSerial itemSerial)
 			{
-				return false;
+				if (!m_Room || !m_Player)
+				{
+					LoggerInstance().Error("User::ItemsUse({}) - Error : room == NULL || player == NULL", GetSerial());
+					return false;
+				}
+
+				return m_Room->PetItemUse(m_Player, itemHash, bag, pos, itemSerial);
 			}
 
 			void User::PetInventoryDirectSend(Protocol::IPacketSerializable& packet)
 			{
+				Send(packet);
 			}
 
 			bool User::PetItemsEquip(XRated::GlobalSerial petSerial, const Database::Info::ItemInfo* info, const Database::Enchant::EnchantBitfields& instance, const uint32& equipPos)
@@ -2149,6 +2185,55 @@ namespace Lunia {
 				return m_RoomCapacity;
 			}
 
+			bool User::IsEnoughSlotCountByProduceSkill(const uint32& skill)
+			{
+				uint32 classHash = XRated::Constants::GetClassHash(GetClassType());
+				Database::Info::SkillInfoList::SkillGroup* skillGroup = Database::DatabaseInstance().InfoCollections.Skills.GetSkillGroupInfo(classHash, skill);
+				if (!skillGroup)
+				{
+					LoggerInstance().Error("User::IsEnoughSlotCountByProduceSkill() - SkillGroup == NULL");
+					return false;
+				}
+
+				if (Database::DatabaseInstance().InfoCollections.EnchantTables.IsProduceSkill(skillGroup->Name) == false)
+					return false;
+
+				std::vector< std::pair<uint32/*item hash*/, uint32/*count*/> > toRemove;
+				std::vector< std::pair<uint32/*item hash*/, uint32/*count*/> > toAdd;
+
+				/*toRemove*/
+				Database::Info::SkillInfoList::SkillInfo* skillinfo = GetSkillInfo(skill);
+				if (skillinfo == NULL)
+					return false;
+
+				size_t size = skillinfo->Reagents.size();
+				for (size_t i = 0; i < size; ++i)
+				{
+					toRemove.emplace_back(skillinfo->Reagents[i].Hash, skillinfo->Reagents[i].Cnt);
+				}
+
+				/*toAdd*/
+				Database::Enchant::EnchantTableManager::ItemInfosForProduce produceList;
+				Database::DatabaseInstance().InfoCollections.EnchantTables.RetrieveMakingSkillMadeItems(skillGroup->Name, m_Player->GetSkillLevel(skill) - 1, produceList);
+				if (produceList.empty()) return false;
+
+				Database::Enchant::EnchantTableManager::ItemInfosForProduce::const_iterator iter = produceList.begin();
+				while (iter != produceList.end())
+				{
+					toAdd.emplace_back(iter->first, iter->second);
+					++iter;
+				}
+
+				/* item validation */
+				int requiredSlotCount(GetRequiredSlotCount(toRemove, toAdd));
+				if (static_cast<int>(GetBlankSlotCountOfNormalBag()) < requiredSlotCount) // not enough item slots to put-in
+				{
+					return false;
+				}
+
+				return true;
+			}
+
 			uint32 User::GetRoomIndex() const
 			{
 				return m_RoomIndex;
@@ -2179,7 +2264,8 @@ namespace Lunia {
 
 			bool User::ItemAdd(const uint32& id, Serial gameObjectSerial, const int& cnt, const InstanceEx& instance, bool autoStack, XRated::Constants::AddItemType addItemType)
 			{
-				return false;
+				m_ItemsChanged = true;
+				return m_Items.ItemAcquired(id, gameObjectSerial, cnt, instance, autoStack, addItemType);
 			}
 
 			uint32 User::ItemFill(const uint32& hash, const uint32& amount)
@@ -2195,6 +2281,11 @@ namespace Lunia {
 			ItemPosition User::ItemAdd(const XRated::Item& item, const uint16& count)
 			{
 				return ItemPosition();
+			}
+
+			uint16 User::ItemEquiped(bool succeed)
+			{
+				return m_Items.ItemEquiped(succeed);
 			}
 
 			bool User::ItemAcquire(const uint32& itemId, Serial serial, const uint16& stackCount, const InstanceEx& instance, const uint64& itemSerial, bool addSeparate, XRated::Item* identifiedAcquireItem)
@@ -2628,7 +2719,6 @@ namespace Lunia {
 				return false;
 			}
 
-
 			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::LoadEnd& packet)
 			{
 				AutoLock lock(m_UserMtx);
@@ -2679,7 +2769,7 @@ namespace Lunia {
 				user->Send(packet);
 			}
 
-			void User::Dispatch(const UserSharedPtr user, StageServer::Protocol::ToServer::Join& packet)
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::Join& packet)
 			{
 				AutoLock lock(m_UserMtx);
 				if (!IsLoaded()) {
@@ -2739,9 +2829,14 @@ namespace Lunia {
 						switch (parsed.size())
 						{
 						case 1: return; // no effects;
-						case 4: instance = StringUtil::ToInt64(parsed[3]);
-						case 3: stackedCount = StringUtil::ToInt(parsed[2]); if (stackedCount == 0) stackedCount = 1;
-						case 2: itemHash = StringUtil::ToInt(parsed[1]);
+						case 4: 
+							instance = StringUtil::ToInt64(parsed[3]);
+						case 3: 
+							stackedCount = StringUtil::ToInt(parsed[2]); 
+							if (stackedCount == 0) 
+								stackedCount = 1;
+						case 2: 
+							itemHash = StringUtil::ToInt(parsed[1]);
 							break;
 						default:
 							return;
@@ -2749,7 +2844,7 @@ namespace Lunia {
 
 						ItemAdd(itemHash, 0, stackedCount, instance);
 					}
-					else if (parsed[0] == L"swap")
+					else if (parsed[0] == L"swap" && parsed.size() == 1)
 					{
 						Protocol::ToServer::EquipSwap packet;
 						packet.Set = StringUtil::ToInt(parsed[1]);
@@ -2759,6 +2854,7 @@ namespace Lunia {
 					{
 						m_Room->DebugCommand(shared_from_this(), packet.message.c_str() + 1);
 					}
+					LoggerInstance().Info(L"chat:{}-User:{}-{}", (int)packet.chattype, GetSerial(), packet.message);
 				}
 				else if (!m_Player && m_CharacterStateFlags.IsSpectator)
 				{
@@ -2779,6 +2875,108 @@ namespace Lunia {
 				m_Items.SwapEquipment(packet.Set);
 			}
 
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::Use& packet) 
+			{
+				AutoLock lock(m_UserMtx);
+
+				if (m_State == LOAD || m_State == NONE)
+					return;
+
+				if (IsItemLocked())
+				{
+					CriticalError("invalid state to use an item");
+					return;
+				}
+
+				/* validation */
+				if (m_Items.IsEnable(false, packet.itemposition.Bag) == false) /* normal inventory bag */
+				{
+					CriticalError("invaliad bag selected(on using)");
+					return;
+				}
+
+				if (!m_Items.UseItem(packet.itemposition.Bag, packet.itemposition.Position))
+				{
+					LoggerInstance().Error("User({})::Dispatch(Use) - items.UseItem({}, {}) == false", GetSerial(), packet.itemposition.Bag, packet.itemposition.Position);
+					return;
+				}
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::MoveItem& packet)
+			{
+				AutoLock lock(m_UserMtx);
+				/* critical validation */
+				if (Items::Validation::IsValidPacketParameter(ItemPosition(packet.pbag, packet.ppos)) == false ||
+					Items::Validation::IsValidPacketParameter(ItemPosition(packet.nbag, packet.npos)) == false)
+				{
+					user->CriticalError(fmt::format("invalid item position to move - ({}, {}) to ({}, {})", packet.pbag, packet.ppos, packet.nbag, packet.npos).c_str(), true);
+				}
+
+				if (m_IsItemLocked)
+				{
+					if (IsLoaded() == false)
+					{
+						Protocol::FromServer::MoveItem moveitem;
+						moveitem.pbag = 0xff;
+						moveitem.ppos = 0xff;
+						moveitem.nbag = 0xff;
+						moveitem.npos = 0xff;
+						Send(moveitem);
+						return;
+					}
+
+					CriticalError("invalid state to move an item");
+					return;
+				}
+
+				/* validation */
+				if (packet.nbag == 0) /* equip item */
+				{
+					const Common::ItemEx* item = m_Items.GetItem(packet.pbag, packet.ppos);
+					if (!item || !item->Info)
+					{
+						CriticalError("empty item selected");
+						return;
+					}
+
+					XRated::Constants::Equipment equipSlot = static_cast<XRated::Constants::Equipment>(packet.npos);
+					if (item->Info->ItemType != Database::Info::ItemInfo::Type::EQUIPMENT || XRated::Constants::IsEquippable(equipSlot, item->Info->EquipParts) == false)
+					{
+						CriticalError(fmt::format("wrong equipment(slot:{}, equipment:{}) from ({}, {})"
+							, equipSlot, item->Info->EquipParts, packet.pbag, packet.ppos).c_str(), true);
+						return;
+					}
+
+					if (Database::Enchant::IsEnchantable(item->Info) && static_cast<Database::Enchant::EnchantBitfields>(item->InstanceEx).IsDestoryed())
+					{
+						CriticalError("destroied equipment requested");
+						return;
+					}
+				}
+				else if (m_Items.IsEnable(false, packet.nbag) == false) /* normal inventory bag */
+				{
+					CriticalError("invaliad bag selected(on moving)");
+					return;
+				}
+
+				/*
+					in case of equipment, ItemsEquip() will be called in items.MoveItems()
+				*/
+				if (m_Items.MoveItems(packet.pbag, packet.ppos, packet.nbag, packet.npos))
+				{
+					m_ItemsChanged = true;
+				}
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::Voice& packet) {
+				AutoLock lock(m_UserMtx);
+
+				if (!m_Room || !m_Player)
+					return;
+
+				m_Room->Voice(m_Player->GetSerial(), packet);
+			}
+			
 			int User::GetRequiredSlotCount(const std::vector<std::pair<uint32, uint32>>& toRemove, const std::vector<std::pair<uint32, uint32>>& toAdd, const uint32& availablecount) const
 			{
 				return m_Items.GetRequiredSlotCount(toRemove, toAdd, availablecount);
