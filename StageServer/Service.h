@@ -1,5 +1,7 @@
 #pragma once
 #include <Core/Serializer/Serializer.h>
+#include <Network/Api/Json.hpp>
+using nlohmann::json;
 namespace Lunia {
 	namespace XRated {
 		struct StageStates {
@@ -28,6 +30,8 @@ namespace Lunia {
 
 				void Serialize(Serializer::IStreamWriter& out) const;
 				void Deserialize(Serializer::IStreamReader& in);
+				friend void to_json(json& j, const SquareInfo& p);
+				friend void from_json(const json& j, SquareInfo& p);
 			};
 		}
 	}

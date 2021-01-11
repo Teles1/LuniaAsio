@@ -248,5 +248,8 @@
     <ClInclude Include="DynamicParser.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="User\Communicators.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

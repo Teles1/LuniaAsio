@@ -97,6 +97,10 @@ namespace Lunia {
 				}
 			}
 
+			void UserManager::RequestValidGuildInfo(UserSharedPtr user)
+			{
+			}
+
 			UserManager::~UserManager() {}
 
 			UserManager::UserManager() {}

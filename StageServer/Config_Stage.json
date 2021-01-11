@@ -5,7 +5,7 @@
       "LoggingLevel": 0
     },
     "ServerAddress": {
-      "ServerIp": "127.0.0.1",
+      "ServerIp": "184.146.121.247",
       "ServerPort": 15551
     },
     "ApiUrl": "http://localhost:51542/Square",
@@ -22,27 +22,36 @@
       "RoomSize": 2,
       "PreloadMovemap": false,
       "PreloadScripts": false,
-      "SquareList": [
+      "SquareInfos": [
         {
-          "Name": "01 Square",
-          "StageGroupHash": 53518598,
-          "AccessLevel": 0,
-          "OrderNumber": 1,
-          "Capacity": 70
+          "accessLevel": 0,
+          "maxFishing": 20,
+          "maxPlayerStore": 20,
+          "maxUserCnt": 80,
+          "orderNumber": 0,
+          "slimeRacingIntervalInMin": 1,
+          "squareName": "01 Square",
+          "stageGroupHash": 53518598
         },
         {
-          "Name": "02 Square",
-          "StageGroupHash": 53518598,
-          "AccessLevel": 0,
-          "OrderNumber": 2,
-          "Capacity": 70
+          "accessLevel": 0,
+          "maxFishing": 20,
+          "maxPlayerStore": 20,
+          "maxUserCnt": 80,
+          "orderNumber": 1,
+          "slimeRacingIntervalInMin": 1,
+          "squareName": "02 Square",
+          "stageGroupHash": 53518598
         },
         {
-          "Name": "03 Square",
-          "StageGroupHash": 53518598,
-          "AccessLevel": 0,
-          "OrderNumber": 3,
-          "Capacity": 70
+          "accessLevel": 0,
+          "maxFishing": 20,
+          "maxPlayerStore": 20,
+          "maxUserCnt": 80,
+          "orderNumber": 2,
+          "slimeRacingIntervalInMin": 1,
+          "squareName": "03 Square",
+          "stageGroupHash": 53518598
         }
       ]
     },

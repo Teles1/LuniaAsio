@@ -79,18 +79,4 @@ namespace Lunia {
         j.at("ShowPacket").get_to(t.ShowPacket);
         j.at("AchievementAddress").get_to(t.AchievementAddress);
     }
-    void to_json(json& j, const SquareStruct& t) {
-        j["Name"] = t.Name;
-        j["StageGroupHash"] = t.StageGroupHash;
-        j["AccessLevel"] = t.AccessLevel;
-        j["Capacity"] = t.Capacity;
-        j["OrderNumber"] = t.OrderNumber;
-    }
-    void from_json(const json& j, SquareStruct& t) {
-        j.at("Name").get_to(t.Name);
-        j.at("StageGroupHash").get_to(t.StageGroupHash);
-        j.at("AccessLevel").get_to(t.AccessLevel);
-        j.at("Capacity").get_to(t.Capacity);
-        j.at("OrderNumber").get_to(t.OrderNumber);
-    }
 }

@@ -223,6 +223,7 @@
     <ClInclude Include="Protocol\Protocol.h" />
     <ClInclude Include="Protocol\ToServer.h" />
     <ClInclude Include="Services\ItemSerial.h" />
+    <ClInclude Include="User\Communicators.h" />
     <ClInclude Include="User\Items\Bag.h" />
     <ClInclude Include="User\Items\Enchanter.h" />
     <ClInclude Include="User\Items\Equip.h" />

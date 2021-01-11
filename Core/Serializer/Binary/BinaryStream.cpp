@@ -27,7 +27,7 @@ namespace Lunia {
 		com_ptr<IRefCountedStreamWriter> CreateBinaryStreamWriter(com_ptr<Lunia::IRefCountedStreamWriter> stream) {
 			return new BinaryStreamWriter(stream);
 		}
-		com_ptr<IRefCountedStreamReader>  CreateBinaryStreamReader(com_ptr<Lunia::IRefCountedStreamReader> stream) {
+		com_ptr<IRefCountedStreamReader> CreateBinaryStreamReader(com_ptr<Lunia::IRefCountedStreamReader> stream) {
 			return new BinaryStreamReader(stream);
 		}
 

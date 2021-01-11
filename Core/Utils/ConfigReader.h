@@ -38,17 +38,6 @@ namespace Lunia {
         friend void to_json(json& j, const GeneralSettings& t);
         friend void from_json(const json& j, GeneralSettings& t);
     };
-    struct SquareStruct {
-    public:
-        std::string Name;
-        uint32 StageGroupHash;
-        uint16 AccessLevel;
-        uint8 OrderNumber;
-        uint16 Capacity;
-        friend void to_json(json& j, const SquareStruct& t);
-        friend void from_json(const json& j, SquareStruct& t);
-    };
-
     struct Config {
     private:
         bool FileExists(const std::string& name);

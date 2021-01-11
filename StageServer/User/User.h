@@ -62,6 +62,7 @@ namespace Lunia {
 				void MailAlarmed();
 				void RemoveFishingUser();
 				void PlayerDeleted();
+				void EnterShop(const Constants::ShopType& type, const uint32& param);
 				//Setters
 				void SetSerial(const uint64& userSerial);
 				void SetCurrentStage(const StageLicense& targetStage);
@@ -186,6 +187,15 @@ namespace Lunia {
 				void ShareQuestToParty(const Database::Info::QuestInfo& info, const uint32& questHash);
 				void ShareQuest(const std::wstring& shareOwner, const Database::Info::QuestInfo& info, const uint32& questHash);
 				bool ClearGuildInfo();
+				struct ValidGuildInfo {
+					uint8	GuildLevel;
+					enum Requested {
+						None = 0,
+						EnterGuildShop,
+					};
+					Requested	type;
+				};
+				ValidGuildInfo m_ValidGuildInfo;
 			public://Quests
 				void CompletedQuest(const uint32& questHash);
 				void AcceptedQuest(const uint32& questHash);
@@ -317,6 +327,8 @@ namespace Lunia {
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Use& packet);
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::MoveItem& packet);
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Voice& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::EnterShop& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::LeaveShop& packet);
 			public://Db callbacks
 				void LicenseAquired(const UserSharedPtr& user, const Net::Answer& answer);
 				void PetCreated(const UserSharedPtr& user, const Net::Answer& answer);

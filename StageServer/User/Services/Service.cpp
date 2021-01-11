@@ -29,6 +29,32 @@ namespace Lunia {
 				in.Read(L"maxUserCnt", maxUserCnt, 0);
 				in.Read(L"slimeRacingIntervalInMin", slimeRacingIntervalInMin, 5);
 			}
+			void to_json(json& j, const SquareInfo& p)
+			{
+				j = json{
+					{"squareName", p.squareName},
+					{"stageGroupHash", p.stageGroupHash},
+					{"accessLevel", p.accessLevel},
+					{"orderNumber", p.orderNumber},
+					{"maxPlayerStore", p.maxPlayerStore},
+					{"maxFishing", p.maxFishing},
+					{"maxUserCnt", p.maxUserCnt},
+					{"slimeRacingIntervalInMin", p.slimeRacingIntervalInMin}
+				};
+			}
+			void from_json(const json& j, SquareInfo& p)
+			{
+				j.at("squareName").get_to(p.squareName);
+				j.at("stageGroupHash").get_to(p.stageGroupHash);
+				j.at("orderNumber").get_to(p.orderNumber);
+				j.at("maxPlayerStore").get_to(p.maxPlayerStore);
+				j.at("maxFishing").get_to(p.maxFishing);
+				j.at("maxUserCnt").get_to(p.maxUserCnt);
+				if (!j.at("slimeRacingIntervalInMin").is_null())
+					j.at("slimeRacingIntervalInMin").get_to(p.slimeRacingIntervalInMin);
+				else
+					p.slimeRacingIntervalInMin = 1;
+			}
 		}
 	}
 }

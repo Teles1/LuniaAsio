@@ -107,6 +107,8 @@ namespace Lunia {
 				m_Parser.Bind<Protocol::ToServer::Use>(*this, &User::Dispatch);
 				m_Parser.Bind<Protocol::ToServer::MoveItem>(*this, &User::Dispatch);
 				m_Parser.Bind<Protocol::ToServer::Voice>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::EnterShop>(*this, &User::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::LeaveShop>(*this, &User::Dispatch);
 				m_Parser.Bind<Protocol::ToServer::Family::RefreshInfo>(m_FamilyManager, &FamilyManager::Dispatch);
 			}
 
@@ -1622,6 +1624,40 @@ namespace Lunia {
 				m_Room->ChangedExpFactorFromItem(shared_from_this(), category, factor);
 			}
 
+			void User::EnterShop(const Constants::ShopType& type, const uint32& param)
+			{
+				AutoLock lock(m_UserMtx);
+				if (!m_Room || !m_Player)
+					return;
+				if (m_IsItemLocked)
+					return;
+				if (m_State == VOTING)
+					return;
+				m_State = SHOP;
+				m_EnterShop = type;
+				if (m_EnterShop == XRated::Constants::ShopType::GuildShop) {
+					if (IsPartOfGuild() == false) {
+						CriticalError(("this user is not joined guild"));
+						return;
+					}
+					m_ValidGuildInfo.GuildLevel = (uint8)param;
+					m_ValidGuildInfo.type = ValidGuildInfo::Requested::EnterGuildShop;
+					if (param != (uint32)GetGuildInfo().GuildLevel) {
+						UserManagerInstance().RequestValidGuildInfo(shared_from_this());
+						return;
+					}
+				}
+				Serial playerSerial;
+				{
+					AutoLock playerLock(m_PlayerMtx);
+					if (!m_Player)
+						return;
+					playerSerial = m_Player->GetSerial();
+					m_Room->Command(m_Player, Constants::Command::Stop, XRated::Constants::None);
+				}
+				m_Room->EnterShop(playerSerial, type, param);
+			}
+
 			void User::SetFamilyExpFactor(const float& factor)
 			{
 				m_ExpFactorManager.SetFamilyExpFactor(factor);
@@ -2989,6 +3025,17 @@ namespace Lunia {
 					return;
 
 				m_Room->Voice(m_Player->GetSerial(), packet);
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::EnterShop& packet) {
+				EnterShop(packet.shopnumber, packet.param);
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::LeaveShop& packet) {
+				AutoLock lock(m_UserMtx);
+
+				if (!m_Room || !m_Player)
+					return;
 			}
 			
 			int User::GetRequiredSlotCount(const std::vector<std::pair<uint32, uint32>>& toRemove, const std::vector<std::pair<uint32, uint32>>& toAdd, const uint32& availablecount) const

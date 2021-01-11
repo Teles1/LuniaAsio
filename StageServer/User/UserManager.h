@@ -33,6 +33,7 @@ namespace Lunia {
 				bool DoesExist(const UserSharedPtr& user) const;
 				void SendCurrentStageEvents(const UserSharedPtr& user) const;
 				void StageChanged(UserSharedPtr user); // right before the room logic is changed. actually, right after the voting to change the stage is completed.
+				void RequestValidGuildInfo(UserSharedPtr user);
 			public:
 				bool AuthenticateUser(const uint32& userId, const json& result);
 				void RoomAuth(const UserSharedPtr& user);

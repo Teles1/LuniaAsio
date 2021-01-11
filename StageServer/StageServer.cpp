@@ -3,7 +3,7 @@
 #include "StageServer.h"
 #include <StageServer/User/UserManager.h>
 #include <Info/Info.h>
-
+#include <StageServer/Service.h>
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
@@ -16,7 +16,7 @@ namespace Lunia {
 				while (true) {
 					Net::Answer result("", -1);
 					if (Config::GetInstance().GetKind() == SquareKind)
-						result = api.RequestPost(Config::GetInstance().Get<std::vector<SquareStruct>>("SquareList"));
+						result = api.RequestPost(Config::GetInstance().Get<std::vector<Service::SquareInfo>>("SquareInfos"));
 					else if (Config::GetInstance().GetKind() == StageKind)
 						result = api.RequestApi();
 					else

@@ -1279,10 +1279,10 @@ namespace Lunia {
 
 				case Common::SQUARE:
 				{
-					const std::vector<SquareStruct> squareInfos = ConfigInstance().Get<std::vector<SquareStruct>>("SquareList");
+					const std::vector<Service::SquareInfo> squareInfos = ConfigInstance().Get<std::vector<Service::SquareInfo>>("SquareInfos");
 					uint16 capacity = 80;
 					if (m_RoomIndex >= 0 && m_RoomIndex < squareInfos.size())
-						capacity = squareInfos[m_RoomIndex].Capacity;
+						capacity = squareInfos[m_RoomIndex].maxUserCnt;
 
 					if (m_UserManager.NowCnt() >= capacity)
 					{

@@ -250,7 +250,7 @@ namespace Lunia {
 				{
 					std::vector<uint8>::const_iterator iter = std::find(bags.begin(), bags.end(), it->first);
 					if (iter == bags.end())
-						bags.push_back(it->first);
+						bags.emplace_back(it->first);
 				}
 
 				it = cashEquipSet.begin();
@@ -258,7 +258,7 @@ namespace Lunia {
 				{
 					std::vector<uint8>::const_iterator iter = std::find(bags.begin(), bags.end(), it->first);
 					if (iter == bags.end())
-						bags.push_back(it->first);
+						bags.emplace_back(it->first);
 				}
 			}
 
@@ -329,7 +329,7 @@ namespace Lunia {
 							item.itemHash = 0;
 							item.InstanceEx = 0;
 						}
-						list.push_back(item);
+						list.emplace_back(item);
 					}
 				}
 			}
@@ -355,7 +355,7 @@ namespace Lunia {
 							item.itemHash = 0;
 							item.InstanceEx = 0;
 						}
-						list.push_back(item);
+						list.emplace_back(item);
 					}
 				}
 			}
@@ -409,7 +409,7 @@ namespace Lunia {
 							Equipments::const_iterator equip = it->second.find(position);
 							if (equip != it->second.end())
 							{
-								items.push_back(equip->second);
+								items.emplace_back(equip->second);
 								continue;
 							}
 						}
@@ -422,7 +422,7 @@ namespace Lunia {
 							Equipments::const_iterator equip = it->second.find(position);
 							if (equip != it->second.end())
 							{
-								items.push_back(equip->second);
+								items.emplace_back(equip->second);
 								continue;
 							}
 						}
@@ -432,11 +432,11 @@ namespace Lunia {
 						Equipments::const_iterator equip = etcEquips.find(position);
 						if (equip != etcEquips.end())
 						{
-							items.push_back(equip->second);
+							items.emplace_back(equip->second);
 							continue;
 						}
 					}
-					items.push_back(Common::ItemEx());
+					items.emplace_back(Common::ItemEx());
 				}
 			}
 
@@ -461,7 +461,7 @@ namespace Lunia {
 						itemSlot.Stacked = itemIter->second.StackedCount;
 						itemSlot.InstanceEx = itemIter->second.InstanceEx;
 
-						allItems.push_back(itemSlot);
+						allItems.emplace_back(itemSlot);
 					}
 				}
 
@@ -484,7 +484,7 @@ namespace Lunia {
 						itemSlot.Stacked = itemIter->second.StackedCount;
 						itemSlot.InstanceEx = itemIter->second.InstanceEx;
 
-						allItems.push_back(itemSlot);
+						allItems.emplace_back(itemSlot);
 					}
 				}
 
@@ -505,7 +505,7 @@ namespace Lunia {
 						itemSlot.Stacked = itemIter->second.StackedCount;
 						itemSlot.InstanceEx = itemIter->second.InstanceEx;
 
-						allItems.push_back(itemSlot);
+						allItems.emplace_back(itemSlot);
 					}
 				}
 			}
