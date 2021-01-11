@@ -82,7 +82,12 @@ namespace Lunia {
 					Info::DailyItemInfoManager DailyItems;
 					Info::MailAwardItemTable MailAwardItemInfos;
 					Info::QuestInfoManager Quests;
+					~Collection() {
+					};
 				} InfoCollections;
+				~LuniaDatabase() {
+
+				}
 			};
 			LuniaDatabase& DatabaseInstance();
 		}

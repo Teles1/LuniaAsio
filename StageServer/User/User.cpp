@@ -444,7 +444,21 @@ namespace Lunia {
 					Logger::GetInstance().Error(L"User::Auth_CharacterLicenses={0}", GetSerial());
 					return false;
 				}
-				m_Items.SetItemList(result["bags"], result["items"]);
+				int stageItemCount = m_Items.SetItemList(result["bags"], result["items"]);
+				if (stageItemCount > 0)
+					m_ItemsChanged = true;
+#ifdef BAN_DUPLICATED_ITEM_SERIAL
+				else if (stageItemCount < 0)
+				{
+					CriticalError("duplicated item detected on initializing the character", true, 1); // arcrus. only 1sec blocking
+					return false;
+				}
+#endif
+				m_PlayerInitialData.equipments.clear();
+				std::vector<Common::ItemEx> equipments;
+				m_Items.GetEquip(equipments);
+				for (auto& i : equipments)
+					m_PlayerInitialData.equipments.emplace_back(i.Info, i.InstanceEx);
 				if (!Auth_SkillLicenses(result["skillLicenses"])) {
 					Logger::GetInstance().Error(L"User::Auth_SkillLicenses={0}", GetSerial());
 				}

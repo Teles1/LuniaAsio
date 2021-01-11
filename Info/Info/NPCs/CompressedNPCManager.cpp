@@ -53,7 +53,7 @@ namespace Lunia {
 						new FileIO::RefCountedMemoryStreamReader(&outBuf[0], (uint32)dstLen)
 					);
 					BlockDecrypted->Read(L"NPCInfoManager", Npcs, false);
-
+					
 					delete[] buffer;
 				}
 

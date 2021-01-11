@@ -26,7 +26,9 @@ namespace Lunia {
 					ItemInfo* Retrieve(const wchar_t* name);
 					UnidentifiedItemInfo* RetrieveUnidentifiedItem(const uint32& hash);
 					UnidentifiedItemInfo* RetrieveUnidentifiedItem(const wchar_t* id);
-
+					~CompressedItemInfoManager() {
+						delete& compressedItemsCBF;
+					}
 				private:
 					bool GetUnidentifiedItems(const uint32& templateOffset);
 					bool GetItems(const uint32& templateOffset);

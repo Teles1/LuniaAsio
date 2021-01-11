@@ -51,7 +51,6 @@ int main(int argc, char* argv[])
 	Lunia::Config::GetInstance( "Config_Stage.json" );
 	Lunia::Resource::ResourceSystemInstance().AddPath(L"../x64/Debug/");
 	DatabaseInstance().Init();
-	//Load Config
 	StageServer stageServer( Lunia::Config::GetInstance().Settings.ServerAddress );
 	stageServer.Run(); 
 	return 0;

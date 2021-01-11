@@ -113,11 +113,11 @@ namespace Lunia {
 				//Bags Character
 				for (auto& x : Bags["bags"])
 					if (!x["isBank"].get<bool>())
-						sendPacket.Bags.push_back(XRated::BagState(x["bagNumber"].get<int>(), x["expireDate"].get<std::string>()));
+						sendPacket.Bags.emplace_back(x["bagNumber"].get<int>(), x["expireDate"].get<std::string>());
 
 				//Bags Bank
 				for (auto& x : Bags["bankBags"])
-					sendPacket.BankBags.push_back(XRated::BagState(x["bagNumber"].get<int>(), x["expireDate"].get<std::string>()));
+					sendPacket.BankBags.emplace_back(x["bagNumber"].get<int>(), x["expireDate"].get<std::string>());
 
 				Send(sendPacket);
 				/* initialize bags */
@@ -141,7 +141,7 @@ namespace Lunia {
 
 					bank.RenewBag(state.BagNumber, state.ExpireDate);
 					state.Expired = !(bank.IsEnable(state.BagNumber));
-					bagStatePacket.BankBags.push_back(state);
+					bagStatePacket.BankBags.emplace_back(state);
 				}
 				event.ItemsDirectSend(bagStatePacket);
 

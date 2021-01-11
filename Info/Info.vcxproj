@@ -240,7 +240,6 @@
     <ClInclude Include="Info\NonPlayerModifier\NonPlayerModifier.h" />
     <ClInclude Include="Info\NonPlayerModifier\NonPlayerModifierManager.h" />
     <ClInclude Include="Info\NPCs\CompressedNPCManager.h" />
-    <ClInclude Include="Info\NPCs\IndexedNPCInfo.h" />
     <ClInclude Include="Info\NPCs\NPC.h" />
     <ClInclude Include="Info\NPCs\NPCManager.h" />
     <ClInclude Include="Info\Pets\Pets.h" />
@@ -323,7 +322,6 @@
     <ClCompile Include="Info\NonPlayerModifier\NonPlayerModifierManager.cpp" />
     <ClCompile Include="Info\NonPlayerModifier\NonPlayerModifier.cpp" />
     <ClCompile Include="Info\NPCs\CompressedNPCManager.cpp" />
-    <ClCompile Include="Info\NPCs\IndexedNPCInfo.cpp" />
     <ClCompile Include="Info\NPCs\NPC.cpp" />
     <ClCompile Include="Info\NPCs\NPCManager.cpp" />
     <ClCompile Include="Info\Pets\Pets.cpp" />

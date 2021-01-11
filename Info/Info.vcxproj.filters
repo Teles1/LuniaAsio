@@ -11,9 +11,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Info\NPCs\IndexedNPCInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Info\NPCs\NPC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -272,9 +269,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Info.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Info\NPCs\IndexedNPCInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Info\NPCs\NPC.cpp">
