@@ -46,6 +46,7 @@ namespace Lunia {
 			{
 				j.at("squareName").get_to(p.squareName);
 				j.at("stageGroupHash").get_to(p.stageGroupHash);
+				j.at("accessLevel").get_to(p.accessLevel);
 				j.at("orderNumber").get_to(p.orderNumber);
 				j.at("maxPlayerStore").get_to(p.maxPlayerStore);
 				j.at("maxFishing").get_to(p.maxFishing);
