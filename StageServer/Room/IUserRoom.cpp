@@ -360,11 +360,19 @@ namespace Lunia {
 			}
 			void Room::EnterShop(const uint64& serial, Constants::ShopType shop, uint32 param)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				Protocol::FromServer::EnterShop entershop;
+				entershop.playerserial = serial;
+				entershop.shopnumber = shop;
+				entershop.param = param;
+				m_UserManager.BroadcastToSerialUsers(entershop);
 			}
 			void Room::LeaveShop(const uint64& serial, float3 position, float3 direction)
 			{
-				LoggerInstance().Exception("Missing implementation");
+				Protocol::FromServer::LeaveShop leaveshop;
+				leaveshop.playerserial = serial;
+				leaveshop.position = position;
+				leaveshop.direction = direction;
+				m_UserManager.BroadcastToSerialUsers(leaveshop);
 			}
 			void Room::JoinEndUser(UserSharedPtr user, float progress)
 			{
