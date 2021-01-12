@@ -104,7 +104,7 @@ namespace Lunia {
 
 			void UserManager::RequestValidGuildInfo(UserSharedPtr user)
 			{
-
+				m_Communicators.Guild.RequestValidGuildInfo(user);
 			}
 
 			UserManager::~UserManager() {}

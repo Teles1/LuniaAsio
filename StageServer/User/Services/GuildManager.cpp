@@ -37,7 +37,7 @@ namespace Lunia {
 					/* fee processing */
 					user->SetMoney(user->GetMoney() - CreationFee);
 					//' request  : guild name, guild id, character name(guild master), intro message, stageLevel, pvpLevel, exp
-					Net::Api request("Guild_v3.Create");
+					Net::Api request("Guild/Create");
 					request << packet.GuildName << packet.Alias << user->GetSerial() << packet.Message;
 					request.GetAsync(this, &GuildManager::Created, user);
 				}
@@ -138,7 +138,7 @@ namespace Lunia {
 				}
 				else
 				{
-					Net::Api request("Guild_v3.Join");
+					Net::Api request("Guild/Join");
 					request << packet.GuildId << user->GetName() << 4;
 					request.GetAsync(this, &GuildManager::Joined, user);
 				}
@@ -165,7 +165,7 @@ namespace Lunia {
 					/* TODO : Make critical */
 				}
 				else {
-					Net::Api request("Guild_v3.Kick");
+					Net::Api request("Guild/Kick");
 					request << user->GetGuildInfo().GuildId << user->GetGuildInfo().GuildMemberId << packet.TargetCharacterName;
 					request.GetAsync(this, &GuildManager::Kicked, user);
 
@@ -189,7 +189,7 @@ namespace Lunia {
 				else
 				{
 					//' request  : guild oid, character name, kicked
-					Net::Api request("Guild_v3.Leave");
+					Net::Api request("Guild/Leave");
 					request << user->GetGuildInfo().GuildId << user->GetGuildInfo().GuildMemberId;
 					request.GetAsync(this, &GuildManager::Left, user);
 				}
@@ -211,7 +211,7 @@ namespace Lunia {
 				else
 				{
 					//' request  : guild oid, character name, kicked
-					Net::Api request("Guild_v3.ListMembers");
+					Net::Api request("Guild/ListMembers");
 					//request : guildid
 					request << user->GetGuildInfo().GuildId;
 					request.GetAsync(this, &GuildManager::MemberListed, user);
@@ -237,7 +237,7 @@ namespace Lunia {
 				else
 				{
 					//' request  : guild oid
-					Net::Api request("Guild_v3.Remove");
+					Net::Api request("Guild/Remove");
 					request << user->GetGuildInfo().GuildId << user->GetName();
 					request.GetAsync(this, &GuildManager::Removed, user);
 				}
@@ -261,7 +261,7 @@ namespace Lunia {
 				else
 				{
 					//' request  : guild name
-					Net::Api request("Guild_v3.CheckName");
+					Net::Api request("Guild/CheckName");
 					request << packet.Name;
 					request.GetAsync(this, &GuildManager::NameValidated, user);
 				}
@@ -285,7 +285,7 @@ namespace Lunia {
 				else
 				{
 					//' request  : guild name
-					Net::Api request("Guild_v3.CheckAlias");
+					Net::Api request("Guild/CheckAlias");
 					request << packet.Alias;
 					request.GetAsync(this, &GuildManager::AliasValidated, user);
 				}
@@ -323,7 +323,7 @@ namespace Lunia {
 
 					std::pair<bool, uint32> nextLevelExp = Database::DatabaseInstance().InfoCollections.GuildInfos.GetNextLevelExp(user->GetGuildInfo().GuildLevel);
 					if (nextLevelExp.first == true) {
-						Net::Api request("Guild_v3.ExpUp");
+						Net::Api request("Guild/ExpUp");
 						request << user->GetGuildInfo().GuildId << user->GetGuildInfo().GuildMemberId << calculated.second;
 						request.GetAsync(this, &GuildManager::AddedGuildExp, user);
 						return;
@@ -359,7 +359,7 @@ namespace Lunia {
 					Point = packet.Point;
 				if (user->RemoveItems(packet.ItemHash, Point) == true)
 				{
-					Net::Api request("Guild_v3.Maintain");
+					Net::Api request("Guild/Maintain");
 					request << user->GetGuildInfo().GuildId << user->GetGuildInfo().GuildMemberId << Point;
 					request.GetAsync(this, &GuildManager::AddedGuildExp, user);
 				}
@@ -429,7 +429,7 @@ namespace Lunia {
 				}
 				else
 				{
-					Net::Api request("Guild_v3.DrawTax");
+					Net::Api request("Guild/DrawTax");
 
 					//request : guildId, guildMemberId, tax
 					request << user->GetGuildInfo().GuildId << user->GetGuildInfo().GuildMemberId << packet.tax;
@@ -457,7 +457,7 @@ namespace Lunia {
 					//request guild item list.
 					if (GetGuildsUserManager().SetLastDbRequestedGuildShopItem(guildId, packet.Item) == true) {
 						//request db.
-						Net::Api request("Guild_v3.ListGuildShopProduct");
+						Net::Api request("Guild/ListGuildShopProduct");
 						request << guildId;
 						request.GetAsync(this, &GuildManager::ReflashedListGuildShopItem, user);
 					}
@@ -477,7 +477,7 @@ namespace Lunia {
 				}
 				else {
 
-					Net::Api request("Guild_v3.ChangeMessage");
+					Net::Api request("Guild/ChangeMessage");
 					//request : guildId, newMessage, guildMemberId
 					request << user->GetGuildInfo().GuildId << packet.Message << user->GetGuildInfo().GuildMemberId;
 					request.GetAsync(this, &GuildManager::MessageChanged, user);
@@ -496,7 +496,7 @@ namespace Lunia {
 					/* TODO : Make critical */
 				}
 				else {
-					Net::Api request("Guild_v3.ChangeGradeName");
+					Net::Api request("Guild/ChangeGradeName");
 					request << user->GetGuildInfo().GuildId << packet.TargetGrade << user->GetGuildInfo().GuildMemberId << packet.TargetGradeName;
 					request.GetAsync(this, &GuildManager::GradeNameChanged, user);
 				}
@@ -516,7 +516,7 @@ namespace Lunia {
 					/* TODO : Make critical */
 				}
 				else {
-					Net::Api request("Guild_v3.ChangeGradeAuthority");
+					Net::Api request("Guild/ChangeGradeAuthority");
 					// request : guildId, grade, guildMemberId, authority
 					request << user->GetGuildInfo().GuildId << packet.TargetGrade << user->GetGuildInfo().GuildMemberId << packet.Authority;
 					request.GetAsync(this, &GuildManager::GradeAuthChanged, user);
@@ -545,7 +545,7 @@ namespace Lunia {
 					/* TODO : Make critical */
 				}
 				else {
-					Net::Api request("Guild_v3.ChangeMemberGrade");
+					Net::Api request("Guild/ChangeMemberGrade");
 					// request : guildId, guildMemberId, characterName_target, grade_target
 					request << user->GetGuildInfo().GuildId << user->GetGuildInfo().GuildMemberId << packet.TargetCharacterName << packet.Grade;
 					request.GetAsync(this, &GuildManager::GradeChanged, user);
@@ -575,7 +575,7 @@ namespace Lunia {
 					/* TODO : Make critical */
 				}
 				else {
-					Net::Api request("Guild_v3.ChangeMaster");
+					Net::Api request("Guild/ChangeMaster");
 					// request guildid, guildMemberId, characterName_Target
 					request << user->GetGuildInfo().GuildId << user->GetGuildInfo().GuildMemberId << packet.TargetCharacterName;
 					request.GetAsync(this, &GuildManager::GuildMasterChanged, user);
@@ -608,7 +608,7 @@ namespace Lunia {
 					/* TODO : Make critical */
 				}
 				else {
-					Net::Api request("Guild_v3.JoinedInfo");
+					Net::Api request("Guild/JoinedInfo");
 					//request : characterName
 					request << user->GetSerial();
 					request.GetAsync(this, &GuildManager::MyInfoRefreshed, user);
@@ -622,7 +622,7 @@ namespace Lunia {
 					return;
 				}
 
-				Net::Api request("Guild_v3.JoinedInfo");
+				Net::Api request("Guild/JoinedInfo");
 				request << user->GetSerial();
 				request.GetAsync(this, &GuildManager::MyInfoVaild, user);
 			}
@@ -634,7 +634,7 @@ namespace Lunia {
 					return;
 				}
 
-				Net::Api request("Guild_v3.JoinedInfo");
+				Net::Api request("Guild/JoinedInfo");
 				request << user->GetSerial();
 				request.GetAsync(this, &GuildManager::MyInfoRefreshed, user);
 			}
@@ -648,7 +648,7 @@ namespace Lunia {
 				}
 
 				user->SetRequestedInitGuildInfo(true);
-				Net::Api request("Guild_v3.JoinedInfo");
+				Net::Api request("Guild/JoinedInfo");
 				request << user->GetSerial();
 				request.GetAsync(this, &GuildManager::SetPlayer, user);
 			}
@@ -660,7 +660,7 @@ namespace Lunia {
 					return;
 				}
 
-				Net::Api request("Guild_v3.JoinedInfo");
+				Net::Api request("Guild/JoinedInfo");
 				//request : characterName
 				request << user->GetSerial();
 				request.GetAsync(this, &GuildManager::MyInfoRefreshed, user);
@@ -680,7 +680,7 @@ namespace Lunia {
 				}
 				else
 				{
-					Net::Api request("Guild_v3.Maintain");
+					Net::Api request("Guild/Maintain");
 					//request : guildid, guildMemberId, guildPoint
 					request << user->GetGuildInfo().GuildId << user->GetGuildInfo().GuildMemberId << point;
 					request.GetAsync(this, &GuildManager::AddedGuildPoint, user);
@@ -701,7 +701,7 @@ namespace Lunia {
 				}
 				else
 				{
-					Net::Api request("Guild_v3.ExpUp");
+					Net::Api request("Guild/ExpUp");
 					//request : guildid, guildMemberId, guildPoint
 					request << user->GetGuildInfo().GuildId << user->GetGuildInfo().GuildMemberId << exp;
 					request.GetAsync(this, &GuildManager::AddedGuildExpByItem, user);
@@ -722,7 +722,7 @@ namespace Lunia {
 				}
 				else
 				{
-					Net::Api request("Guild_v3.AddGuildPlayTime");
+					Net::Api request("Guild/AddGuildPlayTime");
 					//request : guildid, guildMemberId, guildPoint
 					const uint32 secondsInOneHour = 3600;
 					request << user->GetGuildInfo().GuildId << (hours * secondsInOneHour);
@@ -743,7 +743,7 @@ namespace Lunia {
 					return;
 				}
 
-				Net::Api request("Guild_v3.AddGuildShopProduct");
+				Net::Api request("Guild/AddGuildShopProduct");
 				//request : guildId,guildMemberId,itemHash,usableGuildLevel,days
 				request << user->GetGuildInfo().GuildId << user->GetGuildInfo().GuildMemberId << addItemHash << usableGuildLevel << day;
 				request.GetAsync(this, &GuildManager::AddedItemToGuildShop, user);
@@ -760,7 +760,7 @@ namespace Lunia {
 					return;
 				}
 
-				Net::Api request("Guild_v3.ListGuildShopProduct");
+				Net::Api request("Guild/ListGuildShopProduct");
 				request << user->GetGuildInfo().GuildId;
 				request.GetAsync(this, &GuildManager::ListGuildShopItem, user);
 			}
@@ -772,7 +772,7 @@ namespace Lunia {
 					return;
 				}
 
-				Net::Api request("Guild_v3.ListRank");
+				Net::Api request("Guild/ListRank");
 				request.GetAsync(this, &GuildManager::GuildRankingListed, user);
 			}
 
@@ -794,7 +794,7 @@ namespace Lunia {
 
 				if (static_cast<int>(CumulativeTax) > 0)	///by kpongky( 09.07.29 ) BMS 6902
 				{
-					Net::Api request("Guild_v3.PutTax");
+					Net::Api request("Guild/PutTax");
 					request << static_cast<uint32>(CumulativeTax);	///by kpongky( 09.07.29 ) use static_cast than c-cast
 					request.GetAsync(this, &GuildManager::TaxUpdated, user);
 				}
@@ -827,7 +827,7 @@ namespace Lunia {
 					guildId = user->GetGuildInfo().GuildId;
 				}
 				if (GetGuildsUserManager().SetLastDbRequestedGuildProfitDate(guildId, packet.OpenDate, packet.CloseDate) == true) {
-					Net::Api request("Guild_v3.JoinedInfo");
+					Net::Api request("Guild/JoinedInfo");
 					//request : characterName
 					request << user->GetSerial();
 					request.GetAsync(this, &GuildManager::ReflashedGuildProfitDate, user);
@@ -1720,7 +1720,7 @@ namespace Lunia {
 					}
 					user->SendToAll(response);
 					//??? ?????? ?????? ?????? ??????? ??û???.
-					Net::Api request("Guild_v3.ListGuildShopProduct");
+					Net::Api request("Guild/ListGuildShopProduct");
 					request << info.GuildId;
 					request.GetAsync(this, &GuildManager::ListGuildShopItem, user);
 					GetGuildsUserManager().SetGuildLevel(info.GuildId, info.GuildLevel, info.GuildExp);
@@ -1913,7 +1913,7 @@ namespace Lunia {
 				}
 
 				if (GetGuildsUserManager().TryReflashGuildLevel(guildId, guildLevel) == true) {
-					Net::Api request("Guild_v3.CheckLevel");
+					Net::Api request("Guild/CheckLevel");
 					request << guildId << guildLevel;
 					request.GetAsync(this, &GuildManager::ReflashedGuildLevel, user);
 				}
