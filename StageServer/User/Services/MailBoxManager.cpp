@@ -720,11 +720,11 @@ namespace Lunia {
 				waitingState = Idle;
 
 				// Verify packet.
-				/*if (!answer)
+				if (!answer)
 				{
 					LoggerInstance().Warn(L"[RequestMailList] MailboxManager::DBRequestMailList() - Invalid Packet received.");
 					return;
-				}*/
+				}
 
 				// Verify user.
 				if (user->GetSerial() != answer.at("senderUniqueSerial").get<uint64>())
@@ -784,11 +784,11 @@ namespace Lunia {
 				waitingState = Idle;
 
 				// Verify packet.
-				/*if (!answer)
+				if (!answer)
 				{
-					ALLM_IMPORTANT((L"[RetrieveAttached] MailboxManager::DBRetrieveAttached() - Invalid Packet received."));
+					LoggerInstance().Warn("[RetrieveAttached] MailboxManager::DBRetrieveAttached() - Invalid Packet received.");
 					return;
-				}*/
+				}
 
 				// Send result.
 				Protocol::FromServer::Mail::RetrieveAttached		response;
@@ -954,12 +954,12 @@ namespace Lunia {
 				waitingState = Idle;
 
 				// Verify packet.
-				//if (!answer)
-				//{
-				//	ALLM_IMPORTANT((L"[SendMail] MailboxManager::DBSendMail() - Invalid Packet received."));
-				//	user->LockItems(false);
-				//	return;
-				//}
+				if (!answer)
+				{
+					LoggerInstance().Warn("[SendMail] MailboxManager::DBSendMail() - Invalid Packet received.");
+					user->LockItems(false);
+					return;
+				}
 
 				// Send result.
 				Protocol::FromServer::Mail::SendMail		response;
@@ -1110,14 +1110,6 @@ namespace Lunia {
 				}
 
 				waitingState = Idle;
-
-				// Verify packet.
-				//if (!answer)
-				//{
-				//	LoggerInstance().Warn("[SendMail] MailboxManager::DBRollback() - Invalid Packet received.");
-				//	return;
-				//}
-
 				Protocol::FromServer::Mail::RollbackFinished		response;
 
 				if (!answer) {
