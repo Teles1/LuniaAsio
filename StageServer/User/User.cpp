@@ -3155,6 +3155,13 @@ namespace Lunia {
 
 				if (!m_Room || !m_Player)
 					return;
+
+				m_State = ACTIVE;
+				m_EnterShop = XRated::Constants::ShopType::Decorative;
+
+				XRated::ObjectData& data = m_Player->GetPlayerData().BaseCharacter.BaseObject;
+
+				m_Room->LeaveShop(data.GameObjectSerial, data.Position, data.Direction);
 			}
 			
 			int User::GetRequiredSlotCount(const std::vector<std::pair<uint32, uint32>>& toRemove, const std::vector<std::pair<uint32, uint32>>& toAdd, const uint32& availablecount) const
