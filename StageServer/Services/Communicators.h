@@ -8,7 +8,8 @@ namespace Lunia {
 		namespace StageServer {
 			struct Communicators
 			{
-				inline Communicators(int numberOfRooms, std::vector< Service::SquareInfo > squareInfos) : PlayerStore(numberOfRooms, squareInfos) { }
+				inline Communicators(const uint16& numberOfRooms, const std::vector<Service::SquareInfo>& squareInfos) 
+					: PlayerStore(numberOfRooms, squareInfos) { }
 
 				GuildManager Guild;
 				PlayerStoreManager PlayerStore;

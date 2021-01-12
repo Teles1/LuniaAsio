@@ -35,12 +35,12 @@ namespace Lunia {
 				FamilyManager(User& user);
 				~FamilyManager();
 			public:
-				void Dispatch(UserSharedPtr, Protocol::ToServer::Family::Invite& packet);
-				void Dispatch(UserSharedPtr, Protocol::ToServer::Family::Leave& packet);
-				void Dispatch(UserSharedPtr, Protocol::ToServer::Family::InviteAnwer& packet);
-				void Dispatch(UserSharedPtr, Protocol::ToServer::Family::RefreshInfo& packet);
-				void Dispatch(UserSharedPtr, Protocol::ToServer::Family::RequestPresent& packet);
-				void Dispatch(UserSharedPtr, Protocol::ToServer::Family::Kick& packet);
+				void Dispatch(const UserSharedPtr, Protocol::ToServer::Family::Invite& packet);
+				void Dispatch(const UserSharedPtr, Protocol::ToServer::Family::Leave& packet);
+				void Dispatch(const UserSharedPtr, Protocol::ToServer::Family::InviteAnwer& packet);
+				void Dispatch(const UserSharedPtr, Protocol::ToServer::Family::RefreshInfo& packet);
+				void Dispatch(const UserSharedPtr, Protocol::ToServer::Family::RequestPresent& packet);
+				void Dispatch(const UserSharedPtr, Protocol::ToServer::Family::Kick& packet);
 			private:
 				void RequestDBFamilyInfoForInit();
 				void RequestDBFamilyInfoForRefresh();

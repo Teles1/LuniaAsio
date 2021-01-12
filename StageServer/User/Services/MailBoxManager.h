@@ -53,12 +53,12 @@ namespace Lunia {
 			public:
 
 				// Packet handlers (Client-Server)
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::DisposeMail& packet);
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::DisposeReadMails& packet);
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::ReadMail& packet);
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::RequestMailList& packet);
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::RetrieveAttached& packet);
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::SendMail& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::DisposeMail& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::DisposeReadMails& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::ReadMail& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::RequestMailList& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::RetrieveAttached& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::SendMail& packet);
 
 				// Packet handlers (Server-DB)
 				void DBDisposeMail(const UserSharedPtr& user, const Net::Answer& answer);

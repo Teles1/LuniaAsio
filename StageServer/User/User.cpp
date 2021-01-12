@@ -12,6 +12,7 @@
 #include <Core/ErrorDefinition.h>
 #include <StageServer/Services/ItemSerial.h>
 #include <StageServer/User/Items/Enchanter.h>
+#include <StageServer/Services/Communicators.h>
 #include "User.h"
 namespace Lunia {
 	namespace XRated {
@@ -78,14 +79,15 @@ namespace Lunia {
 				, m_GuildState(*this)
 				, m_FamilyManager(*this)
 				, m_Items(*this)
+				, m_FishingManager(*this)
 				, playTimeEventCheckIntervalInSec(ConfigInstance().Get("PlayTimeCheckIntervalInSec", 60.0f))
 			{
 				Logger::GetInstance().Info("User :: Hey, I was created!", GetId());
-				
-				BindPackets();
 			}
 
 			void User::Init() {
+				BindPackets();
+				AutoLock lock(m_UserMtx);
 				m_LastDataSavedTime = m_ConnectTime = m_AliveTime = timeGetTime();
 				Protocol::FromServer::Way way;
 				way.EncryptKey = Math::Random();
@@ -96,6 +98,72 @@ namespace Lunia {
 
 			void User::BindPackets()
 			{
+				AutoLock lock(m_UserMtx);
+				Communicators& communicator = UserManagerInstance().GetCommunicators();
+				//Guild
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::RefreshMyInfo>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::Invite>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::InviteReply>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::Join>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::Kick>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::Leave>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::ListMembers>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::Remove>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::ValidateName>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::ValidateAlias>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::AddExp>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::AddMaintenancePoint>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::ReflashGuildLevel>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::GetTax>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::ReflashGuildShopItem>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::MessageChange>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::ChangeGrade>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::ChangeGradeName>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::ChangeGradeAuth>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::ChangeGuildMaster>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::GetMyInfo>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::RefreshMyInfo>(communicator.Guild, &GuildManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AllMGuild::ReflashGuildProfitDate>(communicator.Guild, &GuildManager::Dispatch);
+				//Family
+				m_Parser.Bind<Protocol::ToServer::Family::Invite>(m_FamilyManager, &FamilyManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Family::InviteAnwer>(m_FamilyManager, &FamilyManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Family::Leave>(m_FamilyManager, &FamilyManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Family::RefreshInfo>(m_FamilyManager, &FamilyManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Family::RequestPresent>(m_FamilyManager, &FamilyManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Family::Kick>(m_FamilyManager, &FamilyManager::Dispatch);
+				//Trades
+				m_Parser.Bind<Protocol::ToServer::RequestTrade>(communicator.Trader, &TradeManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AddTradeItem>(communicator.Trader, &TradeManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::AddTradeMoney>(communicator.Trader, &TradeManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::ReadyToTrade>(communicator.Trader, &TradeManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::CancelTrade>(communicator.Trader, &TradeManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::ConfirmTrade>(communicator.Trader, &TradeManager::Dispatch);
+				//PlayerStore
+				m_Parser.Bind<Protocol::ToServer::PlayerStore::BuyPet>(communicator.PlayerStore, &PlayerStoreManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::PlayerStore::Buy>(communicator.PlayerStore, &PlayerStoreManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::PlayerStore::List>(communicator.PlayerStore, &PlayerStoreManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::PlayerStore::Close>(communicator.PlayerStore, &PlayerStoreManager::Dispatch);
+				//Quests
+				m_Parser.Bind<Protocol::ToServer::Quest::Accept>(m_QuestManager, &QuestManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Quest::Complete>(m_QuestManager, &QuestManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Quest::Drop>(m_QuestManager, &QuestManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Quest::ActivityItem>(m_QuestManager, &QuestManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Quest::ShareToPartyPlayer>(m_QuestManager, &QuestManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Quest::SharedAnswer>(m_QuestManager, &QuestManager::Dispatch);
+				//Mailbox System
+				m_Parser.Bind<Protocol::ToServer::Mail::DisposeMail>(m_MailBoxManager, &MailboxManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Mail::DisposeReadMails>(m_MailBoxManager, &MailboxManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Mail::ReadMail>(m_MailBoxManager, &MailboxManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Mail::RequestMailList>(m_MailBoxManager, &MailboxManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Mail::RetrieveAttached>(m_MailBoxManager, &MailboxManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Mail::SendMail>(m_MailBoxManager, &MailboxManager::Dispatch);
+				/*Fishing*/
+				m_Parser.Bind<Protocol::ToServer::Fishing::Start>(m_FishingManager, &FishingManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Fishing::End>(m_FishingManager, &FishingManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Fishing::List>(m_FishingManager, &FishingManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Fishing::Do>(m_FishingManager, &FishingManager::Dispatch);
+				m_Parser.Bind<Protocol::ToServer::Fishing::ChangeBaitCount>(m_FishingManager, &FishingManager::Dispatch);
+				//User
 				m_Parser.Bind<Protocol::ToServer::Stage>(*this, &User::Dispatch);
 				m_Parser.Bind<Protocol::ToServer::Alive>(*this, &User::Dispatch);
 				m_Parser.Bind<Protocol::ToServer::LoadEnd>(*this, &User::Dispatch);
@@ -110,6 +178,47 @@ namespace Lunia {
 				m_Parser.Bind<Protocol::ToServer::EnterShop>(*this, &User::Dispatch);
 				m_Parser.Bind<Protocol::ToServer::LeaveShop>(*this, &User::Dispatch);
 				m_Parser.Bind<Protocol::ToServer::Family::RefreshInfo>(m_FamilyManager, &FamilyManager::Dispatch);
+				//ItemEx
+				auto user = shared_from_this(); 
+				//General
+				m_ItemEx.Register(std::make_shared<BankBag>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<InventoryBag>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<SkillReset>(m_Player, m_Room));
+				m_ItemEx.Register(std::make_shared<SkillResetAll>(m_Player, m_Room));
+				m_ItemEx.Register(std::make_shared<Nothing>());
+				m_ItemEx.Register(std::make_shared<EnchantRecover>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<PlayerStore>(user, m_Items, communicator.PlayerStore));
+				m_ItemEx.Register(std::make_shared<CharacterSlot>(user));
+				m_ItemEx.Register(std::make_shared<Megaphone>(user));
+				m_ItemEx.Register(std::make_shared<TextBoardMessage>(user));
+				m_ItemEx.Register(std::make_shared<Store>(user));
+				m_ItemEx.Register(std::make_shared<QuestActivity>(user, m_QuestManager));
+				m_ItemEx.Register(std::make_shared<ReviveStone>(user));
+				m_ItemEx.Register(std::make_shared<DailyItem>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<CharacterLicense>(user));
+				m_ItemEx.Register(std::make_shared<PetItem>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<ExtendExpireItemDate>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<ForceItemExpiration>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<PetFood>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<PetLevelDown>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<PetSchoolTicket>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<SkillPointPlus>(user));
+				m_ItemEx.Register(std::make_shared<AddLicense>(user));
+				m_ItemEx.Register(std::make_shared<Rebirth>(user));
+				m_ItemEx.Register(std::make_shared<EventStage>(user));
+				m_ItemEx.Register(std::make_shared<EventDungeonStage>(user));
+				m_ItemEx.Register(std::make_shared<PetRenaming>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<CharacterRenaming>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<RestoreBelonging>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<Appraisal>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<RestoreAppraisal>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<Extract>(user, m_Items));
+				m_ItemEx.Register(std::make_shared<StageServer::AddSkillLicense>(user));
+				//Guild ItemEx
+				m_ItemEx.Register(std::make_shared<GuildPointUp >(user, communicator.Guild));
+				m_ItemEx.Register(std::make_shared<GuildExpUp >(user, communicator.Guild));
+				m_ItemEx.Register(std::make_shared<GuildRankingPointUp >(user, communicator.Guild));
+				m_ItemEx.Register(std::make_shared<AddItemToGuildShop >(user, communicator.Guild));
 			}
 
 			void User::LicenseAquired(const UserSharedPtr& user, const Net::Answer& answer)
@@ -343,6 +452,16 @@ namespace Lunia {
 				}
 				m_Room->GivePresentToPet(m_Player, petSerial, sellPrice, count);
 				return true;
+			}
+
+			void User::ToggleFishingRodVisibility(const bool& state)
+			{
+				m_IsFishingRodVisible = state;
+			}
+
+			bool User::GetFishingRodVisibility() const
+			{
+				return m_IsFishingRodVisible;
 			}
 
 			bool User::PetLevelDecrease(const GlobalSerial& petSerial, const uint32& downLevel, const bool& onlyMaxLevel)
@@ -2019,7 +2138,7 @@ namespace Lunia {
 				return nullptr;
 			}
 
-			bool User::IsProperFishingRod() const
+			bool User::IsProperFishingRod(const uint32& rodHash) const
 			{
 				return false;
 			}

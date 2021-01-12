@@ -1,6 +1,6 @@
 #include "NoLogicItems.h"
 #include "../UserManager.h"
-#include "../User.h"
+#include <StageServer/User/User.h>
 #include <StageServer/User/IUserRoom.h>
 #include <Info/Info/InfoHelper.h>
 #include <Core/ErrorDefinition.h>
@@ -41,8 +41,8 @@ namespace Lunia { namespace XRated { namespace StageServer {
 
 
 	/* BankBag ***********************************************************************************/
-	BankBag::BankBag(Items::IEventListener& sender, Items& items, const String& characterName)
-		: sender(sender), items(items), characterName(characterName)
+	BankBag::BankBag(UserSharedPtr sender, Items& items)
+		: sender(sender), items(items)
 	{
 	}
 
@@ -94,7 +94,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		/*  renew the bag and update DB */
 		DateTime nextExpireDate = items.RenewBag(true, bagNumber, days);
 		Net::Api request("BankBags/Update");
-		request << characterName << bagNumber << nextExpireDate;
+		request << sender->GetCharacterName() << bagNumber << nextExpireDate;
 		request.GetAsync();
 		/* notice to client */
 		Protocol::FromServer::ChangeBagState packet;
@@ -102,7 +102,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		packet.Bag.BagNumber=bagNumber;
 		packet.Bag.ExpireDate=nextExpireDate;
 		packet.Bag.Expired=false;
-		sender.ItemsSend( packet );
+		sender->ItemsSend( packet );
 		/*if(days == 0){ // only unlimited
 			User* user=UserManagerInstance().GetUser(characterName);
 			if(user->achievement.IsConnected()){
@@ -119,8 +119,8 @@ namespace Lunia { namespace XRated { namespace StageServer {
 
 
 	/* InventoryBag ******************************************************************************/
-	InventoryBag::InventoryBag(Items::IEventListener& sender, Items& items, const String& characterName)
-		: sender(sender), items(items), characterName(characterName)
+	InventoryBag::InventoryBag(UserSharedPtr sender, Items& items)
+		: sender(sender), items(items)
 	{
 	}
 
@@ -171,7 +171,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		/*  renew the bag and update DB */
 		DateTime nextExpireDate = items.RenewBag(false, bagNumber, days);
 		Net::Api request("UpdateBagState");
-		request << characterName << "0" << bagNumber << nextExpireDate;
+		request << sender->GetCharacterName() << "0" << bagNumber << nextExpireDate;
 		request.GetAsync();
 
 		/* notice to client */
@@ -180,7 +180,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		packet.Bag.BagNumber=bagNumber;
 		packet.Bag.ExpireDate=nextExpireDate;
 		packet.Bag.Expired=false;
-		sender.ItemsSend( packet );
+		sender->ItemsSend( packet );
 		/*User* user=UserManagerInstance().GetUser(characterName);
 		if(user->IsAchievementConnected()){			
 			Net::Protocol::Achievement::ServerProtocol::InventoryBagOpened pkt;
@@ -197,7 +197,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 
 
 	/* SkillReset ********************************************************************************/
-	SkillReset::SkillReset(XRated::Logic::Player*& player, IUserRoom*& room)
+	SkillReset::SkillReset(XRated::Logic::Player*& player, std::shared_ptr<IUserRoom>& room)
 		: player(player), room(room)
 	{
 	}
@@ -250,7 +250,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	/******************************************************************************** SkillReset */
 
 	/* CharacterLicense ********************************************************************************/
-	CharacterLicense::CharacterLicense(User& pUser)
+	CharacterLicense::CharacterLicense(UserSharedPtr pUser)
 		: user(pUser)
 	{
 	}
@@ -275,7 +275,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		{
 			throw InvalidRuntimeParameterException( fmt::format(L"wrong class type : {0}", classType ).c_str());
 		}
-		else if ( user.HasCharacterLicense( classType ) == true ) 
+		else if ( user->HasCharacterLicense( classType ) == true ) 
 		{
             return 0;	//user already has license.
 		}
@@ -296,13 +296,13 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			throw InvalidRuntimeParameterException( fmt::format(L"wrong class type : {0}", classType).c_str() );
 		}
 
-		user.GiveCharacterLicense(classType);
+		user->GiveCharacterLicense(classType);
 		//room->GiveCharacterLicense(player, classType);
 	}
 	/******************************************************************************** CharacterLicense */
 
 	/* SkillResetAll *****************************************************************************/
-	SkillResetAll::SkillResetAll(XRated::Logic::Player*& player, IUserRoom*& room)
+	SkillResetAll::SkillResetAll(XRated::Logic::Player*& player, std::shared_ptr<IUserRoom>& room)
 		: player(player), room(room)
 	{
 	}
@@ -349,7 +349,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 
 
 	/* EnchantRecover ****************************************************************************/
-	EnchantRecover::EnchantRecover(User& user, Items& items)
+	EnchantRecover::EnchantRecover(UserSharedPtr user, Items& items)
 		: user(user), items(items)
 	{
 	}
@@ -370,7 +370,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		int stageLevelLimit (GetNoLogicStateValue(info, L"LimitStageLevel", 99));
 		int pvpLevelLimit (GetNoLogicStateValue(info, L"LimitPvpLevel", 99));
 
-		if (static_cast<uint32>(user.GetMoney()) < fee)
+		if (static_cast<uint32>(user->GetMoney()) < fee)
 			throw InvalidRuntimeParameterException( L"not enough money to recover enchant");
 
 		if ((target & TargetFlags::InvalidIdentify)==TargetFlags::InvalidIdentify ||
@@ -461,16 +461,16 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		packet.Position = XRated::ItemPosition(static_cast<uint8>(StringUtil::ToInt(parameters[0])), static_cast<uint8>(StringUtil::ToInt(parameters[1])));
 		packet.ItemHash=result.Info->Hash;
 		packet.instanceEx=instance;
-        user.Send( packet );        
+        user->Send( packet );        
 
-		user.SetMoney( user.GetMoney() - fee );
-		user.UpdateInfos();
+		user->SetMoney( user->GetMoney() - fee );
+		user->UpdateInfos();
 	}
 	/**************************************************************************** EnchantRecover */
 
 
 	/* PlayerStore *******************************************************************************/
-	PlayerStore::PlayerStore(User& user, Items& items, PlayerStoreManager& playerStore)
+	PlayerStore::PlayerStore(UserSharedPtr user, Items& items, PlayerStoreManager& playerStore)
 		: user(user), items(items), playerStore(playerStore)
 	{
 	}
@@ -488,8 +488,8 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		//float effectiveRange=StringUtil::ToFloat( stateParameters.find(L"EffectiveRange")->second );
 
 		/* validate */
-		if (user.GetState() != User::ACTIVE)
-			throw InvalidRuntimeParameterException(fmt::format(L"invalid user state for player({})", user.GetState() ).c_str() );
+		if (user->GetState() != User::ACTIVE)
+			throw InvalidRuntimeParameterException(fmt::format(L"invalid user state for player({})", user->GetState() ).c_str() );
 
 		if (parameters.size() < 1/*title*/+(3*MinimalNumberOfSlots))
 			throw InvalidRuntimeParameterException( L"not enough parameter for player store" );
@@ -501,14 +501,14 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			throw InvalidRuntimeParameterException( fmt::format(L"invalid length of the store title ({}/{})", title.size(), titleLength ).c_str() );
 
 		/* TODO : calculate effectiveRange */
-		float3 location(user.GetPlayer()->GetPosition());
+		float3 location(user->GetPlayer()->GetPosition());
 
 		if ((parameters.size()-1) % 3 )
 			throw InvalidRuntimeParameterException(fmt::format(L"invalid size of parameters ({})", parameters.size() ).c_str() );
 		if ( ((parameters.size()-1)/3) > static_cast<uint32>(slotCount) )
 			throw InvalidRuntimeParameterException(fmt::format(L"invalid size of slot count for player store ({}/{})", (parameters.size()-1)/3, slotCount ).c_str() );
-        if ( static_cast<uint32>(user.GetMoney()) < fee )
-			throw InvalidRuntimeParameterException(fmt::format(L"not enough money for player store ({}/{})", user.GetMoney(), fee ).c_str() );
+        if ( static_cast<uint32>(user->GetMoney()) < fee )
+			throw InvalidRuntimeParameterException(fmt::format(L"not enough money for player store ({}/{})", user->GetMoney(), fee ).c_str() );
 
 		uint32 i(0);
 		ItemPosition pos;
@@ -521,7 +521,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 
 			const Common::ItemEx* item = items.GetItem( bag, pos );
 			if (item==NULL || 
-				item->IsTradable(user.shared_from_this())==false )
+				item->IsTradable(user->shared_from_this())==false )
 			{
 				throw InvalidRuntimeParameterException(fmt::format(L"invalid item requested ({})", item?item->Info->Hash:0 ).c_str());
 			}
@@ -546,7 +546,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		uint32 i(0);
 		StoreSlot slot;
 		StoreSlotForPet petSlot;
-		AutoLock lock(user.GetPetDatas().GetSyncObject());
+		AutoLock lock(user->GetPetDatas().GetSyncObject());
 		while( i < parameters.size()-1 )
 		{
 			uint8 bag = static_cast<uint8>(StringUtil::ToInt( parameters[++i] ));
@@ -561,7 +561,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 				slot.SellPrice = StringUtil::ToInt( parameters[++i] );
 				slots.push_back(slot);
 			}else {					
-				const XRated::Pet* pet = user.GetPetDatas().GetPetData( item->Serial );
+				const XRated::Pet* pet = user->GetPetDatas().GetPetData( item->Serial );
 				if( pet) {
 					petSlot.InstanceEx = item->InstanceEx;
 					petSlot.ItemHash = item->Info->Hash;
@@ -579,13 +579,13 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			}
 		}
 
-		user.SetMoney( user.GetMoney() - fee );
-		playerStore.Open(user.shared_from_this(), items, *info, commissionRate, discountRate, parameters[0], slots, slotsForPet);
+		user->SetMoney( user->GetMoney() - fee );
+		playerStore.Open(user->shared_from_this(), items, *info, commissionRate, discountRate, parameters[0], slots, slotsForPet);
 	}
 	/******************************************************************************* PlayerStore */
 
 	/* CharacterSlot *****************************************************************************/
-	CharacterSlot::CharacterSlot(User& user)
+	CharacterSlot::CharacterSlot(UserSharedPtr user)
 		: user(user)
 	{
 	}
@@ -600,8 +600,8 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		int fee(GetNoLogicStateValue(info, L"Fee", 0));
 
 		/* validate */		 
-        if ( user.GetMoney() < static_cast<uint32>(fee) )
-			throw InvalidRuntimeParameterException( fmt::format(L"not enough money for new character slot ({}/{})", user.GetMoney(), fee ).c_str() );
+        if ( user->GetMoney() < static_cast<uint32>(fee) )
+			throw InvalidRuntimeParameterException( fmt::format(L"not enough money for new character slot ({}/{})", user->GetMoney(), fee ).c_str() );
 		return (info->Attributes.Attr & Database::Info::ItemInfo::ATTRIBUTES::CONSUME)?1:0;
 	}
 
@@ -610,11 +610,11 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		int slots(GetNoLogicStateValue(info, L"NumberOfSlots", 1));
 		int fee(GetNoLogicStateValue(info, L"Fee", 0));
 
-		user.SetMoney( user.GetMoney() - fee );
+		user->SetMoney( user->GetMoney() - fee );
 
 		Net::Api packet("AddCharacterSlot");
-		packet << user.GetName() << slots;
-		packet.GetAsync(this, &CharacterSlot::Extended, user.shared_from_this());
+		packet << user->GetName() << slots;
+		packet.GetAsync(this, &CharacterSlot::Extended, user->shared_from_this());
 	}
 	void CharacterSlot::Extended(const UserSharedPtr& user, const Net::Answer& answer)
 	{
@@ -629,7 +629,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 
 
 	/* Megaphone *********************************************************************************/
-	Megaphone::Megaphone(User& user)
+	Megaphone::Megaphone(UserSharedPtr user)
 		: user(user)
 	{
 	}
@@ -657,14 +657,14 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		bool shoutToStages(GetNoLogicStateValue(info, L"ShoutToStages", 0)?true:false);
 
 		if (shoutToSquares)
-			;// InputMgr::GetGeneralController().RequestTo(Service::SquareService, L"chat", user.GetName() + L" : " + parameters[0]);
+			;// InputMgr::GetGeneralController().RequestTo(Service::SquareService, L"chat", user->GetName() + L" : " + parameters[0]);
 		if (shoutToStages)
-			;// InputMgr::GetGeneralController().RequestTo(Service::StageService, L"chat", user.GetName() + L" : " + parameters[0]);
+			;// InputMgr::GetGeneralController().RequestTo(Service::StageService, L"chat", user->GetName() + L" : " + parameters[0]);
 	}
 	/********************************************************************************* Megaphone */
 
 	/* TextBoardMessage **************************************************************************/
-	TextBoardMessage::TextBoardMessage( User& user )
+	TextBoardMessage::TextBoardMessage( UserSharedPtr user )
 		: user( user )
 	{
 	}
@@ -697,17 +697,17 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		if (shoutToSquares)
 			InputMgr::GetGeneralController().RequestTo( Service::SquareService, L"textBoardMsg",
 			StringUtil::ToUnicode( repeat ) + L" " + StringUtil::ToUnicode( playTime ) + L" " + 
-			user.GetName() + L" " + parameters[0] ); // "�ð�(��) �����̸� : �޼���"
+			user->GetName() + L" " + parameters[0] ); // "�ð�(��) �����̸� : �޼���"
 		if (shoutToStages)
 			InputMgr::GetGeneralController().RequestTo( Service::StageService, L"textBoardMsg",
 			StringUtil::ToUnicode( repeat ) + L" " + StringUtil::ToUnicode( playTime ) + L" " + 
-			user.GetName() + L" " + parameters[0] ); // "�ð�(��) �����̸� : �޼���"
+			user->GetName() + L" " + parameters[0] ); // "�ð�(��) �����̸� : �޼���"
 		*/
 	}
 	/************************************************************************** TextBoardMessage */
 
 	/* Store *************************************************************************************/
-	Store::Store(User& user)
+	Store::Store(UserSharedPtr user)
 		: user(user)
 	{
 	}
@@ -724,19 +724,19 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			throw InvalidRuntimeParameterException( fmt::format(L"invalid shop type of the item({})", shopType ).c_str() );
         
 		bool useInSquare(GetNoLogicStateValue(info, L"UseInSquare", 0)?true:false);
-		if (useInSquare==false && user.GetRoom()->GetRoomKind()==Common::SQUARE)
+		if (useInSquare==false && user->GetRoom()->GetRoomKind()==Common::SQUARE)
 			throw InvalidRuntimeParameterException( L"unable to use this item in square");
 
 		bool useInStage(GetNoLogicStateValue(info, L"UseInStage", 0)?true:false);
-		if (useInSquare==false && useInStage==false && user.GetRoom()->IsNowCampfire()==false)
+		if (useInSquare==false && useInStage==false && user->GetRoom()->IsNowCampfire()==false)
 			throw InvalidRuntimeParameterException( L"unable to use this item in stage" );
 
 		bool useInCampfire(GetNoLogicStateValue(info, L"UseInCampfire", 1)?true:false);
-		if (useInCampfire==false && user.GetRoom()->IsNowCampfire()==true)
+		if (useInCampfire==false && user->GetRoom()->IsNowCampfire()==true)
 			throw InvalidRuntimeParameterException( L"unable to use this item in camp fire" );
 
 		int fee(GetNoLogicStateValue(info, L"Fee", 0));
-		if (static_cast<uint32>(user.GetMoney()) < fee)
+		if (static_cast<uint32>(user->GetMoney()) < fee)
 			throw InvalidRuntimeParameterException( L"not enough money"  );
 
 		return (info->Attributes.Attr & Database::Info::ItemInfo::ATTRIBUTES::CONSUME)?1:0;
@@ -745,16 +745,16 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	void Store::Use(const Database::Info::ItemInfo* info, const std::vector<String>& /*parameters*/)
 	{
 		int fee(GetNoLogicStateValue(info, L"Fee", 0));
-		user.SetMoney( user.GetMoney() - fee );
+		user->SetMoney( user->GetMoney() - fee );
 
 		int shopType(GetNoLogicStateValue(info, L"ShopType", 0));
-		user.SetState( User::SHOP );
-		user.GetRoom()->EnterShop( user.GetPlayer()->GetSerial(), static_cast<XRated::Constants::ShopType>(shopType), 0	);
+		user->SetState( User::SHOP );
+		user->GetRoom()->EnterShop( user->GetPlayer()->GetSerial(), static_cast<XRated::Constants::ShopType>(shopType), 0	);
 	}
 	/************************************************************************************* Store */
 
 	/* QuestActivity *************************************************************************************/
-	QuestActivity::QuestActivity(User& user, QuestManager& quest)
+	QuestActivity::QuestActivity(UserSharedPtr user, QuestManager& quest)
 		: user(user)
 		, quest(quest)
 	{
@@ -777,12 +777,12 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	void QuestActivity::Use(const Database::Info::ItemInfo* info, const std::vector<String>& /*parameters*/)
 	{
 		uint32 questHash(GetNoLogicStateValue(info, L"QuestHash", 0));
-		quest.ValidActiveItem(user.shared_from_this(), questHash);
+		quest.ValidActiveItem(user->shared_from_this(), questHash);
 	}
 	/************************************************************************************* QuestActiveItem */
 
 	/* ReviveStone *****************************************************************************************/
-	ReviveStone::ReviveStone(User& user)
+	ReviveStone::ReviveStone(UserSharedPtr user)
 		: user(user)
 	{
 	}
@@ -804,9 +804,9 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		uint32 playerSerial =StringUtil::ToInt(parameters.at(0));
 		Database::Info::FindReviveState condition(Database::Info::StateInfo::Type::REVIVE);
 
-		if(user.GetRoom())
+		if(user->GetRoom())
 		{
-			auto targetUser = user.GetRoom()->GetUser(playerSerial);
+			auto targetUser = user->GetRoom()->GetUser(playerSerial);
 			if( targetUser != NULL )
 			{
 				auto room = targetUser->GetRoom();
@@ -835,20 +835,20 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		std::cout << "ReviveStone::Use" << std::endl;
 		uint32 playerSerial=StringUtil::ToInt(parameters.at(0));
 
-		auto targetUser = user.GetRoom()->GetUser(playerSerial);
+		auto targetUser = user->GetRoom()->GetUser(playerSerial);
 
-		if(!user.GetRoom() || !targetUser)
+		if(!user->GetRoom() || !targetUser)
 			return;
 		
 		std::cout << "ReviveStone::Use" << std::endl;
-		user.GetRoom()->Revive(targetUser->GetPlayer(), false);		
+		user->GetRoom()->Revive(targetUser->GetPlayer(), false);		
 	}
 	/***************************************************************************************** ReviveStone */
 
 	/* DailyItem *********************************************************************************/
 
 	
-	DailyItem::DailyItem(User& user,Items& items) : user(user),items(items)
+	DailyItem::DailyItem(UserSharedPtr user,Items& items) : user(user),items(items)
 	{
 	}
 
@@ -868,12 +868,12 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		if (item==NULL) {
 			throw InvalidRuntimeParameterException( L"invalid item position to recover enchant" );
 		}
-		if( Database::Enchant::IsHaveTodayDailyItem(user.GetConnectDate(),item->InstanceEx) == false ) {
+		if( Database::Enchant::IsHaveTodayDailyItem(user->GetConnectDate(),item->InstanceEx) == false ) {
 			throw InvalidRuntimeParameterException( L"DailyItem : impossible request" );
 		}
-		const Database::Info::DailyItem* dailyItemInfo = Database::DatabaseInstance().InfoCollections.DailyItems.Get(info->Hash, user.GetConnectDayOfWeek(),StringUtil::To<uint32>(parameters[2]));
+		const Database::Info::DailyItem* dailyItemInfo = Database::DatabaseInstance().InfoCollections.DailyItems.Get(info->Hash, user->GetConnectDayOfWeek(),StringUtil::To<uint32>(parameters[2]));
 		if( dailyItemInfo == NULL  ) {
-			throw InvalidRuntimeParameterException( fmt::format(L"can not found daily item info {}, {}", user.GetConnectDayOfWeek(),StringUtil::To<uint32>(parameters[2]) ).c_str() );
+			throw InvalidRuntimeParameterException( fmt::format(L"can not found daily item info {}, {}", user->GetConnectDayOfWeek(),StringUtil::To<uint32>(parameters[2]) ).c_str() );
 		}
 		uint32 slotCount = dailyItemInfo->SlotCount;
 		const Database::Info::ItemInfo* acquireItemInfo = Database::DatabaseInstance().InfoCollections.Items.Retrieve( dailyItemInfo->ItemHash );
@@ -886,20 +886,20 @@ namespace Lunia { namespace XRated { namespace StageServer {
 				slotCount += 1;
 			}
 		}
-		if( user.GetBlankSlotCount() < slotCount ) {
+		if( user->GetBlankSlotCount() < slotCount ) {
 			throw InvalidRuntimeParameterException(fmt::format(L"need more inventory slot : {}", static_cast<int>(slotCount) ).c_str() );
 		}
 		return (info->Attributes.Attr & Database::Info::ItemInfo::ATTRIBUTES::CONSUME)?1:0;				
 	}
 	void DailyItem::Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters)
 	{
-		const Database::Info::DailyItem* dailyItemInfo = Database::DatabaseInstance().InfoCollections.DailyItems.Get(info->Hash, user.GetConnectDayOfWeek(),StringUtil::To<uint32>(parameters[2]));
+		const Database::Info::DailyItem* dailyItemInfo = Database::DatabaseInstance().InfoCollections.DailyItems.Get(info->Hash, user->GetConnectDayOfWeek(),StringUtil::To<uint32>(parameters[2]));
 		const Common::ItemEx* item=items.GetItem( StringUtil::ToInt(parameters[0]), StringUtil::ToInt(parameters[1]),false );
 		if( item != NULL ) {
 			Database::Enchant::DailyItemLastAcquiredDate	date;
-			date.Year = (user.GetConnectDate().GetYear() & 2047 );
-			date.Month = (user.GetConnectDate().GetMonth() & 15);
-			date.Day = user.GetConnectDate().GetDay() & 31;
+			date.Year = (user->GetConnectDate().GetYear() & 2047 );
+			date.Month = (user->GetConnectDate().GetMonth() & 15);
+			date.Day = user->GetConnectDate().GetDay() & 31;
 
 			Database::Enchant::NormalBitfields instance = item->InstanceEx.Instance;
 			instance.CashEnchant1 = date.Year;
@@ -916,7 +916,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			acquireitem.StackedCount = result.StackedCount;
 			acquireitem.instanceEx = result.InstanceEx;
 
-			user.Send( acquireitem );
+			user->Send( acquireitem );
 		}
 		
 		const Database::Info::ItemInfo* acquireItemInfo = Database::DatabaseInstance().InfoCollections.Items.Retrieve( dailyItemInfo->ItemHash );	
@@ -924,16 +924,16 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			uint32 slotCount = (dailyItemInfo->SlotCount/acquireItemInfo->MaxCnt);
 			for( size_t i =0; i < slotCount; ++i )
 			{
-				user.ItemAdd(dailyItemInfo->ItemHash,0,acquireItemInfo->MaxCnt,0,false);				
+				user->ItemAdd(dailyItemInfo->ItemHash,0,acquireItemInfo->MaxCnt,0,false);				
 			}
 			if( (dailyItemInfo->SlotCount % acquireItemInfo->MaxCnt) != 0 ) {
-				user.ItemAdd(dailyItemInfo->ItemHash,0,(dailyItemInfo->SlotCount % acquireItemInfo->MaxCnt),0,false);				
+				user->ItemAdd(dailyItemInfo->ItemHash,0,(dailyItemInfo->SlotCount % acquireItemInfo->MaxCnt),0,false);				
 			}
 		}else {
 			size_t max = dailyItemInfo->SlotCount;
 			for( size_t i =0; i < max; ++i )
 			{
-				user.ItemAdd(dailyItemInfo->ItemHash,0,1,0,false);
+				user->ItemAdd(dailyItemInfo->ItemHash,0,1,0,false);
 			}
 		}
 		
@@ -965,7 +965,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 
 
 	/* ExtendExpireItemDate ********************************************************************************/
-	ExtendExpireItemDate::ExtendExpireItemDate(User& user, Items& items)
+	ExtendExpireItemDate::ExtendExpireItemDate(UserSharedPtr user, Items& items)
 		: user(user), items(items), useable(false)
 	{
 	}
@@ -1040,21 +1040,21 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		packet.ItemHash = item->Info->Hash;
 		packet.instanceEx = i;
 
-		user.Send(packet);
+		user->Send(packet);
 
 		bag = StringUtil::ToInt(parameters[2]);
 		position = StringUtil::ToInt(parameters[3]);
 
 
-		/*Logger().Write(IAdmLogger::NormalLogger, "pet-extend", user.GetName(), Http::Logger::Parameter()
+		/*Logger().Write(IAdmLogger::NormalLogger, "pet-extend", user->GetName(), Http::Logger::Parameter()
 							<< item->Serial << static_cast<int64>(item->InstanceEx.Instance) << info->Hash );*/
 
-		user.DropItems(bag, position, 1);
+		user->DropItems(bag, position, 1);
 	}
 	/******************************************************************************** ExtendExpireItemDate */
 
 	/* ForceItemExpiration ********************************************************************************/
-	ForceItemExpiration::ForceItemExpiration(User& user, Items& items)
+	ForceItemExpiration::ForceItemExpiration(UserSharedPtr user, Items& items)
 		: user(user), items(items), useable(false)
 	{
 	}
@@ -1114,22 +1114,22 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		packet.ItemHash = item->Info->Hash;
 		packet.instanceEx = item->InstanceEx;
 
-		user.Send(packet);
+		user->Send(packet);
 
 		bag = StringUtil::ToInt(parameters[2]);
 		position = StringUtil::ToInt(parameters[3]);
 
 
-		/*Logger().Write(IAdmLogger::NormalLogger, "forceItemExpiration", user.GetName(), Http::Logger::Parameter()
+		/*Logger().Write(IAdmLogger::NormalLogger, "forceItemExpiration", user->GetName(), Http::Logger::Parameter()
 							<< item->Serial << static_cast<int64>(item->InstanceEx.Instance) << item->InstanceEx.ExpireDate.ToString() << info->Hash );*/
 
-		user.DropItems(bag, position, 1);
+		user->DropItems(bag, position, 1);
 	}
 	/******************************************************************************** ForceItemExpiration */
 
 
 	/* PetItem ***********************************************************************************/
-	PetItem::PetItem(User& user, Items& items)
+	PetItem::PetItem(UserSharedPtr user, Items& items)
 		: user( user ), items( items )
 	{
 	}
@@ -1146,7 +1146,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 
 	void PetItem::Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters)
 	{
-		if(user.GetCharacterStateFlags().IsPetNotUsable == true)
+		if(user->GetCharacterStateFlags().IsPetNotUsable == true)
 			return;
 
 		if (Database::DatabaseInstance().InfoCollections.Pets.IsPetItem(info->Hash) == true)
@@ -1154,7 +1154,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			if( parameters.size() < 1 ) return;
 
 			String type = parameters[0];
-			Logic::Player* player = user.GetPlayer();
+			Logic::Player* player = user->GetPlayer();
 
 			if( type == L"naming" )
 			{
@@ -1163,7 +1163,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 				String petName = parameters[1];
 				const Common::ItemEx *item = items.GetItem( StringUtil::ToInt( parameters[2] ), StringUtil::ToInt( parameters[3] ) );
 
-				user.CreatePet(petName, item->Serial, item->Info->Hash);
+				user->CreatePet(petName, item->Serial, item->Info->Hash);
 			}
 			else if( type == L"create" )
 			{
@@ -1177,13 +1177,13 @@ namespace Lunia { namespace XRated { namespace StageServer {
 				if(Database::Enchant::IsExpired(item->Info, item->InstanceEx) && bag != 0)
 					return;
 
-				user.SummonPet(item->Serial, bag, position);
+				user->SummonPet(item->Serial, bag, position);
 			}
 			else if( type == L"destroy" )
 			{
 				if( parameters.size() < 3 ) return;
 
-				user.UnsummonPet();
+				user->UnsummonPet();
 			}			
 		}
 
@@ -1192,7 +1192,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	/*********************************************************************************** PetItem */
 
 	/* PetFood ***********************************************************************************/
-	PetFood::PetFood(User& user, Items& items)
+	PetFood::PetFood(UserSharedPtr user, Items& items)
 		: user( user ), items( items )
 	{
 	}
@@ -1247,17 +1247,17 @@ namespace Lunia { namespace XRated { namespace StageServer {
 					overFeed = StringUtil::ToInt( keyValue->second ) > 0 ? true : false;
 				}
 				
-				user.PetFeed( item->Serial, foodAmount, foodCount, overFeed );
+				user->PetFeed( item->Serial, foodAmount, foodCount, overFeed );
 
 				// Drop Item ///////////////////////////////////////////////////////////////////////////
-				user.DropItems( foodPos.Bag, foodPos.Position, foodCount );
+				user->DropItems( foodPos.Bag, foodPos.Position, foodCount );
 				/////////////////////////////////////////////////////////////////////////// Drop Item //
 			}
 		}
 	}
 
 	/* PetLevelDown ***********************************************************************************/
-	PetLevelDown::PetLevelDown(User& user, Items& items)
+	PetLevelDown::PetLevelDown(UserSharedPtr user, Items& items)
 		: user(user), items(items), useable(false)
 	{
 	}
@@ -1287,12 +1287,12 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		if(Database::Enchant::IsExpired(petItem->Info, petItem->InstanceEx) == true)
 			return 0;
 
-		if(user.GetPlayer() != NULL && user.GetPlayer()->IsRarePet(petItem->Serial) == true)
+		if(user->GetPlayer() != NULL && user->GetPlayer()->IsRarePet(petItem->Serial) == true)
 			return 0;
 
 		bool onlyMaxLevel(GetNoLogicStateValue(info, L"onlyMaxLevel", 0));
 
-		if(onlyMaxLevel == true && user.GetPlayer() != NULL && user.GetPlayer()->IsMaxPetLevel(petItem->Serial) == false)
+		if(onlyMaxLevel == true && user->GetPlayer() != NULL && user->GetPlayer()->IsMaxPetLevel(petItem->Serial) == false)
 			return 0;
 
 		useable = true;
@@ -1310,12 +1310,12 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		uint32 downLevel(GetNoLogicStateValue(info, L"downLevel", 1));
 		bool   onlyMaxLevel(GetNoLogicStateValue(info, L"onlyMaxLevel", 0));
 
-		user.PetLevelDecrease(petItem->Serial/*Pet Serial*/, downLevel, onlyMaxLevel);
+		user->PetLevelDecrease(petItem->Serial/*Pet Serial*/, downLevel, onlyMaxLevel);
 	}
 	/*********************************************************************************** PetLevelDown */
 
 	/* PetSchoolTicket ********************************************************************************/
-	PetSchoolTicket::PetSchoolTicket(User& user, Items& items)
+	PetSchoolTicket::PetSchoolTicket(UserSharedPtr user, Items& items)
 		: user(user), items(items), useable(false)
 	{
 	}
@@ -1343,7 +1343,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		if(Database::Enchant::IsExpired(petItem->Info, petItem->InstanceEx) == true)
 			return 0;
 
-		if(user.GetPlayer() != NULL && user.GetPlayer()->IsMaxPetLevel(petItem->Serial) == true)
+		if(user->GetPlayer() != NULL && user->GetPlayer()->IsMaxPetLevel(petItem->Serial) == true)
 			return 0;
 
 		useable = true;
@@ -1361,14 +1361,14 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		float period( GetNoLogicStateValue( info, L"Period", 0.0f ) );
 		float expFactor( GetNoLogicStateValue( info, L"ExpFactor", 1.0f ) );
 
-		user.TakeCarePetBySchool( petItem->Info->Hash, petItem->Serial
+		user->TakeCarePetBySchool( petItem->Info->Hash, petItem->Serial
 								, petItem->InstanceEx.Instance, petItem->StackedCount // This conversion should defenetly be avoided but since enchant has no expire it doesnt matter anyways.
 			                    , (uint32)period, expFactor, StringUtil::ToInt( parameters[1] ), StringUtil::ToInt( parameters[2] ), info->Hash );
 	}
 	/******************************************************************************** PetSchoolTicket */
 
 	/* PetRenaming ********************************************************************************/
-	PetRenaming::PetRenaming(User& user, Items& items)
+	PetRenaming::PetRenaming(UserSharedPtr user, Items& items)
 		: user(user), items(items), useable(false)
 	{
 	}
@@ -1393,7 +1393,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		if(Database::Enchant::IsExpired(petItem->Info, petItem->InstanceEx) == true)
 			return 0;
 
-		if(user.GetPetDatas().GetPetData(petItem->Serial)->Appear == false)
+		if(user->GetPetDatas().GetPetData(petItem->Serial)->Appear == false)
 			return 0;
 
 		useable = true;
@@ -1408,12 +1408,12 @@ namespace Lunia { namespace XRated { namespace StageServer {
 
 		const Common::ItemEx* petItem = items.GetItem(StringUtil::ToInt(parameters[1]), StringUtil::ToInt(parameters[2]));
 
-		user.PetRename(petItem->Serial, parameters[0]);
+		user->PetRename(petItem->Serial, parameters[0]);
 	}
 	/******************************************************************************** PetRenaming */
 
 	/* CharacterRenaming ********************************************************************************/
-	CharacterRenaming::CharacterRenaming(User& user, Items& items)
+	CharacterRenaming::CharacterRenaming(UserSharedPtr user, Items& items)
 		: user(user), items(items),itemPosition(XRated::ItemPosition::Invalid)
 	{
 	}
@@ -1432,7 +1432,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	{
 		static DateTime prevTime;
 		static std::wstring prevCharacterName;
-		if( prevTime.IsValid() == true && prevCharacterName == user.GetName())
+		if( prevTime.IsValid() == true && prevCharacterName == user->GetName())
 		{
 			TimeSpan now, prev;
 			now.SetTimeSpan( DateTime::Now() );
@@ -1450,11 +1450,11 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		itemPosition.Bag = StringUtil::ToInt( parameters[1] );
 		itemPosition.Position = StringUtil::ToInt( parameters[2] );
 		Net::Api request("ReserveRenameCharacter");
-		request << user.GetSerial() << parameters[0];
-		request.GetAsync(this,&CharacterRenaming::Renamed, user.shared_from_this());
+		request << user->GetSerial() << parameters[0];
+		request.GetAsync(this,&CharacterRenaming::Renamed, user->shared_from_this());
 
 		prevTime = DateTime::Now();
-		prevCharacterName = user.GetName();
+		prevCharacterName = user->GetName();
 	}
 	void CharacterRenaming::Renamed(const UserSharedPtr& user, const Net::Answer& answer)
 	{
@@ -1482,7 +1482,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	/******************************************************************************** CharacterRenaming */
 
 	/* AddLicense ********************************************************************************/
-	AddLicense::AddLicense(User& user)
+	AddLicense::AddLicense(UserSharedPtr user)
 		: user(user)
 	{
 	}
@@ -1510,7 +1510,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		if(stageGroup == NULL)
 			return 0;
 
-		const std::vector<XRated::StageLicense>& stageLicenses = user.GetStageLicenses();
+		const std::vector<XRated::StageLicense>& stageLicenses = user->GetStageLicenses();
 		std::vector<XRated::StageLicense>::const_iterator itr = std::find_if(stageLicenses.begin(), stageLicenses.end(),
 																			XRated::StageLocation::FinderOnlyStageGroupHash(license.StageGroupHash));
 
@@ -1518,7 +1518,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		{
 			if(itr == stageLicenses.end())
 			{
-				const Database::Info::StageLicenseProvider::StageLicenseList *licenseList = Database::DatabaseInstance().InfoCollections.LicenseProvider.GetStageLicenseList(user.GetLevel(), user.GetRebirthCount());
+				const Database::Info::StageLicenseProvider::StageLicenseList *licenseList = Database::DatabaseInstance().InfoCollections.LicenseProvider.GetStageLicenseList(user->GetLevel(), user->GetRebirthCount());
 				if(!licenseList) return 0;
 
 				std::vector<XRated::StageLicense>::const_iterator licenseItr = std::find_if(licenseList->begin(), licenseList->end(),
@@ -1531,7 +1531,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			}
 			else
 			{
-				const Database::Info::StageLicenseProvider::StageLicenseList *licenseList = Database::DatabaseInstance().InfoCollections.LicenseProvider.GetStageLicenseList(user.GetLevel(), user.GetRebirthCount());
+				const Database::Info::StageLicenseProvider::StageLicenseList *licenseList = Database::DatabaseInstance().InfoCollections.LicenseProvider.GetStageLicenseList(user->GetLevel(), user->GetRebirthCount());
 				if(licenseList)
 				{
 					std::vector<XRated::StageLicense>::const_iterator licenseItr = std::find_if(licenseList->begin(), licenseList->end(),
@@ -1576,19 +1576,19 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		if(stageLicense.StageGroupHash == 0)
 			return;
 
-		if(user.AddStageLicense(stageLicense, true) == true)
+		if(user->AddStageLicense(stageLicense, true) == true)
 		{
-			//user.RequestUpdateDBStageLicense(stageLicense);
+			//user->RequestUpdateDBStageLicense(stageLicense);
 
 			Protocol::FromServer::AcquireLicense packet;
-			packet.serial = user.GetSerial();
+			packet.serial = user->GetSerial();
 			packet.stageLicense = stageLicense;
 			packet.sharedOtherPlayers = 0; // 3.1 by ultimate
-			user.Send(packet);
+			user->Send(packet);
 		}
 		else
-			LoggerInstance().Info("AddLicense::Use() - user.AddStageLicense Failed User:{} StageGroupHash:{} Level:{}",
-					user.GetSerial(), stageLicense.StageGroupHash, stageLicense.Level);
+			LoggerInstance().Info("AddLicense::Use() - user->AddStageLicense Failed User:{} StageGroupHash:{} Level:{}",
+					user->GetSerial(), stageLicense.StageGroupHash, stageLicense.Level);
 
 	}
 	/******************************************************************************** AddLicense */
@@ -1632,7 +1632,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	}
 	/******************************************************************************** AddItemToGuildShop */
 
-	Rebirth::Rebirth(User& user)
+	Rebirth::Rebirth(UserSharedPtr user)
 		: user(user)
 	{
 	}
@@ -1646,15 +1646,15 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	{
 		useable = false;
 
-		if(user.GetRoom()->GetRoomKind() != Common::SQUARE)
+		if(user->GetRoom()->GetRoomKind() != Common::SQUARE)
 		{
 			throw InvalidRuntimeParameterException( ((L"Rebirth Failed : not square")) );
 		}
 
-		if(DateTime::Now() > user.GetLastRebirthDate())
+		if(DateTime::Now() > user->GetLastRebirthDate())
 		{
-			int month = static_cast<int>(DateTime::Now().GetDate().GetMonth()) - static_cast<int>(user.GetLastRebirthDate().GetDate().GetMonth());
-			int year = static_cast<int>(DateTime::Now().GetDate().GetYear()) - static_cast<int>(user.GetLastRebirthDate().GetDate().GetYear());
+			int month = static_cast<int>(DateTime::Now().GetDate().GetMonth()) - static_cast<int>(user->GetLastRebirthDate().GetDate().GetMonth());
+			int year = static_cast<int>(DateTime::Now().GetDate().GetYear()) - static_cast<int>(user->GetLastRebirthDate().GetDate().GetYear());
 
 			if(month < 0)
 				month += 12;
@@ -1664,7 +1664,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 
 			useable = month >= delayMonth;
 		}
-		if( user.IsFishing() == true ) {
+		if( user->IsFishing() == true ) {
 			throw InvalidRuntimeParameterException(fmt::format(L"Rebirth Failed, now fishing : {}",info->Hash).c_str());
 		}
 
@@ -1679,7 +1679,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			packet.StoredSkillPoint = 0;
 			packet.LastRebirthDateTime = DateTime::Now();
 			packet.UpdatedLicense.clear();
-			user.Send(packet);
+			user->Send(packet);
 			throw InvalidRuntimeParameterException(L"Rebirth Failed, Need more day", false );
 
 		}
@@ -1695,12 +1695,12 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			throw InvalidRuntimeParameterException(fmt::format(L"Rebirth Failed, parameter broken : {}",info->Hash).c_str());
 		}
 
-		user.RebirthCharacter(XRated::ItemPosition(StringUtil::ToInt( parameters[0] ), StringUtil::ToInt( parameters[1] ) ) );
+		user->RebirthCharacter(XRated::ItemPosition(StringUtil::ToInt( parameters[0] ), StringUtil::ToInt( parameters[1] ) ) );
 	}
 
 
 	/* AddLife ***********************************************************************************/
-	AddLife::AddLife(XRated::Logic::Player*& player, const IUserRoom* const& room, XRated::CharacterStateFlags& characterStateFlags)
+	AddLife::AddLife(XRated::Logic::Player*& player, std::shared_ptr<IUserRoom>& room, XRated::CharacterStateFlags& characterStateFlags)
 		: player(player), room(room), characterStateFlags(characterStateFlags)
 	{
 	}
@@ -1759,7 +1759,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	/*********************************************************************************** AddLife */
 
 	/* ExpFactor ***********************************************************************************/
-	ExpFactor::ExpFactor(User& user)
+	ExpFactor::ExpFactor(UserSharedPtr user)
 		: user(user)
 	{
 	}
@@ -1785,15 +1785,15 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	{
 		float factor(GetNoLogicStateValue(info, L"Factor", 1.0f));
 		int category(GetNoLogicStateValue(info, L"Category", 0));		
-		user.SetExpFactorFromItem( static_cast<XRated::Constants::ExpFactorCategoryFromItem>(category), factor );
+		user->SetExpFactorFromItem( static_cast<XRated::Constants::ExpFactorCategoryFromItem>(category), factor );
 
 		// old version 2008-09-05 by kwind
 		//bool stackable(GetNoLogicStateValue(info, L"Stackable", 0)?true:false);
-		//XRated::PlayerData& data=user.GetPlayer()->GetPlayerData(); // data.expFactor already PC room accepted
+		//XRated::PlayerData& data=user->GetPlayer()->GetPlayerData(); // data.expFactor already PC room accepted
 		//data.expFactor*=factor;
 		//if (stackable==false) // make cancel less effect 
 		//{			
-		//	data.expFactor/=((factor<user.GetExtraExpFactor())?factor:user.GetExtraExpFactor());			
+		//	data.expFactor/=((factor<user->GetExtraExpFactor())?factor:user->GetExtraExpFactor());			
 		//}
 	}
 	/*********************************************************************************** ExpFactor */
@@ -1826,7 +1826,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	/*********************************************************************************** PetAppetiteControl */
 	
 	/* GuildLevelUp *********************************************************************************/
-	GuildLevelUp::GuildLevelUp(User& user, GuildManager& pGuild)
+	GuildLevelUp::GuildLevelUp(UserSharedPtr user, GuildManager& pGuild)
 		: user(user), guild(pGuild)
 	{
 	}
@@ -1848,22 +1848,22 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		if ( level == -1 )
 			throw InvalidRuntimeParameterException( L"guildLevel is wrong" )) );
 
-		if ( user.IsJoined() == false )
+		if ( user->IsJoined() == false )
 		{
 			return 111;
 		}
-		else if ( user.GetGuildInfo().MasterName != user.GetName() )
+		else if ( user->GetGuildInfo().MasterName != user->GetName() )
 		{
 			Protocol::FromServer::AllMGuild::LevelUp response;
 			response.Result = Protocol::FromServer::AllMGuild::LevelUp::Results::HaveNoPermission;
-			user.Send(response);
+			user->Send(response);
 			return 111;
 		}
-		else if ( user.GetGuildInfo().GuildLevel != level-1 || level<0 || level>5)
+		else if ( user->GetGuildInfo().GuildLevel != level-1 || level<0 || level>5)
 		{
 			Protocol::FromServer::AllMGuild::LevelUp response;
 			response.Result = Protocol::FromServer::AllMGuild::LevelUp::Results::InvalidLevel;
-			user.Send(response);
+			user->Send(response);
 			return 111;
 		}
 		
@@ -1971,7 +1971,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	/********************************************************************************* GuildRankingPointUp */
 
 	/* AddSkillPoint *********************************************************************************/
-	SkillPointPlus::SkillPointPlus(User& user)
+	SkillPointPlus::SkillPointPlus(UserSharedPtr user)
 		: user(user)
 	{
 	}
@@ -1990,13 +1990,13 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	{
 		uint16 point(GetNoLogicStateValue(info, L"value", 0));
 		if( point != 0 ) {
-			user.AddSkillPointPlus(point);
+			user->AddSkillPointPlus(point);
 		}
 	}
 	/********************************************************************************* AddSkillPoint */
 
 	/* EventStage *********************************************************************************/
-	EventStage::EventStage(User& user)
+	EventStage::EventStage(UserSharedPtr user)
 		: user(user)
 	{
 	}
@@ -2017,15 +2017,15 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		uint16 accessLevel = GetNoLogicStateValue(info, L"AccessLevel", 0);
 
 		/*InputMgr::GetGeneralController().RequestTo( Service::SquareService, L"userPopStage",
-			StringUtil::Format(L"{} {},{}", user.GetName().c_str(), stageGroupHash, accessLevel) );
+			StringUtil::Format(L"{} {},{}", user->GetName().c_str(), stageGroupHash, accessLevel) );
 
 		InputMgr::GetGeneralController().RequestTo( Service::StageService, L"userPopStage",
-			StringUtil::Format(L"{} {},{}", user.GetName().c_str(), stageGroupHash, accessLevel) );*/
+			StringUtil::Format(L"{} {},{}", user->GetName().c_str(), stageGroupHash, accessLevel) );*/
 	}
 	/********************************************************************************* EventStage */
 
 	/* EventDungeonStage *********************************************************************************/
-	EventDungeonStage::EventDungeonStage(User& user)
+	EventDungeonStage::EventDungeonStage(UserSharedPtr user)
 		: user(user)
 	{
 	}
@@ -2045,15 +2045,15 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		uint32 stageGroupHash = GetNoLogicStateValue(info, L"StageGroupHash", 0);
 
 		/*InputMgr::GetGeneralController().RequestTo( Service::SquareService, L"userPopStage",
-			StringUtil::Format(L"{} {},{}", user.GetName().c_str(), stageGroupHash, 0) );
+			StringUtil::Format(L"{} {},{}", user->GetName().c_str(), stageGroupHash, 0) );
 
 		InputMgr::GetGeneralController().RequestTo( Service::StageService, L"userPopStage",
-			StringUtil::Format(L"{} {},{}", user.GetName().c_str(), stageGroupHash, 0) );*/
+			StringUtil::Format(L"{} {},{}", user->GetName().c_str(), stageGroupHash, 0) );*/
 	}
 	/********************************************************************************* EventDungeonStage */
 
 	/* BookItem ***********************************************************************************/
-	BookItem::BookItem( User& user )
+	BookItem::BookItem( UserSharedPtr user )
 		: user( user )
 	{
 	}
@@ -2075,7 +2075,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	/**********************************************************************************  BookItem */
 
 	/* BookPartItem *******************************************************************************/
-	BookPartItem::BookPartItem( User& user )
+	BookPartItem::BookPartItem( UserSharedPtr user )
 		: user( user )
 	{
 	}
@@ -2097,7 +2097,7 @@ namespace Lunia { namespace XRated { namespace StageServer {
 	/******************************************************************************  BookPartItem */
 
 	/* RestoreBelonging ***************************************************************************/
-	RestoreBelonging::RestoreBelonging( User& user, Items& items )
+	RestoreBelonging::RestoreBelonging( UserSharedPtr user, Items& items )
 		: user( user ), items( items )
 	{
 	}
@@ -2119,13 +2119,13 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			return;
 		}
 
-		user.DoRestoreBelonging( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
+		user->DoRestoreBelonging( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
 							 , XRated::ItemPosition( StringUtil::ToInt( parameters[ 2 ] ), StringUtil::ToInt( parameters[ 3 ] ) ) );
 	}
 	/**************************************************************************  RestoreBelonging */
 
 	/* Appraisal **********************************************************************************/
-	Appraisal::Appraisal( User& user, Items& items )
+	Appraisal::Appraisal( UserSharedPtr user, Items& items )
 		: user( user ), items( items )
 	{
 	}
@@ -2147,13 +2147,13 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			return;
 		}
 
-		user.DoAppraisal( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
+		user->DoAppraisal( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
 					  , XRated::ItemPosition( StringUtil::ToInt( parameters[ 2 ] ), StringUtil::ToInt( parameters[ 3 ] ) ) );
 	}
 	/*********************************************************************************  Appraisal */
 
 	/* CashAppraisal **********************************************************************************/
-	CashAppraisal::CashAppraisal( User& user, Items& items )
+	CashAppraisal::CashAppraisal( UserSharedPtr user, Items& items )
 		: user( user ), items( items )
 	{
 	}
@@ -2175,13 +2175,13 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			return;
 		}
 
-		user.DoCashAppraisal( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
+		user->DoCashAppraisal( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
 					  , XRated::ItemPosition( StringUtil::ToInt( parameters[ 2 ] ), StringUtil::ToInt( parameters[ 3 ] ) ) );
 	}
 	/*********************************************************************************  CashAppraisal */
 
 	/* RestoreAppraisal ***************************************************************************/
-	RestoreAppraisal::RestoreAppraisal( User& user, Items& items )
+	RestoreAppraisal::RestoreAppraisal( UserSharedPtr user, Items& items )
 		: user( user ), items( items )
 	{
 	}
@@ -2203,13 +2203,13 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			return;
 		}
 
-		user.DoRestoreAppraisal( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
+		user->DoRestoreAppraisal( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
 					         , XRated::ItemPosition( StringUtil::ToInt( parameters[ 2 ] ), StringUtil::ToInt( parameters[ 3 ] ) ) );
 	}  
 	/**************************************************************************  RestoreAppraisal */
 
 	/* CashRestoreAppraisal ***********************************************************************/
-	CashRestoreAppraisal::CashRestoreAppraisal( User& user, Items& items )
+	CashRestoreAppraisal::CashRestoreAppraisal( UserSharedPtr user, Items& items )
 		: user( user ), items( items )
 	{
 	}
@@ -2231,13 +2231,13 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			return;
 		}
 
-		user.DoCashRestoreAppraisal( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
+		user->DoCashRestoreAppraisal( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
 								   , XRated::ItemPosition( StringUtil::ToInt( parameters[ 2 ] ), StringUtil::ToInt( parameters[ 3 ] ) ) );
 	}  
 	/**********************************************************************  CashRestoreAppraisal */
 
 	/* Extract ************************************************************************************/
-	Extract::Extract( User& user, Items& items )
+	Extract::Extract( UserSharedPtr user, Items& items )
 		: user( user ), items( items )
 	{
 	}
@@ -2259,13 +2259,13 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			return;
 		}
 
-		user.DoExtract( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
+		user->DoExtract( XRated::ItemPosition( StringUtil::ToInt( parameters[ 0 ] ), StringUtil::ToInt( parameters[ 1 ] ) )
 					, XRated::ItemPosition( StringUtil::ToInt( parameters[ 2 ] ), StringUtil::ToInt( parameters[ 3 ] ) ) );
 	}
 	/***********************************************************************************  Extract */
 
 	/* AddSkillLicense ********************************************************************************/
-	AddSkillLicense::AddSkillLicense(User& user)
+	AddSkillLicense::AddSkillLicense(UserSharedPtr user)
 		: user(user)
 	{
 	}
@@ -2283,11 +2283,11 @@ namespace Lunia { namespace XRated { namespace StageServer {
 			throw InvalidRuntimeParameterException(L"invalid UseItemEx parameter for GetConsumableCount - wrong param size AddSkillLicense");
 
 		uint32 skillGroupHash = GetNoLogicStateValue(info, L"SkillGroupHash", (uint32)0);
-		uint32 classHash = XRated::Constants::GetClassHash( user.GetClassType() );
+		uint32 classHash = XRated::Constants::GetClassHash( user->GetClassType() );
 	
 		Database::Info::SkillInfoList::SkillGroup* skill = Database::DatabaseInstance().InfoCollections.Skills.GetSkillGroupInfo(classHash, skillGroupHash);
 
-		if( !skill || !skill->NeedLicense || user.HasSkillLicense(skillGroupHash) )
+		if( !skill || !skill->NeedLicense || user->HasSkillLicense(skillGroupHash) )
 			return 0;
 
 		skillGroup = skill;
@@ -2299,15 +2299,15 @@ namespace Lunia { namespace XRated { namespace StageServer {
 		if(skillGroup == NULL)
 			return;
 
-		user.AddSkillLicense(skillGroup->Hash);
+		user->AddSkillLicense(skillGroup->Hash);
 		{
 			Protocol::FromServer::AcquireSkillLicense packet;
-			packet.serial = user.GetSerial();
+			packet.serial = user->GetSerial();
 			packet.skillLicense = skillGroup->Hash;
-			user.Send(packet);
+			user->Send(packet);
 		}
 		//else
-		//	ALLM_INFO((L"AddSkillLicense::Use() - user.AddSkillLicense Failed User : {} skillGroupHash :{}", user.GetName().c_str(), skillGroup->Hash ));
+		//	ALLM_INFO((L"AddSkillLicense::Use() - user->AddSkillLicense Failed User : {} skillGroupHash :{}", user->GetName().c_str(), skillGroup->Hash ));
 
 	}
 	/******************************************************************************** AddLicense */

@@ -25,12 +25,12 @@ namespace Lunia {
 						Failed_HaveNotCompleteQuests,	
 					};
 				public: // packet processors
-					void Dispatch(UserSharedPtr, Protocol::ToServer::Quest::Accept& packet);
-					void Dispatch(UserSharedPtr, Protocol::ToServer::Quest::Complete& packet);
-					void Dispatch(UserSharedPtr, Protocol::ToServer::Quest::Drop& packet);
-					void Dispatch(UserSharedPtr, Protocol::ToServer::Quest::ActivityItem& packet);
-					void Dispatch(UserSharedPtr, Protocol::ToServer::Quest::ShareToPartyPlayer& packet);
-					void Dispatch(UserSharedPtr, Protocol::ToServer::Quest::SharedAnswer& packet);
+					void Dispatch(const UserSharedPtr, Protocol::ToServer::Quest::Accept& packet);
+					void Dispatch(const UserSharedPtr, Protocol::ToServer::Quest::Complete& packet);
+					void Dispatch(const UserSharedPtr, Protocol::ToServer::Quest::Drop& packet);
+					void Dispatch(const UserSharedPtr, Protocol::ToServer::Quest::ActivityItem& packet);
+					void Dispatch(const UserSharedPtr, Protocol::ToServer::Quest::ShareToPartyPlayer& packet);
+					void Dispatch(const UserSharedPtr, Protocol::ToServer::Quest::SharedAnswer& packet);
 				public:
 					void RefreshCompletedQuests(UserSharedPtr user, const StageLocation& location); ///< refresh @remakrs asynchronous response
 					void RefreshWorkingQuests(UserSharedPtr user); ///< update Working Quests @remakrs asynchronous response

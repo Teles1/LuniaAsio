@@ -5,7 +5,7 @@ namespace Lunia {
 		namespace StageServer {
 
 			// Packet handlers (Client-Server)
-			void MailboxManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::DisposeMail& packet)
+			void MailboxManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::DisposeMail& packet)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -26,7 +26,7 @@ namespace Lunia {
 				}
 			}
 
-			void MailboxManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::DisposeReadMails& packet)
+			void MailboxManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::DisposeReadMails& packet)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -46,7 +46,7 @@ namespace Lunia {
 				}
 			}
 
-			void MailboxManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::ReadMail& packet)
+			void MailboxManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::ReadMail& packet)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -75,7 +75,7 @@ namespace Lunia {
 				}
 			}
 
-			void MailboxManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::RequestMailList& /*packet*/)
+			void MailboxManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::RequestMailList& /*packet*/)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -95,7 +95,7 @@ namespace Lunia {
 				}
 			}
 
-			void MailboxManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::RetrieveAttached& packet)
+			void MailboxManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::RetrieveAttached& packet)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -197,7 +197,7 @@ namespace Lunia {
 				}
 			}
 
-			void MailboxManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Mail::SendMail& packet)
+			void MailboxManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Mail::SendMail& packet)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{

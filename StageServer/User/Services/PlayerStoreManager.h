@@ -11,10 +11,10 @@ namespace Lunia {
 			class PlayerStoreManager
 			{
 			public: // packet processors
-				void Dispatch(UserSharedPtr& user, Protocol::ToServer::PlayerStore::Buy& packet);
-				void Dispatch(UserSharedPtr& user, Protocol::ToServer::PlayerStore::BuyPet& packet);
-				void Dispatch(UserSharedPtr& user, Protocol::ToServer::PlayerStore::List& packet);
-				void Dispatch(UserSharedPtr& user, Protocol::ToServer::PlayerStore::Close& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::PlayerStore::Buy& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::PlayerStore::BuyPet& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::PlayerStore::List& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::PlayerStore::Close& packet);
 
 			public:
 				PlayerStoreManager(int numberOfRooms, std::vector<Service::SquareInfo> squares);

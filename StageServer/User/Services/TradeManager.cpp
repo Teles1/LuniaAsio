@@ -66,7 +66,7 @@ namespace Lunia {
 					<< money << receiver.GetName());*/
 			}
 
-			void TradeManager::Dispatch(UserSharedPtr user, Protocol::ToServer::RequestTrade& packet)
+			void TradeManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::RequestTrade& packet)
 			{
 				AutoLock userLock(user->GetSyncObject());
 
@@ -131,7 +131,7 @@ namespace Lunia {
 				target->Send(response); // response to acceptor
 			}
 
-			void TradeManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AddTradeItem& packet)
+			void TradeManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AddTradeItem& packet)
 			{
 				AutoLock userLock(user->GetSyncObject());
 				AutoLock lock(cs);
@@ -204,7 +204,7 @@ namespace Lunia {
 				}
 			}
 
-			void TradeManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AddTradeMoney& packet)
+			void TradeManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AddTradeMoney& packet)
 			{
 				AutoLock userLock(user->GetSyncObject());
 				AutoLock lock(cs);
@@ -252,7 +252,7 @@ namespace Lunia {
 				i->Target->Send(response);
 			}
 
-			void TradeManager::Dispatch(UserSharedPtr user, Protocol::ToServer::ReadyToTrade& /*packet*/)
+			void TradeManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::ReadyToTrade& /*packet*/)
 			{
 				AutoLock userLock(user->GetSyncObject());
 				AutoLock lock(cs);
@@ -345,13 +345,13 @@ namespace Lunia {
 				}
 			}
 
-			void TradeManager::Dispatch(UserSharedPtr user, Protocol::ToServer::CancelTrade& /*packet*/)
+			void TradeManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::CancelTrade& /*packet*/)
 			{
 				AutoLock userLock(user->GetSyncObject());
 				Cancel(user);
 			}
 
-			void TradeManager::Dispatch(UserSharedPtr user, Protocol::ToServer::ConfirmTrade& packet)
+			void TradeManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::ConfirmTrade& packet)
 			{
 				AutoLock userLock(user->GetSyncObject());
 				AutoLock lock(cs);

@@ -4,9 +4,6 @@
 #include <Network/Api/Api.h>
 #include <Core/Utils/TimeSpan.h>
 namespace Lunia {
-	namespace Net {
-		
-	}
 	namespace XRated {
 		namespace StageServer {
 			
@@ -20,7 +17,7 @@ namespace Lunia {
 			{
 				debugExpTimeFactor = ConfigInstance().Get("ExpTimeFactor", 0.0f);
 			}
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::Create& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::Create& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -46,7 +43,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::Invite& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::Invite& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -100,7 +97,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::InviteReply& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::InviteReply& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -124,7 +121,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::Join& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::Join& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -147,7 +144,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::Kick& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::Kick& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -175,7 +172,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::Leave& /*packet*/)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::Leave& /*packet*/)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -198,7 +195,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::ListMembers& /*packet*/)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::ListMembers& /*packet*/)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -221,7 +218,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::Remove& /*packet*/)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::Remove& /*packet*/)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -246,7 +243,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::ValidateName& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::ValidateName& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -270,7 +267,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::ValidateAlias& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::ValidateAlias& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -294,7 +291,7 @@ namespace Lunia {
 				}
 			}
 			
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::AddExp& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::AddExp& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -345,7 +342,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::AddMaintenancePoint& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::AddMaintenancePoint& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -369,7 +366,7 @@ namespace Lunia {
 				return;
 			}
 			
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::ReflashGuildLevel& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::ReflashGuildLevel& packet)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -390,7 +387,7 @@ namespace Lunia {
 				RequestReflashGuildLevel(user, guildId, packet.level);
 			}
 			
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::GetTax& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::GetTax& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -440,7 +437,7 @@ namespace Lunia {
 				}
 			}
 			
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::ReflashGuildShopItem& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::ReflashGuildShopItem& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -467,7 +464,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::MessageChange& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::MessageChange& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -487,7 +484,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::ChangeGradeName& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::ChangeGradeName& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -505,7 +502,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::ChangeGradeAuth& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::ChangeGradeAuth& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -526,7 +523,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::ChangeGrade& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::ChangeGrade& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -555,7 +552,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::ChangeGuildMaster& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::ChangeGuildMaster& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -585,7 +582,7 @@ namespace Lunia {
 				}
 			}
 
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::GetMyInfo& /*packet*/)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::GetMyInfo& /*packet*/)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -598,7 +595,7 @@ namespace Lunia {
 					RequestGuildInfo(user);
 			}
 			
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::RefreshMyInfo& /*packet*/)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::RefreshMyInfo& /*packet*/)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -810,7 +807,7 @@ namespace Lunia {
 				}
 			}
 			
-			void GuildManager::Dispatch(UserSharedPtr user, Protocol::ToServer::AllMGuild::ReflashGuildProfitDate& packet)
+			void GuildManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::AllMGuild::ReflashGuildProfitDate& packet)
 			{
 				if (user && user->GetCharacterStateFlags().IsGuestID)
 				{

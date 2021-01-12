@@ -1,5 +1,6 @@
 #pragma once
 #include <StageServer/Protocol/FromServer.h>
+#include <StageServer/Protocol/ToServer.h>
 #include <StageServer/Common.h>
 
 namespace Lunia {
@@ -18,9 +19,14 @@ namespace Lunia {
 				Math::PseudoRandomFloat randomFloat;
 
 				enum State { Doing = 0, Wait } state;
-
+				User& m_Owner;
 			public:
-				FishingManager();
+				FishingManager(User& owner);
+				void Dispatch(const UserSharedPtr, Protocol::ToServer::Fishing::Start& packet);
+				void Dispatch(const UserSharedPtr, Protocol::ToServer::Fishing::End& packet);
+				void Dispatch(const UserSharedPtr, Protocol::ToServer::Fishing::List& packet);
+				void Dispatch(const UserSharedPtr, Protocol::ToServer::Fishing::Do& packet);
+				void Dispatch(const UserSharedPtr, Protocol::ToServer::Fishing::ChangeBaitCount& packet);
 				void Init();
 				bool Start();
 				bool End();

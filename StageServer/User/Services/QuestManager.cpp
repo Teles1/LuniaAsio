@@ -291,13 +291,13 @@ namespace Lunia {
 
 
 
-			void QuestManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Quest::Accept& packet)
+			void QuestManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Quest::Accept& packet)
 			{
 				AcceptQuest(user, packet.QuestHash, packet.SelectRewardIndex, true);
 
 				user->AcceptedQuest(packet.QuestHash);
 			}
-			void QuestManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Quest::SharedAnswer& packet)
+			void QuestManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Quest::SharedAnswer& packet)
 			{
 				AcceptQuest(user, packet.QuestHash, packet.SelectRewardIndex, false);
 
@@ -480,7 +480,7 @@ namespace Lunia {
 				user->CriticalError(fmt::format("invalid quest({})-accept requested", questHash).c_str(), true);
 			}
 
-			void QuestManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Quest::Complete& packet)
+			void QuestManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Quest::Complete& packet)
 			{
 				AutoLock userLock(user->GetSyncObject());
 				const Database::Info::QuestInfo* info(Database::DatabaseInstance().InfoCollections.Quests.Retrieve(packet.QuestHash));
@@ -666,7 +666,7 @@ namespace Lunia {
 				user->CriticalError(fmt::format("invalid quest({})-complete requested", packet.QuestHash).c_str(), true);
 			}
 
-			void QuestManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Quest::Drop& packet)
+			void QuestManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Quest::Drop& packet)
 			{
 				AutoLock userLock(user->GetSyncObject());
 				AutoLock lock(cs);
@@ -681,7 +681,7 @@ namespace Lunia {
 				}
 
 			}
-			void QuestManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Quest::ShareToPartyPlayer& packet)
+			void QuestManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Quest::ShareToPartyPlayer& packet)
 			{
 				const Database::Info::QuestInfo* info = NULL;
 				{
@@ -1557,7 +1557,7 @@ namespace Lunia {
 			//	Active Quest Item
 			//--------------------------------------------------------------------------------------------------------------------------------------------
 
-			void QuestManager::Dispatch(UserSharedPtr user, Protocol::ToServer::Quest::ActivityItem& packet)
+			void QuestManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::Quest::ActivityItem& packet)
 			{
 				AutoLock userLock(user->GetSyncObject());
 				AutoLock lock(cs);

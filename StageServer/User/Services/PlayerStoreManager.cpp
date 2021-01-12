@@ -4,7 +4,7 @@
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
-			void PlayerStoreManager::Dispatch(UserSharedPtr& buyer, Protocol::ToServer::PlayerStore::Buy& packet)
+			void PlayerStoreManager::Dispatch(const UserSharedPtr buyer, Protocol::ToServer::PlayerStore::Buy& packet)
 			{
 				if (buyer->GetCharacterStateFlags().IsGuestID)
 				{
@@ -136,7 +136,7 @@ namespace Lunia {
 
 			}
 			
-			void PlayerStoreManager::Dispatch(UserSharedPtr& buyer, Protocol::ToServer::PlayerStore::BuyPet& packet)
+			void PlayerStoreManager::Dispatch(const UserSharedPtr buyer, Protocol::ToServer::PlayerStore::BuyPet& packet)
 			{
 				if (buyer->GetCharacterStateFlags().IsGuestID)
 				{
@@ -279,7 +279,7 @@ namespace Lunia {
 				buyer->UpdateInfos();
 			}
 
-			void PlayerStoreManager::Dispatch(UserSharedPtr& user, Protocol::ToServer::PlayerStore::List& packet)
+			void PlayerStoreManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::PlayerStore::List& packet)
 			{
 				if (user->GetCharacterStateFlags().IsGuestID)
 				{
@@ -300,7 +300,7 @@ namespace Lunia {
 				user->Send(response);
 			}
 
-			void PlayerStoreManager::Dispatch(UserSharedPtr& user, Protocol::ToServer::PlayerStore::Close& /*packet*/)
+			void PlayerStoreManager::Dispatch(const UserSharedPtr user, Protocol::ToServer::PlayerStore::Close& /*packet*/)
 			{
 				Protocol::FromServer::PlayerStore::Close response;
 

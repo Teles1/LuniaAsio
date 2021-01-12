@@ -4,6 +4,7 @@
 #include <Network/Tcp/Shared.h>
 #include <Network/Api/Api.h>
 #include <Info/Info/Event/EventInfo.h>
+#include <StageServer/Services/Communicators.h>
 namespace Lunia {
 	namespace XRated{
 		namespace StageServer
@@ -23,6 +24,7 @@ namespace Lunia {
 				UserManager(UserManager&&) = delete;
 				UserManager& operator=(UserManager&&) = delete;
 				static UserManager& GetInstance();
+				Communicators& GetCommunicators();
 #pragma endregion Singleton
 			public: 
 				bool IsEventQuestPeriod(const uint8& eventType);
@@ -62,6 +64,8 @@ namespace Lunia {
 
 				std::map<uint8, bool>								m_NpcDropEventStates;
 				std::map<uint8, std::wstring>						m_NpcDropEventExplains;
+
+				Communicators										m_Communicators;
 				class CurrentEvent
 				{
 				public:

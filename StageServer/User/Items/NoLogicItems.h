@@ -63,7 +63,7 @@ namespace Lunia {
 			class BankBag : public NonLogicItem
 			{
 			public:
-				BankBag(Items::IEventListener& sender, Items& items, const String& characterName);
+				BankBag(UserSharedPtr sender, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
@@ -71,15 +71,14 @@ namespace Lunia {
 
 			private:
 				/* should be reference of members of User because the user name string changes after construction */
-				Items::IEventListener& sender;
+				UserSharedPtr sender;
 				Items& items;
-				const String& characterName;
 			};
 
 			class InventoryBag : public NonLogicItem
 			{
 			public:
-				InventoryBag(Items::IEventListener& sender, Items& items, const String& characterName);
+				InventoryBag(UserSharedPtr sender, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
@@ -87,15 +86,14 @@ namespace Lunia {
 
 			private:
 				/* should be reference of members of User because the user name string changes after construction */
-				Items::IEventListener& sender;
+				UserSharedPtr sender;
 				Items& items;
-				const String& characterName;
 			};
 
 			class SkillReset : public NonLogicItem
 			{
 			public:
-				SkillReset(XRated::Logic::Player*& player, IUserRoom*& room);
+				SkillReset(XRated::Logic::Player*& player, std::shared_ptr<IUserRoom>& room);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
@@ -103,13 +101,13 @@ namespace Lunia {
 
 			private:
 				XRated::Logic::Player*& player;
-				IUserRoom*& room;
+				std::shared_ptr<IUserRoom>& room;
 			};
 
 			class SkillResetAll : public NonLogicItem
 			{
 			public:
-				SkillResetAll(XRated::Logic::Player*& player, IUserRoom*& room);
+				SkillResetAll(XRated::Logic::Player*& player, std::shared_ptr<IUserRoom>& room);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
@@ -117,7 +115,7 @@ namespace Lunia {
 
 			private:
 				XRated::Logic::Player*& player;
-				IUserRoom*& room;
+				std::shared_ptr<IUserRoom>& room;
 			};
 
 
@@ -135,7 +133,7 @@ namespace Lunia {
 			class EnchantRecover : public NonLogicItem
 			{
 			public:
-				EnchantRecover(User& user, Items& items);
+				EnchantRecover(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
@@ -158,14 +156,14 @@ namespace Lunia {
 
 			private:
 				/* should be reference of members of User because the user name string changes after construction */
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 			};
 
 			class PlayerStore : public NonLogicItem
 			{
 			public:
-				PlayerStore(User& user, Items& items, PlayerStoreManager& playerStore);
+				PlayerStore(UserSharedPtr user, Items& items, PlayerStoreManager& playerStore);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
@@ -174,7 +172,7 @@ namespace Lunia {
 			private:
 				static const int MinimalNumberOfSlots = 1;
 
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 				PlayerStoreManager& playerStore;
 			};
@@ -182,7 +180,7 @@ namespace Lunia {
 			class CharacterSlot : public NonLogicItem
 			{
 			public:
-				CharacterSlot(User& user);
+				CharacterSlot(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
@@ -192,52 +190,52 @@ namespace Lunia {
 				void Extended(const UserSharedPtr& user, const Net::Answer& answer);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 			class Megaphone : public NonLogicItem
 			{
 			public:
-				Megaphone(User& user);
+				Megaphone(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 			class TextBoardMessage : public NonLogicItem
 			{
 			public:
-				TextBoardMessage(User& user);
+				TextBoardMessage(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 			class Store : public NonLogicItem
 			{
 			public:
-				Store(User& user);
+				Store(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 			class GuildLevelUp : public NonLogicItem
 			{
 			public:
-				GuildLevelUp(User& user, GuildManager& guild);
+				GuildLevelUp(UserSharedPtr user, GuildManager& guild);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
@@ -246,7 +244,7 @@ namespace Lunia {
 				/* DB response */
 				//void LevelUp(UserSharedPtr& user, Net::Answer& packet);
 			private:
-				User& user;
+				UserSharedPtr user;
 				GuildManager& guild;
 			};
 
@@ -296,47 +294,47 @@ namespace Lunia {
 			class CharacterLicense : public NonLogicItem
 			{
 			public:
-				CharacterLicense(User& user);
+				CharacterLicense(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 			class QuestActivity : public NonLogicItem
 			{
 			public:
-				QuestActivity(User& user, QuestManager& quest);
+				QuestActivity(UserSharedPtr user, QuestManager& quest);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				QuestManager& quest;
 			};
 
 			class ReviveStone : public NonLogicItem
 			{
 			public:
-				ReviveStone(User& user);
+				ReviveStone(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 
 			class DailyItem : public NonLogicItem
 			{
 			public:
-				DailyItem(User& user, Items& items);
+				DailyItem(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
@@ -346,7 +344,7 @@ namespace Lunia {
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 
 
@@ -366,14 +364,14 @@ namespace Lunia {
 			class ExtendExpireItemDate : public NonLogicItem
 			{
 			public:
-				ExtendExpireItemDate(User& user, Items& items);
+				ExtendExpireItemDate(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 				mutable bool useable;
 			};
@@ -381,14 +379,14 @@ namespace Lunia {
 			class ForceItemExpiration : public NonLogicItem
 			{
 			public:
-				ForceItemExpiration(User& user, Items& items);
+				ForceItemExpiration(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 				mutable bool useable;
 			};
@@ -396,42 +394,42 @@ namespace Lunia {
 			class PetItem : public NonLogicItem
 			{
 			public:
-				PetItem(User& user, Items& items);
+				PetItem(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 			};
 
 			class PetFood : public NonLogicItem
 			{
 			public:
-				PetFood(User& user, Items& items);
+				PetFood(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 			};
 
 			class PetLevelDown : public NonLogicItem
 			{
 			public:
-				PetLevelDown(User& user, Items& items);
+				PetLevelDown(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 				mutable bool useable;
 			};
@@ -439,14 +437,14 @@ namespace Lunia {
 			class PetSchoolTicket : public NonLogicItem
 			{
 			public:
-				PetSchoolTicket(User& user, Items& items);
+				PetSchoolTicket(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 				mutable bool useable;
 			};
@@ -455,14 +453,14 @@ namespace Lunia {
 				: public NonLogicItem
 			{
 			public:
-				PetRenaming(User& user, Items& items);
+				PetRenaming(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 				mutable bool useable;
 			};
@@ -470,7 +468,7 @@ namespace Lunia {
 			class CharacterRenaming : public NonLogicItem
 			{
 			public:
-				CharacterRenaming(User& user, Items& items);
+				CharacterRenaming(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
@@ -480,7 +478,7 @@ namespace Lunia {
 				void Renamed(const UserSharedPtr& user, const Net::Answer& answer);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 				XRated::ItemPosition itemPosition;
 			};
@@ -488,26 +486,26 @@ namespace Lunia {
 			class SkillPointPlus : public NonLogicItem
 			{
 			public:
-				SkillPointPlus(User& user);
+				SkillPointPlus(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 			class AddLicense : public NonLogicItem
 			{
 			public:
-				AddLicense(User& user);
+				AddLicense(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				mutable XRated::StageLicense stageLicense;
 			};
 
@@ -527,12 +525,12 @@ namespace Lunia {
 			class Rebirth : public NonLogicItem
 			{
 			public:
-				Rebirth(User& user);
+				Rebirth(UserSharedPtr user);
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 			private:
-				User& user;
+				UserSharedPtr user;
 				mutable bool useable;
 			};
 
@@ -543,27 +541,27 @@ namespace Lunia {
 			class AddLife : public NonLogicItem
 			{
 			public:
-				AddLife(XRated::Logic::Player*& player, const IUserRoom* const& room, XRated::CharacterStateFlags& characterStateFlags);
+				AddLife(XRated::Logic::Player*& player, std::shared_ptr<IUserRoom>& room, XRated::CharacterStateFlags& characterStateFlags);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 			private:
 				XRated::Logic::Player*& player;
-				const IUserRoom* const& room;
+				std::shared_ptr<IUserRoom>& room;
 				XRated::CharacterStateFlags& characterStateFlags;
 			};
 
 			class ExpFactor : public NonLogicItem
 			{
 			public:
-				ExpFactor(User& user);
+				ExpFactor(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 			//class PetAppetiteControl : public NonLogicItem
@@ -583,150 +581,150 @@ namespace Lunia {
 			class EventStage : public NonLogicItem
 			{
 			public:
-				EventStage(User& user);
+				EventStage(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 			class EventDungeonStage : public NonLogicItem
 			{
 			public:
-				EventDungeonStage(User& user);
+				EventDungeonStage(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 			class BookItem : public NonLogicItem
 			{
 			public:
-				BookItem(User& user);
+				BookItem(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 			class BookPartItem : public NonLogicItem
 			{
 			public:
-				BookPartItem(User& user);
+				BookPartItem(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 			};
 
 			class RestoreBelonging : public NonLogicItem
 			{
 			public:
-				RestoreBelonging(User& user, Items& items);
+				RestoreBelonging(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 			};
 
 			class Appraisal : public NonLogicItem
 			{
 			public:
-				Appraisal(User& user, Items& items);
+				Appraisal(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 			};
 
 			class CashAppraisal : public NonLogicItem
 			{
 			public:
-				CashAppraisal(User& user, Items& items);
+				CashAppraisal(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 			};
 
 			class RestoreAppraisal : public NonLogicItem
 			{
 			public:
-				RestoreAppraisal(User& user, Items& items);
+				RestoreAppraisal(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 			};
 
 			class CashRestoreAppraisal : public NonLogicItem
 			{
 			public:
-				CashRestoreAppraisal(User& user, Items& items);
+				CashRestoreAppraisal(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 			};
 
 			class Extract : public NonLogicItem
 			{
 			public:
-				Extract(User& user, Items& items);
+				Extract(UserSharedPtr user, Items& items);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void   Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				Items& items;
 			};
 
 			class AddSkillLicense : public NonLogicItem
 			{
 			public:
-				AddSkillLicense(User& user);
+				AddSkillLicense(UserSharedPtr user);
 
 				const wchar_t* GetTypeName() const;
 				uint16 GetConsumableCount(const Database::Info::ItemInfo* info, const std::vector<String>& parameters) const;
 				void Use(const Database::Info::ItemInfo* info, const std::vector<String>& parameters);
 
 			private:
-				User& user;
+				UserSharedPtr user;
 				mutable Database::Info::SkillInfoList::SkillGroup* skillGroup;
 			};
 

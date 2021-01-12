@@ -19,6 +19,7 @@
 #include <StageServer/Common.h>
 #include <StageServer/User/Items/Items.h>
 #include <StageServer/DynamicParser.h>
+#include <StageServer/User/Items/ItemEx.h>
 namespace Lunia {
 	namespace XRated {
 		namespace StageServer {
@@ -203,8 +204,10 @@ namespace Lunia {
 				void UpdateFishing(const float& dt);
 				uint32 GetFishingRodId() const;
 				const Database::Info::FishingRodInfo::RodInfo* GetFishingRod() const;
-				bool IsProperFishingRod() const;
+				bool IsProperFishingRod(const uint32& rodHash) const;
 				bool IsFishingArea() const;
+				void ToggleFishingRodVisibility(const bool& state);
+				bool GetFishingRodVisibility() const;
 			public:
 				/* game logical commands */
 				void AddExp(const XRated::Constants::ExpAcquiredType& type, const uint32& exp, const bool& withFactor);
@@ -351,6 +354,7 @@ namespace Lunia {
 				QuestManager								m_QuestManager;
 				MailboxManager								m_MailBoxManager;
 				Items										m_Items;
+				UseExItemManager							m_ItemEx;
 			public: //Auth_Publisher
 				std::wstring								m_SecuKey = L"";
 				std::wstring 								m_UsingLocale = L"";
@@ -383,6 +387,7 @@ namespace Lunia {
 				bool										m_DoesHaveGuildInfo = false;
 				bool										m_RequestedInitGuildInfoToDB = false;
 				bool										m_UsedUltimateSkill = false;
+				bool										m_IsFishingRodVisible = false;
 				AllMGuildInfo								m_AllMGuildInfo = AllMGuildInfo();
 				CharacterRewardStateFlags					m_CharacterRewardStateFlags = 0;
 				DWORD										m_LastDataSavedTime = 0;

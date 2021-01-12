@@ -493,7 +493,7 @@ namespace Lunia {
 			}
 
 			//recv from client(dispatch)
-			void FamilyManager::Dispatch(UserSharedPtr, Protocol::ToServer::Family::Invite& packet)
+			void FamilyManager::Dispatch(const UserSharedPtr, Protocol::ToServer::Family::Invite& packet)
 			{
 				XRated::Family::FamilySerial serial = 0;
 				DateTime createdDate = DateTime::Now();
@@ -523,7 +523,7 @@ namespace Lunia {
 				owner.Send(result);
 			}
 
-			void FamilyManager::Dispatch(UserSharedPtr, Protocol::ToServer::Family::Leave& packet)
+			void FamilyManager::Dispatch(const UserSharedPtr, Protocol::ToServer::Family::Leave& packet)
 			{
 				AutoLock lock(cs);
 				if (IsFamily() == true)
@@ -532,7 +532,7 @@ namespace Lunia {
 				}
 			}
 
-			void FamilyManager::Dispatch(UserSharedPtr, Protocol::ToServer::Family::InviteAnwer& packet)
+			void FamilyManager::Dispatch(const UserSharedPtr, Protocol::ToServer::Family::InviteAnwer& packet)
 			{
 				if ((packet.IsJoin == true) && ((IsFamily() == false) || (myInfo.IsGuest == true)))
 				{		
@@ -553,12 +553,12 @@ namespace Lunia {
 				}
 			}
 
-			void FamilyManager::Dispatch(UserSharedPtr, Protocol::ToServer::Family::RefreshInfo& packet)
+			void FamilyManager::Dispatch(const UserSharedPtr, Protocol::ToServer::Family::RefreshInfo& packet)
 			{
 				RequestDBFamilyInfoForRefresh();
 			}
 
-			void FamilyManager::Dispatch(UserSharedPtr, Protocol::ToServer::Family::RequestPresent& packet)
+			void FamilyManager::Dispatch(const UserSharedPtr, Protocol::ToServer::Family::RequestPresent& packet)
 			{
 
 				Protocol::FromServer::Family::TakePresentResult result;
@@ -614,7 +614,7 @@ namespace Lunia {
 				owner.Send(result);
 			}
 
-			void FamilyManager::Dispatch(UserSharedPtr, Protocol::ToServer::Family::Kick& packet)
+			void FamilyManager::Dispatch(const UserSharedPtr, Protocol::ToServer::Family::Kick& packet)
 			{
 				if (IsFamily() == false)
 				{

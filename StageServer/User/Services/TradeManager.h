@@ -12,13 +12,13 @@ namespace Lunia {
 			class TradeManager
 			{
 			public: // packet processors
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::RequestTrade& packet);
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::AddTradeItem& packet);
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::AddTradeMoney& packet);
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::ReadyToTrade& packet);
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::CancelTrade& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::RequestTrade& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::AddTradeItem& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::AddTradeMoney& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::ReadyToTrade& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::CancelTrade& packet);
 
-				void Dispatch(UserSharedPtr user, Protocol::ToServer::ConfirmTrade& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::ConfirmTrade& packet);
 
 			public:
 				void Cancel(UserSharedPtr user, Protocol::FromServer::Trade::Results result = Protocol::FromServer::Trade::Canceled);

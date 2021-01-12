@@ -12,7 +12,7 @@ namespace Lunia {
 				Net::Api::ApiUrl = Config::GetInstance().Settings.ApiUrl;
 				Net::Api api("AddServer");
 				api << address.ServerPort;
-				api << ConfigInstance().Get("RoomSize", uint16(150));
+				api << ConfigInstance().Get("roomSize", uint16(150));
 				while (true) {
 					Net::Answer result("", -1);
 					if (Config::GetInstance().GetKind() == SquareKind)
@@ -34,7 +34,6 @@ namespace Lunia {
 			void StageServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
 			{
 				auto user = UserManagerInstance().MakeUser(socket);
-				AutoLock lock(user->GetSyncObject());
 				user->HandleRead();
 				user->Init();
 				Logger::GetInstance().Info("Connection handled by StageServer");
