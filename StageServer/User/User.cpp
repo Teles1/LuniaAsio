@@ -70,8 +70,14 @@ namespace Lunia {
 					LoggerInstance().Error("Invalid packet");
 					return 0;
 				}
-				if (sReader.IsNetStream() && read <= size)
-					m_Parser.Invoke(shared_from_this(), sReader);
+				if (sReader.IsNetStream() && read <= size) {
+					std::thread t1(
+						[&m_Parser= m_Parser,user= shared_from_this()] (Net::StreamReader reader){
+							m_Parser.Invoke(user, reader);
+						},sReader); 
+					// This might create problems in the future. If the operation done before was not completed and something else arrives they gonna work kinda of relying on mutexes. We shall see.
+					t1.detach();
+				}
 
 				return read;
 			}
