@@ -7,6 +7,7 @@ namespace Lunia {
 				: m_socket(std::move(s)) //ClientTcp now Owns the socket.
 				, m_decryptor(false)
 				, m_isEncryptKey(false)
+				, m_receiveBuffer(2 << 14)
 			{
 				std::cout << "ClientTcp was created" << std::endl;
 			}
@@ -30,98 +31,57 @@ namespace Lunia {
 				std::cout << "ClientTcp was destroyed" << std::endl;
 			}
 
-			void ClientTcp::ReceivedSome(const error_code& ec, size_t size)
+			void ClientTcp::ReceivedSome(const error_code& ec, size_t lenght)
 			{
 				if (!ec)
 				{
-					auto t = std::thread([=]() {
-						//try {
-						int total = 0;
-						uint8* work = new uint8[Constants::HeaderSize]{ 0 };
-						do {
-							if (size - total >= Constants::HeaderSize) {
-								if (m_isEncryptKey) {
-									uint32 keyBackup = GetCryptoKey();
-									//INFO_LOG("Work[{0}]", StringUtil::GetString(work, Serializer::HeaderSize));
-									memcpy(work, &m_buffer[total], Constants::HeaderSize);
-									//INFO_LOG("Work[{0}]", StringUtil::GetString(work, Serializer::HeaderSize));
-									m_decryptor.Translate(work, Constants::HeaderSize); // translate the header only
-
-									LengthType pSize = *(LengthType*)work;
-									HashType header = *(HashType*)(work + 2);
-
-									//printf("Psize[%.2X], Hash[%.2X]\n", pSize, header);
-									if (header == NetStreamHash) {
-										//Translate only the bytes related to the packet
-										if (size_t(pSize) - size_t(Constants::HeaderSize) > size) {
-											//Back up the packet for the next iteration. There is not enough bytes to parse this data, or, the client is trolling?
-											Logger::GetInstance().Warn("Could not read entire packet. We should back up the packet for the next iteration WARN!!!!! pSize[{0}] > size[{1}]", pSize - Constants::HeaderSize, size);
-										}
-										else {
-											//Packet can be deserialized safely.
-											//Packet can be fully read because lenght > pSize
-											m_decryptor.Translate(&m_buffer[size_t(total) + size_t(Constants::HeaderSize)], pSize - Constants::HeaderSize); // Decryption done
-											//Putting work into the m_buffer
-											memmove(&m_buffer[total], work, Constants::HeaderSize);
-
-											total += Parse(&m_buffer[total], pSize);
-											//if not then something went wrong lol
-										}
-										//size - total - HeaderSize > lenght  means that there is more data to be processed.
-										// Eventually we gonna have to add a system to simple add data to a buffer or maybe a pointer to hold the data?
-									}
-									else {
-										SetCryptoKey(keyBackup);
-										total += 1;
-									}
-								}
-								else { // If there is no cryptography we keep on adding 1 to the buffer until we find a NetStream
-									LengthType pSize = *(LengthType*)(m_buffer + total);
-									HashType header = *(HashType*)(m_buffer + total + 2);
-
-									//printf("size[%.2X] Psize[%.2X], Hash[%.2X]\n", size, pSize, header);
-									if (header == NetStreamHash && pSize <= size) {
-										/*for (int i = 0; i < pSize; i++) {
-											printf("%.2X", m_buffer[i]);
-										}
-										printf("\n");*/
-										//printf("size[%d] total[%d] pSize[%d]\n", size, total, pSize);
-										Parse(&m_buffer[size_t(total)/* + size_t(Constants::HeaderSize)*/], pSize/* - Constants::HeaderSize*/);
-										total = +pSize;
-									}
-									else
-										total += 1;
-								}
-								/*
-								if (size - total < Serializer::HeaderSize) //Read Enough
-									break;
-								*/
-							}
-							else //Cant read header.
-								break;
-							/*
-							else {
-								WARN_LOG("Cannot read beyond stream");
-								for (int i = 0; i < size; i++) {
-									printf("%02x ", src[i]);
-								}
-								printf("\n");
-								break;
-							}*/
-							if (size_t(total) >= size)
-								break;
-						} while (true);
-						//Cleaning up my pointer.
-						delete[] work;
-						//}
-						//catch (...) {
-							//std::cout << "Exception trown\n";
-						//}
-
-						});
-
-					t.detach();
+					if (m_receiveBuffer.GetLength() >= m_receiveBuffer.GetMaxLength()) {
+						LoggerInstance().Error("Buffer Overflow on ClientTcp");
+						CloseSocket();
+						return;
+					}
+					int check = m_receiveBuffer.Append(&m_buffer[0], (int)lenght);
+					if (check != lenght) {
+						LoggerInstance().Error("bufferOverflow ClientTcp");
+					}
+					int processed = OnReceived((uint8*)m_receiveBuffer.GetData(), m_receiveBuffer.GetLength());
+					m_receiveBuffer.Remove(0, processed);
+					HandleRead();
 				}
+			}
+
+			int ClientTcp::OnReceived(uint8* buffer, size_t lenght)
+			{
+				//try {
+				int total = 0;
+				int result = 0;
+				do {
+					if (lenght - total > sizeof(LengthType)) {
+						uint8* work = buffer + total;
+						LengthType* work_length = (LengthType*)work;
+
+						LengthType backup = *work_length;
+						uint32 key = m_decryptor.GetKey();
+
+						m_decryptor.Translate(work, sizeof(LengthType));
+						LengthType size = *work_length;
+						if (size < sizeof(LengthType))
+							LoggerInstance().Exception("invalid size({}) set", lenght);
+						if (size > lenght - total) {
+							//rollback
+							m_decryptor.SetKey(key);
+							*work_length = backup;
+							break;
+						}
+
+						m_decryptor.Translate(work + sizeof(LengthType), size - sizeof(LengthType));
+						result = Parse(work, lenght - total);
+						total += result;
+						if (total >= lenght)
+							break;
+					}
+				} while (result);
+				return total;
 			}
 
 			void ClientTcp::SetCryptoKey(uint32& newKey)

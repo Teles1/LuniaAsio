@@ -34,18 +34,21 @@ namespace Lunia {
                         }
                     }
                 }
-                void Invoke(const SenderType user, Net::StreamReader& reader) {
+                bool Invoke(const SenderType user, Net::StreamReader& reader) {
                     AutoLock lock(cs);
                     auto itr = events.find(reader.GetSerializedTypeHash());
                     if (itr == events.end()) {
                         LoggerInstance().Error("Unhandled Packet [{0:#4x}]", reader.GetSerializedTypeHash());
-                        return;
+                        return false;
                     }
                     reader.Read(*itr->second.PacketBuffer); // Deserializing the packet
                     auto& procedure = itr->second.Procedures;
+                    bool handled = false;
                     for (auto& element : procedure) {
                         element->Call(user, *itr->second.PacketBuffer); // calling the listeners binded to this packet. can be multiples.
+                        handled = true;
                     }
+                    return handled;
                 }
             private:
                 class ICaller {

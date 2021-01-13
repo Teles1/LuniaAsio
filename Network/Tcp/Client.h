@@ -5,6 +5,8 @@
 #include "Shared.h"
 #include "../Crypt/Crypt.h"
 #include "FloodChecker.h"
+#include <Core/Utils/Buffer.h>
+
 namespace Lunia {
     namespace XRated {
         namespace Net {
@@ -21,13 +23,15 @@ namespace Lunia {
 
             protected:
                 void SendAsync(uint8* data, size_t size);
-                void ReceivedSome(const error_code& ec, size_t size);
+                void ReceivedSome(const error_code& ec, size_t lenght);
+                int OnReceived(uint8* buffer, size_t lenght);
                 void WroteSome(const error_code& error, size_t size);
                 virtual uint32 Parse(uint8* buffer, size_t size) = 0;
                 FloodChecker            m_floodChecker;
             private:
                 bool					m_isEncryptKey;
-                uint8					m_buffer[READ_DATA_BUFFER_LENGTH] = {};
+                uint8                   m_buffer[2 << 14];
+                Buffer                  m_receiveBuffer;
                 tcp::socket				m_socket;
             };
         }

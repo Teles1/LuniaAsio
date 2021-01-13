@@ -60,11 +60,20 @@ namespace Lunia {
 					That's why I want to keep this call in here
 					Parse only known packets. At least the ones which follow NetStream Standarts.
 				*/
-
+				if (size < Lunia::Constants::HeaderSize)
+					return 0;  // first 4 bytes are just header of NetStream
 				Net::StreamReader sReader(buffer);
-				m_Parser.Invoke(shared_from_this(), sReader);
-				HandleRead();
-				return (uint32)size;
+				int read = sReader.GetNetStreamSize();
+				if (read == 0)
+					return 0;
+				if (read < 0) {
+					LoggerInstance().Error("Invalid packet");
+					return 0;
+				}
+				if (sReader.IsNetStream() && read <= size)
+					m_Parser.Invoke(shared_from_this(), sReader);
+
+				return read;
 			}
 
 			void User::SendToAll(Protocol::IPacketSerializable& packet)
