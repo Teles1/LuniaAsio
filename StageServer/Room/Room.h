@@ -43,6 +43,7 @@ namespace Lunia {
 				void Clear();
 				bool IsBoss(const NonPlayerData::NpcType& type) const;
 				bool IsEnableStylePoint() const;
+				bool IsUserExist(const std::wstring& userName);
 			public: // IEventListener implementation which sends information from the Logic.
 				void Initialized(Database::Info::StageInfo* info, uint16 uniqueId);
 				std::mutex& GetSyncRoom();
@@ -270,6 +271,8 @@ namespace Lunia {
 				void ChangeStylePointStateToLogic(Logic::Player* player, XRated::StylePoint::State state);
 				void CashItemView(UserSharedPtr user, std::pair< uint16, uint16 > flag);
 				std::pair< uint16, uint16 > GetCashItemViewFlag(const UserSharedPtr user);
+				int GetCashItemViewCnt() const;
+				void ClearCashItemViewList();
 				void SendReinforcementResult(UserSharedPtr user, ItemPosition itemPos, uint32 hash, int64 oldInstance, int64 newInstance);
 				void SendLightReinforcementResult(UserSharedPtr user, ItemPosition itemPos, uint32 hash, int64 oldInstance, int64 newInstance);
 

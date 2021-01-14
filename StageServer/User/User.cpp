@@ -1,8 +1,8 @@
 #pragma once
 #include <functional>
 #include <mmsystem.h>
-#include <algorithm>
 #pragma comment( lib, "Winmm.lib" )
+#include <algorithm>
 #include <StageServer/User/UserManager.h>
 #include <Network/NetStream.h>
 #include <Network/CommonProtocol/Protocol.h>
@@ -11,6 +11,7 @@
 #include <StageServer/User/IUserRoom.h>
 #include <Core/ErrorDefinition.h>
 #include <StageServer/Services/ItemSerial.h>
+#include <StageServer/Services/CoinItemPurchaseManager.h>
 #include <StageServer/User/Items/Enchanter.h>
 #include <StageServer/Services/Communicators.h>
 #include "User.h"
@@ -33,7 +34,7 @@ namespace Lunia {
 				return m_floodChecker.IsAdmitable(receivedBytes, GetCharacterStateFlags().IsAdmin ? 0.0f : costFactor);
 			}
 
-			void User::Send(const Protocol::IPacketSerializable& packet) {
+			void User::Send(const Protocol::IPacketSerializable& packet) const{
 				StaticBuffer<2 << 12> buffer;
 				try
 				{
@@ -46,10 +47,10 @@ namespace Lunia {
 					return;
 				}
 				Logger::GetInstance().Info(L"Sending packet[{0}] to User@{1}", packet.GetTypeName(), this->GetSerial());
-				this->SendAsync(reinterpret_cast<uint8*>(buffer.GetData()), buffer.GetLength());
+				SendAsync((uint8*)buffer.GetData(), buffer.GetLength());
 			}
 
-			void User::Send(const Serializer::ISerializable& packet)
+			void User::Send(const Serializer::ISerializable& packet) const
 			{
 				Send(*(Protocol::IPacketSerializable*)(&packet));
 			}
@@ -82,7 +83,7 @@ namespace Lunia {
 				return read;
 			}
 
-			void User::SendToAll(Protocol::IPacketSerializable& packet)
+			void User::SendToAll(Protocol::IPacketSerializable& packet) const
 			{
 				if (m_Room && IsConnected())
 					m_Room->SendToAll(packet);
@@ -103,7 +104,7 @@ namespace Lunia {
 			void User::Init() {
 				BindPackets();
 				AutoLock lock(m_UserMtx);
-				m_LastDataSavedTime = m_ConnectTime = m_AliveTime = timeGetTime();
+				m_LastDataSavedTime = m_ConnectTime = m_aliveTime = timeGetTime();
 				Protocol::FromServer::Way way;
 				way.EncryptKey = Math::Random();
 				m_FishingManager.Init();
@@ -1106,6 +1107,58 @@ namespace Lunia {
 				return m_Player->GetPlayerData().BaseCharacter.Money;
 			}
 
+			bool User::IsEnableSkill(const uint32& hash) const
+			{
+				Database::Info::SkillInfoList::SkillInfo* skillinfo = GetSkillInfo(hash);
+
+				if (!skillinfo)
+				{
+					Protocol::FromServer::Error error;
+					error.errorcode = Errors::Unexpected;
+					error.errorstring = L"Could not find the specified skill.";
+					Send(error);
+					return false;
+				}
+
+				if (m_CharacterStateFlags.IsRebirthSkillDisable == 1 && skillinfo->RebirthCountLimit > 0)
+				{
+					Protocol::FromServer::Error error;
+					error.errorcode = Errors::NotUseToRebirthSkill;
+					Send(error);
+					return false;
+				}
+
+				if (skillinfo->PrecedingItems.size() > 0)
+				{
+					for (std::vector<uint32>::iterator itr = skillinfo->PrecedingItems.begin(); itr != skillinfo->PrecedingItems.end(); ++itr)
+					{
+						if (m_Items.GetItemCount(*itr) + m_Items.GetItemCountInPetInventory(*itr, true) < 1)
+						{
+							Protocol::FromServer::Error error;
+							error.errorcode = Errors::NotHaveSkillItem;
+							Send(error);
+							return false;
+						}
+					}
+				}
+				int size = static_cast<int>(skillinfo->Reagents.size());
+
+				for (int i = 0; i < size; i++)
+				{
+					int ic = m_Items.GetItemCount(skillinfo->Reagents[i].Hash) + m_Items
+						.GetItemCountInPetInventory(skillinfo->Reagents[i].Hash, true);
+					if (ic < skillinfo->Reagents[i].Cnt)
+					{
+						Protocol::FromServer::Error error;
+						error.errorcode = Errors::NotHaveReagents;
+						Send(error);
+						return false;
+					}
+				}
+
+				return true;
+			}
+
 			uint32 User::GetMaxAirCombo() const
 			{
 				if (!m_Player)
@@ -1806,6 +1859,64 @@ namespace Lunia {
 				UpdateExpFactor();
 			}
 
+			void User::InstantCoinRevive(const int16& errorNumber, const uint64& orderNumber)
+			{
+				AutoLock lock(m_UserMtx);
+				Protocol::FromServer::InstantCoinRevive	instantCoinRevive;
+
+				if (errorNumber == 0)
+					instantCoinRevive.Result = Protocol::FromServer::InstantCoinRevive::Ok;
+				else if (errorNumber == 1)
+					instantCoinRevive.Result = Protocol::FromServer::InstantCoinRevive::FailedShopDBError;
+				else if (errorNumber == 2)
+					instantCoinRevive.Result = Protocol::FromServer::InstantCoinRevive::FailedCGPointError;
+				else if (errorNumber == 3)
+					instantCoinRevive.Result = Protocol::FromServer::InstantCoinRevive::FailedShopOrderError;
+
+				if (errorNumber != 0)
+				{
+					LoggerInstance().Warn("InstantCoinRevive - [errorNumber:{}]", errorNumber);
+				}
+				else
+				{
+					m_Room->InstantCoinRevive(m_Player, orderNumber); // revive
+				}
+
+
+				Send(instantCoinRevive);
+			}
+
+			void User::PurchaseCashItem(const int16& errorNumber, const uint64& orderNumber)
+			{
+				Protocol::FromServer::PurchaseCashItem purchaseCashItem;
+
+				if (errorNumber == 0)
+					purchaseCashItem.Result = Protocol::FromServer::PurchaseCashItem::Ok;
+				else if (errorNumber == 1)
+					purchaseCashItem.Result = Protocol::FromServer::PurchaseCashItem::WrongOidProduct;
+				else if (errorNumber == 2)
+					purchaseCashItem.Result = Protocol::FromServer::PurchaseCashItem::NotEnoughCoin;
+				else if (errorNumber == 3)
+					purchaseCashItem.Result = Protocol::FromServer::PurchaseCashItem::UnknownError;
+				else if (errorNumber == 4)
+					purchaseCashItem.Result = Protocol::FromServer::PurchaseCashItem::QuantityOverDue;
+				else if (errorNumber == 5)
+					purchaseCashItem.Result = Protocol::FromServer::PurchaseCashItem::PeriodExceeded;
+				else if (errorNumber == 6)
+					purchaseCashItem.Result = Protocol::FromServer::PurchaseCashItem::CannotPurchase;
+				else if (errorNumber == 7)
+					purchaseCashItem.Result = Protocol::FromServer::PurchaseCashItem::NotOnSale;
+				else if (errorNumber == 8)
+					purchaseCashItem.Result = Protocol::FromServer::PurchaseCashItem::PeriodExceededGoods;
+
+				if (errorNumber != 0)
+				{
+					LoggerInstance().Error("PurchaseCashItem - [errorNumber:{}]", errorNumber);
+				}
+
+				Send(purchaseCashItem);
+			}
+
 			void User::AddSkillPointPlus(const uint16& point)
 			{
 				m_Room->AddSkillPointPlus(m_Player, point);
@@ -1943,9 +2054,26 @@ namespace Lunia {
 				return false;
 			}
 
-			Database::Info::SkillInfoList::SkillInfo* User::GetSkillInfo(const uint32& skillGroupName)
+			Database::Info::SkillInfoList::SkillInfo* User::GetSkillInfo(const uint32& skillGroupHash) const
 			{
-				return nullptr;
+				if (!m_Player)
+				{
+					LoggerInstance().Error(L"User({})::GetSkillInfo() player == NULL", GetCharacterName().c_str());
+					return nullptr;
+				}
+
+				//uint32 classHash = Constants::GetClassHash( playerInitData.type );
+				uint32 classHash = Constants::GetClassHash(m_Player->GetPlayerData().Job);
+
+				auto skillgroup = Database::DatabaseInstance().InfoCollections.Skills.GetSkillGroupInfo(classHash, skillGroupHash);
+
+				if (!skillgroup)
+				{
+					LoggerInstance().Error(L"User({})::GetSkillInfo() skillgroup == NULL", GetCharacterName().c_str());
+					return nullptr;
+				}
+
+				return skillgroup->GetSkillInfo((uint8)m_Player->GetSkillLevel(skillGroupHash));
 			}
 
 			const Constants::ClassType& User::GetClassType() const
@@ -2145,22 +2273,60 @@ namespace Lunia {
 
 			uint32 User::GetFishingRodId() const
 			{
-				return uint32();
+				auto pair = GetEquipment(XRated::Constants::Equipment::Weapon);
+				auto pair2 = GetEquipment(XRated::Constants::Equipment::CashWeapon);
+
+				if (Database::DatabaseInstance().InfoCollections.FishigInfos.IsFishingRod(pair.first) == true)
+					return Database::DatabaseInstance().InfoCollections.FishigInfos.RetrieveID(pair.first);
+				if (Database::DatabaseInstance().InfoCollections.FishigInfos.IsFishingRod(pair2.first) == true)
+					return Database::DatabaseInstance().InfoCollections.FishigInfos.RetrieveID(pair2.first);
+
+				return 0;
 			}
 
 			const Database::Info::FishingRodInfo::RodInfo* User::GetFishingRod() const
 			{
+				auto pair = GetEquipment(XRated::Constants::Equipment::Weapon);
+				auto pair2 = GetEquipment(XRated::Constants::Equipment::CashWeapon);
+
+				if (Database::DatabaseInstance().InfoCollections.FishigInfos.IsFishingRod(pair.first) == true)
+					return Database::DatabaseInstance().InfoCollections.FishigInfos.Retrieve(pair.first, m_CurrentStageHash);
+				if (Database::DatabaseInstance().InfoCollections.FishigInfos.IsFishingRod(pair2.first) == true)
+					return Database::DatabaseInstance().InfoCollections.FishigInfos.Retrieve(pair2.first, m_CurrentStageHash);
+
 				return nullptr;
 			}
 
 			bool User::IsProperFishingRod(const uint32& rodHash) const
 			{
-				return false;
+				Database::Info::ItemInfo* info = Database::DatabaseInstance().InfoCollections.Items.Retrieve(rodHash);
+				if (info == nullptr)
+					return false;
+				uint16 lv = GetLevel();
+				if (lv < info->Limits.Level || lv > info->Limits.MaxLevel)
+					return false;
+				return true;
 			}
 
 			bool User::IsFishingArea() const
 			{
-				return false;
+				AutoLock lock(m_UserMtx);
+				if (!m_Player) {
+					LoggerInstance().Warn(L"Unknow exception - player == NULL ({})", GetName().c_str());
+					return false;
+				}
+				float3 pos = m_Player->GetPosition() + m_Player->GetDirection() * XRated::Fishing::CorkRelativePosition;
+
+				Database::Info::StageInfo* stageInfo = m_Room->GetStageInfo();
+				if (!stageInfo) {
+					LoggerInstance().Warn(L"Unable to find stageinfo. seems to be changing stage now.({})", GetName().c_str());
+					return false;
+				}
+				else {
+					if (stageInfo->GetMoveMapHeigh(pos.x, pos.z) != XRated::Fishing::FishingHeight)
+						return false;
+				}
+				return true;
 			}
 
 			void User::AddExp(const XRated::Constants::ExpAcquiredType& type, const uint32& exp, const bool& withFactor)
@@ -2949,7 +3115,7 @@ namespace Lunia {
 			}
 
 			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::Alive& packet) {
-				m_AliveTime = timeGetTime();
+				m_aliveTime = timeGetTime();
 				user->Send(packet);
 			}
 
@@ -2983,10 +3149,12 @@ namespace Lunia {
 
 			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::ListItem& packet)
 			{
+				//Does nothing.
 			}
 
 			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::ListQuickSlot& packet)
 			{
+				//Does nothing.
 			}
 
 			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::Chat& packet)
@@ -3178,7 +3346,61 @@ namespace Lunia {
 
 				m_Room->LeaveShop(data.GameObjectSerial, data.Position, data.Direction);
 			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::CharacterInfo& packet)
+			{
+				//Does nothing.
+			}
 			
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::Cast& packet) 
+			{
+				AutoLock lock(m_UserMtx);
+				if (!m_Room || !m_Player)
+					return;
+
+				if (m_State == LOAD || m_State == NONE)
+					return;
+
+				if (!IsEnableSkill(packet.skillgroupid))
+				{
+					LoggerInstance().Error(L"User({})::Dispatch(Cast) - Error : IsEnableSkill({}) == false", GetCharacterName().c_str(), packet.skillgroupid);
+					return;
+				}
+
+				m_Room->Cast(m_Player, packet.skillgroupid);
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::SetSkillLevel& packet)
+			{
+				AutoLock lock(m_UserMtx);
+				if (!m_Room || !m_Player)
+					return;
+
+				if (m_State == LOAD || m_State == NONE)
+					return;
+
+				if (HasSkillLicense(packet.skillgroupid) == false) {
+					CriticalError(fmt::format("Trying to increase unacquired skill license. - ({})", (int)packet.skillgroupid).c_str(), true);
+					return;
+				}
+				m_Room->LogicSkillPointUp(m_Player, packet);
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::InstantCoinRevive& packet)
+			{
+				if (!m_Room || !m_Player)
+					return;
+
+				CoinItemPurchaseManagerInstance().PurchaseCoinItem(shared_from_this(), GetSerial(), m_Room->GetRoomIndex(), m_Room->GetRoomID(), CoinItemPurchaseManagerInstance().InstantCoinReviveItem);
+			}
+
+			void User::Dispatch(const UserSharedPtr user, Protocol::ToServer::CashEquipSwap& packet)
+			{
+				AutoLock lock(m_UserMtx);
+				m_Items.SwapCashEquipment(packet.Set);
+			}
+
+
 			int User::GetRequiredSlotCount(const std::vector<std::pair<uint32, uint32>>& toRemove, const std::vector<std::pair<uint32, uint32>>& toAdd, const uint32& availablecount) const
 			{
 				return m_Items.GetRequiredSlotCount(toRemove, toAdd, availablecount);

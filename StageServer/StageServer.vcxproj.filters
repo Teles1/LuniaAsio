@@ -122,6 +122,9 @@
     <ClCompile Include="User\Services\MailBoxManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Services\CoinItemPurchaseManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -249,6 +252,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Services\Communicators.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\CoinItemPurchaseManager.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

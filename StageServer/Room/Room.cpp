@@ -70,6 +70,11 @@ namespace Lunia {
 				return true;
 			}
 
+			bool Room::IsUserExist(const std::wstring& userName) 
+			{ 
+				return m_UserManager.IsExist(userName); 
+			}
+
 			bool Room::IsBoss(const NonPlayerData::NpcType& type) const
 			{
 				if (!IsEnableStylePoint()) return false;

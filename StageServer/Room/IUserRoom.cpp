@@ -538,6 +538,12 @@ namespace Lunia {
 				LoggerInstance().Exception("Missing implementation");
 				return std::pair<uint16, uint16>();
 			}
+			int Room::GetCashItemViewCnt() const {
+				return m_UserManager.GetCashItemViewCnt(); 
+			}
+			void Room::ClearCashItemViewList() { 
+				m_UserManager.ClearCashItemViewList();
+			}
 			void Room::SendReinforcementResult(UserSharedPtr user, ItemPosition itemPos, uint32 hash, int64 oldInstance, int64 newInstance)
 			{
 				LoggerInstance().Exception("Missing implementation");

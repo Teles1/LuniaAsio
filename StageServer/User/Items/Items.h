@@ -101,7 +101,7 @@ namespace Lunia {
 					virtual bool ItemsEquipToEquip(const uint32& from, const uint32& to) = 0;
 					virtual bool EquipmentSwap(const std::vector< EquippedItem >& newEquipments) = 0;
 					virtual bool CashEquipmentSwap(const std::vector< EquippedItem >& newEquipments) = 0;
-					virtual Database::Info::SkillInfoList::SkillInfo* GetSkillInfo(const uint32& skillGroupName) = 0;
+					virtual Database::Info::SkillInfoList::SkillInfo* GetSkillInfo(const uint32& skillGroupName) const = 0;
 					virtual const XRated::Constants::ClassType& GetClassType() const = 0;
 					virtual void CriticalError(const char* logMessage, const bool& block, const uint32& blockDurationInSec) = 0;
 					virtual void SendSystemChat(const std::wstring& message) = 0;

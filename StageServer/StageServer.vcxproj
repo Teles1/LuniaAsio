@@ -182,6 +182,7 @@
     <ClCompile Include="Room\Services\Guild.cpp" />
     <ClCompile Include="Protocol\FromServer.cpp" />
     <ClCompile Include="Protocol\ToServer.cpp" />
+    <ClCompile Include="Services\CoinItemPurchaseManager.cpp" />
     <ClCompile Include="Services\ItemSerial.cpp" />
     <ClCompile Include="User\Items\Bag.cpp" />
     <ClCompile Include="User\Items\Enchanter.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="Protocol\FromServer.h" />
     <ClInclude Include="Protocol\Protocol.h" />
     <ClInclude Include="Protocol\ToServer.h" />
+    <ClInclude Include="Services\CoinItemPurchaseManager.h" />
     <ClInclude Include="Services\ItemSerial.h" />
     <ClInclude Include="Services\Communicators.h" />
     <ClInclude Include="User\Items\Bag.h" />

@@ -64,6 +64,9 @@ namespace Lunia {
 				void RemoveFishingUser();
 				void PlayerDeleted();
 				void EnterShop(const Constants::ShopType& type, const uint32& param);
+				void InstantCoinRevive(const int16& errorNumber, const uint64& orderNumber);
+				void PurchaseCashItem(const int16& errorNumber, const uint64& orderNumber);
+
 				//Setters
 				void SetSerial(const uint64& userSerial);
 				void SetCurrentStage(const StageLicense& targetStage);
@@ -125,7 +128,7 @@ namespace Lunia {
 				bool IsItemLocked() const;
 				bool IsFishing() const;
 				bool IsEnoughSlotCountByProduceSkill(const uint32& skill);
-
+				bool IsEnableSkill(const uint32& hash) const;
 				//Getters
 				uint8			GetTeamNumber() const;
 				uint8			GetTotalRank() const;
@@ -296,7 +299,7 @@ namespace Lunia {
 				bool ItemsEquipToEquip(const uint32& from, const uint32& to);
 				bool EquipmentSwap(const std::vector< EquippedItem >& newEquipments);
 				bool CashEquipmentSwap(const std::vector< EquippedItem >& newEquipments);
-				Database::Info::SkillInfoList::SkillInfo* GetSkillInfo(const uint32& skillGroupName);
+				Database::Info::SkillInfoList::SkillInfo* GetSkillInfo(const uint32& skillGroupHash) const;
 				const XRated::Constants::ClassType& GetClassType() const;
 				void CriticalError(const char* logMessage, const bool& block = false, const uint32& blockDuration = 86400);
 				void SendSystemChat(const std::wstring& message);
@@ -313,10 +316,10 @@ namespace Lunia {
 				FishingManager								m_FishingManager;
 			public://Network Related;
 				bool IsAdmitable(const uint32& receivedBytes, const float& costFactor = 1.0f);
-				void Send(const Protocol::IPacketSerializable& packet);
-				void Send(const Serializer::ISerializable& packet);
+				void Send(const Protocol::IPacketSerializable& packet) const;
+				void Send(const Serializer::ISerializable& packet) const;
 				uint32 Parse(uint8* buffer, size_t size);
-				void SendToAll(Protocol::IPacketSerializable& packet);
+				void SendToAll(Protocol::IPacketSerializable& packet) const;
 			public://Packet handling coming from PacketHandler
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Stage& packet);
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Alive& packet);
@@ -332,6 +335,60 @@ namespace Lunia {
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Voice& packet);
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::EnterShop& packet);
 				void Dispatch(const UserSharedPtr user, Protocol::ToServer::LeaveShop& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::CharacterInfo& packet);
+
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Cast& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::SetSkillLevel& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Revive& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::InstantCoinRevive& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::CashEquipSwap& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::StackItem& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::GivePresentToPet& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::MoveItemInventoryToPet& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::MoveItemInPetInven& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::UseItemInPetInven& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::RequestTakeOutCaredPet& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::TakeOutAllPetItems& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::CheckJoinToSecretStage& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::AddMinimapPing& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::DropItem& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::MoveQuickSlot& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::RequestVoting& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::AnswerPersonalVoting& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::RequestPersonalVoting& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Vote& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Buy& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::BuyBack& packet); // 3.1 BY ULTIMATE
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::BuyBarterItem& packet); // 3.1 BY ULTIMATE
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Compose& packet); // 3.1 BY ULTIMATE
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::BuyToGuildShop& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Sell& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::DropBankItem& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::BankMoneyIn& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::BankMoneyOut& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::QuickSlot& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Identify& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Terminate& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Reinforce& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::RecoverReinforcement& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::RecoverLightReinforcement& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::ResetIndentification& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::LightReinforce& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::AttachMagic& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Extract& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::RestoreBelonging& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::ListCashItems& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::CashItemMove& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::CashItemRefund& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::CashItemView& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::UseItemEx& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Alchemy& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::GiveUpRevive& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Familiar::ChangeFormation& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Familiar::Command& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Random& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::RequestReward& packet);
+				void Dispatch(const UserSharedPtr user, Protocol::ToServer::Rename& packet);
 			public://Db callbacks
 				void LicenseAquired(const UserSharedPtr& user, const Net::Answer& answer);
 				void PetCreated(const UserSharedPtr& user, const Net::Answer& answer);
@@ -396,8 +453,6 @@ namespace Lunia {
 				DWORD										m_StackedPlayTimeEventCheckTime = 0;
 				DWORD										m_ConnectTime = 0;
 				const float									playTimeEventCheckIntervalInSec;
-			public: //Alive
-				DWORD										m_AliveTime = 0;
 			private:
 				DynamicParser<std::shared_ptr<User>>		m_Parser;
 			};
@@ -405,7 +460,7 @@ namespace Lunia {
 			typedef std::weak_ptr<User> UserWeakPtr;
 			typedef std::vector<XRated::LobbyPlayerInfo>::iterator CharactersIterator;
 
-			//template<> std::shared_ptr<User> shared_from(User* derived);
+			//template<> std::shared_ptr<User> shared_from(const UserSharedPtr derived);
 		}
 	}
 }

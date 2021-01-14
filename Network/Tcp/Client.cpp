@@ -1,5 +1,7 @@
 #include "Client.h"
 #include <Network/NetStream.h>
+#include <mmsystem.h>
+#pragma comment( lib, "Winmm.lib" )
 namespace Lunia {
 	namespace XRated {
 		namespace Net {
@@ -12,7 +14,7 @@ namespace Lunia {
 				std::cout << "ClientTcp was created" << std::endl;
 			}
 
-			void ClientTcp::SendAsync(uint8* data, size_t size) {
+			void ClientTcp::SendAsync(uint8* data, size_t size) const{
 				m_socket.async_send(asio::buffer(data, size),
 					std::bind(&ClientTcp::WroteSome, this, std::placeholders::_1, std::placeholders::_2));
 			}
@@ -81,6 +83,7 @@ namespace Lunia {
 							break;
 					}
 				} while (result);
+				m_aliveTime = timeGetTime();
 				return total;
 			}
 
@@ -99,7 +102,7 @@ namespace Lunia {
 				return std::move(m_socket.remote_endpoint().address().to_string());
 			}
 
-			void ClientTcp::WroteSome(const error_code& error, size_t size)
+			void ClientTcp::WroteSome(const error_code& error, size_t size) const
 			{
 			}
 		}
