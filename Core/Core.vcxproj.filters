@@ -29,6 +29,7 @@
     <ClCompile Include="DeltaTimer.cpp" />
     <ClCompile Include="Utils\TimeSpan.cpp" />
     <ClCompile Include="Utils\Logger.cpp" />
+    <ClCompile Include="Utils\StringUtil\utf8.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -113,6 +114,7 @@
     <ClInclude Include="Utils\Math\MinMax.h" />
     <ClInclude Include="Runnable.h" />
     <ClInclude Include="Utils\TimeSpan.h" />
+    <ClInclude Include="Utils\StringUtil\utf8.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

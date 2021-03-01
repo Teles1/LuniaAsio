@@ -7,6 +7,9 @@
     <ClCompile Include="NetStream.cpp" />
     <ClCompile Include="CommonProtocol\Protocol.cpp" />
     <ClCompile Include="Tcp\FloodChecker.cpp" />
+    <ClCompile Include="TextPacket\TextPacket.cpp" />
+    <ClCompile Include="AspApi\AspApi.cpp" />
+    <ClCompile Include="Http\UrlEncoder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypt\Crypt.h" />
@@ -19,6 +22,9 @@
     <ClInclude Include="NetStream.h" />
     <ClInclude Include="CommonProtocol\Protocol.h" />
     <ClInclude Include="Tcp\FloodChecker.h" />
+    <ClInclude Include="TextPacket\TextPacket.h" />
+    <ClInclude Include="AspApi\AspApi.h" />
+    <ClInclude Include="Http\UrlEncoder.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
