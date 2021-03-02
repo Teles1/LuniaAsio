@@ -39,6 +39,9 @@
     <ClCompile Include="PacketHandlers.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Common.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LobbyProtocol\LobbyProtocol.h">

@@ -3,6 +3,9 @@
 #include "LobbyProtocol/LobbyProtocol.h"
 #include <vector>
 #include <Core/GameConstants.h>
+#include <Network/DynamicParser.h>
+#include <Network/AspApi/AspApi.h>
+
 namespace Lunia {
 	namespace XRated {
 		namespace Lobby {
@@ -37,15 +40,30 @@ namespace Lunia {
 			};
 			class User : public Net::ClientTcp {
 			public:
-				User(uint32& userId, asio::ip::tcp::socket&& socket)
+				inline User(uint32& userId, asio::ip::tcp::socket&& socket)
 					: ClientTcp(std::move(socket))
 					, m_userId(userId)
 					, m_NumberOfSlots(0)
 				{
 					Logger::GetInstance().Info("User :: Hey, I was created!", GetId());
+					m_AccountLicenses.reserve(17);
 				}
 
+				std::shared_ptr<User> shared_from_this();
+
+				void Authorize(std::shared_ptr<User> user, int16 errorNumber, Http::TextPacket* packet,
+					unsigned int senderUniqueSerial);
+				
+				void CharacterListed(std::shared_ptr<User> user, int16 errorNumber, Http::TextPacket* packet,
+					unsigned int senderUniqueSerial);
+				void KeyLoaded(std::shared_ptr<User> user, int16 errorNumber, Http::TextPacket* packet,
+					unsigned int senderUniqueSerial);
+				void Auth_2nd_Check(std::shared_ptr<User> user, int16 errorNumber, Http::TextPacket* packet,
+					unsigned int senderUniqueSerial);
+
 				uint32 GetId() const;
+
+				uint32 GetUniqueSerial() const;
 
 				void SetId(const uint32& userId);
 
@@ -72,8 +90,6 @@ namespace Lunia {
 
 				bool IsAuthenticated() const;
 
-				bool PassedSecondPassword(const bool& newBool);
-
 				bool IsAValidCharacterName(String& characterName);
 
 				bool DeleteCharacter(String& characterName);
@@ -94,6 +110,7 @@ namespace Lunia {
 
 				uint32 Parse(uint8* buffer, size_t size);
 
+				void Terminate(bool withRemoval = true);
 			private:
 				//Alive m_lastTickAlivePing;
 
@@ -107,14 +124,12 @@ namespace Lunia {
 
 				String m_AccountName;
 
-				bool									 m_isAuthenticated;
+				bool									m_isAuthenticated;
 
 			public:
-				bool									 m_isSecondPasswordProtected;
-
 				uint8									m_NumberOfSlots;
 
-				uint32									m_AccountLicenses;
+				std::vector<int>						m_AccountLicenses;
 
 				std::vector<XRated::LobbyPlayerInfo>	m_Characters;
 
@@ -123,6 +138,7 @@ namespace Lunia {
 				XRated::CharacterStateFlags				m_CharacterStateFlags;
 			private:
 				std::mutex mtx;
+				//DynamicParser<std::shared_ptr<User>>	m_Parser;
 			};
 			typedef std::shared_ptr<User> UserSharedPtr;
 			typedef std::weak_ptr<User> UserWeakPtr;

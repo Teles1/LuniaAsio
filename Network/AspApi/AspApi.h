@@ -6,7 +6,7 @@
 #include <Network/TextPacket/TextPacket.h>
 #include <set>
 namespace Lunia {
-	namespace Net {
+	namespace XRated {
 		namespace Http {
 			struct Request
 			{
@@ -48,7 +48,7 @@ namespace Lunia {
 			public:
 				Host : db("url", "requesterId") {}
 
-				void Update(const T& sender)
+				void Update(T sender)
 				{
 					TextPacket packet("auth");
 					packet<<"param";
@@ -76,6 +76,7 @@ namespace Lunia {
 				{
 					if (this->baseUrl[this->baseUrl.size() - 1] != '/')
 						this->baseUrl += '/';
+					LoggerInstance().Info("{} - DBConnector initialized on {}", serviceName, baseUrl);
 				}
 
 				void Initialize(const std::string& baseUrl, const std::string& serviceName)
@@ -85,17 +86,18 @@ namespace Lunia {
 						this->baseUrl += '/';
 
 					this->serviceName = serviceName;
+					LoggerInstance().Info("{} - DBConnector initialized on {}", serviceName, baseUrl);
 				}
 
 				template <typename ListenerType>
-				void Request(const T& sender, const std::string& toGetAreaPacketString, const TextPacket& toPostAreaPacket, ListenerType& listener, void (ListenerType::* fp)(const T&, int16, TextPacket*, unsigned int), bool cancelByDuplication = false, bool disableWrongSenderEvent = true)
+				void Request(T sender, const std::string& toGetAreaPacketString, const TextPacket& toPostAreaPacket, ListenerType& listener, void (ListenerType::* fp)(T, int16, TextPacket*, unsigned int), bool cancelByDuplication = false, bool disableWrongSenderEvent = true)
 				{
 					Caller<ListenerType>* caller = new Caller<ListenerType>(sender, &listener, fp, disableWrongSenderEvent);
 					Request(toGetAreaPacketString, toPostAreaPacket, caller, cancelByDuplication);
 				}
 
 				template <typename ListenerType>
-				void Request(const T& sender, const TextPacket& packet, ListenerType& listener, void (ListenerType::* fp)(const T&, int16, TextPacket*, unsigned int), bool cancelByDuplication = false, bool disableWrongSenderEvent = true)
+				void Request(T sender, const TextPacket& packet, ListenerType& listener, void (ListenerType::* fp)(T, int16, TextPacket*, unsigned int), bool cancelByDuplication = false, bool disableWrongSenderEvent = true)
 				{
 					Caller<ListenerType>* caller = new Caller<ListenerType>(sender, &listener, fp, disableWrongSenderEvent);
 					Request(packet, caller, cancelByDuplication);
@@ -121,7 +123,7 @@ namespace Lunia {
 				class Caller : public ICaller
 				{
 				public:
-					Caller(const T& sender, U* listener, void (U::* fp)(const T&, int16, TextPacket*, unsigned int), bool disableWrongSenderEvent)
+					Caller(T sender, U* listener, void (U::* fp)(T, int16, TextPacket*, unsigned int), bool disableWrongSenderEvent)
 						: sender(sender), listener(listener), fp(fp), uniqueSerial(sender ? sender->GetUniqueSerial() : 0) // class T must implement GetUniqueSerial()
 						,
 						disableWrongSenderEvent(disableWrongSenderEvent)
@@ -141,7 +143,7 @@ namespace Lunia {
 					U* listener;
 					unsigned int uniqueSerial;
 					bool disableWrongSenderEvent;
-					void (U::* fp)(const T&, int16, TextPacket*, unsigned int);
+					void (U::* fp)(T, int16, TextPacket*, unsigned int);
 				};
 
 				void Request(const std::string& toGetAreaPacketString, const TextPacket& toPostAreaPacket, ICaller* caller, bool cancelByDuplication = false)
@@ -225,75 +227,76 @@ namespace Lunia {
 
 					Open(request);
 				}
-				
+
 				void Open(Http::Request& request) {
-					std::string encodedUrl = request.Url;
-					cpr::Url url(encodedUrl);
-					cpr::Response r;
-					if (request.Method == Request::Methods::GET)
-						r = cpr::Get(url, request.Header, timeout);
-					else
-						r = cpr::Post(url, request.Header, cpr::Body{request.Content}, timeout);
-
 					Utils::thread_pool::GetInstance().push(
-					[&](const int& id, cpr::Response response, void* passToResponse) {
-						// Sending response.
-						ICaller* event = reinterpret_cast<ICaller*>(passToResponse);
-						if (event == NULL)
-							return; // nothing to be reported
-
-						std::string operation(ExtractOperation(response.url));
-						TextPacket packet(operation, TextPacket::Methods::POST);
-
-						bool eventWork = false;
-
-						{
-							AutoLock lock(cs);
-							std::multiset<unsigned int>::iterator i = ref.find(event->GetSenderSerial());
-							if (i != ref.end())
-							{
-								eventWork = true;
-								ref.erase(i);
-							}
-						}
-
-						// TODO: make sure 'event' is valid while working. 
-						if (eventWork == true)
-						{
-							uint8 errorNumber;
-							std::vector<std::string> parameters;
-
-							if (response.status_code != 200)
-							{
-								LoggerInstance().Error("Http response : {}\n{}\n{}", response.url.c_str(), response.status_code, response.text.c_str());
-							}
-
-							// error porcessing
-							const int errorCode = static_cast<int>(response.status_code / 100);
-
-							if (2 == errorCode)
-							{
-								errorNumber = 0; // 0 means 'ok'
-								packet.Parse(response.text.c_str());
-								event->Call(errorNumber, &packet);
-							}
-							else if (6 <= errorCode)
-							{
-								// XRated protocol level error (db level)
-								errorNumber = static_cast<uint8>(response.status_code - 600); // 600 + error code
-								event->Call(errorNumber, &packet);
-							}
+						[&](const int& id, Http::Request request) {
+							printf("%d", id);
+							std::string encodedUrl = request.Url;
+							cpr::Url url(encodedUrl);
+							cpr::Response r;
+							if (request.Method == Request::Methods::GET)
+								r = cpr::Get(url, request.Header, timeout);
 							else
-							{
-								// iis level error
-								// TODO : error handling on iis error/
-								errorNumber = 0xff; // NoResponse
-								event->Call(errorNumber, &packet);
-							}
-						}
-						delete event;
+								r = cpr::Post(url, request.Header, cpr::Body{ request.Content }, timeout);
 
-					}, r, request.PassToResponse);
+								// Sending response.
+								ICaller* event = reinterpret_cast<ICaller*>(request.PassToResponse);
+								if (event == NULL)
+									return; // nothing to be reported
+
+								std::string operation(ExtractOperation(r.url));
+								TextPacket packet(operation, TextPacket::Methods::POST);
+
+								bool eventWork = false;
+
+								{
+									AutoLock lock(cs);
+									std::multiset<unsigned int>::iterator i = ref.find(event->GetSenderSerial());
+									if (i != ref.end())
+									{
+										eventWork = true;
+										ref.erase(i);
+									}
+								}
+
+								// TODO: make sure 'event' is valid while working. 
+								if (eventWork == true)
+								{
+									uint8 errorNumber;
+									std::vector<std::string> parameters;
+
+									if (r.status_code != 200)
+									{
+										LoggerInstance().Error("Http response : {}\n{}\n{}", r.url.c_str(), r.status_code, r.text.c_str());
+									}
+
+									// error porcessing
+									const int errorCode = static_cast<int>(r.status_code / 100);
+
+									if (2 == errorCode)
+									{
+										errorNumber = 0; // 0 means 'ok'
+										packet.Parse(r.text.c_str());
+										event->Call(errorNumber, &packet);
+									}
+									else if (6 <= errorCode)
+									{
+										// XRated protocol level error (db level)
+										errorNumber = static_cast<uint8>(r.status_code - 600); // 600 + error code
+										event->Call(errorNumber, &packet);
+									}
+									else
+									{
+										// iis level error
+										// TODO : error handling on iis error/
+										errorNumber = 0xff; // NoResponse
+										event->Call(errorNumber, &packet);
+									}
+								}
+								delete event;
+
+						}, request);
 				}
 
 				std::mutex cs;
@@ -304,7 +307,6 @@ namespace Lunia {
 
 				std::multiset<unsigned int> ref;
 			};
-
 		}
 	}
 }

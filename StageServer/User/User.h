@@ -18,7 +18,7 @@
 #include <StageServer/Protocol/ToServer.h>
 #include <StageServer/Common.h>
 #include <StageServer/User/Items/Items.h>
-#include <StageServer/DynamicParser.h>
+#include <Network/DynamicParser.h>
 #include <StageServer/User/Items/ItemEx.h>
 namespace Lunia {
 	namespace XRated {

@@ -23,8 +23,9 @@
     <ClInclude Include="CommonProtocol\Protocol.h" />
     <ClInclude Include="Tcp\FloodChecker.h" />
     <ClInclude Include="TextPacket\TextPacket.h" />
-    <ClInclude Include="AspApi\AspApi.h" />
     <ClInclude Include="Http\UrlEncoder.h" />
+    <ClInclude Include="AspApi\AspApi.h" />
+    <ClInclude Include="DynamicParser.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

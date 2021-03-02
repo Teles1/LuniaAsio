@@ -1,6 +1,6 @@
 #pragma once
 #include "LobbyServer.h"
-#include "Network/Api/Api.h"
+#include <Network/AspApi/AspApi.h>
 #include <LobbyServer/Common.h>
 #include <Core/Utils/InitFunction.h>
 namespace Lunia {
@@ -8,19 +8,13 @@ namespace Lunia {
 		namespace Lobby {
 			LobbyServer::LobbyServer(const char* ip, uint16 port) : ServerTcp(ip, port)
 			{
-				Net::Api::ApiUrl = Config::GetInstance().Settings.ApiUrl;
-				Net::Api api("AddServer");
-				api << Config::GetInstance().Settings.ServerAddress.ServerPort;
-				while (true) {
-					auto result = api.RequestApi();
-					if (result.errorCode == 0 || result.errorCode == 1) {
-						Logger::GetInstance().Info("{0} Initialized on port {1}", Config::GetInstance().Settings.ServerName, Config::GetInstance().Settings.ServerAddress.ServerPort);
-						break;
-					}
-					else
-						Logger::GetInstance().Error("Could not initiaze server using the API supplied!! {0}", result.errorMessage);
-					Sleep(3000);
-				}
+				Http::TextPacket request("Start");
+				request << ConfigInstance().Settings.ServerAddress.ServerIp;
+				request << ConfigInstance().Settings.ServerAddress.ServerPort;
+				request << ConfigInstance().Settings.Capacity;
+
+				DB().Request(request);
+				Sleep(500);
 			}
 			void LobbyServer::HandleNewConnection(const asio::error_code& err_code, asio::ip::tcp::socket& socket)
 			{
@@ -46,6 +40,7 @@ namespace Lunia {
 							Logger::GetInstance().Info("UserRegistry :: OnUserAuthenticated :: userId@{0} oldUserId@{1}", user->GetId(), oldUserId);
 						});
 				});
+			
 		}
 	}
 }

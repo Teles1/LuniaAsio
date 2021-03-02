@@ -248,9 +248,6 @@
     <ClInclude Include="User\Services\MailBoxManager.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="DynamicParser.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Services\Communicators.h">
       <Filter>Headers</Filter>
     </ClInclude>

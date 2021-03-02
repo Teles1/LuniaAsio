@@ -233,6 +233,7 @@
     <ClInclude Include="AspApi\AspApi.h" />
     <ClInclude Include="Crypt\Crypt.h" />
     <ClInclude Include="Api\httplib.h" />
+    <ClInclude Include="DynamicParser.h" />
     <ClInclude Include="Http\UrlEncoder.h" />
     <ClInclude Include="NetStream.h" />
     <ClInclude Include="CommonProtocol\Protocol.h" />

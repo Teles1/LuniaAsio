@@ -6,9 +6,7 @@
 namespace Lunia {
 	namespace XRated {
 		namespace Lobby {
-			inline Net::UserRegistry<User>& UserRegistry(const uint32& timeout = 30000) {
-				return Net::UserRegistry<User>::GetInstance(timeout);
-			}
+			UserRegistryClass<User>& UserRegistry(const uint32& timeout = 30000);
 		}
 	}
 }

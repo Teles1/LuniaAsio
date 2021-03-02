@@ -4,9 +4,9 @@
       "Filename": "lobby_bulky.txt",
       "LoggingLevel": 0
     },
-    "ApiUrl": "http://localhost:51542/Lobby",
+    "ApiUrl": "http://localhost/v43/Lobby",
     "ServerAddress": {
-      "ServerIp": "127.0.0.1",
+      "ServerIp": "184.146.191.162",
       "ServerPort": 15550
     },
     "ServerName": "Lobby_DEV",
@@ -14,7 +14,7 @@
     "PingTimeout": 30,
     "ShowPacket": true,
     "AchievementAddress": {
-      "ServerIp": "127.0.0.1",
+      "ServerIp": "184.146.191.162",
       "ServerPort": 15000
     },
     "LobbyServer": {

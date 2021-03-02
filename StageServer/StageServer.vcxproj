@@ -237,7 +237,6 @@
     <ClInclude Include="User\Items\PassiveItemManager.h" />
     <ClInclude Include="User\Items\PetInventory.h" />
     <ClInclude Include="User\Items\Slot.h" />
-    <ClInclude Include="DynamicParser.h" />
     <ClInclude Include="User\Services\ExpFactorManager.h" />
     <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="Room\Room.h" />

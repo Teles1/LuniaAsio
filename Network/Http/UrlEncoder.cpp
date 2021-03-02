@@ -4,7 +4,7 @@
 #include <sstream>
 #include <iomanip>
 namespace Lunia {
-	namespace Net {
+	namespace XRated {
 		namespace Http {
 			const std::string UrlEncoder::unsafeCharacters(" <>%{}|\\^~[]`'$+:\n"); // except ";", "/", "?", ":", "@", "=", "#" and "&"
 
