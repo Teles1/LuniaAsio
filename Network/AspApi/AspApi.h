@@ -231,7 +231,6 @@ namespace Lunia {
 				void Open(Http::Request& request) {
 					Utils::thread_pool::GetInstance().push(
 						[&](const int& id, Http::Request request) {
-							printf("%d", id);
 							std::string encodedUrl = request.Url;
 							cpr::Url url(encodedUrl);
 							cpr::Response r;
