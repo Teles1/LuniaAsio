@@ -10,6 +10,7 @@ Recommendation is to make sure that you have the integration enabled to make you
 4. Run bootstrap-vcpkg.bat in a cmd from inside the newly created vcpkg folder.
 5. After everything is done downloading and compiling run -> vcpkg integrate install
 6. Now it's time to install our libraries. Make sure to check if they are being compiled in x64 it'll tell in the cmd
+7. Go to cmd and run -> vcpkg integrate project
 
 # Packages being used in our project.
 - vcpkg install asio:x64-windows
