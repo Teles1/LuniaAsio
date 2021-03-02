@@ -42,5 +42,4 @@
 *x64/*
 */x64/*
 *.user
-*.vcpkg.props
 Debug/
