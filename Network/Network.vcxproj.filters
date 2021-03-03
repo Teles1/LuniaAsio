@@ -10,6 +10,7 @@
     <ClCompile Include="TextPacket\TextPacket.cpp" />
     <ClCompile Include="AspApi\AspApi.cpp" />
     <ClCompile Include="Http\UrlEncoder.cpp" />
+    <ClCompile Include="Http\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Crypt\Crypt.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="Http\UrlEncoder.h" />
     <ClInclude Include="AspApi\AspApi.h" />
     <ClInclude Include="DynamicParser.h" />
+    <ClInclude Include="Http\Logger.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

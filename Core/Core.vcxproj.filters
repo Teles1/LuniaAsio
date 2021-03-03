@@ -30,6 +30,7 @@
     <ClCompile Include="Utils\TimeSpan.cpp" />
     <ClCompile Include="Utils\Logger.cpp" />
     <ClCompile Include="Utils\StringUtil\utf8.cpp" />
+    <ClCompile Include="Service.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
@@ -115,6 +116,7 @@
     <ClInclude Include="Runnable.h" />
     <ClInclude Include="Utils\TimeSpan.h" />
     <ClInclude Include="Utils\StringUtil\utf8.h" />
+    <ClInclude Include="Service.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
