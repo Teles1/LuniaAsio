@@ -1,6 +1,6 @@
 #pragma once
 namespace Lunia {
-	namespace Net {
+	namespace XRated {
 		namespace Http {
 			class UrlEncoder
 			{

@@ -103,6 +103,7 @@
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,6 +128,7 @@
       <PrecompiledHeaderOutputFile>$(SolutionDir)Pchs\$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,6 +157,7 @@
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessToFile>false</PreprocessToFile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -180,6 +183,7 @@
       <ForcedIncludeFiles>$(SolutionDir)Core\Types.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SupportJustMyCode>true</SupportJustMyCode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -244,6 +248,7 @@
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamReader2.h" />
     <ClInclude Include="Serializer\Binary\StructuredBinaryStreamWriter2.h" />
+    <ClInclude Include="Service.h" />
     <ClInclude Include="ServiceHelper\LobbyService.h" />
     <ClInclude Include="Utils\ConfigReader.h" />
     <ClInclude Include="Utils\Math\Color.h" />
@@ -293,6 +298,7 @@
     <ClCompile Include="Serializer\Binary\XmlSerializer.cpp" />
     <ClCompile Include="Serializer\Binary\XmlStream.cpp" />
     <ClCompile Include="Serializer\Serializer.cpp" />
+    <ClCompile Include="Service.cpp" />
     <ClCompile Include="ServiceHelper\LobbyService.cpp" />
     <ClCompile Include="Utils\ConfigReader.cpp">
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</PreprocessToFile>

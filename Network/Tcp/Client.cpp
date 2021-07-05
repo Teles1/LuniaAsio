@@ -63,20 +63,25 @@ namespace Lunia {
 						LengthType* work_length = (LengthType*)work;
 
 						LengthType backup = *work_length;
-						uint32 key = m_decryptor.GetKey();
-
-						m_decryptor.Translate(work, sizeof(LengthType));
-						LengthType size = *work_length;
-						if (size < sizeof(LengthType))
-							LoggerInstance().Exception("invalid size({}) set", lenght);
-						if (size > lenght - total) {
-							//rollback
-							m_decryptor.SetKey(key);
-							*work_length = backup;
-							break;
+						if (!m_isEncryptKey && *work_length <= (lenght - total)) {
 						}
+						else {
+							uint32 key = m_decryptor.GetKey();
 
-						m_decryptor.Translate(work + sizeof(LengthType), size - sizeof(LengthType));
+							m_decryptor.Translate(work, sizeof(LengthType));
+
+							LengthType size = *work_length;
+							if (size < sizeof(LengthType))
+								LoggerInstance().Exception("invalid size({}) set", lenght);
+							if (size > lenght - total) {
+								//rollback
+								m_decryptor.SetKey(key);
+								*work_length = backup;
+								break;
+							}
+
+							m_decryptor.Translate(work + sizeof(LengthType), size - sizeof(LengthType));
+						}
 						result = Parse(work, lenght - total);
 						total += result;
 						if (total >= lenght)

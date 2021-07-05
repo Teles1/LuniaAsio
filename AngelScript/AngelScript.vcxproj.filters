@@ -371,8 +371,10 @@
     <None Include="Source\as_callfunc_arm64_msvc.asm">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="Source\as_callfunc_x64_msvc_asm.asm">
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="Source\as_callfunc_x64_msvc_asm.asm">
       <Filter>Source Files</Filter>
-    </None>
+    </MASM>
   </ItemGroup>
 </Project>

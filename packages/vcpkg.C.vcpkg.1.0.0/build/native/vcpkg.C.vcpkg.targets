@@ -5,3 +5,4 @@
     <Error Text="Unsupported architecture combination. Remove the 'vcpkg' nuget package." Condition="'$(VCPkgEnabled)' != 'true' and '$(VCPkgDisableError)' == ''"/>
   </Target>
 </Project>
+ 
